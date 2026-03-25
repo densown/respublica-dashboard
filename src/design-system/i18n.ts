@@ -79,6 +79,18 @@ export const de = {
   promises: 'Versprechen',
   dataLoadError: 'Daten konnten nicht geladen werden.',
   coalitionTrackerBlurb: '20 Versprechen, 1 erfüllt, 2 in Bearbeitung',
+  bundestagSubtitle: 'Namentliche Abstimmungen der 21. Wahlperiode',
+  selectVote: 'Abstimmung wählen',
+  searchVotes: 'Abstimmung suchen...',
+  result: 'Ergebnis',
+  totalYes: 'Ja gesamt',
+  totalNo: 'Nein gesamt',
+  seats: 'Sitze',
+  showAll: 'Alle anzeigen',
+  showLess: 'Weniger anzeigen',
+  noVoteSelected: 'Wähle eine Abstimmung aus der Liste',
+  animationHint:
+    'Klicke auf eine Abstimmung um die Sitzverteilung zu sehen',
 } as const
 
 export const en = {
@@ -161,6 +173,17 @@ export const en = {
   promises: 'promises',
   dataLoadError: 'Data could not be loaded.',
   coalitionTrackerBlurb: '20 promises, 1 fulfilled, 2 in progress',
+  bundestagSubtitle: 'Roll-call votes in the 21st electoral term',
+  selectVote: 'Select a vote',
+  searchVotes: 'Search votes…',
+  result: 'Result',
+  totalYes: 'Total yes',
+  totalNo: 'Total no',
+  seats: 'seats',
+  showAll: 'Show all',
+  showLess: 'Show less',
+  noVoteSelected: 'Choose a vote from the list',
+  animationHint: 'Click a vote to see the seating chart',
 } as const
 
 export type I18nKey = keyof typeof de
