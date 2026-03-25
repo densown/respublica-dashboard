@@ -35,6 +35,8 @@ export type FraktionVote = {
 export interface HemicycleProps {
   sitzverteilung: SitzverteilungRow[]
   abstimmung?: { fraktionen: FraktionVote[] }
+  /** true während der Einfärb-Animation (~2,5 s) */
+  animating?: boolean
 }
 
 type Seat = {
@@ -153,6 +155,7 @@ function generateSeats(sitz: SitzverteilungRow[]): Omit<Seat, 'voteColor'>[] {
 export function Hemicycle({
   sitzverteilung,
   abstimmung,
+  animating,
 }: HemicycleProps) {
   const { c, t } = useTheme()
   const [voteReveal, setVoteReveal] = useState(false)
@@ -200,6 +203,7 @@ export function Hemicycle({
           background: 'transparent',
         }}
         aria-label="Bundestag Hemicycle"
+        aria-busy={animating ? true : undefined}
       >
         {seats.map((seat) => {
           const fill =

@@ -21,6 +21,7 @@ export default function Bundestag() {
   const { c, t } = useTheme()
 
   const [selectedPollId, setSelectedPollId] = useState<number | null>(null)
+  const [animating, setAnimating] = useState(false)
 
   const { data: sitzverteilung, loading: loadingSitz, error: errSitz } =
     useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
@@ -52,6 +53,13 @@ export default function Bundestag() {
       setSelectedPollId(null)
     }
   }, [pollIdParam, abstimmungen])
+
+  useEffect(() => {
+    if (!abstimmungsDetail) return
+    setAnimating(true)
+    const id = window.setTimeout(() => setAnimating(false), 2500)
+    return () => window.clearTimeout(id)
+  }, [abstimmungsDetail?.poll_id])
 
   const handleSelect = useCallback(
     (pollId: number) => {
@@ -113,6 +121,7 @@ export default function Bundestag() {
                   ? { fraktionen: abstimmungsDetail.fraktionen }
                   : undefined
               }
+              animating={animating}
             />
             <p
               style={{
