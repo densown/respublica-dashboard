@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Badge, ShareToolbar, VoteBar, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 
@@ -25,16 +26,76 @@ export interface AbstimmungsDetailProps {
   sitzverteilung: { partei: string; farbe: string }[]
 }
 
-function farbeForFraktion(
-  partei: string,
+/** Politische Reihenfolge links → rechts; nicht Gematchtes ans Ende */
+export const PARTEI_ORDER = [
+  'Linke',
+  'BSW',
+  'Grüne',
+  'BÜNDNIS',
+  'SPD',
+  'FDP',
+  'CDU',
+  'AfD',
+  'fraktionslos',
+] as const
+
+const FDP_LABEL_COLOR = '#B8860B'
+
+function matchesOrderToken(apiPartei: string, token: string): boolean {
+  const p = apiPartei.toLowerCase()
+  const tok = token.toLowerCase()
+  if (tok === 'grüne' || tok === 'bündnis')
+    return p.includes('grün') || p.includes('bündnis')
+  if (tok === 'linke') return p.includes('linke')
+  if (tok === 'bsw') return p.includes('bsw')
+  if (tok === 'spd') return /\bspd\b/.test(p)
+  if (tok === 'fdp') return /\bfdp\b/.test(p)
+  if (tok === 'cdu') return p.includes('cdu') || p.includes('csu')
+  if (tok === 'afd') return /\bafd\b/.test(p)
+  if (tok === 'fraktionslos') return p.includes('fraktionslos')
+  return p.includes(tok)
+}
+
+function politicalSortIndex(apiPartei: string): number {
+  const hits = PARTEI_ORDER.map((token, i) =>
+    matchesOrderToken(apiPartei, token) ? i : -1,
+  ).filter((i) => i >= 0)
+  return hits.length ? Math.min(...hits) : PARTEI_ORDER.length
+}
+
+function matchesSitzRow(apiPartei: string, stamm: string): boolean {
+  const p = apiPartei.toLowerCase()
+  const s = stamm.toLowerCase()
+  if (s === 'grüne') return p.includes('grün') || p.includes('bündnis')
+  if (s.includes('cdu') || stamm === 'CDU/CSU')
+    return p.includes('cdu') || p.includes('csu')
+  if (s === 'linke') return p.includes('linke')
+  if (s === 'fraktionslos') return p.includes('fraktionslos')
+  if (s === 'afd') return /\bafd\b/.test(p)
+  if (s === 'fdp') return /\bfdp\b/.test(p)
+  if (s === 'spd') return /\bspd\b/.test(p)
+  if (s === 'bsw') return p.includes('bsw')
+  return p.includes(s) || apiPartei.includes(stamm)
+}
+
+/** Farbe aus sitzverteilung; FDP-Label wegen Kontrast dunkelgold */
+export function labelColorFromSitzverteilung(
+  apiPartei: string,
   rows: { partei: string; farbe: string }[],
 ): string {
-  const hit = rows.find(
-    (r) =>
-      partei.includes(r.partei) ||
-      r.partei.includes(partei.split(/\s+/)[0] ?? ''),
+  const row = rows.find((r) => matchesSitzRow(apiPartei, r.partei))
+  const farbe = row?.farbe
+  if (!farbe) return '#888888'
+  if (row?.partei === 'FDP' || /\bfdp\b/i.test(apiPartei)) return FDP_LABEL_COLOR
+  return farbe
+}
+
+export function sortFraktionenByPoliticalOrder<
+  T extends { partei: string },
+>(fraktionen: T[]): T[] {
+  return [...fraktionen].sort(
+    (a, b) => politicalSortIndex(a.partei) - politicalSortIndex(b.partei),
   )
-  return hit?.farbe ?? '#888888'
 }
 
 export function AbstimmungsDetail({
@@ -48,6 +109,11 @@ export function AbstimmungsDetail({
   const baseUrl =
     typeof window !== 'undefined' ? window.location.origin : ''
   const shareUrl = `${baseUrl}/bundestag/${data.poll_id}`
+
+  const fraktionenSorted = useMemo(
+    () => sortFraktionenByPoliticalOrder(data.fraktionen),
+    [data.fraktionen],
+  )
 
   return (
     <div>
@@ -133,11 +199,11 @@ export function AbstimmungsDetail({
         {t('result')}
       </p>
 
-      {data.fraktionen.map((f) => (
+      {fraktionenSorted.map((f) => (
         <VoteBar
           key={f.partei}
           label={f.partei}
-          labelColor={farbeForFraktion(f.partei, sitzverteilung)}
+          labelColor={labelColorFromSitzverteilung(f.partei, sitzverteilung)}
           ja={f.ja}
           nein={f.nein}
           enthalten={f.enthalten}

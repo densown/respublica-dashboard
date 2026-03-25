@@ -3,8 +3,8 @@ import { fonts, spacing } from '../../design-system/tokens'
 import { useTheme } from '../../design-system/ThemeContext'
 
 const INNER_RADIUS = 120
-const OUTER_RADIUS = 280
 const ROW_SPACING = 16
+const MAX_ROW_RADIUS = 500
 const SEAT_RADIUS = 5
 const GAP = 2
 const PITCH = SEAT_RADIUS * 2 + GAP
@@ -88,67 +88,92 @@ function voteColorForSeatInPartei(
   return VOTE_ABSENT
 }
 
+/** Proportionale Sitzverteilung in einer Reihe gemäß verbleibender Sitze */
+function allocateProportionalRowFromRemaining(
+  nRow: number,
+  remaining: number[],
+): number[] {
+  const remTotal = remaining.reduce((a, b) => a + b, 0)
+  if (remTotal === 0 || nRow === 0) return remaining.map(() => 0)
+  const raw = remaining.map((r) => (nRow * r) / remTotal)
+  const out = raw.map((x, i) =>
+    Math.min(Math.floor(x), remaining[i]),
+  )
+  let sum = out.reduce((a, b) => a + b, 0)
+  let rem = nRow - sum
+  const frac = raw
+    .map((x, i) => ({
+      i,
+      frac: x - Math.floor(x),
+    }))
+    .sort((a, b) => b.frac - a.frac)
+  for (let k = 0; k < frac.length && rem > 0; k++) {
+    const i = frac[k].i
+    if (out[i] < remaining[i]) {
+      out[i] += 1
+      rem -= 1
+    }
+  }
+  while (rem > 0) {
+    const i = out.findIndex((x, j) => x < remaining[j])
+    if (i === -1) break
+    out[i] += 1
+    rem -= 1
+  }
+  return out
+}
+
 function generateSeats(sitz: SitzverteilungRow[]): Omit<Seat, 'voteColor'>[] {
   const ordered = sortedSitz(sitz)
-  const totalNeeded = ordered.reduce((s, p) => s + p.sitze, 0)
-  const slots: { r: number; theta: number }[] = []
-
-  for (let r = INNER_RADIUS; r <= OUTER_RADIUS; r += ROW_SPACING) {
-    const arc = Math.PI * r
-    const n = Math.max(1, Math.floor(arc / PITCH))
-    for (let i = 0; i < n; i++) {
-      const theta =
-        n === 1 ? Math.PI / 2 : Math.PI - (i / (n - 1)) * Math.PI
-      slots.push({ r, theta })
-    }
-  }
-
-  let rExtra = OUTER_RADIUS + ROW_SPACING
-  while (slots.length < totalNeeded && rExtra <= 420) {
-    const arc = Math.PI * rExtra
-    const n = Math.max(1, Math.floor(arc / PITCH))
-    for (let i = 0; i < n; i++) {
-      const theta =
-        n === 1 ? Math.PI / 2 : Math.PI - (i / (n - 1)) * Math.PI
-      slots.push({ r: rExtra, theta })
-    }
-    rExtra += ROW_SPACING
-  }
-
-  const used = slots.slice(0, totalNeeded)
-
+  const total = ordered.reduce((s, p) => s + p.sitze, 0)
   const seats: Omit<Seat, 'voteColor'>[] = []
-  let partyIdx = 0
-  let takenInParty = 0
-  let seatInPartei = 0
+  let remaining = ordered.map((p) => p.sitze)
+  const seatInPartei = ordered.map(() => 0)
+  let globalId = 0
 
-  for (let g = 0; g < used.length; g++) {
-    const { r, theta } = used[g]
-    const x = CX + r * Math.cos(theta)
-    const y = CY - r * Math.sin(theta)
+  let r = INNER_RADIUS
+  while (remaining.some((x) => x > 0) && r <= MAX_ROW_RADIUS) {
+    const remTotal = remaining.reduce((a, b) => a + b, 0)
+    if (remTotal === 0) break
 
-    while (partyIdx < ordered.length && takenInParty >= ordered[partyIdx].sitze) {
-      partyIdx += 1
-      takenInParty = 0
-      seatInPartei = 0
-    }
-    if (partyIdx >= ordered.length) break
+    const nRow = Math.max(1, Math.floor((Math.PI * r) / PITCH))
+    const nThisRow = Math.min(nRow, remTotal)
+    const counts = allocateProportionalRowFromRemaining(nThisRow, remaining)
 
-    const row = ordered[partyIdx]
-    seats.push({
-      id: `s-${g}`,
-      x,
-      y,
-      partei: row.partei,
-      fraktionIndex: partyIdx,
-      seatInPartei,
-      partyColor: row.farbe,
-      delay: partyIdx * 300,
+    let col = 0
+    ordered.forEach((party, pi) => {
+      const k = counts[pi]
+      for (let j = 0; j < k; j++) {
+        const i = col + j
+        const theta =
+          nThisRow === 1
+            ? Math.PI / 2
+            : Math.PI - (i / (nThisRow - 1)) * Math.PI
+        const x = CX + r * Math.cos(theta)
+        const y = CY - r * Math.sin(theta)
+        const sip = seatInPartei[pi]
+        seats.push({
+          id: `s-${globalId++}`,
+          x,
+          y,
+          partei: party.partei,
+          fraktionIndex: pi,
+          seatInPartei: sip,
+          partyColor: party.farbe,
+          delay: pi * 300,
+        })
+        seatInPartei[pi] += 1
+      }
+      col += k
     })
-    takenInParty += 1
-    seatInPartei += 1
+
+    remaining = remaining.map((x, i) => x - counts[i])
+    r += ROW_SPACING
   }
 
+  if (seats.length > total) {
+    return seats.slice(0, total)
+  }
   return seats
 }
 
