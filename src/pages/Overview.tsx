@@ -1,310 +1,550 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, type CSSProperties } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Badge,
   DataCard,
-  EmptyState,
-  FilterToolbar,
   LoadingSpinner,
   PageHeader,
-  Pagination,
   ProgressBar,
   StatWidget,
-  VoteBar,
   useTheme,
 } from '../design-system'
+import type { BadgeVariant } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 
-function countList(data: unknown): number | null {
-  if (Array.isArray(data)) return data.length
-  return null
+const COALITION_YELLOW = '#CA8A04'
+
+type GesetzeStats = {
+  gesetze_count: number
+  aenderungen_count: number
 }
 
-function countEuStats(data: unknown): number | null {
-  if (data == null || typeof data !== 'object') return null
-  const o = data as Record<string, unknown>
-  for (const k of ['total', 'count', 'anzahl']) {
-    const v = o[k]
-    if (typeof v === 'number') return v
+type GesetzRow = {
+  id: number
+  kuerzel: string
+  datum: string
+  zusammenfassung: string | null
+  poll_id: number | null
+}
+
+type PollLatest = {
+  poll_id: number
+  poll_titel: string
+  poll_datum: string
+}
+
+type EuRechtRow = {
+  id: number
+  celex: string
+  titel_de: string
+  titel_en: string
+  typ: string
+  datum: string
+  zusammenfassung: string | null
+  rechtsgebiet: string
+  eurlex_url: string
+}
+
+type EuStats = {
+  total: number
+}
+
+/** Bis /api/abstimmungen/count (echter DB-Stand laut Produktion). */
+const ABSTIMMUNGEN_STAT_COUNT = 258
+
+function euItemsFromResponse(data: unknown): EuRechtRow[] {
+  if (data == null) return []
+  if (Array.isArray(data)) return data as EuRechtRow[]
+  if (typeof data === 'object' && 'items' in data) {
+    const raw = (data as { items: unknown }).items
+    return Array.isArray(raw) ? (raw as EuRechtRow[]) : []
   }
-  return null
+  return []
 }
 
-function statDisplay(
-  loading: boolean,
-  error: string | null,
-  n: number | null,
-): string | number {
+function typVariant(typ: string): BadgeVariant {
+  if (typ === 'REG') return 'blue'
+  if (typ === 'DIR') return 'amber'
+  return 'muted'
+}
+
+function trunc(s: string, max: number): string {
+  if (s.length <= max) return s
+  return `${s.slice(0, Math.max(0, max - 3))}...`
+}
+
+function fmtDate(iso: string, lang: 'de' | 'en'): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
+function statValue(loading: boolean, error: string | null, n: number | null): string | number {
   if (loading) return '...'
-  if (error) return '—'
-  if (n === null) return '—'
+  if (error) return '-'
+  if (n === null) return '-'
   return n
 }
 
 export default function Overview() {
-  const { c, t } = useTheme()
-  const [page, setPage] = useState(2)
+  const { c, t, lang } = useTheme()
+  const navigate = useNavigate()
 
-  const { data: gesetze, loading: lg, error: eg } = useApi<unknown[]>('/api/gesetze')
-  const { data: urteile, loading: lu, error: eu } = useApi<unknown[]>('/api/urteile')
-  const { data: euStats, loading: le, error: ee } = useApi<unknown>('/api/eu-recht/stats')
-  const { data: abstimmungen, loading: la, error: ea } = useApi<unknown[]>(
-    '/api/abstimmungen',
+  const { data: gesetzeStats, loading: gStatsLoading, error: gStatsError } =
+    useApi<GesetzeStats>('/api/gesetze/stats')
+  const { data: urteile, loading: urtLoading, error: urtError } = useApi<unknown[]>(
+    '/api/urteile',
   )
+  const { data: euStats, loading: euStLoading, error: euStError } =
+    useApi<EuStats>('/api/eu-recht/stats')
+  const { data: latestPolls, loading: pollsLoading, error: pollsError } =
+    useApi<PollLatest[]>('/api/abstimmungen/latest?limit=5')
+  const { data: gesetzeRows, loading: gesetzeLoading, error: gesetzeError } =
+    useApi<GesetzRow[]>('/api/gesetze')
+  const { data: euListRaw, loading: euListLoading, error: euListError } =
+    useApi<unknown>('/api/eu-recht?limit=3')
 
-  const demoShareUrl =
-    typeof window !== 'undefined' ? window.location.href : 'https://app.respublica.media'
-
-  const filterDefs = useMemo(
-    () => [
-      {
-        label: t('type'),
-        options: [
-          { value: 'all', label: t('filterAll') },
-          { value: 'reg', label: t('regulation') },
-          { value: 'dir', label: t('directive') },
-          { value: 'dec', label: t('decision') },
-        ],
-      },
-      {
-        label: t('legalArea'),
-        options: [
-          { value: 'all', label: t('filterAll') },
-          { value: 'energy', label: t('filterEnergy') },
-          { value: 'trade', label: t('filterTrade') },
-          { value: 'digital', label: t('filterDigital') },
-          { value: 'migration', label: t('filterMigration') },
-        ],
-      },
-    ],
-    [t],
-  )
+  const urteileCount = Array.isArray(urteile) ? urteile.length : null
+  const recentPolls = Array.isArray(latestPolls) ? latestPolls : []
+  const recentGesetze = Array.isArray(gesetzeRows) ? gesetzeRows.slice(0, 3) : []
+  const euItems = useMemo(() => euItemsFromResponse(euListRaw), [euListRaw])
 
   const coalitionSegments = useMemo(
     () => [
       { pct: 17, color: c.yes },
-      { pct: 33, color: c.abstain },
+      { pct: 33, color: COALITION_YELLOW },
       { pct: 50, color: c.absent },
     ],
-    [c],
+    [c.yes, c.absent],
   )
 
-  const onPageChange = useCallback((p: number) => setPage(p), [])
+  const section = (title: string) => (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: spacing.md,
+        marginBottom: spacing.md,
+      }}
+    >
+      <h2
+        style={{
+          fontFamily: fonts.display,
+          fontSize: '1.15rem',
+          fontWeight: 700,
+          color: c.ink,
+          margin: 0,
+          flexShrink: 0,
+        }}
+      >
+        {title}
+      </h2>
+      <div style={{ flex: 1, height: 1, background: c.border, minWidth: 24 }} />
+    </div>
+  )
+
+  const viewAllBtn = (path: string, label: string) => (
+    <button
+      type="button"
+      onClick={() => navigate(path)}
+      style={{
+        marginTop: 12,
+        fontFamily: fonts.mono,
+        fontSize: '0.75rem',
+        color: c.red,
+        background: 'none',
+        border: 'none',
+        padding: 0,
+        cursor: 'pointer',
+        textAlign: 'left',
+      }}
+    >
+      {label} →
+    </button>
+  )
+
+  const listWrap: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    maxWidth: 780,
+  }
 
   return (
     <>
-      <PageHeader title="Demokratie" subtitle={t('overview')} />
+      <PageHeader title="Demokratie" subtitle={t('dashboardSubtitle')} />
 
       <div
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))',
           gap: spacing.md,
-          marginBottom: spacing.xl,
+          marginBottom: spacing.xxl,
         }}
       >
         <StatWidget
           label={t('lawsTracked')}
-          value={statDisplay(lg, eg, countList(gesetze))}
-          sub={t('months12')}
+          value={statValue(
+            gStatsLoading,
+            gStatsError,
+            gesetzeStats != null ? gesetzeStats.gesetze_count : null,
+          )}
+          sub={
+            gStatsLoading
+              ? '...'
+              : gStatsError
+                ? '-'
+                : gesetzeStats != null
+                  ? `${gesetzeStats.aenderungen_count} ${t('changesRecorded')}`
+                  : '-'
+          }
           icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('rulings')}
-          value={statDisplay(lu, eu, countList(urteile))}
+          value={statValue(urtLoading, urtError, urteileCount)}
           sub={t('courts')}
           icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('euActs')}
-          value={statDisplay(le, ee, countEuStats(euStats))}
-          sub="EUR-Lex"
+          value={statValue(euStLoading, euStError, euStats?.total ?? null)}
+          sub={t('months12')}
           icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('votes')}
-          value={statDisplay(la, ea, countList(abstimmungen))}
+          value={ABSTIMMUNGEN_STAT_COUNT}
           sub={t('wp21')}
           icon={<span aria-hidden>◇</span>}
         />
       </div>
 
-      <FilterToolbar filters={filterDefs} />
-
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: spacing.xl,
-        }}
-      >
-        <DataCard
-          header={
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                gap: spacing.md,
-                justifyContent: 'space-between',
-              }}
-            >
-              <h2
-                style={{
-                  fontFamily: fonts.display,
-                  fontWeight: 900,
-                  fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
-                }}
-              >
-                {t('votes')}: Beispielabstimmung
-              </h2>
-              <Badge text={t('accepted')} variant="yes" />
-            </div>
-          }
-        >
-          <p
-            style={{
-              fontFamily: fonts.body,
-              fontSize: '0.88rem',
-              color: c.muted,
-              marginBottom: spacing.lg,
-            }}
-          >
-            {t('aiDisclaimer')}
-          </p>
-          <VoteBar label="CDU/CSU" labelColor={c.ink} ja={45} nein={12} enthalten={3} abwesend={2} />
-          <VoteBar label="SPD" labelColor={c.red} ja={38} nein={18} enthalten={4} abwesend={2} />
-          <VoteBar label="Grüne" labelColor={c.yes} ja={41} nein={8} enthalten={6} abwesend={1} />
-          <VoteBar label="AfD" labelColor={c.muted} ja={2} nein={48} enthalten={0} abwesend={6} />
-        </DataCard>
-
-        <DataCard>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: spacing.md,
-              alignItems: 'center',
-              marginBottom: spacing.md,
-            }}
-          >
-            <Badge text={t('regulation')} variant="blue" />
-            <span
-              style={{
-                fontFamily: fonts.mono,
-                fontSize: '0.75rem',
-                color: c.muted,
-              }}
-            >
-              CELEX 32021R0644
-            </span>
-          </div>
-          <p
-            style={{
-              fontFamily: fonts.body,
-              fontSize: '0.95rem',
-              marginBottom: spacing.md,
-              lineHeight: 1.5,
-            }}
-          >
-            Digital Markets Act (DMA), Auszug Demo. {t('aiDisclaimer')}
-          </p>
-          <a
-            href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32021R0644"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: '0.72rem',
-              color: c.red,
-              textDecoration: 'none',
-            }}
-          >
-            {t('viewEurlex')} →
-          </a>
-        </DataCard>
-
-        <section>
-          <h3
-            style={{
-              fontFamily: fonts.display,
-              fontWeight: 900,
-              fontSize: '1.15rem',
-              marginBottom: spacing.md,
-            }}
-          >
-            {t('coalition')}
-          </h3>
+      <section style={{ marginBottom: spacing.xxl }}>
+        {section(t('recentVotes'))}
+        {pollsLoading ? (
+          <LoadingSpinner />
+        ) : pollsError ? (
           <p
             style={{
               fontFamily: fonts.body,
               fontSize: '0.85rem',
               color: c.muted,
-              marginBottom: spacing.sm,
+              margin: 0,
             }}
           >
-            17% {t('fulfilled')} · 33% {t('inProgress')} · 50% {t('pending')}
+            {t('dataLoadError')}
           </p>
-          <ProgressBar segments={coalitionSegments} />
-        </section>
+        ) : (
+          <>
+            <div style={listWrap}>
+              {recentPolls.map((poll) => (
+                <DataCard
+                  key={poll.poll_id}
+                  onClick={() => navigate(`/bundestag/${poll.poll_id}`)}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      gap: spacing.md,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: fonts.body,
+                        fontSize: '0.92rem',
+                        fontWeight: 600,
+                        color: c.ink,
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      {poll.poll_titel}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: fonts.mono,
+                        fontSize: '0.7rem',
+                        color: c.muted,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {fmtDate(poll.poll_datum, lang)}
+                    </span>
+                  </div>
+                </DataCard>
+              ))}
+            </div>
+            {viewAllBtn('/bundestag', t('viewAllVotes'))}
+          </>
+        )}
+      </section>
 
-        <Pagination current={page} total={5} onChange={onPageChange} />
+      <section style={{ marginBottom: spacing.xxl }}>
+        {section(t('recentChanges'))}
+        {gesetzeLoading ? (
+          <LoadingSpinner />
+        ) : gesetzeError ? (
+          <p
+            style={{
+              fontFamily: fonts.body,
+              fontSize: '0.85rem',
+              color: c.muted,
+              margin: 0,
+            }}
+          >
+            {t('dataLoadError')}
+          </p>
+        ) : (
+          <>
+            <div style={listWrap}>
+              {recentGesetze.map((row) => (
+                <DataCard key={row.id} onClick={() => navigate(`/gesetze/${row.id}`)}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: spacing.sm,
+                      marginBottom: spacing.sm,
+                    }}
+                  >
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.sm, alignItems: 'center' }}>
+                      <Badge text={row.kuerzel} variant="default" />
+                      {row.poll_id != null && row.poll_id !== 0 ? (
+                        <Badge text={t('hasVoteData')} variant="yes" />
+                      ) : null}
+                    </div>
+                    <span
+                      style={{
+                        fontFamily: fonts.mono,
+                        fontSize: '0.7rem',
+                        color: c.muted,
+                      }}
+                    >
+                      {fmtDate(row.datum, lang)}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: fonts.body,
+                      fontSize: '0.85rem',
+                      color: c.ink,
+                      lineHeight: 1.5,
+                      margin: 0,
+                    }}
+                  >
+                    {row.zusammenfassung?.trim()
+                      ? row.zusammenfassung
+                      : t('summaryPending')}
+                  </p>
+                  <p
+                    style={{
+                      marginTop: spacing.sm,
+                      fontFamily: fonts.body,
+                      fontSize: '0.6rem',
+                      fontStyle: 'italic',
+                      color: c.subtle,
+                      marginBottom: 0,
+                    }}
+                  >
+                    {t('aiHint')}
+                  </p>
+                </DataCard>
+              ))}
+            </div>
+            {viewAllBtn('/gesetze', t('viewAllLaws'))}
+          </>
+        )}
+      </section>
 
-        <details
+      <section style={{ marginBottom: spacing.xxl }}>
+        {section(t('euLaw'))}
+        {euListLoading ? (
+          <LoadingSpinner />
+        ) : euListError ? (
+          <p
+            style={{
+              fontFamily: fonts.body,
+              fontSize: '0.85rem',
+              color: c.muted,
+              margin: 0,
+            }}
+          >
+            {t('dataLoadError')}
+          </p>
+        ) : (
+          <>
+            <div style={listWrap}>
+              {euItems.map((item) => {
+                const title =
+                  lang === 'de' ? item.titel_de || item.titel_en : item.titel_en || item.titel_de
+                const summary = item.zusammenfassung?.trim() ?? ''
+                return (
+                  <DataCard
+                    key={item.id}
+                    onClick={() => navigate(`/eu-recht/${item.id}`)}
+                    header={
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: spacing.sm,
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.sm }}>
+                          <Badge text={item.typ} variant={typVariant(item.typ)} />
+                          <Badge text={item.rechtsgebiet} variant="default" />
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: '0.7rem',
+                            color: c.muted,
+                          }}
+                        >
+                          {fmtDate(item.datum, lang)}
+                        </span>
+                      </div>
+                    }
+                    footer={
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: spacing.md,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: '0.65rem',
+                            color: c.muted,
+                          }}
+                        >
+                          {item.celex}
+                        </span>
+                        <a
+                          href={item.eurlex_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: '0.75rem',
+                            color: c.red,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {t('viewEurlex')} →
+                        </a>
+                      </div>
+                    }
+                  >
+                    <p
+                      style={{
+                        fontFamily: fonts.body,
+                        fontSize: '0.92rem',
+                        fontWeight: 600,
+                        color: c.ink,
+                        lineHeight: 1.35,
+                        margin: 0,
+                      }}
+                    >
+                      {trunc(title, 150)}
+                    </p>
+                    {summary ? (
+                      <p
+                        style={{
+                          marginTop: spacing.sm,
+                          fontFamily: fonts.body,
+                          fontSize: '0.85rem',
+                          color: c.inkSoft,
+                          lineHeight: 1.45,
+                          marginBottom: 0,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical' as const,
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {summary}
+                      </p>
+                    ) : null}
+                  </DataCard>
+                )
+              })}
+            </div>
+            {viewAllBtn('/eu-recht', t('viewAllEu'))}
+          </>
+        )}
+      </section>
+
+      <section style={{ marginBottom: spacing.xxl }}>
+        {section(t('coalition'))}
+        <p
           style={{
-            marginTop: spacing.xl,
-            border: `1px solid ${c.border}`,
-            borderRadius: 8,
-            padding: spacing.md,
-            background: c.bgAlt,
+            fontFamily: fonts.body,
+            fontSize: '0.85rem',
+            color: c.muted,
+            marginBottom: spacing.sm,
           }}
         >
-          <summary
-            style={{
-              cursor: 'pointer',
-              fontFamily: fonts.display,
-              fontWeight: 700,
-              fontSize: '1rem',
-              color: c.ink,
-            }}
-          >
-            {t('componentShowcase')}
-          </summary>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: spacing.lg,
-              marginTop: spacing.lg,
-            }}
-          >
+          {t('coalitionTrackerBlurb')}
+        </p>
+        <ProgressBar segments={coalitionSegments} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: spacing.sm,
+            marginTop: spacing.md,
+          }}
+        >
+          {[
+            { color: c.yes, label: t('fulfilled') },
+            { color: COALITION_YELLOW, label: t('inProgress') },
+            { color: c.absent, label: t('pending') },
+          ].map((row) => (
             <div
+              key={row.label}
               style={{
-                border: `1px dashed ${c.border}`,
-                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'center',
+                gap: spacing.sm,
+                fontFamily: fonts.body,
+                fontSize: '0.8rem',
+                color: c.inkSoft,
               }}
             >
-              <LoadingSpinner />
-            </div>
-            <div
-              style={{
-                border: `1px dashed ${c.border}`,
-                borderRadius: 8,
-              }}
-            >
-              <EmptyState
-                text={t('emptyStateDemo')}
-                action={{
-                  label: t('copyLink'),
-                  onClick: () => {
-                    void navigator.clipboard.writeText(demoShareUrl)
-                  },
+              <span
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: row.color,
+                  flexShrink: 0,
                 }}
+                aria-hidden
               />
+              {row.label}
             </div>
-          </div>
-        </details>
-      </div>
+          ))}
+        </div>
+        {viewAllBtn('/koalition', t('viewTracker'))}
+      </section>
     </>
   )
 }

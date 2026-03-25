@@ -65,6 +65,20 @@ export const de = {
   notFoundBody: 'Die angeforderte Seite existiert nicht.',
   backToOverview: 'Zurück zur Übersicht',
   phasePlaceholder: 'Kommt in einer späteren Phase.',
+  dashboardSubtitle:
+    'Dein Dashboard für Gesetzgebung, Abstimmungen und EU-Recht.',
+  recentVotes: 'Letzte Abstimmungen',
+  recentChanges: 'Aktuelle Gesetzesänderungen',
+  viewAllVotes: 'Alle Abstimmungen ansehen',
+  viewAllLaws: 'Alle Gesetze ansehen',
+  viewAllEu: 'Alle EU-Rechtsakte ansehen',
+  viewTracker: 'Tracker ansehen',
+  changesRecorded: 'Änderungen erfasst',
+  summaryPending: 'Zusammenfassung wird generiert...',
+  hasVoteData: 'Abstimmungsdaten',
+  promises: 'Versprechen',
+  dataLoadError: 'Daten konnten nicht geladen werden.',
+  coalitionTrackerBlurb: '20 Versprechen, 1 erfüllt, 2 in Bearbeitung',
 } as const
 
 export const en = {
@@ -72,7 +86,7 @@ export const en = {
   bundestag: 'Bundestag',
   legislation: 'Legislation',
   euLaw: 'EU Law',
-  coalition: 'Coalition agreement',
+  coalition: 'Coalition Agreement',
   democracyIndex: 'Democracy index',
   worldMap: 'World map',
   lobby: 'Lobby register',
@@ -134,6 +148,19 @@ export const en = {
   notFoundBody: 'The requested page does not exist.',
   backToOverview: 'Back to overview',
   phasePlaceholder: 'Coming in a later phase.',
+  dashboardSubtitle: 'Your dashboard for legislation, votes and EU law.',
+  recentVotes: 'Recent votes',
+  recentChanges: 'Recent legislative changes',
+  viewAllVotes: 'View all votes',
+  viewAllLaws: 'View all laws',
+  viewAllEu: 'View all EU legal acts',
+  viewTracker: 'View tracker',
+  changesRecorded: 'changes recorded',
+  summaryPending: 'Summary is being generated...',
+  hasVoteData: 'Vote data',
+  promises: 'promises',
+  dataLoadError: 'Data could not be loaded.',
+  coalitionTrackerBlurb: '20 promises, 1 fulfilled, 2 in progress',
 } as const
 
 export type I18nKey = keyof typeof de

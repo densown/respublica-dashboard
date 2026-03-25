@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-const DEFAULT_BASE = 'https://api.respublica.media'
+const DEFAULT_BASE = typeof window !== 'undefined' ? window.location.origin : ''
 
 function getBaseUrl(): string {
   const raw = import.meta.env.VITE_API_BASE as string | undefined
@@ -57,7 +57,49 @@ export function useApi<T>(
       }
       try {
         const url = buildUrl(endpoint, params)
+        // #region agent log
+        fetch('http://localhost:7473/ingest/3e7d6dd8-438b-410c-92d5-fd3cc0268322', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Debug-Session-Id': '817973',
+          },
+          body: JSON.stringify({
+            sessionId: '817973',
+            runId: 'pre-fix',
+            hypothesisId: 'A',
+            location: 'useApi.ts:load:start',
+            message: 'fetch start',
+            data: {
+              endpoint,
+              paramsKey,
+              base: getBaseUrl(),
+              url,
+              isRetry,
+            },
+            timestamp: Date.now(),
+          }),
+        }).catch(() => {})
+        // #endregion
         const res = await fetch(url, { signal: controller.signal })
+        // #region agent log
+        fetch('http://localhost:7473/ingest/3e7d6dd8-438b-410c-92d5-fd3cc0268322', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Debug-Session-Id': '817973',
+          },
+          body: JSON.stringify({
+            sessionId: '817973',
+            runId: 'pre-fix',
+            hypothesisId: 'B',
+            location: 'useApi.ts:load:response',
+            message: 'fetch response',
+            data: { endpoint, ok: res.ok, status: res.status },
+            timestamp: Date.now(),
+          }),
+        }).catch(() => {})
+        // #endregion
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`)
         }
@@ -68,6 +110,24 @@ export function useApi<T>(
       } catch (e) {
         if (controller.signal.aborted) return
         const msg = e instanceof Error ? e.message : 'Fetch failed'
+        // #region agent log
+        fetch('http://localhost:7473/ingest/3e7d6dd8-438b-410c-92d5-fd3cc0268322', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Debug-Session-Id': '817973',
+          },
+          body: JSON.stringify({
+            sessionId: '817973',
+            runId: 'pre-fix',
+            hypothesisId: 'C',
+            location: 'useApi.ts:load:catch',
+            message: 'fetch error',
+            data: { endpoint, msg },
+            timestamp: Date.now(),
+          }),
+        }).catch(() => {})
+        // #endregion
         setData(null)
         setError(msg)
         if (!isRetry && !didRetry) {
@@ -77,6 +137,28 @@ export function useApi<T>(
           }, 2000)
         }
       } finally {
+        // #region agent log
+        fetch('http://localhost:7473/ingest/3e7d6dd8-438b-410c-92d5-fd3cc0268322', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Debug-Session-Id': '817973',
+          },
+          body: JSON.stringify({
+            sessionId: '817973',
+            runId: 'pre-fix',
+            hypothesisId: 'D',
+            location: 'useApi.ts:load:finally',
+            message: 'load finally',
+            data: {
+              endpoint,
+              cancelled,
+              willSetLoadingFalse: !cancelled,
+            },
+            timestamp: Date.now(),
+          }),
+        }).catch(() => {})
+        // #endregion
         if (!cancelled) setLoading(false)
       }
     }
@@ -84,6 +166,24 @@ export function useApi<T>(
     void load(false)
 
     return () => {
+      // #region agent log
+      fetch('http://localhost:7473/ingest/3e7d6dd8-438b-410c-92d5-fd3cc0268322', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Debug-Session-Id': '817973',
+        },
+        body: JSON.stringify({
+          sessionId: '817973',
+          runId: 'pre-fix',
+          hypothesisId: 'A',
+          location: 'useApi.ts:cleanup',
+          message: 'effect cleanup (abort in-flight)',
+          data: { endpoint, paramsKey },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {})
+      // #endregion
       cancelled = true
       controller.abort()
       if (retryTimer !== null) window.clearTimeout(retryTimer)
