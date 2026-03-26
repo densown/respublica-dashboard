@@ -26,6 +26,36 @@ export interface AbstimmungsDetailProps {
   sitzverteilung: { partei: string; farbe: string }[]
 }
 
+/** Stimmfarben im Fraktionsbalken (Bundestag) */
+const BUNDESTAG_VOTE_SEG = {
+  ja: '#2D8E4E',
+  nein: '#C92A2A',
+  enthalten: '#8899AA',
+  abwesend: '#CDD5DE',
+} as const
+
+const BUNDESTAG_WP_SUFFIX = /\s*\(Bundestag\s+2025\s*[-–]\s*2029\)\s*$/i
+
+/** Kürzt API-Parteilabel für die Ansicht */
+export function shortFraktionName(apiPartei: string): string {
+  let s = apiPartei.replace(BUNDESTAG_WP_SUFFIX, '').trim()
+  const l = s.toLowerCase()
+  if (
+    (l.includes('bündnis') || l.includes('b90')) &&
+    (l.includes('grün') || l.includes('grüne'))
+  )
+    return 'Grüne'
+  if (l.includes('linke')) return 'Die Linke'
+  if (l.includes('cdu') || l.includes('csu')) return 'CDU/CSU'
+  if (/\bfdp\b/.test(l)) return 'FDP'
+  if (/\bspd\b/.test(l)) return 'SPD'
+  if (/\bafd\b/.test(l)) return 'AfD'
+  if (l.includes('fraktionslos')) return 'Fraktionslos'
+  if (l.includes('bsw')) return 'BSW'
+  if (l.includes('ssw')) return 'SSW'
+  return s
+}
+
 /** Politische Reihenfolge links → rechts; nicht Gematchtes ans Ende */
 export const PARTEI_ORDER = [
   'Linke',
@@ -90,6 +120,19 @@ export function labelColorFromSitzverteilung(
   return farbe
 }
 
+function labelColorForVoteBar(
+  apiPartei: string,
+  rows: { partei: string; farbe: string }[],
+  theme: 'light' | 'dark',
+): string {
+  const base = labelColorFromSitzverteilung(apiPartei, rows)
+  if (theme === 'dark') {
+    const hex = base.replace('#', '').toLowerCase()
+    if (hex === '000000' || hex === '1a1a1a') return '#CCCCCC'
+  }
+  return base
+}
+
 export function sortFraktionenByPoliticalOrder<
   T extends { partei: string },
 >(fraktionen: T[]): T[] {
@@ -102,7 +145,7 @@ export function AbstimmungsDetail({
   data,
   sitzverteilung,
 }: AbstimmungsDetailProps) {
-  const { c, t } = useTheme()
+  const { c, t, theme } = useTheme()
   const { ergebnis } = data
   const accepted = ergebnis.ja_gesamt > ergebnis.nein_gesamt
 
@@ -202,12 +245,15 @@ export function AbstimmungsDetail({
       {fraktionenSorted.map((f) => (
         <VoteBar
           key={f.partei}
-          label={f.partei}
-          labelColor={labelColorFromSitzverteilung(f.partei, sitzverteilung)}
+          label={shortFraktionName(f.partei)}
+          labelColor={labelColorForVoteBar(f.partei, sitzverteilung, theme)}
           ja={f.ja}
           nein={f.nein}
           enthalten={f.enthalten}
           abwesend={f.abwesend}
+          trackVariant="outline"
+          segmentColors={BUNDESTAG_VOTE_SEG}
+          expandedDetails="secondary"
         />
       ))}
 

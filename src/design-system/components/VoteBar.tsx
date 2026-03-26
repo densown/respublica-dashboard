@@ -9,6 +9,21 @@ export type VoteBarProps = {
   nein: number
   enthalten: number
   abwesend: number
+  /** Standard: grauer Track. outline = transparent mit Rand */
+  trackVariant?: 'default' | 'outline'
+  /** Stimmfarben im Balken (überschreibt Theme) */
+  segmentColors?: {
+    ja: string
+    nein: string
+    enthalten: string
+    abwesend: string
+  }
+  /**
+   * Ausklapp-Bereich unter dem Balken:
+   * all = alle vier Zahlen (Default),
+   * secondary = nur Enthalten/Abwesend
+   */
+  expandedDetails?: 'all' | 'secondary'
 }
 
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
@@ -20,6 +35,9 @@ export function VoteBar({
   nein,
   enthalten,
   abwesend,
+  trackVariant = 'default',
+  segmentColors,
+  expandedDetails = 'all',
 }: VoteBarProps) {
   const { c, t } = useTheme()
   const [open, setOpen] = useState(false)
@@ -38,6 +56,15 @@ export function VoteBar({
   const toggle = useCallback(() => setOpen((v) => !v), [])
 
   const lc = labelColor ?? c.ink
+  const colJa = segmentColors?.ja ?? c.yes
+  const colNein = segmentColors?.nein ?? c.no
+  const colEnthalten = segmentColors?.enthalten ?? c.abstain
+  const colAbwesend = segmentColors?.abwesend ?? c.absent
+
+  const trackBg =
+    trackVariant === 'outline' ? 'transparent' : c.bgHover
+  const trackBorder =
+    trackVariant === 'outline' ? `1px solid ${c.border}` : undefined
 
   return (
     <div style={{ marginBottom: spacing.md }}>
@@ -92,34 +119,36 @@ export function VoteBar({
             height: 10,
             borderRadius: 4,
             overflow: 'hidden',
-            background: c.bgHover,
+            background: trackBg,
+            border: trackBorder,
+            boxSizing: 'border-box',
           }}
         >
           <div
             style={{
               width: `${pct.ja}%`,
-              background: c.yes,
+              background: colJa,
               transition: `width 0.45s ${transition}`,
             }}
           />
           <div
             style={{
               width: `${pct.nein}%`,
-              background: c.no,
+              background: colNein,
               transition: `width 0.45s ${transition}`,
             }}
           />
           <div
             style={{
               width: `${pct.enthalten}%`,
-              background: c.abstain,
+              background: colEnthalten,
               transition: `width 0.45s ${transition}`,
             }}
           />
           <div
             style={{
               width: `${pct.abwesend}%`,
-              background: c.absent,
+              background: colAbwesend,
               transition: `width 0.45s ${transition}`,
             }}
           />
@@ -137,18 +166,31 @@ export function VoteBar({
             color: c.muted,
           }}
         >
-          <span>
-            {t('yes')}: {ja}
-          </span>
-          <span>
-            {t('no')}: {nein}
-          </span>
-          <span>
-            {t('abstained')}: {enthalten}
-          </span>
-          <span>
-            {t('absentL')}: {abwesend}
-          </span>
+          {expandedDetails === 'all' ? (
+            <>
+              <span>
+                {t('yes')}: {ja}
+              </span>
+              <span>
+                {t('no')}: {nein}
+              </span>
+              <span>
+                {t('abstained')}: {enthalten}
+              </span>
+              <span>
+                {t('absentL')}: {abwesend}
+              </span>
+            </>
+          ) : (
+            <>
+              <span>
+                {t('abstained')}: {enthalten}
+              </span>
+              <span>
+                {t('absentL')}: {abwesend}
+              </span>
+            </>
+          )}
         </div>
       )}
     </div>

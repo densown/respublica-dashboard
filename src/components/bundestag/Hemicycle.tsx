@@ -1,21 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import { RAW_SEATS } from '../../data/bundestag-seats'
 import { fonts, spacing } from '../../design-system/tokens'
 import { useTheme } from '../../design-system/ThemeContext'
 
-const INNER_RADIUS = 120
-const ROW_SPACING = 16
-const MAX_ROW_RADIUS = 500
-const SEAT_RADIUS = 5
-const GAP = 2
-const PITCH = SEAT_RADIUS * 2 + GAP
-
-const VOTE_YES = '#2D7D46'
-const VOTE_NO = '#B91C1C'
-const VOTE_ABSTAIN = '#94A3B8'
-const VOTE_ABSENT = '#D1D5DB'
-
-const CX = 300
-const CY = 300
+const VIEW_W = 800
+const VIEW_H = 410
+const SEAT_R = 5.8
+const FRACT_ANIM_MS = 350
 
 export type SitzverteilungRow = {
   partei: string
@@ -35,44 +26,178 @@ export type FraktionVote = {
 export interface HemicycleProps {
   sitzverteilung: SitzverteilungRow[]
   abstimmung?: { fraktionen: FraktionVote[] }
-  /** true während der Einfärb-Animation (~2,5 s) */
   animating?: boolean
 }
 
-type Seat = {
-  id: string
-  x: number
-  y: number
+type MergedParty = {
+  key: string
   partei: string
-  fraktionIndex: number
-  seatInPartei: number
-  partyColor: string
-  voteColor: string
-  delay: number
+  farbe: string
+  sitze: number
+  position: number
+}
+
+type SeatDerived = {
+  cx: number
+  cy: number
+  rawPartei: string
+  rawFarbe: string
+  fraktionsIndex: number
+  idxInFrak: number
+}
+
+function canonicalKey(partei: string): string {
+  const s = partei.trim().toLowerCase()
+  if (/\blinke\b|die linke|dielinke/.test(s)) return 'linke'
+  if (/\bbsw\b|bündnis sarah wagenknecht/.test(s)) return 'bsw'
+  if (
+    /\bgrün|grüne|bündnis\s*90|b90/.test(s) ||
+    (s.includes('grün') && !s.includes('grünwald'))
+  )
+    return 'grüne'
+  if (/\bspd\b|sozialdemokrat/.test(s)) return 'spd'
+  if (/\bcdu\b|\bcsu\b|cdu\/csu/.test(s)) return 'cdu/csu'
+  if (/\bafd\b/.test(s)) return 'afd'
+  if (/fraktionslos|fraktionslose|parteilos|unabhängig/.test(s))
+    return 'fraktionslos'
+  if (/\bfdp\b|freie demokraten/.test(s)) return 'fdp'
+  if (/\bssw\b/.test(s)) return 'ssw'
+  return 'unknown'
 }
 
 function sortedSitz(sitz: SitzverteilungRow[]): SitzverteilungRow[] {
   return [...sitz].sort((a, b) => a.position - b.position)
 }
 
-function matchFraktion(
-  parteiShort: string,
+function mergePartiesForLegend(
+  rows: SitzverteilungRow[],
+  cduFill: string,
+): { legendByKey: Map<string, MergedParty> } {
+  const sorted = sortedSitz(rows)
+  const map = new Map<string, MergedParty>()
+
+  for (const r of sorted) {
+    let key = canonicalKey(r.partei)
+    if (key === 'unknown') key = `ext:${r.partei.trim().toLowerCase()}`
+    const farbe = key === 'cdu/csu' ? cduFill : r.farbe
+    const prev = map.get(key)
+    if (prev) {
+      map.set(key, {
+        key,
+        partei: r.partei,
+        farbe: key === 'cdu/csu' ? cduFill : prev.farbe,
+        sitze: prev.sitze + r.sitze,
+        position: Math.min(prev.position, r.position),
+      })
+    } else {
+      map.set(key, {
+        key,
+        partei: r.partei,
+        farbe,
+        sitze: r.sitze,
+        position: r.position,
+      })
+    }
+  }
+
+  return { legendByKey: map }
+}
+
+/** Legenden-Reihenfolge: Kurzname für die Anzeige */
+const LEGEND_ORDER: readonly { key: string; kurz: string }[] = [
+  { key: 'linke', kurz: 'Die Linke' },
+  { key: 'bsw', kurz: 'BSW' },
+  { key: 'grüne', kurz: 'Grüne' },
+  { key: 'spd', kurz: 'SPD' },
+  { key: 'fdp', kurz: 'FDP' },
+  { key: 'cdu/csu', kurz: 'CDU/CSU' },
+  { key: 'afd', kurz: 'AfD' },
+  { key: 'fraktionslos', kurz: 'Fraktionslos' },
+]
+
+function orderedLegend(
+  legendByKey: Map<string, MergedParty>,
+  cduFill: string,
+): MergedParty[] {
+  const ordered: MergedParty[] = []
+  const used = new Set<string>()
+  for (const { key, kurz } of LEGEND_ORDER) {
+    const p = legendByKey.get(key)
+    if (p && p.sitze > 0) {
+      used.add(key)
+      ordered.push({
+        ...p,
+        partei: kurz,
+        farbe: key === 'cdu/csu' ? cduFill : p.farbe,
+      })
+    }
+  }
+  const rest = [...legendByKey.values()]
+    .filter((p) => !used.has(p.key) && p.sitze > 0)
+    .sort((a, b) => a.position - b.position)
+  return [...ordered, ...rest]
+}
+
+function matchApiRowForSeat(
+  seatLabel: string,
+  rows: SitzverteilungRow[],
+): SitzverteilungRow | undefined {
+  const sorted = sortedSitz(rows)
+  const sk = canonicalKey(seatLabel)
+  if (sk !== 'unknown') {
+    const hit = sorted.find((r) => canonicalKey(r.partei) === sk)
+    if (hit) return hit
+  }
+  const sl = seatLabel.toLowerCase()
+  return sorted.find((r) => {
+    const rl = r.partei.toLowerCase()
+    return rl.includes(sl) || sl.includes(rl)
+  })
+}
+
+function partyFillForSeat(
+  seatLabel: string,
+  rawFarbe: string,
+  rows: SitzverteilungRow[],
+  cduFill: string,
+): string {
+  const row = matchApiRowForSeat(seatLabel, rows)
+  if (!row) {
+    return canonicalKey(seatLabel) === 'cdu/csu' ? cduFill : rawFarbe
+  }
+  return canonicalKey(row.partei) === 'cdu/csu' ? cduFill : row.farbe
+}
+
+function displayParteiForSeat(
+  seatLabel: string,
+  rows: SitzverteilungRow[],
+): string {
+  return matchApiRowForSeat(seatLabel, rows)?.partei ?? seatLabel
+}
+
+function matchFraktionVote(
+  seatLabel: string,
   fraktionen: FraktionVote[],
 ): FraktionVote | undefined {
-  const short = parteiShort.trim()
-  const s = short.toLowerCase()
+  const sk = canonicalKey(seatLabel)
+  const s = seatLabel.toLowerCase()
   return fraktionen.find((f) => {
     const fl = f.partei.toLowerCase()
-    if (fl.includes(s)) return true
-    if (s === 'grüne' && fl.includes('grün')) return true
-    if (s === 'cdu/csu' && (fl.includes('cdu') || fl.includes('csu')))
+    if (sk !== 'unknown') {
+      const fk = canonicalKey(f.partei)
+      if (fk !== 'unknown' && fk === sk) return true
+    }
+    if (fl.includes(s) || s.includes(fl)) return true
+    if (sk === 'grüne' && fl.includes('grün')) return true
+    if (sk === 'linke' && fl.includes('linke')) return true
+    if (sk === 'cdu/csu' && (fl.includes('cdu') || fl.includes('csu')))
       return true
-    if (s === 'linke' && fl.includes('linke')) return true
-    if (s === 'afd' && /\bafd\b/i.test(fl)) return true
-    if (s === 'fdp' && /\bfdp\b/i.test(fl)) return true
-    if (s === 'spd' && /\bspd\b/i.test(fl)) return true
-    if (s === 'bsw' && fl.includes('bsw')) return true
-    if (s === 'fraktionslos' && fl.includes('fraktionslos')) return true
+    if (sk === 'afd' && /\bafd\b/i.test(fl)) return true
+    if (sk === 'fdp' && /\bfdp\b/i.test(fl)) return true
+    if (sk === 'spd' && /\bspd\b/i.test(fl)) return true
+    if (sk === 'bsw' && fl.includes('bsw')) return true
+    if (sk === 'ssw' && fl.includes('ssw')) return true
+    if (sk === 'fraktionslos' && fl.includes('fraktionslos')) return true
     return false
   })
 }
@@ -80,101 +205,32 @@ function matchFraktion(
 function voteColorForSeatInPartei(
   localIndex: number,
   f: FraktionVote,
+  yes: string,
+  no: string,
+  abstain: string,
+  absent: string,
 ): string {
   const { ja, nein, enthalten } = f
-  if (localIndex < ja) return VOTE_YES
-  if (localIndex < ja + nein) return VOTE_NO
-  if (localIndex < ja + nein + enthalten) return VOTE_ABSTAIN
-  return VOTE_ABSENT
+  if (localIndex < ja) return yes
+  if (localIndex < ja + nein) return no
+  if (localIndex < ja + nein + enthalten) return abstain
+  return absent
 }
 
-/** Proportionale Sitzverteilung in einer Reihe gemäß verbleibender Sitze */
-function allocateProportionalRowFromRemaining(
-  nRow: number,
-  remaining: number[],
-): number[] {
-  const remTotal = remaining.reduce((a, b) => a + b, 0)
-  if (remTotal === 0 || nRow === 0) return remaining.map(() => 0)
-  const raw = remaining.map((r) => (nRow * r) / remTotal)
-  const out = raw.map((x, i) =>
-    Math.min(Math.floor(x), remaining[i]),
-  )
-  let sum = out.reduce((a, b) => a + b, 0)
-  let rem = nRow - sum
-  const frac = raw
-    .map((x, i) => ({
-      i,
-      frac: x - Math.floor(x),
-    }))
-    .sort((a, b) => b.frac - a.frac)
-  for (let k = 0; k < frac.length && rem > 0; k++) {
-    const i = frac[k].i
-    if (out[i] < remaining[i]) {
-      out[i] += 1
-      rem -= 1
+function buildSeatDerived(): SeatDerived[] {
+  const counters = new Map<string, number>()
+  return RAW_SEATS.map(([cx, cy, rawPartei, rawFarbe, fraktionsIndex]) => {
+    const i = counters.get(rawPartei) ?? 0
+    counters.set(rawPartei, i + 1)
+    return {
+      cx,
+      cy,
+      rawPartei,
+      rawFarbe,
+      fraktionsIndex,
+      idxInFrak: i,
     }
-  }
-  while (rem > 0) {
-    const i = out.findIndex((x, j) => x < remaining[j])
-    if (i === -1) break
-    out[i] += 1
-    rem -= 1
-  }
-  return out
-}
-
-function generateSeats(sitz: SitzverteilungRow[]): Omit<Seat, 'voteColor'>[] {
-  const ordered = sortedSitz(sitz)
-  const total = ordered.reduce((s, p) => s + p.sitze, 0)
-  const seats: Omit<Seat, 'voteColor'>[] = []
-  let remaining = ordered.map((p) => p.sitze)
-  const seatInPartei = ordered.map(() => 0)
-  let globalId = 0
-
-  let r = INNER_RADIUS
-  while (remaining.some((x) => x > 0) && r <= MAX_ROW_RADIUS) {
-    const remTotal = remaining.reduce((a, b) => a + b, 0)
-    if (remTotal === 0) break
-
-    const nRow = Math.max(1, Math.floor((Math.PI * r) / PITCH))
-    const nThisRow = Math.min(nRow, remTotal)
-    const counts = allocateProportionalRowFromRemaining(nThisRow, remaining)
-
-    let col = 0
-    ordered.forEach((party, pi) => {
-      const k = counts[pi]
-      for (let j = 0; j < k; j++) {
-        const i = col + j
-        const theta =
-          nThisRow === 1
-            ? Math.PI / 2
-            : Math.PI - (i / (nThisRow - 1)) * Math.PI
-        const x = CX + r * Math.cos(theta)
-        const y = CY - r * Math.sin(theta)
-        const sip = seatInPartei[pi]
-        seats.push({
-          id: `s-${globalId++}`,
-          x,
-          y,
-          partei: party.partei,
-          fraktionIndex: pi,
-          seatInPartei: sip,
-          partyColor: party.farbe,
-          delay: pi * 300,
-        })
-        seatInPartei[pi] += 1
-      }
-      col += k
-    })
-
-    remaining = remaining.map((x, i) => x - counts[i])
-    r += ROW_SPACING
-  }
-
-  if (seats.length > total) {
-    return seats.slice(0, total)
-  }
-  return seats
+  })
 }
 
 export function Hemicycle({
@@ -182,23 +238,65 @@ export function Hemicycle({
   abstimmung,
   animating,
 }: HemicycleProps) {
-  const { c, t } = useTheme()
+  const { c, t, theme } = useTheme()
   const [voteReveal, setVoteReveal] = useState(false)
 
-  const baseSeats = useMemo(
-    () => generateSeats(sitzverteilung),
-    [sitzverteilung],
+  const cduSeat = theme === 'dark' ? '#CCCCCC' : '#000000'
+
+  const { legendByKey } = useMemo(
+    () => mergePartiesForLegend(sitzverteilung, cduSeat),
+    [sitzverteilung, cduSeat],
   )
 
-  const seats: Seat[] = useMemo(() => {
-    const fr = abstimmung?.fraktionen ?? []
-    return baseSeats.map((s) => {
-      const fv = matchFraktion(s.partei, fr)
+  const legendOrdered = useMemo(
+    () => orderedLegend(legendByKey, cduSeat),
+    [legendByKey, cduSeat],
+  )
+
+  const seatDerived = useMemo(() => buildSeatDerived(), [])
+
+  const seatRender = useMemo(() => {
+    return seatDerived.map((d) => {
+      const partyColor = partyFillForSeat(
+        d.rawPartei,
+        d.rawFarbe,
+        sitzverteilung,
+        cduSeat,
+      )
+      const partei = displayParteiForSeat(d.rawPartei, sitzverteilung)
+      const fv =
+        abstimmung != null
+          ? matchFraktionVote(d.rawPartei, abstimmung.fraktionen)
+          : undefined
       const voteColor =
-        fv != null ? voteColorForSeatInPartei(s.seatInPartei, fv) : s.partyColor
-      return { ...s, voteColor }
+        fv != null
+          ? voteColorForSeatInPartei(
+              d.idxInFrak,
+              fv,
+              c.yes,
+              c.no,
+              c.abstain,
+              c.absent,
+            )
+          : partyColor
+      return {
+        ...d,
+        partyColor,
+        partei,
+        voteColor,
+        delay: d.fraktionsIndex * FRACT_ANIM_MS,
+      }
     })
-  }, [baseSeats, abstimmung])
+  }, [
+    seatDerived,
+    sitzverteilung,
+    cduSeat,
+    abstimmung,
+    c.yes,
+    c.no,
+    c.abstain,
+    c.absent,
+  ])
 
   useEffect(() => {
     if (!abstimmung) {
@@ -206,48 +304,72 @@ export function Hemicycle({
       return
     }
     setVoteReveal(false)
-    const id = window.requestAnimationFrame(() => {
-      setVoteReveal(true)
-    })
+    const id = window.requestAnimationFrame(() => setVoteReveal(true))
     return () => window.cancelAnimationFrame(id)
   }, [abstimmung])
 
   const showVoteFill = Boolean(abstimmung && voteReveal)
 
-  const legendParties = sortedSitz(sitzverteilung)
-
   return (
     <div>
       <svg
-        viewBox="0 0 600 320"
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        role="img"
         style={{
           width: '100%',
-          maxWidth: 600,
+          maxWidth: 820,
           display: 'block',
           margin: '0 auto',
-          background: 'transparent',
+          background: c.bg,
         }}
-        aria-label="Bundestag Hemicycle"
+        aria-label="Bundestag-Sitzverteilung"
         aria-busy={animating ? true : undefined}
       >
-        {seats.map((seat) => {
+        <title>Bundestag-Sitzverteilung</title>
+        <rect
+          x={382}
+          y={392}
+          width={36}
+          height={12}
+          rx={2}
+          fill={c.muted}
+          opacity={0.55}
+        />
+        <rect
+          x={374}
+          y={396}
+          width={10}
+          height={8}
+          rx={1}
+          fill={c.border}
+          opacity={0.9}
+        />
+        <rect
+          x={416}
+          y={396}
+          width={10}
+          height={8}
+          rx={1}
+          fill={c.border}
+          opacity={0.9}
+        />
+
+        {seatRender.map((s, i) => {
           const fill =
-            showVoteFill && abstimmung ? seat.voteColor : seat.partyColor
+            showVoteFill && abstimmung ? s.voteColor : s.partyColor
           return (
             <circle
-              key={seat.id}
-              cx={seat.x}
-              cy={seat.y}
-              r={SEAT_RADIUS}
+              key={i}
+              cx={s.cx}
+              cy={s.cy}
+              r={SEAT_R}
               fill={fill}
               style={{
-                transition: abstimmung
-                  ? 'fill 0.4s ease'
-                  : 'fill 0.2s ease',
-                transitionDelay: abstimmung ? `${seat.delay}ms` : '0ms',
+                transition: abstimmung ? 'fill 0.4s ease' : 'fill 0.2s ease',
+                transitionDelay: abstimmung ? `${s.delay}ms` : '0ms',
               }}
             >
-              <title>{seat.partei}</title>
+              <title>{s.partei}</title>
             </circle>
           )
         })}
@@ -256,89 +378,138 @@ export function Hemicycle({
       <div
         style={{
           marginTop: spacing.lg,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: spacing.md,
-          justifyContent: 'center',
-          fontFamily: fonts.body,
-          fontSize: '0.78rem',
-          color: c.muted,
+          padding: spacing.md,
+          borderRadius: 8,
+          border: `1px solid ${c.border}`,
+          borderLeft: `3px solid ${c.red}`,
+          background: c.cardBg,
         }}
       >
-        {!abstimmung &&
-          legendParties.map((p) => (
-            <span
-              key={p.partei}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: spacing.xs,
-              }}
-            >
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: spacing.md,
+            justifyContent: 'center',
+            fontFamily: fonts.body,
+            fontSize: '0.78rem',
+            color: c.muted,
+          }}
+        >
+          {!abstimmung &&
+            legendOrdered.map((p) => (
               <span
+                key={p.key}
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: p.farbe,
-                  flexShrink: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: spacing.xs,
                 }}
-              />
-              <span style={{ color: c.inkSoft }}>
-                {p.partei}{' '}
-                <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem' }}>
-                  ({p.sitze} {t('seats')})
+              >
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: p.farbe,
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{ color: c.ink }}>
+                  {p.partei}{' '}
+                  <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem' }}>
+                    ({p.sitze} {t('seats')})
+                  </span>
                 </span>
               </span>
-            </span>
-          ))}
-        {abstimmung && (
-          <>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs }}>
+            ))}
+          {abstimmung && (
+            <>
               <span
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: VOTE_YES,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: spacing.xs,
                 }}
-              />
-              {t('yes')}
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs }}>
+              >
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: c.yes,
+                  }}
+                />
+                <span style={{ color: c.ink }}>{t('yes')}</span>
+              </span>
               <span
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: VOTE_NO,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: spacing.xs,
                 }}
-              />
-              {t('no')}
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs }}>
+              >
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: c.no,
+                  }}
+                />
+                <span style={{ color: c.ink }}>{t('no')}</span>
+              </span>
               <span
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: VOTE_ABSTAIN,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: spacing.xs,
                 }}
-              />
-              {t('abstained')}
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs }}>
+              >
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: c.abstain,
+                  }}
+                />
+                <span style={{ color: c.ink }}>{t('abstained')}</span>
+              </span>
               <span
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  background: VOTE_ABSENT,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: spacing.xs,
                 }}
-              />
-              {t('absentL')}
-            </span>
-          </>
+              >
+                <span
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: c.absent,
+                  }}
+                />
+                <span style={{ color: c.ink }}>{t('absentL')}</span>
+              </span>
+            </>
+          )}
+        </div>
+        {!abstimmung && (
+          <p
+            style={{
+              marginTop: spacing.md,
+              marginBottom: 0,
+              fontFamily: fonts.body,
+              fontSize: '0.72rem',
+              color: c.subtle,
+              textAlign: 'center',
+              lineHeight: 1.4,
+            }}
+          >
+            {t('hemicycleVoteHint')}
+          </p>
         )}
       </div>
     </div>

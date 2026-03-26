@@ -13,6 +13,7 @@ import {
   Hemicycle,
   type SitzverteilungRow,
 } from '../components/bundestag/Hemicycle'
+import { RAW_SEAT_COUNT } from '../data/bundestag-seats'
 import type { AbstimmungsDetailData } from '../components/bundestag/AbstimmungsDetail'
 
 export default function Bundestag() {
@@ -47,12 +48,8 @@ export default function Bundestag() {
         return
       }
     }
-    if (abstimmungen?.length) {
-      setSelectedPollId(abstimmungen[0].poll_id)
-    } else {
-      setSelectedPollId(null)
-    }
-  }, [pollIdParam, abstimmungen])
+    setSelectedPollId(null)
+  }, [pollIdParam])
 
   useEffect(() => {
     if (!abstimmungsDetail) return
@@ -114,6 +111,36 @@ export default function Bundestag() {
               boxShadow: c.shadow,
             }}
           >
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'baseline',
+                gap: spacing.md,
+                marginBottom: spacing.lg,
+              }}
+            >
+              <h2
+                style={{
+                  margin: 0,
+                  fontFamily: fonts.display,
+                  fontSize: '1.15rem',
+                  fontWeight: 700,
+                  color: c.ink,
+                }}
+              >
+                {t('seatDistribution')}
+              </h2>
+              <span
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: '0.85rem',
+                  color: c.muted,
+                }}
+              >
+                {RAW_SEAT_COUNT} {t('seats')}
+              </span>
+            </div>
             <Hemicycle
               sitzverteilung={sitz}
               abstimmung={
@@ -123,17 +150,6 @@ export default function Bundestag() {
               }
               animating={animating}
             />
-            <p
-              style={{
-                marginTop: spacing.md,
-                fontFamily: fonts.body,
-                fontSize: '0.85rem',
-                color: c.muted,
-                lineHeight: 1.5,
-              }}
-            >
-              {t('animationHint')}
-            </p>
           </div>
 
           <div

@@ -91,6 +91,9 @@ export const de = {
   noVoteSelected: 'Wähle eine Abstimmung aus der Liste',
   animationHint:
     'Klicke auf eine Abstimmung um die Sitzverteilung zu sehen',
+  seatDistribution: 'Sitzverteilung',
+  hemicycleVoteHint:
+    'Wähle eine Abstimmung um das Stimmverhalten zu sehen',
 } as const
 
 export const en = {
@@ -184,6 +187,8 @@ export const en = {
   showLess: 'Show less',
   noVoteSelected: 'Choose a vote from the list',
   animationHint: 'Click a vote to see the seating chart',
+  seatDistribution: 'Seat distribution',
+  hemicycleVoteHint: 'Select a vote to see voting behaviour',
 } as const
 
 export type I18nKey = keyof typeof de
