@@ -26,6 +26,7 @@ export type FraktionVote = {
 export interface HemicycleProps {
   sitzverteilung: SitzverteilungRow[]
   abstimmung?: { fraktionen: FraktionVote[] }
+  abgeordnete?: Map<number, { name: string; fraktion: string; wahlkreis: string }>
   animating?: boolean
 }
 
@@ -40,6 +41,7 @@ type MergedParty = {
 type SeatDerived = {
   cx: number
   cy: number
+  seatId: number
   rawPartei: string
   rawFarbe: string
   fraktionsIndex: number
@@ -219,23 +221,27 @@ function voteColorForSeatInPartei(
 
 function buildSeatDerived(): SeatDerived[] {
   const counters = new Map<string, number>()
-  return RAW_SEATS.map(([cx, cy, rawPartei, rawFarbe, fraktionsIndex]) => {
+  return RAW_SEATS.map(
+    ([cx, cy, rawPartei, rawFarbe, fraktionsIndex], seatId) => {
     const i = counters.get(rawPartei) ?? 0
     counters.set(rawPartei, i + 1)
     return {
       cx,
       cy,
+      seatId,
       rawPartei,
       rawFarbe,
       fraktionsIndex,
       idxInFrak: i,
     }
-  })
+    },
+  )
 }
 
 export function Hemicycle({
   sitzverteilung,
   abstimmung,
+  abgeordnete,
   animating,
 }: HemicycleProps) {
   const { c, t, theme } = useTheme()
@@ -279,11 +285,23 @@ export function Hemicycle({
               c.absent,
             )
           : partyColor
+
+      const voteLabel =
+        fv != null
+          ? d.idxInFrak < fv.ja
+            ? t('yes')
+            : d.idxInFrak < fv.ja + fv.nein
+              ? t('no')
+              : d.idxInFrak < fv.ja + fv.nein + fv.enthalten
+                ? t('abstained')
+                : t('absentL')
+          : undefined
       return {
         ...d,
         partyColor,
         partei,
         voteColor,
+        voteLabel,
         delay: d.fraktionsIndex * FRACT_ANIM_MS,
       }
     })
@@ -296,6 +314,7 @@ export function Hemicycle({
     c.no,
     c.abstain,
     c.absent,
+    t,
   ])
 
   useEffect(() => {
@@ -357,6 +376,13 @@ export function Hemicycle({
         {seatRender.map((s, i) => {
           const fill =
             showVoteFill && abstimmung ? s.voteColor : s.partyColor
+          const abg = abgeordnete?.get(s.seatId)
+          const title =
+            abg != null
+              ? `${abg.name} (${abg.fraktion})\nWahlkreis: ${abg.wahlkreis}${
+                  abstimmung && s.voteLabel ? `\nStimme: ${s.voteLabel}` : ''
+                }`
+              : s.partei
           return (
             <circle
               key={i}
@@ -369,7 +395,7 @@ export function Hemicycle({
                 transitionDelay: abstimmung ? `${s.delay}ms` : '0ms',
               }}
             >
-              <title>{s.partei}</title>
+              <title>{title}</title>
             </circle>
           )
         })}
