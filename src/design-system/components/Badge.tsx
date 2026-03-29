@@ -9,6 +9,9 @@ export type BadgeVariant =
   | 'muted'
   | 'blue'
   | 'amber'
+  | 'purple'
+  | 'teal'
+  | 'gray'
 
 export type BadgeProps = {
   text: string
@@ -16,7 +19,10 @@ export type BadgeProps = {
 }
 
 const BLUE = '#1E40AF'
-const AMBER = '#92400E'
+const AMBER = '#C2410C'
+const PURPLE = '#6B21A8'
+const TEAL = '#0F766E'
+const GRAY = '#6B7280'
 
 export function Badge({ text, variant = 'default' }: BadgeProps) {
   const { c } = useTheme()
@@ -56,7 +62,19 @@ export function Badge({ text, variant = 'default' }: BadgeProps) {
     },
     amber: {
       background: AMBER,
-      color: c.badgeText,
+      color: '#FFFFFF',
+    },
+    purple: {
+      background: PURPLE,
+      color: '#FFFFFF',
+    },
+    teal: {
+      background: TEAL,
+      color: '#FFFFFF',
+    },
+    gray: {
+      background: GRAY,
+      color: '#FFFFFF',
     },
   }
 
