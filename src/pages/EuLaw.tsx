@@ -3,6 +3,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  type FocusEvent,
 } from 'react'
 import { useParams } from 'react-router-dom'
 import {
@@ -177,7 +178,7 @@ export default function EuLaw() {
       padding: `0 ${spacing.lg}px`,
       borderRadius: 999,
       border: `1px solid ${active ? c.red : c.border}`,
-      background: active ? c.red : c.bgAlt,
+      background: active ? c.red : c.cardBg,
       color: active ? '#FFFFFF' : c.muted,
       fontFamily: fonts.body,
       fontSize: '0.85rem',
@@ -189,23 +190,41 @@ export default function EuLaw() {
     [c],
   )
 
+  const selectFocusProps = useMemo(
+    () => ({
+      onFocus: (e: FocusEvent<HTMLSelectElement>) => {
+        e.target.style.borderColor = c.red
+        e.target.style.borderStyle = 'solid'
+      },
+      onBlur: (e: FocusEvent<HTMLSelectElement>) => {
+        e.target.style.borderColor = c.border
+        e.target.style.borderStyle = 'solid'
+      },
+    }),
+    [c.red, c.border],
+  )
+
   const selectStyle = useMemo(
     () => ({
       width: '100%',
       minHeight: 44,
       padding: `${spacing.md}px ${spacing.xl}px ${spacing.md}px ${spacing.md}px`,
-      border: `1px solid ${c.inputBorder}`,
       borderRadius: 6,
-      background: c.inputBg,
+      outline: 'none' as const,
+      borderStyle: 'solid' as const,
+      borderWidth: '1px',
+      borderColor: c.border,
+      WebkitAppearance: 'none' as const,
+      MozAppearance: 'none' as const,
+      appearance: 'none' as const,
+      backgroundImage: selectArrowDataUrl,
+      backgroundColor: c.cardBg,
+      backgroundRepeat: 'no-repeat' as const,
+      backgroundPosition: 'right 12px center',
       color: c.ink,
       fontFamily: fonts.body,
       fontSize: '0.88rem',
-      appearance: 'none' as const,
-      WebkitAppearance: 'none' as const,
-      backgroundImage: selectArrowDataUrl,
-      backgroundRepeat: 'no-repeat' as const,
-      backgroundPosition: 'right 12px center',
-      cursor: 'pointer',
+      cursor: 'pointer' as const,
     }),
     [c, selectArrowDataUrl],
   )
@@ -317,9 +336,9 @@ export default function EuLaw() {
               minWidth: 0,
               minHeight: 44,
               padding: `${spacing.md}px ${spacing.lg}px`,
-              border: `1px solid ${c.inputBorder}`,
+              border: `1px solid ${c.border}`,
               borderRadius: 6,
-              background: c.inputBg,
+              background: c.cardBg,
               color: c.ink,
               fontFamily: fonts.body,
               fontSize: '0.9rem',
@@ -332,7 +351,7 @@ export default function EuLaw() {
             }}
             onBlur={(e) => {
               e.target.style.boxShadow = 'none'
-              e.target.style.borderColor = c.inputBorder
+              e.target.style.borderColor = c.border
             }}
           />
 
@@ -394,6 +413,7 @@ export default function EuLaw() {
               onChange={(e) => setRechtsgebiet(e.target.value)}
               aria-label={t('euLawAreaLabel')}
               style={selectStyle}
+              {...selectFocusProps}
             >
               <option value="">{t('euLawAreaAll')}</option>
               {LEGAL_AREA_KEYS.map((a) => (
@@ -430,6 +450,7 @@ export default function EuLaw() {
               onChange={(e) => setSortNewest(e.target.value === 'new')}
               aria-label={t('euLawSortLabel')}
               style={selectStyle}
+              {...selectFocusProps}
             >
               <option value="new">{t('euLawSortNewest')}</option>
               <option value="old">{t('euLawSortOldest')}</option>

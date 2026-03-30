@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type FocusEvent,
+} from 'react'
 import {
   useNavigate,
   useParams,
@@ -456,18 +462,64 @@ export default function Legislation() {
     [c],
   )
 
+  const legislationSelectArrow = useMemo(() => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="${c.muted}" stroke-width="1.5" stroke-linecap="round"/></svg>`
+    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
+  }, [c.muted])
+
   const selectStyle = useMemo(
     () => ({
-      padding: `${spacing.sm}px ${spacing.md}px`,
+      boxSizing: 'border-box' as const,
+      padding: `${spacing.sm}px ${spacing.xl}px ${spacing.sm}px ${spacing.md}px`,
       borderRadius: 6,
-      border: `1px solid ${c.inputBorder}`,
-      background: c.inputBg,
+      outline: 'none' as const,
+      borderStyle: 'solid' as const,
+      borderWidth: '1px',
+      borderColor: c.border,
+      WebkitAppearance: 'none' as const,
+      MozAppearance: 'none' as const,
+      appearance: 'none' as const,
+      backgroundImage: legislationSelectArrow,
+      backgroundColor: c.cardBg,
+      backgroundRepeat: 'no-repeat' as const,
+      backgroundPosition: 'right 10px center',
       color: c.ink,
       fontFamily: fonts.body,
       fontSize: '0.78rem',
       cursor: 'pointer' as const,
-      outline: 'none' as const,
       minWidth: 120,
+    }),
+    [c, legislationSelectArrow],
+  )
+
+  const selectFocusHandlers = useMemo(
+    () => ({
+      onFocus: (e: FocusEvent<HTMLSelectElement>) => {
+        e.target.style.borderColor = c.red
+        e.target.style.borderStyle = 'solid'
+      },
+      onBlur: (e: FocusEvent<HTMLSelectElement>) => {
+        e.target.style.borderColor = c.border
+        e.target.style.borderStyle = 'solid'
+      },
+    }),
+    [c.red, c.border],
+  )
+
+  const urteilSortBtnBase = useMemo(
+    () => ({
+      padding: `${spacing.sm}px ${spacing.md}px`,
+      borderRadius: 6,
+      outline: 'none' as const,
+      borderStyle: 'solid' as const,
+      borderWidth: '1px',
+      borderColor: c.border,
+      backgroundColor: c.cardBg,
+      color: c.ink,
+      fontFamily: fonts.mono,
+      fontSize: '0.78rem',
+      cursor: 'pointer' as const,
+      minWidth: 44,
     }),
     [c],
   )
@@ -601,6 +653,7 @@ export default function Legislation() {
               }
               aria-label={t('gesetzeToolbarDomain')}
               style={selectStyle}
+              {...selectFocusHandlers}
             >
               <option value="all">{t('filterAll')}</option>
               {DOMAIN_OPTIONS.map((o) => (
@@ -635,6 +688,7 @@ export default function Legislation() {
                 setGesetzSort(e.target.value as GesetzSort)
               }
               style={selectStyle}
+              {...selectFocusHandlers}
             >
               <option value="new">{t('gesetzeSortNewest')}</option>
               <option value="old">{t('gesetzeSortOldest')}</option>
@@ -914,6 +968,7 @@ export default function Legislation() {
             onChange={(e) => setUrteilCourt(e.target.value)}
             aria-label={t('urteileCourtLabel')}
             style={selectStyle}
+            {...selectFocusHandlers}
           >
             <option value="all">{t('filterAll')}</option>
             {COURT_VALUES.map((cv) => (
@@ -947,6 +1002,7 @@ export default function Legislation() {
             onChange={(e) => setUrteilRg(e.target.value)}
             aria-label={t('legalArea')}
             style={selectStyle}
+            {...selectFocusHandlers}
           >
             <option value="all">{t('filterAll')}</option>
             {URTEIL_RECHTSGEBIET_OPTIONS.map((rg) => (
@@ -982,6 +1038,7 @@ export default function Legislation() {
             }
             aria-label={t('urteileTimeLabel')}
             style={selectStyle}
+            {...selectFocusHandlers}
           >
             <option value="30d">{t('urteileTime30d')}</option>
             <option value="3m">{t('urteileTime3m')}</option>
@@ -1013,10 +1070,8 @@ export default function Legislation() {
               type="button"
               onClick={() => setUrteilSortNewest(true)}
               style={{
-                ...selectStyle,
-                minWidth: 44,
-                fontFamily: fonts.mono,
-                borderColor: urteilSortNewest ? c.red : c.inputBorder,
+                ...urteilSortBtnBase,
+                borderColor: urteilSortNewest ? c.red : c.border,
                 color: urteilSortNewest ? c.red : c.ink,
               }}
               aria-pressed={urteilSortNewest}
@@ -1028,10 +1083,8 @@ export default function Legislation() {
               type="button"
               onClick={() => setUrteilSortNewest(false)}
               style={{
-                ...selectStyle,
-                minWidth: 44,
-                fontFamily: fonts.mono,
-                borderColor: !urteilSortNewest ? c.red : c.inputBorder,
+                ...urteilSortBtnBase,
+                borderColor: !urteilSortNewest ? c.red : c.border,
                 color: !urteilSortNewest ? c.red : c.ink,
               }}
               aria-pressed={!urteilSortNewest}

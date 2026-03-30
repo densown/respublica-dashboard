@@ -196,6 +196,8 @@ export const de = {
   euLawStatRegLabel: 'Verordnungen',
   euLawStatDirLabel: 'Richtlinien',
   euLawAiDisclaimerEmoji: '🤖 KI-generierte Zusammenfassung',
+  euLawSummaryGermanOnly:
+    'ℹ️ Zusammenfassung derzeit nur auf Deutsch verfügbar',
   euLawViewEurlexArrow: 'Auf EUR-Lex ansehen →',
   euLawLinkedGermanLaws: 'Verknüpfte deutsche Gesetze',
   euLawEurovocHeading: 'EuroVoc',
@@ -411,6 +413,8 @@ export const en = {
   euLawStatRegLabel: 'Regulations',
   euLawStatDirLabel: 'Directives',
   euLawAiDisclaimerEmoji: '🤖 AI-generated summary',
+  euLawSummaryGermanOnly:
+    'ℹ️ Summary currently available in German only',
   euLawViewEurlexArrow: 'View on EUR-Lex →',
   euLawLinkedGermanLaws: 'Linked German statutes',
   euLawEurovocHeading: 'EuroVoc',

@@ -133,6 +133,15 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
     [toggle],
   )
 
+  const summaryGermanOnlyStyle: CSSProperties = {
+    fontFamily: fonts.body,
+    fontSize: '0.75rem',
+    color: c.muted,
+    fontStyle: 'italic',
+    marginTop: spacing.sm,
+    marginBottom: 0,
+  }
+
   const titleStyle: CSSProperties = {
     fontFamily: fonts.body,
     fontSize: narrow ? '0.9rem' : '1rem',
@@ -244,6 +253,9 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             >
               {preview}
             </p>
+            {lang === 'en' ? (
+              <p style={summaryGermanOnlyStyle}>{t('euLawSummaryGermanOnly')}</p>
+            ) : null}
             <p
               style={{
                 fontFamily: fonts.body,
@@ -278,6 +290,11 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 >
                   {summaryFull}
                 </p>
+                {lang === 'en' ? (
+                  <p style={{ ...summaryGermanOnlyStyle, marginBottom: 0 }}>
+                    {t('euLawSummaryGermanOnly')}
+                  </p>
+                ) : null}
                 <p
                   style={{
                     fontFamily: fonts.body,
