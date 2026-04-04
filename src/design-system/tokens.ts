@@ -17,6 +17,8 @@ export const light = {
   badgeBg: '#1A1A1A',
   badgeText: '#FFFFFF',
   cardBg: '#FFFFFF',
+  /** Flächen für Overlays / Such-Dropdowns (Dark Mode: wie cardBg) */
+  surface: '#FFFFFF',
   cardBorder: '#E8E4DC',
   sidebarBg: '#1A1A1A',
   sidebarText: 'rgba(255,255,255,0.55)',
@@ -51,6 +53,7 @@ export const dark = {
   badgeBg: '#E8E4DC',
   badgeText: '#111111',
   cardBg: '#1A1A1A',
+  surface: '#1A1A1A',
   cardBorder: '#2D2D2D',
   sidebarBg: '#0A0A0A',
   sidebarText: 'rgba(255,255,255,0.45)',

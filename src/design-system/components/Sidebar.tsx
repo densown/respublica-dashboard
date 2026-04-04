@@ -3,14 +3,27 @@ import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { ShareCompact } from './ShareCompact'
 
-export type SidebarModule = {
+/** Ein Nav-Link (wie bisher mit id / icon / label). */
+export type SidebarNavLink = {
+  kind: 'link'
   id: string
   icon: string
   label: string
 }
 
+/** Sektions-Überschrift, nicht klickbar. */
+export type SidebarNavSection = {
+  kind: 'section'
+  label: string
+}
+
+export type SidebarNavEntry = SidebarNavSection | SidebarNavLink
+
+/** @deprecated Verwende SidebarNavLink */
+export type SidebarModule = SidebarNavLink
+
 export type SidebarProps = {
-  modules: SidebarModule[]
+  entries: SidebarNavEntry[]
   active: string
   onSelect: (id: string) => void
   collapsed: boolean
@@ -22,7 +35,7 @@ export type SidebarProps = {
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function Sidebar({
-  modules,
+  entries,
   active,
   onSelect,
   collapsed,
@@ -48,6 +61,8 @@ export function Sidebar({
   const toggleLang = useCallback(() => {
     setLang(lang === 'de' ? 'en' : 'de')
   }, [lang, setLang])
+
+  const sectionColor = theme === 'light' ? '#888' : '#666'
 
   return (
     <aside
@@ -138,13 +153,42 @@ export function Sidebar({
           overflowY: 'auto',
         }}
       >
-        {modules.map((m) => {
-          const isActive = m.id === active
+        {entries.map((entry, idx) => {
+          if (entry.kind === 'section') {
+            if (collapsed) {
+              return (
+                <div
+                  key={`sec-${idx}`}
+                  style={{ height: spacing.sm, flexShrink: 0 }}
+                  aria-hidden
+                />
+              )
+            }
+            return (
+              <div
+                key={`sec-${idx}`}
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: '0.65rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: sectionColor,
+                  paddingTop: 16,
+                  paddingLeft: spacing.sm,
+                  paddingRight: spacing.sm,
+                  userSelect: 'none',
+                }}
+              >
+                {entry.label}
+              </div>
+            )
+          }
+          const isActive = entry.id === active
           return (
             <button
-              key={m.id}
+              key={entry.id}
               type="button"
-              onClick={() => handleModule(m.id)}
+              onClick={() => handleModule(entry.id)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -161,11 +205,11 @@ export function Sidebar({
               }}
             >
               <span style={{ flexShrink: 0, width: '1.2em', textAlign: 'center' }}>
-                {m.icon}
+                {entry.icon}
               </span>
               {!collapsed && (
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {m.label}
+                  {entry.label}
                 </span>
               )}
             </button>

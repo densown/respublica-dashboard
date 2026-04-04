@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
-import type { SidebarModule } from './Sidebar'
+import type { SidebarNavEntry } from './Sidebar'
 import { ShareCompact } from './ShareCompact'
 
 export type MobileNavProps = {
-  modules: SidebarModule[]
+  entries: SidebarNavEntry[]
   active: string
   onSelect: (id: string) => void
   shareTitle: string
@@ -15,7 +15,7 @@ export type MobileNavProps = {
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function MobileNav({
-  modules,
+  entries,
   active,
   onSelect,
   shareTitle,
@@ -41,6 +41,8 @@ export function MobileNav({
   const toggleLang = useCallback(() => {
     setLang(lang === 'de' ? 'en' : 'de')
   }, [lang, setLang])
+
+  const sectionColor = theme === 'light' ? '#888' : '#666'
 
   return (
     <>
@@ -208,13 +210,32 @@ export function MobileNav({
                   flex: 1,
                 }}
               >
-                {modules.map((m) => {
-                  const isActive = m.id === active
+                {entries.map((entry, idx) => {
+                  if (entry.kind === 'section') {
+                    return (
+                      <div
+                        key={`msec-${idx}`}
+                        style={{
+                          fontFamily: fonts.mono,
+                          fontSize: '0.65rem',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          color: sectionColor,
+                          paddingTop: 16,
+                          paddingLeft: spacing.sm,
+                          userSelect: 'none',
+                        }}
+                      >
+                        {entry.label}
+                      </div>
+                    )
+                  }
+                  const isActive = entry.id === active
                   return (
                     <button
-                      key={m.id}
+                      key={entry.id}
                       type="button"
-                      onClick={() => handleSelect(m.id)}
+                      onClick={() => handleSelect(entry.id)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -231,8 +252,8 @@ export function MobileNav({
                         transition: `background 0.2s ${transition}, border-color 0.2s ${transition}`,
                       }}
                     >
-                      <span>{m.icon}</span>
-                      <span>{m.label}</span>
+                      <span>{entry.icon}</span>
+                      <span>{entry.label}</span>
                     </button>
                   )
                 })}

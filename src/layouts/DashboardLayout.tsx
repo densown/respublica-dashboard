@@ -12,6 +12,8 @@ const ROUTE_PREFIX: Record<string, string> = {
   weltkarte: 'worldmap',
   'eu-parlament': 'euParl',
   lobbyregister: 'lobby',
+  wahlen: 'elections',
+  quellen: 'sources',
   admin: 'admin',
 }
 
@@ -25,6 +27,8 @@ const MODULE_PATH: Record<string, string> = {
   worldmap: '/weltkarte',
   euParl: '/eu-parlament',
   lobby: '/lobbyregister',
+  elections: '/wahlen',
+  sources: '/quellen',
   admin: '/admin',
 }
 
@@ -58,18 +62,23 @@ export default function DashboardLayout() {
 
   const activeModule = activeModuleFromPath(location.pathname)
 
-  const modules = useMemo(
+  const navEntries = useMemo(
     () => [
-      { id: 'overview', icon: '◉', label: t('overview') },
-      { id: 'bundestag', icon: '⬡', label: t('bundestag') },
-      { id: 'legislation', icon: '§', label: t('legislation') },
-      { id: 'euLaw', icon: '★', label: t('euLaw') },
-      { id: 'coalition', icon: '✓', label: t('coalition') },
-      { id: 'democracy', icon: '◈', label: t('democracyIndex') },
-      { id: 'worldmap', icon: '⊕', label: t('worldMap') },
-      { id: 'euParl', icon: '⊞', label: t('euParliament') },
-      { id: 'lobby', icon: '⊘', label: t('lobby') },
-      { id: 'admin', icon: '⚙', label: t('admin') },
+      { kind: 'link' as const, id: 'overview', icon: '◉', label: t('overview') },
+      { kind: 'link' as const, id: 'worldmap', icon: '⊕', label: t('worldMap') },
+      { kind: 'section' as const, label: t('sectionGermany') },
+      { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
+      { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },
+      { kind: 'link' as const, id: 'legislation', icon: '§', label: t('legislation') },
+      { kind: 'link' as const, id: 'coalition', icon: '✓', label: t('coalition') },
+      { kind: 'section' as const, label: t('sectionEurope') },
+      { kind: 'link' as const, id: 'euLaw', icon: '★', label: t('euLaw') },
+      { kind: 'link' as const, id: 'euParl', icon: '⊞', label: t('euParliament') },
+      { kind: 'section' as const, label: t('sectionTools') },
+      { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') },
+      { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
+      { kind: 'link' as const, id: 'sources', icon: '◆', label: t('navSources') },
+      { kind: 'link' as const, id: 'admin', icon: '⚙', label: t('admin') },
     ],
     [t],
   )
@@ -103,7 +112,7 @@ export default function DashboardLayout() {
     >
       {!isMobile && (
         <Sidebar
-          modules={modules}
+          entries={navEntries}
           active={activeModule}
           onSelect={handleModuleSelect}
           collapsed={collapsed}
@@ -124,7 +133,7 @@ export default function DashboardLayout() {
       >
         {isMobile && (
           <MobileNav
-            modules={modules}
+            entries={navEntries}
             active={activeModule}
             onSelect={handleModuleSelect}
             shareTitle={shareTitle}

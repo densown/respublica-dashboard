@@ -16,6 +16,13 @@ export { Pagination, type PaginationProps } from './components/Pagination'
 export { ProgressBar, type ProgressBarProps, type ProgressSegment } from './components/ProgressBar'
 export { ShareCompact, type ShareCompactProps } from './components/ShareCompact'
 export { ShareToolbar, type ShareToolbarProps } from './components/ShareToolbar'
-export { Sidebar, type SidebarModule, type SidebarProps } from './components/Sidebar'
+export {
+  Sidebar,
+  type SidebarModule,
+  type SidebarNavEntry,
+  type SidebarNavLink,
+  type SidebarNavSection,
+  type SidebarProps,
+} from './components/Sidebar'
 export { StatWidget, type StatWidgetProps } from './components/StatWidget'
 export { VoteBar, type VoteBarProps } from './components/VoteBar'

@@ -6,12 +6,14 @@ import Admin from './pages/Admin'
 import Bundestag from './pages/Bundestag'
 import Coalition from './pages/Coalition'
 import DemocracyIndex from './pages/DemocracyIndex'
+import Elections from './pages/Elections'
 import EuLaw from './pages/EuLaw'
 import EuParliament from './pages/EuParliament'
 import Legislation from './pages/Legislation'
 import LobbyRegister from './pages/LobbyRegister'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
+import Sources from './pages/Sources'
 import WorldMap from './pages/WorldMap'
 
 const GOOGLE_FONTS_HREF =
@@ -47,6 +49,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
+            <Route path="wahlen" element={<Elections />} />
+            <Route path="quellen" element={<Sources />} />
             <Route path="bundestag" element={<Bundestag />} />
             <Route path="bundestag/:pollId" element={<Bundestag />} />
             <Route path="gesetze" element={<Legislation />} />
