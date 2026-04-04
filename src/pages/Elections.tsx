@@ -1,30 +1,12 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from 'react'
-import {
-  DataCard,
-  EmptyState,
-  PageHeader,
-  useTheme,
-} from '../design-system'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { EmptyState, PageHeader, useTheme } from '../design-system'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
-import { AdvancedAnalysis } from './elections/AdvancedAnalysis'
-import { ElectionMap, ElectionMapLegend } from './elections/ElectionMap'
-import { mapFillColor } from './elections/mapColors'
 import { buildKreiseMap } from './elections/mapGeometry'
+import { DistrictAnalysis } from './elections/DistrictAnalysis'
+import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
+import { MapMode } from './elections/MapMode'
 import { normalizeMapRow } from './elections/normalizeWahlen'
-import {
-  MAIN_PARTIES,
-  PARTY_LABELS,
-  partyColorsForTheme,
-} from './elections/partyColors'
-import { RegionPanel } from './elections/RegionPanel'
 import { useDebouncedValue } from './elections/useDebouncedValue'
 import type {
   ElectionType,
@@ -32,116 +14,31 @@ import type {
   MapRow,
   MapRowFromApi,
 } from './elections/types'
-import type { I18nKey } from '../design-system/i18n'
 
-const ELECTION_TYPES: ElectionType[] = [
-  'federal',
-  'state',
-  'municipal',
-  'european',
-  'mayoral',
-]
+export type ElectionsActiveMode = 'map' | 'analysis' | 'compare'
 
-const METRICS = ['winning_party', 'turnout', ...MAIN_PARTIES] as const
-
-function selectCss(c: {
-  inputBg: string
-  inputBorder: string
-  ink: string
-}): CSSProperties {
-  return {
-    minHeight: 44,
-    padding: '0 12px',
-    borderRadius: 8,
-    border: `1px solid ${c.inputBorder}`,
-    background: c.inputBg,
-    color: c.ink,
-    fontFamily: fonts.body,
-    fontSize: '0.9rem',
-    width: '100%',
-    boxSizing: 'border-box',
-  }
-}
-
-function typeLabel(t: (k: I18nKey) => string, typ: ElectionType) {
-  switch (typ) {
-    case 'federal':
-      return t('federal')
-    case 'state':
-      return t('state')
-    case 'municipal':
-      return t('municipal')
-    case 'european':
-      return t('european')
-    case 'mayoral':
-      return t('mayoral')
-    default:
-      return typ
-  }
-}
-
-function metricLabel(t: (k: I18nKey) => string, lang: 'de' | 'en', m: string) {
-  if (m === 'winning_party') return t('winningParty')
-  if (m === 'turnout') return t('turnout')
-  return PARTY_LABELS[m]?.[lang] ?? m
-}
-
-const KREISE_EXPECTED = 400
-const KREISE_COVERAGE_WARN_BELOW = 320
-
-function sparseKreisBannerText(
-  lang: 'de' | 'en',
-  typ: ElectionType,
-  typeName: string,
-  year: number,
-  count: number,
-): string {
-  const headDe = `Für ${typeName} ${year} liegen Daten für ${count} von ${KREISE_EXPECTED} Kreisen vor.`
-  const headEn = `Data are available for ${count} of ${KREISE_EXPECTED} counties for ${typeName} ${year}.`
-  if (lang === 'de') {
-    const tail =
-      typ === 'state'
-        ? 'Landtagswahlen finden nicht in allen Bundesländern gleichzeitig statt.'
-        : typ === 'municipal'
-          ? 'Kommunalwahlen werden nicht bundesweit gleichzeitig abgehalten.'
-          : typ === 'mayoral'
-            ? 'Bürgermeisterwahlen finden individuell pro Gemeinde statt.'
-            : 'Für dieses Jahr liegen nicht für alle Kreise Daten vor.'
-    return `${headDe} ${tail}`
-  }
-  const tail =
-    typ === 'state'
-      ? 'State elections are not held simultaneously across all states.'
-      : typ === 'municipal'
-        ? 'Municipal elections are not held nationwide on the same date.'
-        : typ === 'mayoral'
-          ? 'Mayoral elections are scheduled individually per municipality.'
-          : 'Data are not available for all counties for this year.'
-  return `${headEn} ${tail}`
-}
+const MODE_TAB_KEYS = {
+  map: 'modeMap',
+  analysis: 'modeAnalysis',
+  compare: 'modeCompare',
+} as const
 
 export default function Elections() {
-  const { c, t, lang, theme } = useTheme()
+  const { c, t } = useTheme()
   const geoRef = useRef<KreiseGeoJson | null>(null)
   const [geojson, setGeojson] = useState<KreiseGeoJson | null>(null)
   const [geoErr, setGeoErr] = useState(false)
 
+  const [activeMode, setActiveMode] = useState<ElectionsActiveMode>('map')
   const [electionType, setElectionType] = useState<ElectionType>('federal')
   const [year, setYear] = useState<number>(2025)
   const [metric, setMetric] = useState<string>('winning_party')
   const [selectedAgs, setSelectedAgs] = useState<string | null>(null)
-  const [compareAgs, setCompareAgs] = useState<string | null>(null)
-  const [comparePicking, setComparePicking] = useState(false)
+  const [compareRegions, setCompareRegions] = useState<string[]>([])
   const [showAdvanced, setShowAdvanced] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState('')
-  const [showSearchDropdown, setShowSearchDropdown] = useState(false)
-  const searchWrapRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    setCompareAgs(null)
-    setComparePicking(false)
-  }, [selectedAgs])
   const [narrow, setNarrow] = useState(
     typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
   )
@@ -226,56 +123,10 @@ export default function Elections() {
     return m
   }, [geojson])
 
-  const agsNameMap = useMemo(
-    () => Object.fromEntries(kreisNameByAgs) as Record<string, string>,
-    [kreisNameByAgs],
+  const searchResults = useMemo(
+    () => filterKreiseSearchHits(geojson, searchQuery),
+    [geojson, searchQuery],
   )
-
-  const searchResults = useMemo(() => {
-    const q = searchQuery.trim()
-    if (!geojson || q.length < 2) return [] as { ags: string; name: string; state: string }[]
-    const ql = q.toLowerCase()
-    const out: { ags: string; name: string; state: string }[] = []
-    for (const f of geojson.features) {
-      const name = String(f.properties.name ?? '')
-      if (!name.toLowerCase().includes(ql)) continue
-      const ags = f.properties.ags?.replace(/\s/g, '') ?? ''
-      if (!ags) continue
-      out.push({ ags, name, state: String(f.properties.state ?? '') })
-      if (out.length >= 8) break
-    }
-    return out
-  }, [geojson, searchQuery])
-
-  useEffect(() => {
-    const t = searchQuery.trim()
-    if (t.length < 2) {
-      setShowSearchDropdown(false)
-      return
-    }
-    setShowSearchDropdown(searchResults.length > 0)
-  }, [searchQuery, searchResults])
-
-  useEffect(() => {
-    if (!showSearchDropdown) return
-    const onDocMouseDown = (e: MouseEvent) => {
-      const root = searchWrapRef.current
-      if (root && !root.contains(e.target as Node)) {
-        setShowSearchDropdown(false)
-      }
-    }
-    document.addEventListener('mousedown', onDocMouseDown)
-    return () => document.removeEventListener('mousedown', onDocMouseDown)
-  }, [showSearchDropdown])
-
-  useEffect(() => {
-    if (!showSearchDropdown) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setShowSearchDropdown(false)
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [showSearchDropdown])
 
   const normalizedRows = useMemo(() => {
     if (!mapRows?.length) return [] as MapRow[]
@@ -325,80 +176,14 @@ export default function Elections() {
     }
   }, [normalizedRows])
 
-  useEffect(() => {
-    if (!import.meta.env.DEV) return
-    if (mapRows?.length) {
-      console.log('[wahlen] map API response (first 5 raw)', mapRows.slice(0, 5))
-    }
-    if (normalizedRows.length && mapEp) {
-      const sample = normalizedRows.slice(0, 5).map((r) => {
-        const fill = mapFillColor({
-          metric: debouncedMetric,
-          value: r.value,
-          turnout: r.turnout,
-          winningParty: r.winning_party,
-          turnoutMin: turnoutStats.minT,
-          turnoutMax: turnoutStats.maxT,
-          partyColors: partyColorsForTheme(theme === 'dark'),
-        })
-        return {
-          ags: r.ags,
-          ags_name: r.ags_name,
-          turnout: r.turnout,
-          value: r.value,
-          winning_party: r.winning_party,
-          fill,
-        }
-      })
-      console.log(
-        '[wahlen] first 5 kreise (normalized + computed map fill)',
-        sample,
-      )
-    }
-  }, [
-    mapRows,
-    normalizedRows,
-    mapEp,
-    debouncedMetric,
-    turnoutStats.minT,
-    turnoutStats.maxT,
-    theme,
-  ])
-
-  const onMapSelect = useCallback(
-    (ags: string) => {
-      const k = ags.replace(/\s/g, '')
-      if (comparePicking && selectedAgs && k !== selectedAgs) {
-        setCompareAgs(k)
-        setComparePicking(false)
-        return
-      }
-      setSelectedAgs(k)
-      setComparePicking(false)
-    },
-    [comparePicking, selectedAgs],
-  )
-
-  const onPickSearchKreis = useCallback((ags: string) => {
+  const onActivateKreis = useCallback((ags: string) => {
     setSelectedAgs(ags.replace(/\s/g, ''))
-    setSearchQuery('')
-    setShowSearchDropdown(false)
+    setActiveMode('analysis')
   }, [])
 
-  const statCard = (title: string, body: string) => (
-    <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: '0.8rem', color: c.muted }}>{title}</span>}>
-      <div
-        style={{
-          fontFamily: fonts.mono,
-          fontSize: '1.1rem',
-          color: c.ink,
-          lineHeight: 1.4,
-        }}
-      >
-        {body}
-      </div>
-    </DataCard>
-  )
+  const modeTabs = (
+    ['map', 'analysis', 'compare'] as const
+  ).map((id) => ({ id, label: t(MODE_TAB_KEYS[id]) }))
 
   return (
     <div style={{ paddingBottom: spacing.xl }}>
@@ -406,341 +191,132 @@ export default function Elections() {
 
       <div
         style={{
-          display: 'flex',
-          flexDirection: narrow ? 'column' : 'row',
-          flexWrap: 'wrap',
-          gap: spacing.md,
-          marginTop: spacing.lg,
-          marginBottom: spacing.xl,
+          marginTop: spacing.md,
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
-        <label style={{ flex: narrow ? '1 1 100%' : '1 1 200px' }}>
-          <span
-            style={{
-              display: 'block',
-              fontFamily: fonts.body,
-              fontSize: '0.8rem',
-              color: c.muted,
-              marginBottom: 6,
-            }}
-          >
-            {t('electionType')}
-          </span>
-          <select
-            value={electionType}
-            onChange={(e) => setElectionType(e.target.value as ElectionType)}
-            style={selectCss(c)}
-          >
-            {ELECTION_TYPES.map((tp) => (
-              <option key={tp} value={tp}>
-                {typeLabel(t, tp)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label style={{ flex: narrow ? '1 1 100%' : '1 1 160px' }}>
-          <span
-            style={{
-              display: 'block',
-              fontFamily: fonts.body,
-              fontSize: '0.8rem',
-              color: c.muted,
-              marginBottom: 6,
-            }}
-          >
-            {t('electionYear')}
-          </span>
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            disabled={yearsLoading || !years.length}
-            style={selectCss(c)}
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label style={{ flex: narrow ? '1 1 100%' : '1 1 220px' }}>
-          <span
-            style={{
-              display: 'block',
-              fontFamily: fonts.body,
-              fontSize: '0.8rem',
-              color: c.muted,
-              marginBottom: 6,
-            }}
-          >
-            {t('metric')}
-          </span>
-          <select
-            value={metric}
-            onChange={(e) => setMetric(e.target.value)}
-            style={selectCss(c)}
-          >
-            {METRICS.map((m) => (
-              <option key={m} value={m}>
-                {metricLabel(t, lang, m)}
-              </option>
-            ))}
-          </select>
-        </label>
         <div
-          ref={searchWrapRef}
+          role="tablist"
+          aria-label={t('electionsTitle')}
           style={{
-            flex: narrow ? '1 1 100%' : '1 1 240px',
-            position: 'relative',
+            display: 'flex',
+            gap: 0,
+            borderBottom: `1px solid ${c.border}`,
+            minWidth: 'min-content',
           }}
         >
-          <span
-            style={{
-              display: 'block',
-              fontFamily: fonts.body,
-              fontSize: '0.8rem',
-              color: c.muted,
-              marginBottom: 6,
-            }}
-          >
-            {t('electionsDistrict')}
-          </span>
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => {
-              const tq = searchQuery.trim()
-              if (tq.length >= 2 && searchResults.length > 0) {
-                setShowSearchDropdown(true)
-              }
-            }}
-            placeholder={t('searchPlaceholder')}
-            aria-label={t('searchPlaceholder')}
-            autoComplete="off"
-            style={{
-              ...selectCss(c),
-              fontFamily: fonts.body,
-              fontSize: '0.9rem',
-            }}
-          />
-          {showSearchDropdown && searchResults.length > 0 && (
-            <div
-              role="listbox"
-              style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                marginTop: 4,
-                zIndex: 10,
-                background: c.surface,
-                border: `1px solid ${c.border}`,
-                boxShadow: c.shadow,
-                borderRadius: 8,
-                maxHeight: 300,
-                overflowY: 'auto',
-              }}
-            >
-              {searchResults.map((hit, i) => (
-                <button
-                  key={hit.ags}
-                  type="button"
-                  role="option"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => onPickSearchKreis(hit.ags)}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '8px 12px',
-                    border: 'none',
-                    borderBottom:
-                      i < searchResults.length - 1
-                        ? `1px solid ${c.border}`
-                        : 'none',
-                    background: 'transparent',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontFamily: fonts.body,
-                    fontSize: '0.9rem',
-                    color: c.ink,
-                    boxSizing: 'border-box',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = c.bgHover
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent'
-                  }}
-                >
-                  <span>{hit.name}</span>
-                  {hit.state ? (
-                    <span style={{ color: c.muted }}> · {hit.state}</span>
-                  ) : null}
-                </button>
-              ))}
-            </div>
-          )}
+          {modeTabs.map(({ id, label }) => {
+            const isActive = activeMode === id
+            return (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => setActiveMode(id)}
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: '0.85rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  padding: '12px 24px',
+                  flexShrink: 0,
+                  border: 'none',
+                  borderBottom: isActive
+                    ? '3px solid #C8102E'
+                    : '3px solid transparent',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontWeight: isActive ? 700 : 400,
+                  color: isActive ? c.ink : c.muted,
+                  boxSizing: 'border-box',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.color = c.ink
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = c.muted
+                }}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      {geoErr && (
-        <p style={{ color: c.red, fontFamily: fonts.body, marginBottom: spacing.md }}>
-          {t('noData')} (GeoJSON)
-        </p>
-      )}
-
-      {mapError ? (
-        <EmptyState text={`${t('dataLoadError')} ${t('noData')}`} />
-      ) : (
-        <>
-          {!mapLoading &&
-            !yearsLoading &&
-            normalizedRows.length > 0 &&
-            normalizedRows.length < KREISE_COVERAGE_WARN_BELOW && (
-              <div
-                role="status"
-                style={{
-                  padding: '8px 16px',
-                  marginBottom: spacing.md,
-                  borderRadius: 4,
-                  fontSize: '0.82rem',
-                  fontFamily: fonts.body,
-                  lineHeight: 1.45,
-                  background: theme === 'dark' ? '#332B00' : '#FFF3CD',
-                  color: theme === 'dark' ? '#F5E6A3' : '#664D03',
-                  border: `1px solid ${theme === 'dark' ? '#5C4D1A' : '#E8D9A8'}`,
-                }}
-              >
-                {sparseKreisBannerText(
-                  lang,
-                  debouncedType,
-                  typeLabel(t, debouncedType),
-                  debouncedYear,
-                  normalizedRows.length,
-                )}
-              </div>
-            )}
-          <ElectionMap
-            mapBuild={mapBuild}
-            dataByAgs={dataByAgs}
-            kreisNameByAgs={kreisNameByAgs}
-            metric={debouncedMetric}
-            turnoutMin={turnoutStats.minT}
-            turnoutMax={turnoutStats.maxT}
-            lang={lang}
-            onSelectAgs={onMapSelect}
-            selectedAgs={selectedAgs}
-            comparePickMode={comparePicking}
-            loading={mapLoading || yearsLoading}
-          />
-
-          <ElectionMapLegend
-            metric={debouncedMetric}
-            lang={lang}
-            turnoutMin={turnoutStats.minT}
-            turnoutMax={turnoutStats.maxT}
-            partyForScale={debouncedMetric}
-          />
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-              gap: spacing.md,
-              marginTop: spacing.xl,
-            }}
-          >
-            {statCard(
-              t('avgTurnout'),
-              `${turnoutStats.avg.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
-            )}
-            {statCard(
-              t('highestTurnout'),
-              `${turnoutStats.hi.name} · ${turnoutStats.hi.v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
-            )}
-            {statCard(
-              t('lowestTurnout'),
-              `${turnoutStats.lo.name} · ${turnoutStats.lo.v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
-            )}
-            {statCard(t('counties'), String(turnoutStats.n))}
-          </div>
-        </>
-      )}
-
-      <div style={{ marginTop: spacing.xl }}>
-        <button
-          type="button"
-          onClick={() => setShowAdvanced((v) => !v)}
-          style={{
-            minHeight: 44,
-            padding: '0 18px',
-            borderRadius: 8,
-            border: `1px solid ${c.border}`,
-            background: c.inputBg,
-            color: c.ink,
-            fontFamily: fonts.body,
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-          }}
-        >
-          {showAdvanced ? '▼ ' : '▶ '}
-          {t('advancedAnalysis')}
-        </button>
-      </div>
-
-      {showAdvanced && (
-        <AdvancedAnalysis
-          electionType={debouncedType}
-          year={debouncedYear}
+      {activeMode === 'map' && (
+        <MapMode
+          narrow={narrow}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          searchResults={searchResults}
+          electionType={electionType}
+          setElectionType={setElectionType}
+          year={year}
+          setYear={setYear}
+          metric={metric}
+          setMetric={setMetric}
           years={years}
+          yearsLoading={yearsLoading}
+          geoErr={geoErr}
+          mapError={mapError}
+          mapLoading={mapLoading}
+          mapRows={mapRows}
+          mapEp={mapEp}
+          debouncedType={debouncedType}
+          debouncedYear={debouncedYear}
+          debouncedMetric={debouncedMetric}
+          normalizedRows={normalizedRows}
           mapBuild={mapBuild}
-          winnersByAgs={winnersByAgs}
+          dataByAgs={dataByAgs}
           kreisNameByAgs={kreisNameByAgs}
-          onSelectRegion={(ags) => setSelectedAgs(ags.replace(/\s/g, ''))}
+          turnoutStats={turnoutStats}
+          selectedAgs={selectedAgs}
+          onActivateKreis={onActivateKreis}
+          showAdvanced={showAdvanced}
+          setShowAdvanced={setShowAdvanced}
+          winnersByAgs={winnersByAgs}
         />
       )}
 
-      {comparePicking && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: narrow ? 100 : 24,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 125,
-            padding: '12px 20px',
-            borderRadius: 8,
-            background: c.cardBg,
-            border: `1px solid ${c.red}`,
-            boxShadow: c.shadow,
-            fontFamily: fonts.body,
-            fontSize: '0.9rem',
-            color: c.ink,
-            maxWidth: '90vw',
-          }}
-        >
-          {t('electionsCompareHint')}
-        </div>
-      )}
+      {activeMode === 'analysis' &&
+        (selectedAgs ? (
+          <DistrictAnalysis
+            ags={selectedAgs}
+            kreisNameByAgs={kreisNameByAgs}
+            geojson={geojson}
+            mapElectionType={electionType}
+            mapYear={year}
+            narrow={narrow}
+            onBackToMap={() => setActiveMode('map')}
+            onSelectKreis={(next) => setSelectedAgs(next)}
+            onStartCompare={(a) => {
+              setCompareRegions([a])
+              setActiveMode('compare')
+            }}
+          />
+        ) : (
+          <EmptyState
+            text={t('electionsTabAnalysisPlaceholder')}
+            action={{
+              label: t('backToMap'),
+              onClick: () => setActiveMode('map'),
+            }}
+          />
+        ))}
 
-      {selectedAgs && (
-        <RegionPanel
-          ags={selectedAgs}
-          agsNameMap={agsNameMap}
-          mapYear={debouncedYear}
-          mapTyp={debouncedType}
-          compareAgs={compareAgs}
-          comparePicking={comparePicking}
-          onClose={() => {
-            setSelectedAgs(null)
-            setCompareAgs(null)
-            setComparePicking(false)
-          }}
-          onStartCompare={() => setComparePicking(true)}
-          onClearCompare={() => {
-            setCompareAgs(null)
-            setComparePicking(false)
+      {activeMode === 'compare' && (
+        <EmptyState
+          text={
+            compareRegions.length
+              ? `${t('electionsTabComparePlaceholder')} (${compareRegions.length})`
+              : t('electionsTabComparePlaceholder')
+          }
+          action={{
+            label: t('backToMap'),
+            onClick: () => setActiveMode('map'),
           }}
         />
       )}
