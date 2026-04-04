@@ -3,6 +3,7 @@ import { EmptyState, PageHeader, useTheme } from '../design-system'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { buildKreiseMap } from './elections/mapGeometry'
+import { CompareMode } from './elections/CompareMode'
 import { DistrictAnalysis } from './elections/DistrictAnalysis'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { MapMode } from './elections/MapMode'
@@ -308,16 +309,14 @@ export default function Elections() {
         ))}
 
       {activeMode === 'compare' && (
-        <EmptyState
-          text={
-            compareRegions.length
-              ? `${t('electionsTabComparePlaceholder')} (${compareRegions.length})`
-              : t('electionsTabComparePlaceholder')
-          }
-          action={{
-            label: t('backToMap'),
-            onClick: () => setActiveMode('map'),
-          }}
+        <CompareMode
+          compareRegions={compareRegions}
+          setCompareRegions={setCompareRegions}
+          kreisNameByAgs={kreisNameByAgs}
+          geojson={geojson}
+          narrow={narrow}
+          initialElectionType={electionType}
+          onBackToMap={() => setActiveMode('map')}
         />
       )}
     </div>

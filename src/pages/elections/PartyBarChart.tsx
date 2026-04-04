@@ -20,18 +20,45 @@ type PartyBarChartProps = {
   data: PartyBarRow[]
   year: number
   lang: Lang
+  /** Gemeinsame horizontale Skala (z. B. Kreisvergleich) */
+  valueMax?: number
+  /** Optional: Kreisname oberhalb der Jahreszeile */
+  regionCaption?: string
 }
 
-export function PartyBarChart({ data, year, lang }: PartyBarChartProps) {
+export function PartyBarChart({
+  data,
+  year,
+  lang,
+  valueMax,
+  regionCaption,
+}: PartyBarChartProps) {
   const { c, theme } = useTheme()
   const partyColors = useMemo(
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
   )
   const sorted = [...data].sort((a, b) => b.value - a.value)
+  const xMax =
+    valueMax != null && valueMax > 0
+      ? valueMax
+      : ('dataMax' as const)
 
   return (
     <div style={{ width: '100%', minHeight: 220 }}>
+      {regionCaption ? (
+        <div
+          style={{
+            fontFamily: fonts.body,
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            color: c.ink,
+            marginBottom: 4,
+          }}
+        >
+          {regionCaption}
+        </div>
+      ) : null}
       <div
         style={{
           fontFamily: fonts.body,
@@ -48,7 +75,7 @@ export function PartyBarChart({ data, year, lang }: PartyBarChartProps) {
           data={sorted}
           margin={{ top: 4, right: 48, left: 8, bottom: 4 }}
         >
-          <XAxis type="number" domain={[0, 'dataMax']} hide />
+          <XAxis type="number" domain={[0, xMax]} hide />
           <YAxis
             type="category"
             dataKey="party"
