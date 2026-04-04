@@ -1,12 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { EmptyState, PageHeader, useTheme } from '../design-system'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { buildKreiseMap } from './elections/mapGeometry'
-import { CompareMode } from './elections/CompareMode'
-import { DistrictAnalysis } from './elections/DistrictAnalysis'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
-import { MapMode } from './elections/MapMode'
 import { normalizeMapRow } from './elections/normalizeWahlen'
 import { useDebouncedValue } from './elections/useDebouncedValue'
 import type {
@@ -15,6 +20,18 @@ import type {
   MapRow,
   MapRowFromApi,
 } from './elections/types'
+
+const MapMode = lazy(() =>
+  import('./elections/MapMode').then((m) => ({ default: m.MapMode })),
+)
+const DistrictAnalysis = lazy(() =>
+  import('./elections/DistrictAnalysis').then((m) => ({
+    default: m.DistrictAnalysis,
+  })),
+)
+const CompareMode = lazy(() =>
+  import('./elections/CompareMode').then((m) => ({ default: m.CompareMode })),
+)
 
 export type ElectionsActiveMode = 'map' | 'analysis' | 'compare'
 
@@ -218,10 +235,10 @@ export default function Elections() {
                 onClick={() => setActiveMode(id)}
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.85rem',
+                  fontSize: narrow ? '0.75rem' : '0.85rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  padding: '12px 24px',
+                  padding: narrow ? '10px 14px' : '12px 24px',
                   flexShrink: 0,
                   border: 'none',
                   borderBottom: isActive
@@ -230,11 +247,11 @@ export default function Elections() {
                   background: 'transparent',
                   cursor: 'pointer',
                   fontWeight: isActive ? 700 : 400,
-                  color: isActive ? c.ink : c.muted,
+                  color: isActive ? c.text : c.muted,
                   boxSizing: 'border-box',
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = c.ink
+                  if (!isActive) e.currentTarget.style.color = c.text
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) e.currentTarget.style.color = c.muted
@@ -247,81 +264,96 @@ export default function Elections() {
         </div>
       </div>
 
-      {activeMode === 'map' && (
-        <MapMode
-          narrow={narrow}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          searchResults={searchResults}
-          electionType={electionType}
-          setElectionType={setElectionType}
-          year={year}
-          setYear={setYear}
-          metric={metric}
-          setMetric={setMetric}
-          years={years}
-          yearsLoading={yearsLoading}
-          geoErr={geoErr}
-          mapError={mapError}
-          mapLoading={mapLoading}
-          mapRows={mapRows}
-          mapEp={mapEp}
-          debouncedType={debouncedType}
-          debouncedYear={debouncedYear}
-          debouncedMetric={debouncedMetric}
-          normalizedRows={normalizedRows}
-          mapBuild={mapBuild}
-          dataByAgs={dataByAgs}
-          kreisNameByAgs={kreisNameByAgs}
-          turnoutStats={turnoutStats}
-          selectedAgs={selectedAgs}
-          onActivateKreis={onActivateKreis}
-          showAdvanced={showAdvanced}
-          setShowAdvanced={setShowAdvanced}
-          winnersByAgs={winnersByAgs}
-        />
-      )}
-
-      {activeMode === 'analysis' &&
-        (selectedAgs ? (
-          <DistrictAnalysis
-            ags={selectedAgs}
-            kreisNameByAgs={kreisNameByAgs}
-            geojson={geojson}
-            mapElectionType={electionType}
-            mapYear={year}
+      <Suspense
+        fallback={
+          <div
+            style={{
+              padding: spacing.xl,
+              textAlign: 'center',
+              fontFamily: fonts.body,
+              color: c.muted,
+            }}
+          >
+            {t('loading')}
+          </div>
+        }
+      >
+        {activeMode === 'map' && (
+          <MapMode
             narrow={narrow}
-            onBackToMap={() => setActiveMode('map')}
-            onSelectKreis={(next) => setSelectedAgs(next)}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchResults={searchResults}
+            electionType={electionType}
+            setElectionType={setElectionType}
+            year={year}
+            setYear={setYear}
+            metric={metric}
+            setMetric={setMetric}
+            years={years}
+            yearsLoading={yearsLoading}
+            geoErr={geoErr}
+            mapError={mapError}
+            mapLoading={mapLoading}
+            mapRows={mapRows}
+            mapEp={mapEp}
+            debouncedType={debouncedType}
+            debouncedYear={debouncedYear}
+            debouncedMetric={debouncedMetric}
+            normalizedRows={normalizedRows}
+            mapBuild={mapBuild}
+            dataByAgs={dataByAgs}
+            kreisNameByAgs={kreisNameByAgs}
+            turnoutStats={turnoutStats}
+            selectedAgs={selectedAgs}
+            onActivateKreis={onActivateKreis}
+            showAdvanced={showAdvanced}
+            setShowAdvanced={setShowAdvanced}
+            winnersByAgs={winnersByAgs}
+          />
+        )}
+
+        {activeMode === 'analysis' &&
+          (selectedAgs ? (
+            <DistrictAnalysis
+              ags={selectedAgs}
+              kreisNameByAgs={kreisNameByAgs}
+              geojson={geojson}
+              mapElectionType={electionType}
+              mapYear={year}
+              narrow={narrow}
+              onBackToMap={() => setActiveMode('map')}
+              onSelectKreis={(next) => setSelectedAgs(next)}
+              compareRegions={compareRegions}
+              setCompareRegions={setCompareRegions}
+              onOpenCompare={() => setActiveMode('compare')}
+              onStartCompare={(a) => {
+                setCompareRegions([a])
+                setActiveMode('compare')
+              }}
+            />
+          ) : (
+            <EmptyState
+              text={t('electionsTabAnalysisPlaceholder')}
+              action={{
+                label: t('backToMap'),
+                onClick: () => setActiveMode('map'),
+              }}
+            />
+          ))}
+
+        {activeMode === 'compare' && (
+          <CompareMode
             compareRegions={compareRegions}
             setCompareRegions={setCompareRegions}
-            onOpenCompare={() => setActiveMode('compare')}
-            onStartCompare={(a) => {
-              setCompareRegions([a])
-              setActiveMode('compare')
-            }}
+            kreisNameByAgs={kreisNameByAgs}
+            geojson={geojson}
+            narrow={narrow}
+            initialElectionType={electionType}
+            onBackToMap={() => setActiveMode('map')}
           />
-        ) : (
-          <EmptyState
-            text={t('electionsTabAnalysisPlaceholder')}
-            action={{
-              label: t('backToMap'),
-              onClick: () => setActiveMode('map'),
-            }}
-          />
-        ))}
-
-      {activeMode === 'compare' && (
-        <CompareMode
-          compareRegions={compareRegions}
-          setCompareRegions={setCompareRegions}
-          kreisNameByAgs={kreisNameByAgs}
-          geojson={geojson}
-          narrow={narrow}
-          initialElectionType={electionType}
-          onBackToMap={() => setActiveMode('map')}
-        />
-      )}
+        )}
+      </Suspense>
     </div>
   )
 }

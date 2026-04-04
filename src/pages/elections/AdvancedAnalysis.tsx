@@ -63,21 +63,22 @@ function formatLossPp(n: number, lang: 'de' | 'en'): string {
 }
 
 function selectStyle(c: {
-  inputBg: string
-  inputBorder: string
-  ink: string
+  cardBg: string
+  border: string
+  text: string
 }): React.CSSProperties {
   return {
     minHeight: 44,
     padding: '0 12px',
     borderRadius: 8,
-    border: `1px solid ${c.inputBorder}`,
-    background: c.inputBg,
-    color: c.ink,
+    border: `1px solid ${c.border}`,
+    background: c.cardBg,
+    color: c.text,
     fontFamily: fonts.body,
     fontSize: '0.9rem',
     cursor: 'pointer',
     flex: '1 1 140px',
+    maxWidth: '100%',
   }
 }
 
@@ -288,7 +289,7 @@ export function AdvancedAnalysis({
         borderRadius: 8,
         border: `1px solid ${tab === id ? c.red : c.border}`,
         background: tab === id ? c.bgHover : c.inputBg,
-        color: c.ink,
+        color: c.text,
         fontFamily: fonts.body,
         fontSize: '0.9rem',
         cursor: 'pointer',
@@ -304,7 +305,7 @@ export function AdvancedAnalysis({
         style={{
           fontFamily: fonts.display,
           fontSize: '1.5rem',
-          color: c.ink,
+          color: c.text,
           marginBottom: spacing.lg,
         }}
       >
@@ -312,17 +313,27 @@ export function AdvancedAnalysis({
       </h2>
 
       <div
-        role="tablist"
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 10,
+          overflowX: narrow ? 'auto' : 'visible',
+          WebkitOverflowScrolling: 'touch',
           marginBottom: spacing.xl,
+          width: '100%',
+          maxWidth: '100%',
         }}
       >
-        {tabBtn('scatter', t('scatter'))}
-        {tabBtn('ranking', t('ranking'))}
-        {tabBtn('change', t('change'))}
+        <div
+          role="tablist"
+          style={{
+            display: 'flex',
+            flexWrap: narrow ? 'nowrap' : 'wrap',
+            gap: 10,
+            minWidth: narrow ? 'min-content' : undefined,
+          }}
+        >
+          {tabBtn('scatter', t('scatter'))}
+          {tabBtn('ranking', t('ranking'))}
+          {tabBtn('change', t('change'))}
+        </div>
       </div>
 
       {tab === 'scatter' && (

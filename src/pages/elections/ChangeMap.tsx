@@ -56,7 +56,7 @@ export function ChangeMap({
   selectedAgs,
   filterStatePrefix,
 }: ChangeMapProps) {
-  const { c, lang, t } = useTheme()
+  const { c, lang, t, theme } = useTheme()
   const svgRef = useRef<SVGSVGElement>(null)
   const [layoutTick, setLayoutTick] = useState(0)
   const [hoverTip, setHoverTip] = useState<{
@@ -168,8 +168,9 @@ export function ChangeMap({
       ? `${zoomVB[0]} ${zoomVB[1]} ${zoomVB[2]} ${zoomVB[3]}`
       : `0 0 ${vbW} ${vbH}`
 
-  const legendLeft = changeColor(-maxAbs, maxAbs, neutral)
-  const legendRight = changeColor(maxAbs, maxAbs, neutral)
+  const legendNeutral = theme === 'dark' ? c.bgHover : neutral
+  const legendLeft = changeColor(-maxAbs, maxAbs, legendNeutral)
+  const legendRight = changeColor(maxAbs, maxAbs, legendNeutral)
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
@@ -238,14 +239,14 @@ export function ChangeMap({
             transform: activeTip.mode === 'pin' ? 'translate(-50%, 8px)' : 'none',
             zIndex: 50,
             padding: '10px 12px',
-            background: c.cardBg,
+            background: c.surface,
             border: `1px solid ${c.border}`,
             borderRadius: 8,
             boxShadow: c.shadow,
             pointerEvents: 'none',
             fontFamily: fonts.body,
             fontSize: '0.85rem',
-            color: c.ink,
+            color: c.text,
             maxWidth: 280,
           }}
         >
@@ -255,14 +256,14 @@ export function ChangeMap({
           </div>
         </div>
       )}
-      <div style={{ width: 300, maxWidth: '100%', marginTop: 14 }}>
+      <div style={{ width: '100%', maxWidth: '100%', marginTop: 14 }}>
         <div
           style={{
-            width: 300,
+            width: '100%',
             maxWidth: '100%',
             height: 20,
             borderRadius: 4,
-            background: `linear-gradient(to right, ${legendLeft}, ${neutral}, ${legendRight})`,
+            background: `linear-gradient(to right, ${legendLeft}, ${legendNeutral}, ${legendRight})`,
             border: `1px solid ${c.border}`,
             boxSizing: 'border-box',
           }}
@@ -275,7 +276,7 @@ export function ChangeMap({
             fontFamily: fonts.mono,
             fontSize: '0.72rem',
             color: c.muted,
-            width: 300,
+            width: '100%',
             maxWidth: '100%',
           }}
         >

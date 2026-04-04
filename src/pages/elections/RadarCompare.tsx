@@ -38,6 +38,7 @@ type RadarCompareProps = {
   chartData: Record<string, string | number>[]
   series: RadarCompareSeries[]
   domainMax: number
+  narrow?: boolean
 }
 
 export function RadarCompare({
@@ -45,6 +46,7 @@ export function RadarCompare({
   chartData,
   series,
   domainMax,
+  narrow,
 }: RadarCompareProps) {
   const { c } = useTheme()
   const sep = lang === 'de' ? ',' : '.'
@@ -58,8 +60,15 @@ export function RadarCompare({
   if (!chartData.length || !series.length) return null
 
   return (
-    <div style={{ width: '100%', minHeight: 360 }}>
-      <ResponsiveContainer width="100%" height={400}>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: narrow ? 300 : undefined,
+        margin: narrow ? '0 auto' : undefined,
+        minHeight: narrow ? 280 : 360,
+      }}
+    >
+      <ResponsiveContainer width="100%" height={narrow ? 300 : 400}>
         <RadarChart cx="50%" cy="50%" outerRadius="72%" data={chartData}>
           <PolarGrid stroke={c.border} />
           <PolarAngleAxis
@@ -74,12 +83,12 @@ export function RadarCompare({
           />
           <Tooltip
             contentStyle={{
-              background: c.cardBg,
+              background: c.surface,
               border: `1px solid ${c.border}`,
               borderRadius: 8,
               fontFamily: fonts.mono,
               fontSize: 12,
-              color: c.ink,
+              color: c.text,
             }}
             formatter={(value) => {
               if (value == null) return '—'

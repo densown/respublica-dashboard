@@ -52,7 +52,7 @@ export function PartyBarChart({
             fontFamily: fonts.body,
             fontSize: '0.9rem',
             fontWeight: 600,
-            color: c.ink,
+            color: c.text,
             marginBottom: 4,
           }}
         >
@@ -96,7 +96,7 @@ export function PartyBarChart({
                 return `${pct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`
               }}
               style={{
-                fill: c.ink,
+                fill: c.text,
                 fontFamily: fonts.mono,
                 fontSize: 11,
               }}

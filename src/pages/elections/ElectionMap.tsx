@@ -131,7 +131,9 @@ export function ElectionMap({
             d={p.d}
             fill={fillForPath(p.ags)}
             fillOpacity={1}
-            stroke={isSel ? '#C8102E' : isHover ? '#ffffff' : '#333'}
+            stroke={
+              isSel ? '#C8102E' : isHover ? (theme === 'dark' ? '#E8E4DC' : '#ffffff') : '#333'
+            }
             strokeWidth={isSel || isHover ? 2 : 0.3}
             vectorEffect="non-scaling-stroke"
             style={{
@@ -148,7 +150,16 @@ export function ElectionMap({
           />
         )
       }),
-    [paths, fillForPath, selectedAgs, hoveredAgs, comparePickMode, onMove, onSelectAgs],
+    [
+      paths,
+      fillForPath,
+      selectedAgs,
+      hoveredAgs,
+      comparePickMode,
+      onMove,
+      onSelectAgs,
+      theme,
+    ],
   )
 
   return (
@@ -207,14 +218,14 @@ export function ElectionMap({
             minWidth: 160,
             maxWidth: 280,
             padding: '10px 12px',
-            background: c.cardBg,
+            background: c.surface,
             border: `1px solid ${c.border}`,
             borderRadius: 8,
             boxShadow: c.shadow,
             pointerEvents: 'none',
             fontFamily: fonts.body,
             fontSize: '0.875rem',
-            color: c.ink,
+            color: c.text,
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 4 }}>{tip.name}</div>
@@ -305,7 +316,8 @@ export function ElectionMapLegend({
             borderRadius: 4,
             overflow: 'hidden',
             border: `1px solid ${c.border}`,
-            maxWidth: 360,
+            maxWidth: '100%',
+            width: '100%',
           }}
         >
           {TURNOUT_SCALE.map((col, i) => (
@@ -316,7 +328,8 @@ export function ElectionMapLegend({
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            maxWidth: 360,
+            maxWidth: '100%',
+            width: '100%',
             marginTop: 4,
             color: c.inkSoft,
           }}
@@ -340,15 +353,20 @@ export function ElectionMapLegend({
           height: 14,
           borderRadius: 4,
           border: `1px solid ${c.border}`,
-          maxWidth: 360,
-          background: `linear-gradient(90deg, #ffffff 0%, ${base} 100%)`,
+          maxWidth: '100%',
+          width: '100%',
+          background:
+            theme === 'dark'
+              ? `linear-gradient(90deg, ${c.bgAlt} 0%, ${base} 100%)`
+              : `linear-gradient(90deg, #ffffff 0%, ${base} 100%)`,
         }}
       />
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          maxWidth: 360,
+          maxWidth: '100%',
+          width: '100%',
           marginTop: 4,
           color: c.inkSoft,
         }}

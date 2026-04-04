@@ -69,22 +69,21 @@ const TYPE_COMPARE_ORDER: {
   { typ: 'european', strokeDasharray: '12 4 3 4', strokeWidth: 2 },
 ]
 
-function selectCss(c: {
-  inputBg: string
-  inputBorder: string
-  ink: string
-}): CSSProperties {
+function selectCss(
+  c: { cardBg: string; border: string; text: string },
+  narrow: boolean,
+): CSSProperties {
   return {
     minHeight: 44,
     padding: '0 12px',
     borderRadius: 8,
-    border: `1px solid ${c.inputBorder}`,
-    background: c.inputBg,
-    color: c.ink,
+    border: `1px solid ${c.border}`,
+    background: c.cardBg,
+    color: c.text,
     fontFamily: fonts.body,
     fontSize: '0.9rem',
     width: '100%',
-    maxWidth: 280,
+    maxWidth: narrow ? '100%' : 280,
     boxSizing: 'border-box',
   }
 }
@@ -145,7 +144,7 @@ function ElectionTypeCompareLineLegend({
               y1={5}
               x2={30}
               y2={5}
-              stroke={c.ink}
+              stroke={c.text}
               strokeWidth={strokeWidth}
               {...(strokeDasharray
                 ? { strokeDasharray }
@@ -215,7 +214,7 @@ export type DistrictAnalysisProps = {
   onStartCompare?: (ags: string) => void
 }
 
-function sectionTitle(text: string, c: { border: string; ink: string }) {
+function sectionTitle(text: string, c: { border: string; text: string }) {
   return (
     <h3
       style={{
@@ -225,7 +224,7 @@ function sectionTitle(text: string, c: { border: string; ink: string }) {
         marginBottom: spacing.md,
         paddingBottom: spacing.sm,
         borderBottom: `1px solid ${c.border}`,
-        color: c.ink,
+        color: c.text,
       }}
     >
       {text}
@@ -265,6 +264,7 @@ export function DistrictAnalysis({
   }, [mapElectionType, ags])
 
   const [activePartyKeys, setActivePartyKeys] = useState<string[]>([])
+  const [showNationalAvg, setShowNationalAvg] = useState(false)
 
   const latestForTimeline = useMemo(() => {
     if (!data?.elections.length) return undefined
@@ -387,16 +387,47 @@ export function DistrictAnalysis({
     })
   }, [data, timelineTyp])
 
+  const timelineRefParty = activePartyKeys[0] ?? 'spd'
+  const nationalAvgEp =
+    showNationalAvg && timelineTyp && timelineRefParty
+      ? `/api/wahlen/national-average?typ=${encodeURIComponent(timelineTyp)}&party=${encodeURIComponent(timelineRefParty)}`
+      : ''
+  const { data: nationalAvgRows } =
+    useApi<{ year: number; value: number | null }[]>(nationalAvgEp)
+
+  const partyTimelineChartRows = useMemo(() => {
+    const natMap = new Map<number, number>()
+    if (showNationalAvg && nationalAvgRows?.length) {
+      for (const r of nationalAvgRows) {
+        if (r.value != null && Number.isFinite(Number(r.value))) {
+          natMap.set(r.year, toDisplayPercent(Number(r.value)))
+        }
+      }
+    }
+    return partyTimelineData.map((row) => ({
+      ...row,
+      nationalAvg: showNationalAvg ? natMap.get(row.year) : undefined,
+    }))
+  }, [partyTimelineData, showNationalAvg, nationalAvgRows])
+
   const maxYTimeline = useMemo(() => {
     let m = 5
-    for (const row of partyTimelineData) {
+    for (const row of partyTimelineChartRows) {
+      const rec = row as Record<string, number | undefined>
       for (const p of activePartyKeys) {
-        const v = row[p]
+        const v = rec[p]
         if (typeof v === 'number' && !Number.isNaN(v)) m = Math.max(m, v)
+      }
+      if (
+        showNationalAvg &&
+        typeof row.nationalAvg === 'number' &&
+        !Number.isNaN(row.nationalAvg)
+      ) {
+        m = Math.max(m, row.nationalAvg)
       }
     }
     return Math.min(55, Math.ceil(m / 5) * 5 + 5)
-  }, [partyTimelineData, activePartyKeys])
+  }, [partyTimelineChartRows, activePartyKeys, showNationalAvg])
 
   const togglePartyKey = useCallback(
     (p: string) => {
@@ -529,7 +560,16 @@ export function DistrictAnalysis({
   }
 
   return (
-    <div style={{ marginTop: spacing.lg }}>
+    <div
+      style={{
+        marginTop: spacing.lg,
+        paddingLeft: narrow ? 12 : 0,
+        paddingRight: narrow ? 12 : 0,
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: '100%',
+      }}
+    >
       <div
         style={{
           display: 'flex',
@@ -550,7 +590,7 @@ export function DistrictAnalysis({
             borderRadius: 8,
             border: `1px solid ${c.border}`,
             background: c.inputBg,
-            color: c.ink,
+            color: c.text,
             fontFamily: fonts.mono,
             fontSize: '0.8rem',
             cursor: 'pointer',
@@ -565,7 +605,7 @@ export function DistrictAnalysis({
               fontFamily: fonts.display,
               fontSize: '1.35rem',
               fontWeight: 700,
-              color: c.ink,
+              color: c.text,
               margin: 0,
               lineHeight: 1.25,
             }}
@@ -612,7 +652,7 @@ export function DistrictAnalysis({
                 borderRadius: 8,
                 border: `1px solid ${c.border}`,
                 background: c.inputBg,
-                color: c.ink,
+                color: c.text,
                 fontFamily: fonts.body,
                 fontSize: '0.9rem',
                 cursor: 'pointer',
@@ -687,6 +727,28 @@ export function DistrictAnalysis({
               activeKeys={activePartyKeys}
               onChange={setActivePartyKeys}
             />
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                marginTop: spacing.sm,
+                fontFamily: fonts.body,
+                fontSize: '0.82rem',
+                color: c.muted,
+                cursor: 'pointer',
+                width: 'fit-content',
+                maxWidth: '100%',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={showNationalAvg}
+                onChange={(e) => setShowNationalAvg(e.target.checked)}
+                style={{ width: 18, height: 18, accentColor: c.red }}
+              />
+              {t('showNationalAverage')}
+            </label>
           </div>
           <label
             style={{
@@ -708,7 +770,7 @@ export function DistrictAnalysis({
             <select
               value={timelineTyp}
               onChange={(e) => setTimelineTyp(e.target.value as ElectionType)}
-              style={selectCss(c)}
+              style={selectCss(c, narrow)}
             >
               {ELECTION_TYPES.map((tp) => (
                 <option key={tp} value={tp}>
@@ -717,10 +779,17 @@ export function DistrictAnalysis({
               ))}
             </select>
           </label>
-          <div style={{ width: '100%', minHeight: 320, marginTop: spacing.md }}>
-            <ResponsiveContainer width="100%" height={360}>
+          <div
+            style={{
+              width: '100%',
+              minHeight: narrow ? 250 : 320,
+              marginTop: spacing.md,
+              overflow: 'hidden',
+            }}
+          >
+            <ResponsiveContainer width="100%" height={narrow ? 250 : 360}>
               <LineChart
-                data={partyTimelineData}
+                data={partyTimelineChartRows}
                 margin={{ top: 8, right: 16, left: 0, bottom: 8 }}
               >
                 <XAxis
@@ -737,20 +806,29 @@ export function DistrictAnalysis({
                 />
                 <Tooltip
                   contentStyle={{
-                    background: c.cardBg,
+                    background: c.surface,
                     border: `1px solid ${c.border}`,
                     borderRadius: 8,
                     fontFamily: fonts.mono,
                     fontSize: 12,
-                    color: c.ink,
+                    color: c.text,
                   }}
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null
                     const keys = activePartyKeys
+                    const natItem = payload.find(
+                      (x) => String(x.dataKey ?? '') === 'nationalAvg',
+                    )
+                    const natV = natItem?.value
+                    const natNum = typeof natV === 'number' ? natV : Number(natV)
+                    const natPct =
+                      showNationalAvg && Number.isFinite(natNum)
+                        ? `${natNum.toFixed(1).replace('.', sep)} %`
+                        : null
                     return (
                       <div
                         style={{
-                          background: c.cardBg,
+                          background: c.surface,
                           border: `1px solid ${c.border}`,
                           borderRadius: 8,
                           padding: '8px 10px',
@@ -772,6 +850,18 @@ export function DistrictAnalysis({
                             </div>
                           )
                         })}
+                        {natPct ? (
+                          <div
+                            style={{
+                              marginTop: 6,
+                              paddingTop: 6,
+                              borderTop: `1px solid ${c.border}`,
+                              color: c.muted,
+                            }}
+                          >
+                            {t('nationalAverage')}: {natPct}
+                          </div>
+                        ) : null}
                       </div>
                     )
                   }}
@@ -801,6 +891,19 @@ export function DistrictAnalysis({
                     />
                   )
                 })}
+                {showNationalAvg && nationalAvgRows && nationalAvgRows.length > 0 ? (
+                  <Line
+                    type="monotone"
+                    dataKey="nationalAvg"
+                    name={t('nationalAverage')}
+                    stroke={c.muted}
+                    strokeWidth={1.5}
+                    strokeDasharray="2 4"
+                    dot={false}
+                    connectNulls
+                    isAnimationActive={false}
+                  />
+                ) : null}
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -826,7 +929,7 @@ export function DistrictAnalysis({
             <select
               value={focusParty}
               onChange={(e) => setFocusParty(e.target.value)}
-              style={selectCss(c)}
+              style={selectCss(c, narrow)}
             >
               {DISTRICT_CHART_PARTIES.map((p) => (
                 <option key={p} value={p}>
@@ -836,8 +939,14 @@ export function DistrictAnalysis({
             </select>
           </label>
           <div>
-            <div style={{ width: '100%', minHeight: 280 }}>
-              <ResponsiveContainer width="100%" height={320}>
+            <div
+              style={{
+                width: '100%',
+                minHeight: narrow ? 220 : 280,
+                overflow: 'hidden',
+              }}
+            >
+              <ResponsiveContainer width="100%" height={narrow ? 250 : 320}>
                 <LineChart
                   data={typeCompareData}
                   margin={{ top: 8, right: 16, left: 0, bottom: 8 }}
@@ -856,11 +965,12 @@ export function DistrictAnalysis({
                   />
                   <Tooltip
                     contentStyle={{
-                      background: c.cardBg,
+                      background: c.surface,
                       border: `1px solid ${c.border}`,
                       borderRadius: 8,
                       fontFamily: fonts.mono,
                       fontSize: 12,
+                      color: c.text,
                     }}
                   />
                   {TYPE_COMPARE_ORDER.map(({ typ, strokeDasharray, strokeWidth }) => {
@@ -920,7 +1030,7 @@ export function DistrictAnalysis({
                 value={resultYear}
                 onChange={(e) => setResultYear(Number(e.target.value))}
                 disabled={!yearsForResultTyp.length}
-                style={selectCss(c)}
+                style={selectCss(c, narrow)}
               >
                 {yearsForResultTyp.map((y) => (
                   <option key={y} value={y}>
@@ -942,7 +1052,7 @@ export function DistrictAnalysis({
               <select
                 value={resultTyp}
                 onChange={(e) => setResultTyp(e.target.value as ElectionType)}
-                style={selectCss(c)}
+                style={selectCss(c, narrow)}
               >
                 {ELECTION_TYPES.map((tp) => (
                   <option key={tp} value={tp}>
@@ -958,14 +1068,17 @@ export function DistrictAnalysis({
               gridTemplateColumns: narrow ? '1fr' : '1fr 1fr',
               gap: spacing.xl,
               alignItems: 'start',
+              width: '100%',
+              maxWidth: '100%',
             }}
           >
             <div
               style={{
                 fontFamily: fonts.body,
                 fontSize: '0.9rem',
-                color: c.ink,
+                color: c.text,
                 lineHeight: 1.6,
+                minWidth: 0,
               }}
             >
               {singleRow ? (
@@ -1023,7 +1136,7 @@ export function DistrictAnalysis({
                 <span style={{ color: c.muted }}>{t('noData')}</span>
               )}
             </div>
-            <div>
+            <div style={{ width: '100%', minWidth: 0, overflow: 'hidden' }}>
               {singleRow ? (
                 <PartyBarChart
                   data={singleBarData}
@@ -1055,7 +1168,7 @@ export function DistrictAnalysis({
             <select
               value={focusParty}
               onChange={(e) => setFocusParty(e.target.value)}
-              style={selectCss(c)}
+              style={selectCss(c, narrow)}
             >
               {DISTRICT_CHART_PARTIES.map((p) => (
                 <option key={p} value={p}>

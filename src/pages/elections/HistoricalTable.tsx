@@ -213,8 +213,8 @@ export function HistoricalTable({
             padding: '0 14px',
             borderRadius: 8,
             border: `1px solid ${c.border}`,
-            background: c.inputBg,
-            color: c.ink,
+            background: c.cardBg,
+            color: c.text,
             fontFamily: fonts.mono,
             fontSize: '0.75rem',
             cursor: 'pointer',
@@ -252,9 +252,11 @@ export function HistoricalTable({
               key={`${r.typ}-${r.year}-${i}`}
               style={{
                 borderBottom: `1px solid ${c.border}`,
+                background:
+                  (pageSafe * PAGE_SIZE + i) % 2 === 0 ? c.cardBg : c.bg,
               }}
             >
-              <td style={{ padding: '8px 10px', color: c.ink }}>{r.year}</td>
+              <td style={{ padding: '8px 10px', color: c.text }}>{r.year}</td>
               <td style={{ padding: '8px 10px', color: c.inkSoft }}>
                 {typeLabel(r.typ as ElectionType)}
               </td>
@@ -268,7 +270,7 @@ export function HistoricalTable({
               <td style={{ padding: '8px 10px' }}>{cellPct(r, 'bsw', lang)}</td>
               <td style={{ padding: '8px 10px' }}>{cellPct(r, 'linke_pds', lang)}</td>
               <td style={{ padding: '8px 10px' }}>{cellPct(r, 'fdp', lang)}</td>
-              <td style={{ padding: '8px 10px', color: c.ink }}>
+              <td style={{ padding: '8px 10px', color: c.text }}>
                 {PARTY_LABELS[r._winner]?.[lang] ?? r._winner}
               </td>
             </tr>
@@ -297,7 +299,7 @@ export function HistoricalTable({
               borderRadius: 8,
               border: `1px solid ${c.border}`,
               background: c.inputBg,
-              color: c.ink,
+              color: c.text,
               cursor: pageSafe <= 0 ? 'not-allowed' : 'pointer',
               opacity: pageSafe <= 0 ? 0.5 : 1,
             }}
@@ -317,7 +319,7 @@ export function HistoricalTable({
               borderRadius: 8,
               border: `1px solid ${c.border}`,
               background: c.inputBg,
-              color: c.ink,
+              color: c.text,
               cursor: pageSafe >= pageCount - 1 ? 'not-allowed' : 'pointer',
               opacity: pageSafe >= pageCount - 1 ? 0.5 : 1,
             }}

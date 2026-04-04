@@ -3,6 +3,8 @@ export const light = {
   bgAlt: '#FFFFFF',
   bgHover: '#EDE8DF',
   ink: '#0F0F0F',
+  /** Primärer Fließtext / Überschriften (semantisch; gleicher Kontrast wie ink) */
+  text: '#0F0F0F',
   inkSoft: '#3D3D3D',
   muted: '#6B7280',
   subtle: '#9CA3AF',
@@ -39,6 +41,7 @@ export const dark = {
   bgAlt: '#1A1A1A',
   bgHover: '#222222',
   ink: '#E8E4DC',
+  text: '#E8E4DC',
   inkSoft: '#C8C4BC',
   muted: '#8B8B8B',
   subtle: '#6B6B6B',

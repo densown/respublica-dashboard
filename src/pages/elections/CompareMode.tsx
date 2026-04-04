@@ -69,22 +69,21 @@ function normAgs(a: string) {
   return a.replace(/\s/g, '')
 }
 
-function selectCss(c: {
-  inputBg: string
-  inputBorder: string
-  ink: string
-}): CSSProperties {
+function selectCss(
+  c: { cardBg: string; border: string; text: string },
+  narrow: boolean,
+): CSSProperties {
   return {
     minHeight: 44,
     padding: '0 12px',
     borderRadius: 8,
-    border: `1px solid ${c.inputBorder}`,
-    background: c.inputBg,
-    color: c.ink,
+    border: `1px solid ${c.border}`,
+    background: c.cardBg,
+    color: c.text,
     fontFamily: fonts.body,
     fontSize: '0.9rem',
     width: '100%',
-    maxWidth: 280,
+    maxWidth: narrow ? '100%' : 280,
     boxSizing: 'border-box',
   }
 }
@@ -106,7 +105,7 @@ function typeLabelT(t: (k: I18nKey) => string, typ: ElectionType) {
   }
 }
 
-function sectionTitle(text: string, c: { border: string; ink: string }) {
+function sectionTitle(text: string, c: { border: string; text: string }) {
   return (
     <h3
       style={{
@@ -116,7 +115,7 @@ function sectionTitle(text: string, c: { border: string; ink: string }) {
         marginBottom: spacing.md,
         paddingBottom: spacing.sm,
         borderBottom: `1px solid ${c.border}`,
-        color: c.ink,
+        color: c.text,
       }}
     >
       {text}
@@ -175,6 +174,13 @@ export function CompareMode({
   }, [initialElectionType])
 
   const [compareParty, setCompareParty] = useState<string>('spd')
+
+  const nationalAvgEp =
+    compareTyp && compareParty
+      ? `/api/wahlen/national-average?typ=${encodeURIComponent(compareTyp)}&party=${encodeURIComponent(compareParty)}`
+      : ''
+  const { data: nationalAvgRows } =
+    useApi<{ year: number; value: number | null }[]>(nationalAvgEp)
   const [snapshotYear, setSnapshotYear] = useState<number>(() => new Date().getFullYear())
   const [addQuery, setAddQuery] = useState('')
   const addHits = useMemo(
@@ -252,6 +258,14 @@ export function CompareMode({
   }, [datasets, compareTyp])
 
   const lineChartData = useMemo(() => {
+    const natMap = new Map<number, number>()
+    if (nationalAvgRows?.length) {
+      for (const r of nationalAvgRows) {
+        if (r.value != null && Number.isFinite(Number(r.value))) {
+          natMap.set(r.year, toDisplayPercent(Number(r.value)))
+        }
+      }
+    }
     return timeSeriesYears.map((year) => {
       const row: Record<string, number | undefined> & { year: number } = {
         year,
@@ -264,9 +278,17 @@ export function CompareMode({
             ? toDisplayPercent(Number(raw))
             : undefined
       })
+      const nv = natMap.get(year)
+      row.nationalAvg = nv
       return row
     })
-  }, [timeSeriesYears, datasets, compareTyp, compareParty])
+  }, [
+    timeSeriesYears,
+    datasets,
+    compareTyp,
+    compareParty,
+    nationalAvgRows,
+  ])
 
   const maxYLine = useMemo(() => {
     let m = 5
@@ -275,6 +297,8 @@ export function CompareMode({
         const v = row[`r${i}`]
         if (typeof v === 'number' && !Number.isNaN(v)) m = Math.max(m, v)
       }
+      const nv = row.nationalAvg
+      if (typeof nv === 'number' && !Number.isNaN(nv)) m = Math.max(m, nv)
     }
     return Math.min(55, Math.ceil(m / 5) * 5 + 5)
   }, [lineChartData, datasets.length])
@@ -357,7 +381,16 @@ export function CompareMode({
   const ready = datasets.length >= 2 && datasets.every((d) => d.data)
 
   return (
-    <div style={{ marginTop: spacing.lg }}>
+    <div
+      style={{
+        marginTop: spacing.lg,
+        paddingLeft: narrow ? 12 : 0,
+        paddingRight: narrow ? 12 : 0,
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: '100%',
+      }}
+    >
       <div
         style={{
           display: 'flex',
@@ -377,8 +410,8 @@ export function CompareMode({
             padding: '0 16px',
             borderRadius: 8,
             border: `1px solid ${c.border}`,
-            background: c.inputBg,
-            color: c.ink,
+            background: c.cardBg,
+            color: c.text,
             fontFamily: fonts.mono,
             fontSize: '0.8rem',
             cursor: 'pointer',
@@ -391,7 +424,7 @@ export function CompareMode({
             fontFamily: fonts.display,
             fontSize: '1.35rem',
             fontWeight: 700,
-            color: c.ink,
+            color: c.text,
             margin: 0,
             flex: 1,
           }}
@@ -422,7 +455,7 @@ export function CompareMode({
           <select
             value={compareParty}
             onChange={(e) => setCompareParty(e.target.value)}
-            style={selectCss(c)}
+            style={selectCss(c, narrow)}
           >
             {DISTRICT_CHART_PARTIES.map((p) => (
               <option key={p} value={p}>
@@ -444,7 +477,7 @@ export function CompareMode({
           <select
             value={compareTyp}
             onChange={(e) => setCompareTyp(e.target.value as ElectionType)}
-            style={selectCss(c)}
+            style={selectCss(c, narrow)}
           >
             {ELECTION_TYPES.map((tp) => (
               <option key={tp} value={tp}>
@@ -482,13 +515,13 @@ export function CompareMode({
               style={{
                 fontFamily: fonts.mono,
                 fontSize: '0.85rem',
-                color: c.ink,
+                color: c.text,
                 minWidth: 24,
               }}
             >
               {String.fromCharCode(65 + idx)}.
             </span>
-            <span style={{ fontFamily: fonts.body, flex: 1, color: c.ink }}>
+            <span style={{ fontFamily: fonts.body, flex: 1, color: c.text, minWidth: 0 }}>
               {regionLabel(
                 ags,
                 datasets.find((d) => normAgs(d.ags) === normAgs(ags))?.data ??
@@ -505,7 +538,7 @@ export function CompareMode({
                 borderRadius: 8,
                 border: `1px solid ${c.border}`,
                 background: c.bgAlt,
-                color: c.ink,
+                color: c.text,
                 fontFamily: fonts.mono,
                 fontSize: '0.72rem',
                 cursor: 'pointer',
@@ -516,7 +549,7 @@ export function CompareMode({
           </div>
         ))}
         {compareRegions.length < 4 ? (
-          <div style={{ marginTop: spacing.md, maxWidth: 400 }}>
+          <div style={{ marginTop: spacing.md, maxWidth: narrow ? '100%' : 400 }}>
             <KreisAutocomplete
               label={t('addRegion')}
               placeholder={t('searchPlaceholder')}
@@ -556,8 +589,14 @@ export function CompareMode({
       {ready ? (
         <>
           {sectionTitle(t('compareSectionTimeSeries'), c)}
-          <div style={{ width: '100%', minHeight: 300 }}>
-            <ResponsiveContainer width="100%" height={360}>
+          <div
+            style={{
+              width: '100%',
+              minHeight: narrow ? 250 : 300,
+              overflow: 'hidden',
+            }}
+          >
+            <ResponsiveContainer width="100%" height={narrow ? 250 : 360}>
               <LineChart
                 data={lineChartData}
                 margin={{ top: 8, right: 16, left: 0, bottom: 8 }}
@@ -576,12 +615,12 @@ export function CompareMode({
                 />
                 <Tooltip
                   contentStyle={{
-                    background: c.cardBg,
+                    background: c.surface,
                     border: `1px solid ${c.border}`,
                     borderRadius: 8,
                     fontFamily: fonts.mono,
                     fontSize: 12,
-                    color: c.ink,
+                    color: c.text,
                   }}
                 />
                 <Legend
@@ -608,6 +647,19 @@ export function CompareMode({
                     />
                   )
                 })}
+                {nationalAvgRows?.some((r) => r.value != null) ? (
+                  <Line
+                    type="monotone"
+                    dataKey="nationalAvg"
+                    name={t('nationalAverage')}
+                    stroke={c.muted}
+                    strokeWidth={1.5}
+                    strokeDasharray="2 4"
+                    dot={false}
+                    connectNulls
+                    isAnimationActive={false}
+                  />
+                ) : null}
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -634,7 +686,7 @@ export function CompareMode({
               value={snapshotYear}
               onChange={(e) => setSnapshotYear(Number(e.target.value))}
               disabled={!yearsForTyp.length}
-              style={selectCss(c)}
+              style={selectCss(c, narrow)}
             >
               {yearsForTyp.map((y) => (
                 <option key={y} value={y}>
@@ -651,6 +703,8 @@ export function CompareMode({
                 : 'repeat(auto-fit, minmax(240px, 1fr))',
               gap: spacing.lg,
               alignItems: 'start',
+              width: '100%',
+              maxWidth: '100%',
             }}
           >
             {datasets.map((ds) => {
@@ -675,6 +729,7 @@ export function CompareMode({
             chartData={radarChartData}
             series={radarSeries}
             domainMax={radarDomainMax}
+            narrow={narrow}
           />
 
           {sectionTitle(t('compareSectionDiff'), c)}

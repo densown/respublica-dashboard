@@ -41,20 +41,21 @@ const KREISE_EXPECTED = 400
 const KREISE_COVERAGE_WARN_BELOW = 320
 
 function selectCss(c: {
-  inputBg: string
-  inputBorder: string
-  ink: string
+  cardBg: string
+  border: string
+  text: string
 }): CSSProperties {
   return {
     minHeight: 44,
     padding: '0 12px',
     borderRadius: 8,
-    border: `1px solid ${c.inputBorder}`,
-    background: c.inputBg,
-    color: c.ink,
+    border: `1px solid ${c.border}`,
+    background: c.cardBg,
+    color: c.text,
     fontFamily: fonts.body,
     fontSize: '0.9rem',
     width: '100%',
+    maxWidth: '100%',
     boxSizing: 'border-box',
   }
 }
@@ -233,7 +234,7 @@ export function MapMode({
         style={{
           fontFamily: fonts.mono,
           fontSize: '1.1rem',
-          color: c.ink,
+          color: c.text,
           lineHeight: 1.4,
         }}
       >
@@ -257,10 +258,13 @@ export function MapMode({
         style={{
           display: 'flex',
           flexDirection: narrow ? 'column' : 'row',
-          flexWrap: 'wrap',
+          flexWrap: narrow ? 'nowrap' : 'wrap',
           gap: spacing.md,
           marginTop: spacing.lg,
           marginBottom: spacing.xl,
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
         }}
       >
         <label style={{ flex: narrow ? '1 1 100%' : '1 1 200px' }}>
@@ -385,18 +389,27 @@ export function MapMode({
                 )}
               </div>
             )}
-          <ElectionMap
-            mapBuild={mapBuild}
-            dataByAgs={dataByAgs}
-            kreisNameByAgs={kreisNameByAgs}
-            metric={debouncedMetric}
-            turnoutMin={turnoutStats.minT}
-            turnoutMax={turnoutStats.maxT}
-            lang={lang}
-            onSelectAgs={onMapSelect}
-            selectedAgs={selectedAgs}
-            loading={mapLoading || yearsLoading}
-          />
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '100%',
+              overflow: 'hidden',
+              boxSizing: 'border-box',
+            }}
+          >
+            <ElectionMap
+              mapBuild={mapBuild}
+              dataByAgs={dataByAgs}
+              kreisNameByAgs={kreisNameByAgs}
+              metric={debouncedMetric}
+              turnoutMin={turnoutStats.minT}
+              turnoutMax={turnoutStats.maxT}
+              lang={lang}
+              onSelectAgs={onMapSelect}
+              selectedAgs={selectedAgs}
+              loading={mapLoading || yearsLoading}
+            />
+          </div>
 
           <ElectionMapLegend
             metric={debouncedMetric}
@@ -409,9 +422,13 @@ export function MapMode({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gridTemplateColumns: narrow
+                ? 'repeat(2, minmax(0, 1fr))'
+                : 'repeat(auto-fill, minmax(200px, 1fr))',
               gap: spacing.md,
               marginTop: spacing.xl,
+              width: '100%',
+              maxWidth: '100%',
             }}
           >
             {statCard(
@@ -440,8 +457,8 @@ export function MapMode({
             padding: '0 18px',
             borderRadius: 8,
             border: `1px solid ${c.border}`,
-            background: c.inputBg,
-            color: c.ink,
+            background: c.cardBg,
+            color: c.text,
             fontFamily: fonts.body,
             fontSize: '0.95rem',
             cursor: 'pointer',

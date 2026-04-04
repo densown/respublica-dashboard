@@ -51,9 +51,14 @@ export function PartyToggles({ lang, activeKeys, onChange }: PartyTogglesProps) 
       role="group"
       style={{
         display: 'flex',
-        flexWrap: 'wrap',
+        flexWrap: 'nowrap',
         gap: 8,
         alignItems: 'center',
+        overflowX: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        paddingBottom: 4,
+        width: '100%',
+        maxWidth: '100%',
       }}
     >
       {DISTRICT_CHART_PARTIES.map((p) => {
@@ -70,9 +75,9 @@ export function PartyToggles({ lang, activeKeys, onChange }: PartyTogglesProps) 
               minHeight: 36,
               padding: `0 ${spacing.md}px`,
               borderRadius: 999,
-              border: `2px solid ${bg}`,
+              border: on ? `2px solid ${bg}` : `1px solid ${c.border}`,
               background: on ? bg : 'transparent',
-              color: on ? textOnPartyColor(bg) : c.ink,
+              color: on ? textOnPartyColor(bg) : c.text,
               fontFamily: fonts.mono,
               fontSize: '0.78rem',
               fontWeight: on ? 600 : 400,

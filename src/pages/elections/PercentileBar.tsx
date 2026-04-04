@@ -35,8 +35,8 @@ export function PercentileBar({
       ? 50
       : Math.min(100, Math.max(0, ((value - min) / span) * 100))
 
-  const gradLeft = theme === 'dark' ? '#2A2A2A' : '#E8E4DC'
-  const gradRight = theme === 'dark' ? '#5C5C5C' : '#9CA3AF'
+  const gradLeft = theme === 'dark' ? '#3D3D3D' : '#E8E4DC'
+  const gradRight = theme === 'dark' ? '#8A8A8A' : '#9CA3AF'
   const gradient = accentColor
     ? `linear-gradient(90deg, ${gradLeft} 0%, ${accentColor}40 50%, ${gradRight} 100%)`
     : `linear-gradient(90deg, ${gradLeft} 0%, ${gradRight} 100%)`
@@ -85,7 +85,7 @@ export function PercentileBar({
           marginTop: spacing.sm,
           fontFamily: fonts.mono,
           fontSize: '0.85rem',
-          color: c.ink,
+          color: c.text,
         }}
       >
         {fmt(value)}% · {interpolate(t('rankOf'), { rank, total })}
