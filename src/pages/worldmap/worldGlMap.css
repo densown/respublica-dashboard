@@ -1,0 +1,19 @@
+/* Kompakte MapLibre-Controls auf schmalen Viewports */
+.world-gl-map .maplibregl-ctrl-top-right {
+  top: 6px;
+  right: 6px;
+}
+
+.world-gl-map .maplibregl-ctrl-group {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.world-gl-map .maplibregl-ctrl-group button {
+  width: 28px;
+  height: 28px;
+}
+
+.world-gl-map .maplibregl-ctrl-icon {
+  transform: scale(0.85);
+  transform-origin: center;
+}
