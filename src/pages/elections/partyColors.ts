@@ -88,6 +88,26 @@ export const STATE_PREFIX_COLORS: Record<string, string> = {
   '16': '#D37295',
 }
 
+/** Bundesland aus AGS-Präfix (erste zwei Ziffern). */
+export const STATE_NAMES: Record<string, string> = {
+  '01': 'Schleswig-Holstein',
+  '02': 'Hamburg',
+  '03': 'Niedersachsen',
+  '04': 'Bremen',
+  '05': 'Nordrhein-Westfalen',
+  '06': 'Hessen',
+  '07': 'Rheinland-Pfalz',
+  '08': 'Baden-Württemberg',
+  '09': 'Bayern',
+  '10': 'Saarland',
+  '11': 'Berlin',
+  '12': 'Brandenburg',
+  '13': 'Mecklenburg-Vorpommern',
+  '14': 'Sachsen',
+  '15': 'Sachsen-Anhalt',
+  '16': 'Thüringen',
+}
+
 export function statePrefixFromAgs(ags: string): string {
   const s = ags.replace(/\s/g, '')
   return s.length >= 2 ? s.slice(0, 2) : s

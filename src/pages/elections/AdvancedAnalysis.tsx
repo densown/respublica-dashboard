@@ -23,7 +23,6 @@ import type {
   MapRow,
   RankingRow,
   ScatterRow,
-  WahlenState,
 } from './types'
 
 type AnalysisTab = 'scatter' | 'ranking' | 'change'
@@ -36,7 +35,6 @@ type AdvancedAnalysisProps = {
   winnersByAgs: Map<string, MapRow>
   /** Kreisnamen aus GeoJSON (AGS → Name) */
   kreisNameByAgs: Map<string, string>
-  states: WahlenState[] | null
   onSelectRegion: (ags: string) => void
 }
 
@@ -98,7 +96,6 @@ export function AdvancedAnalysis({
   mapBuild,
   winnersByAgs,
   kreisNameByAgs,
-  states,
   onSelectRegion,
 }: AdvancedAnalysisProps) {
   const { c, t, lang } = useTheme()
@@ -400,7 +397,7 @@ export function AdvancedAnalysis({
           {!rankLoading && rankingData && (
             <RankingTable
               rows={rankingData}
-              states={states}
+              kreisNameByAgs={kreisNameByAgs}
               onRowClick={onSelectRegion}
             />
           )}

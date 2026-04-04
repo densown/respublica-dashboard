@@ -31,7 +31,6 @@ import type {
   KreiseGeoJson,
   MapRow,
   MapRowFromApi,
-  WahlenState,
 } from './elections/types'
 import type { I18nKey } from '../design-system/i18n'
 
@@ -216,8 +215,6 @@ export default function Elections() {
       : ''
   const { data: mapRows, loading: mapLoading, error: mapError } =
     useApi<MapRowFromApi[]>(mapEp)
-
-  const { data: states } = useApi<WahlenState[]>('/api/wahlen/states')
 
   const kreisNameByAgs = useMemo(() => {
     const m = new Map<string, string>()
@@ -700,7 +697,6 @@ export default function Elections() {
           mapBuild={mapBuild}
           winnersByAgs={winnersByAgs}
           kreisNameByAgs={kreisNameByAgs}
-          states={states ?? null}
           onSelectRegion={(ags) => setSelectedAgs(ags.replace(/\s/g, ''))}
         />
       )}

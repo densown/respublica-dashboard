@@ -1,27 +1,24 @@
 import { useCallback, useMemo, useState, type CSSProperties } from 'react'
 import { useTheme } from '../../design-system'
 import { fonts } from '../../design-system/tokens'
-import { statePrefixFromAgs } from './partyColors'
-import type { RankingRow, WahlenState } from './types'
+import { STATE_NAMES, statePrefixFromAgs } from './partyColors'
+import { resolveKreisDisplayName, toDisplayPercent } from './normalizeWahlen'
+import type { RankingRow } from './types'
 
 type SortKey = 'rank' | 'name' | 'state' | 'value'
 
 type RankingTableProps = {
   rows: RankingRow[]
-  states: WahlenState[] | null
+  kreisNameByAgs: Map<string, string>
   onRowClick: (ags: string) => void
 }
 
-function stateNameForAgs(
-  ags: string,
-  states: WahlenState[] | null,
-): string {
-  const code = statePrefixFromAgs(ags)
-  const hit = states?.find((s) => s.code === code)
-  return hit?.name ?? code
+function bundeslandFromAgs(ags: string): string {
+  const prefix = statePrefixFromAgs(ags)
+  return STATE_NAMES[prefix] ?? prefix
 }
 
-export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
+export function RankingTable({ rows, kreisNameByAgs, onRowClick }: RankingTableProps) {
   const { c, t, lang } = useTheme()
   const [sortKey, setSortKey] = useState<SortKey>('rank')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
@@ -29,9 +26,11 @@ export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
   const enriched = useMemo(() => {
     return rows.map((r) => ({
       ...r,
-      stateName: stateNameForAgs(r.ags, states),
+      kreisName: resolveKreisDisplayName(r.ags, kreisNameByAgs, r.name),
+      stateName: bundeslandFromAgs(r.ags),
+      valuePct: toDisplayPercent(r.value),
     }))
-  }, [rows, states])
+  }, [rows, kreisNameByAgs])
 
   const sorted = useMemo(() => {
     const dir = sortDir === 'asc' ? 1 : -1
@@ -43,13 +42,13 @@ export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
           cmp = a.rank - b.rank
           break
         case 'name':
-          cmp = a.name.localeCompare(b.name, lang)
+          cmp = a.kreisName.localeCompare(b.kreisName, lang)
           break
         case 'state':
           cmp = a.stateName.localeCompare(b.stateName, lang)
           break
         case 'value':
-          cmp = a.value - b.value
+          cmp = a.valuePct - b.valuePct
           break
         default:
           cmp = 0
@@ -72,7 +71,7 @@ export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
       .map((h) => `"${h}"`)
       .join(';')
     const lines = sorted.map((r) =>
-      [r.rank, `"${r.name}"`, `"${r.stateName}"`, r.value.toFixed(2).replace('.', ',')].join(
+      [r.rank, `"${r.kreisName}"`, `"${r.stateName}"`, r.valuePct.toFixed(2).replace('.', ',')].join(
         ';',
       ),
     )
@@ -161,7 +160,7 @@ export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
                 <td style={{ padding: '12px 10px', fontFamily: fonts.mono, fontSize: '0.85rem' }}>
                   {r.rank}
                 </td>
-                <td style={{ padding: '12px 10px', fontSize: '0.9rem', color: c.ink }}>{r.name}</td>
+                <td style={{ padding: '12px 10px', fontSize: '0.9rem', color: c.ink }}>{r.kreisName}</td>
                 <td style={{ padding: '12px 10px', fontSize: '0.85rem', color: c.inkSoft }}>
                   {r.stateName}
                 </td>
@@ -173,7 +172,7 @@ export function RankingTable({ rows, states, onRowClick }: RankingTableProps) {
                     fontSize: '0.85rem',
                   }}
                 >
-                  {r.value.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %
+                  {r.valuePct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %
                 </td>
               </tr>
             ))}
