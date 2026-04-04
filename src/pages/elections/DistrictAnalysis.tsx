@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type Dispatch,
+  type SetStateAction,
+} from 'react'
 import {
   Legend,
   Line,
@@ -201,6 +209,9 @@ export type DistrictAnalysisProps = {
   narrow: boolean
   onBackToMap: () => void
   onSelectKreis: (ags: string) => void
+  compareRegions: string[]
+  setCompareRegions: Dispatch<SetStateAction<string[]>>
+  onOpenCompare: () => void
   onStartCompare?: (ags: string) => void
 }
 
@@ -231,6 +242,9 @@ export function DistrictAnalysis({
   narrow,
   onBackToMap,
   onSelectKreis,
+  compareRegions,
+  setCompareRegions,
+  onOpenCompare,
   onStartCompare,
 }: DistrictAnalysisProps) {
   const { c, t, lang, theme } = useTheme()
@@ -482,6 +496,38 @@ export function DistrictAnalysis({
     setKreisSearch('')
   }
 
+  const selectedKey = normAgs(ags)
+  const inCompare = compareRegions.some((r) => normAgs(r) === selectedKey)
+  const compareCount = compareRegions.length
+  const atMaxCompareRegions = compareCount >= 4
+  const addToCompareDisabled = inCompare || atMaxCompareRegions
+  const addToCompareLabel = inCompare
+    ? t('alreadyInCompare')
+    : atMaxCompareRegions
+      ? `${t('compareFull')} (4/4)`
+      : `${t('addToCompare')} (${compareCount}/4)`
+
+  const addToComparePrimaryStyle: CSSProperties = {
+    background: c.red,
+    color: '#fff',
+    padding: '8px 16px',
+    borderRadius: 4,
+    fontSize: '0.8rem',
+    fontFamily: fonts.body,
+    border: 'none',
+    cursor: addToCompareDisabled ? 'not-allowed' : 'pointer',
+    opacity: addToCompareDisabled ? 0.5 : 1,
+    whiteSpace: 'nowrap',
+  }
+
+  const onAddToCompare = () => {
+    if (addToCompareDisabled) return
+    const k = selectedKey
+    if (compareRegions.some((r) => normAgs(r) === k)) return
+    if (compareRegions.length >= 4) return
+    setCompareRegions([...compareRegions, k])
+  }
+
   return (
     <div style={{ marginTop: spacing.lg }}>
       <div
@@ -538,6 +584,61 @@ export function DistrictAnalysis({
             {bundeslandLine ? ' · ' : ''}
             AGS {data?.ags ?? ags}
           </div>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 10,
+            alignSelf: narrow ? 'stretch' : 'auto',
+          }}
+        >
+          <button
+            type="button"
+            onClick={onAddToCompare}
+            disabled={addToCompareDisabled}
+            style={addToComparePrimaryStyle}
+          >
+            {addToCompareLabel}
+          </button>
+          {onStartCompare ? (
+            <button
+              type="button"
+              onClick={() => onStartCompare(selectedKey)}
+              style={{
+                minHeight: 44,
+                padding: '0 18px',
+                borderRadius: 8,
+                border: `1px solid ${c.border}`,
+                background: c.inputBg,
+                color: c.ink,
+                fontFamily: fonts.body,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+              }}
+            >
+              + {t('compare')}
+            </button>
+          ) : null}
+          {compareCount >= 2 ? (
+            <button
+              type="button"
+              onClick={onOpenCompare}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: fonts.body,
+                fontSize: '0.8rem',
+                color: c.red,
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+            >
+              {t('openCompare')}
+            </button>
+          ) : null}
         </div>
       </div>
 
@@ -997,28 +1098,6 @@ export function DistrictAnalysis({
             rows={[...(data.elections ?? [])].sort((a, b) => b.year - a.year)}
             typeLabel={typeLabelFn}
           />
-
-          {onStartCompare ? (
-            <div style={{ marginTop: spacing.xl }}>
-              <button
-                type="button"
-                onClick={() => onStartCompare(normAgs(ags))}
-                style={{
-                  minHeight: 44,
-                  padding: '0 18px',
-                  borderRadius: 8,
-                  border: `1px solid ${c.border}`,
-                  background: c.inputBg,
-                  color: c.ink,
-                  fontFamily: fonts.body,
-                  fontSize: '0.9rem',
-                  cursor: 'pointer',
-                }}
-              >
-                + {t('compare')}
-              </button>
-            </div>
-          ) : null}
         </>
       )}
     </div>

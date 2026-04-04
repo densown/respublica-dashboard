@@ -293,6 +293,9 @@ export default function Elections() {
             narrow={narrow}
             onBackToMap={() => setActiveMode('map')}
             onSelectKreis={(next) => setSelectedAgs(next)}
+            compareRegions={compareRegions}
+            setCompareRegions={setCompareRegions}
+            onOpenCompare={() => setActiveMode('compare')}
             onStartCompare={(a) => {
               setCompareRegions([a])
               setActiveMode('compare')
