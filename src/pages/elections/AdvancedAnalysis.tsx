@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DataCard, useTheme } from '../../design-system'
 import { breakpoints, fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import {
+  ChangeDeltaHistogram,
+  ChangeGainsLossesBarCharts,
+  ChangeStateAverageBars,
+} from './ChangeAnalysisCharts'
 import { ChangeMap } from './ChangeMap'
 import type { KreiseMapBuild } from './mapGeometry'
-import { MAIN_PARTIES, PARTY_LABELS } from './partyColors'
+import { MAIN_PARTIES, PARTY_LABELS, STATE_NAMES } from './partyColors'
 import { RankingTable } from './RankingTable'
 import {
   SCATTER_AXIS_OPTIONS,
@@ -76,6 +81,12 @@ function selectStyle(c: {
   }
 }
 
+function normAgs(ags: string): string {
+  return ags.replace(/\s/g, '')
+}
+
+const BUNDESLAND_PREFIXES = (Object.keys(STATE_NAMES) as string[]).sort()
+
 function useNarrow() {
   const [narrow, setNarrow] = useState(
     typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
@@ -114,6 +125,7 @@ export function AdvancedAnalysis({
   const [xKey, setXKey] = useState<ScatterAxisKey>('turnout')
   const [yKey, setYKey] = useState<ScatterAxisKey>('afd')
   const [colorMode, setColorMode] = useState<'state' | 'winner'>('state')
+  const [scatterRegionFilter, setScatterRegionFilter] = useState<string>('')
 
   const [rankParty, setRankParty] = useState<string>('afd')
   const [rankOrder, setRankOrder] = useState<'desc' | 'asc'>('desc')
@@ -122,6 +134,11 @@ export function AdvancedAnalysis({
   const [changeFrom, setChangeFrom] = useState<number | null>(null)
   const [changeTo, setChangeTo] = useState<number | null>(null)
   const [changeParty, setChangeParty] = useState<string>('spd')
+  const [changeMapFocusAgs, setChangeMapFocusAgs] = useState<string | null>(null)
+  const [changeStateFilter, setChangeStateFilter] = useState<string>('')
+  const [changeSearchQuery, setChangeSearchQuery] = useState('')
+  const [showChangeSearchDropdown, setShowChangeSearchDropdown] = useState(false)
+  const changeSearchWrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (sortedYears.length >= 2) {
@@ -136,6 +153,13 @@ export function AdvancedAnalysis({
       : ''
   const { data: scatterData, loading: scatterLoading, error: scatterErr } =
     useApi<ScatterRow[]>(scatterEp)
+
+  const scatterRowsForPlot = useMemo(() => {
+    if (!scatterData?.length) return [] as ScatterRow[]
+    const p = scatterRegionFilter
+    if (!p) return scatterData
+    return scatterData.filter((d) => normAgs(d.ags).startsWith(p))
+  }, [scatterData, scatterRegionFilter])
 
   const rankingEp =
     rankingSeen && electionType && year && rankParty
@@ -183,21 +207,67 @@ export function AdvancedAnalysis({
     return Math.max(1, ...normalizedChangeData.map((r) => Math.abs(r.change)))
   }, [normalizedChangeData])
 
-  const topGains = useMemo(() => {
+  const topGainsFiltered = useMemo(() => {
     if (!normalizedChangeData) return []
-    return [...normalizedChangeData]
-      .filter((r) => r.change > 0)
-      .sort((a, b) => b.change - a.change)
-      .slice(0, 10)
-  }, [normalizedChangeData])
+    let pool = normalizedChangeData.filter((r) => r.change > 0)
+    if (changeStateFilter) {
+      pool = pool.filter((r) => normAgs(r.ags).startsWith(changeStateFilter))
+    }
+    return [...pool].sort((a, b) => b.change - a.change).slice(0, 10)
+  }, [normalizedChangeData, changeStateFilter])
 
-  const topLosses = useMemo(() => {
+  const topLossesFiltered = useMemo(() => {
     if (!normalizedChangeData) return []
-    return [...normalizedChangeData]
-      .filter((r) => r.change < 0)
-      .sort((a, b) => a.change - b.change)
-      .slice(0, 10)
-  }, [normalizedChangeData])
+    let pool = normalizedChangeData.filter((r) => r.change < 0)
+    if (changeStateFilter) {
+      pool = pool.filter((r) => normAgs(r.ags).startsWith(changeStateFilter))
+    }
+    return [...pool].sort((a, b) => a.change - b.change).slice(0, 10)
+  }, [normalizedChangeData, changeStateFilter])
+
+  const changeSearchHits = useMemo(() => {
+    const q = changeSearchQuery.trim().toLowerCase()
+    if (q.length < 2) return [] as { ags: string; name: string }[]
+    const hits: { ags: string; name: string }[] = []
+    for (const [ags, name] of kreisNameByAgs) {
+      if (String(name).toLowerCase().includes(q)) hits.push({ ags, name: String(name) })
+    }
+    hits.sort((a, b) => a.name.localeCompare(b.name, lang))
+    return hits.slice(0, 8)
+  }, [kreisNameByAgs, changeSearchQuery, lang])
+
+  useEffect(() => {
+    setChangeMapFocusAgs(null)
+  }, [changeFrom, changeTo, changeParty])
+
+  useEffect(() => {
+    const tq = changeSearchQuery.trim()
+    if (tq.length < 2) {
+      setShowChangeSearchDropdown(false)
+      return
+    }
+    setShowChangeSearchDropdown(changeSearchHits.length > 0)
+  }, [changeSearchQuery, changeSearchHits])
+
+  useEffect(() => {
+    if (!showChangeSearchDropdown) return
+    const onDocMouseDown = (e: MouseEvent) => {
+      const root = changeSearchWrapRef.current
+      if (root && !root.contains(e.target as Node)) setShowChangeSearchDropdown(false)
+    }
+    document.addEventListener('mousedown', onDocMouseDown)
+    return () => document.removeEventListener('mousedown', onDocMouseDown)
+  }, [showChangeSearchDropdown])
+
+  const onPickChangeSearchKreis = useCallback(
+    (ags: string) => {
+      setChangeMapFocusAgs(normAgs(ags))
+      setChangeSearchQuery('')
+      setShowChangeSearchDropdown(false)
+      onSelectRegion(ags)
+    },
+    [onSelectRegion],
+  )
 
   const kreisLabel = useCallback(
     (ags: string, apiName?: string | null) =>
@@ -307,6 +377,21 @@ export function AdvancedAnalysis({
                 <option value="winner">{t('electionsByWinner')}</option>
               </select>
             </label>
+            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+              {t('electionsRegion')}
+              <select
+                value={scatterRegionFilter}
+                onChange={(e) => setScatterRegionFilter(e.target.value)}
+                style={{ ...selectStyle(c), display: 'block', marginTop: 6, width: '100%' }}
+              >
+                <option value="">{t('electionsAllStates')}</option>
+                {BUNDESLAND_PREFIXES.map((code) => (
+                  <option key={code} value={code}>
+                    {STATE_NAMES[code]}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
           {scatterErr && (
             <p style={{ color: c.red, fontFamily: fonts.body }}>{t('dataLoadError')}</p>
@@ -316,13 +401,14 @@ export function AdvancedAnalysis({
           )}
           {!scatterLoading && scatterData && (
             <ScatterPlot
-              rows={scatterData}
+              rows={scatterRowsForPlot}
               xKey={xKey}
               yKey={yKey}
               colorMode={colorMode}
               winnersByAgs={winnersByAgs}
               lang={lang}
               onPointClick={onSelectRegion}
+              stateLegendEmphasisPrefix={scatterRegionFilter || null}
             />
           )}
         </DataCard>
@@ -464,6 +550,7 @@ export function AdvancedAnalysis({
             <p style={{ color: c.muted, fontFamily: fonts.body }}>{t('loading')}</p>
           )}
           {!changeLoading && changeData && (
+            <>
             <div
               style={{
                 display: 'flex',
@@ -473,12 +560,149 @@ export function AdvancedAnalysis({
               }}
             >
               <div style={{ flex: narrow ? 'none' : '1 1 0', minWidth: 0, width: '100%' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: spacing.md,
+                    marginBottom: spacing.md,
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <div
+                    ref={changeSearchWrapRef}
+                    style={{
+                      flex: narrow ? '1 1 100%' : '1 1 220px',
+                      minWidth: narrow ? undefined : 200,
+                      position: 'relative',
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'block',
+                        fontFamily: fonts.body,
+                        fontSize: '0.85rem',
+                        color: c.muted,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {t('electionsDistrict')}
+                    </span>
+                    <input
+                      type="search"
+                      value={changeSearchQuery}
+                      onChange={(e) => setChangeSearchQuery(e.target.value)}
+                      onFocus={() => {
+                        const tq = changeSearchQuery.trim()
+                        if (tq.length >= 2 && changeSearchHits.length > 0) {
+                          setShowChangeSearchDropdown(true)
+                        }
+                      }}
+                      placeholder={t('searchPlaceholder')}
+                      aria-label={t('searchPlaceholder')}
+                      autoComplete="off"
+                      style={{
+                        ...selectStyle(c),
+                        display: 'block',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        marginTop: 0,
+                      }}
+                    />
+                    {showChangeSearchDropdown && changeSearchHits.length > 0 && (
+                      <div
+                        role="listbox"
+                        style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          right: 0,
+                          marginTop: 4,
+                          zIndex: 20,
+                          background: c.surface,
+                          border: `1px solid ${c.border}`,
+                          boxShadow: c.shadow,
+                          borderRadius: 8,
+                          maxHeight: 300,
+                          overflowY: 'auto',
+                        }}
+                      >
+                        {changeSearchHits.map((hit, i) => (
+                          <button
+                            key={hit.ags}
+                            type="button"
+                            role="option"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => onPickChangeSearchKreis(hit.ags)}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              padding: '8px 12px',
+                              border: 'none',
+                              borderBottom:
+                                i < changeSearchHits.length - 1
+                                  ? `1px solid ${c.border}`
+                                  : 'none',
+                              background: 'transparent',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontFamily: fonts.body,
+                              fontSize: '0.9rem',
+                              color: c.ink,
+                              boxSizing: 'border-box',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = c.bgHover
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = 'transparent'
+                            }}
+                          >
+                            {hit.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <label
+                    style={{
+                      fontFamily: fonts.body,
+                      fontSize: '0.85rem',
+                      color: c.muted,
+                      flex: narrow ? '1 1 100%' : '0 1 200px',
+                    }}
+                  >
+                    {t('electionsBundesland')}
+                    <select
+                      value={changeStateFilter}
+                      onChange={(e) => setChangeStateFilter(e.target.value)}
+                      style={{
+                        ...selectStyle(c),
+                        display: 'block',
+                        marginTop: 6,
+                        width: '100%',
+                      }}
+                    >
+                      <option value="">{t('electionsAllStates')}</option>
+                      {BUNDESLAND_PREFIXES.map((code) => (
+                        <option key={code} value={code}>
+                          {STATE_NAMES[code]}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
                 <ChangeMap
                   mapBuild={mapBuild}
                   changeByAgs={changeByAgs}
                   maxAbs={maxAbsChange}
                   kreisNameByAgs={kreisNameByAgs}
-                  onSelectAgs={onSelectRegion}
+                  selectedAgs={changeMapFocusAgs}
+                  filterStatePrefix={changeStateFilter || null}
+                  onSelectAgs={(ags) => {
+                    setChangeMapFocusAgs(normAgs(ags))
+                    onSelectRegion(ags)
+                  }}
                 />
               </div>
               <div
@@ -493,11 +717,14 @@ export function AdvancedAnalysis({
                   {t('topGains')}
                 </div>
                 <ol style={{ margin: 0, paddingLeft: 18, color: c.inkSoft }}>
-                  {topGains.map((r) => (
+                  {topGainsFiltered.map((r) => (
                     <li key={r.ags} style={{ marginBottom: 6 }}>
                       <button
                         type="button"
-                        onClick={() => onSelectRegion(r.ags)}
+                        onClick={() => {
+                          setChangeMapFocusAgs(normAgs(r.ags))
+                          onSelectRegion(r.ags)
+                        }}
                         style={{
                           background: 'none',
                           border: 'none',
@@ -527,11 +754,14 @@ export function AdvancedAnalysis({
                   {t('topLosses')}
                 </div>
                 <ol style={{ margin: 0, paddingLeft: 18, color: c.inkSoft }}>
-                  {topLosses.map((r) => (
+                  {topLossesFiltered.map((r) => (
                     <li key={r.ags} style={{ marginBottom: 6 }}>
                       <button
                         type="button"
-                        onClick={() => onSelectRegion(r.ags)}
+                        onClick={() => {
+                          setChangeMapFocusAgs(normAgs(r.ags))
+                          onSelectRegion(r.ags)
+                        }}
                         style={{
                           background: 'none',
                           border: 'none',
@@ -552,6 +782,23 @@ export function AdvancedAnalysis({
                 </ol>
               </div>
             </div>
+            {normalizedChangeData && normalizedChangeData.length > 0 && (
+              <>
+                <ChangeGainsLossesBarCharts
+                  gains={topGainsFiltered}
+                  losses={topLossesFiltered}
+                  kreisLabel={kreisLabel}
+                  onSelectAgs={(ags) => {
+                    setChangeMapFocusAgs(normAgs(ags))
+                    onSelectRegion(ags)
+                  }}
+                  narrow={narrow}
+                />
+                <ChangeDeltaHistogram rows={normalizedChangeData} narrow={narrow} />
+                <ChangeStateAverageBars rows={normalizedChangeData} narrow={narrow} />
+              </>
+            )}
+            </>
           )}
         </DataCard>
       )}

@@ -12,15 +12,26 @@ import {
 } from 'recharts'
 import { useTheme } from '../../design-system'
 import { fonts } from '../../design-system/tokens'
+import { toDisplayPercent } from './normalizeWahlen'
 import {
-  colorForStatePrefix,
   MAIN_PARTIES,
   PARTY_LABELS,
+  STATE_COLORS,
+  STATE_NAMES,
   partyColorsForTheme,
   statePrefixFromAgs,
 } from './partyColors'
 import type { MapRow } from './types'
 import type { ScatterRow } from './types'
+
+function formatScatterPercent(n: number, lang: 'de' | 'en'): string {
+  if (Number.isNaN(n)) return '—'
+  const dec = Math.abs(n % 1) > 1e-9
+  const s = dec
+    ? n.toFixed(1).replace('.', lang === 'de' ? ',' : '.')
+    : String(Math.round(n))
+  return `${s} %`
+}
 
 const AXIS_KEYS = ['turnout', ...MAIN_PARTIES] as const
 export type ScatterAxisKey = (typeof AXIS_KEYS)[number]
@@ -33,16 +44,21 @@ type ScatterPlotProps = {
   winnersByAgs?: Map<string, MapRow>
   lang: 'de' | 'en'
   onPointClick?: (ags: string) => void
+  /** Bundesland-Präfix (z. B. "05"): Legende hebt dieses Land hervor, Rest ausgegraut. */
+  stateLegendEmphasisPrefix?: string | null
 }
 
 export function scatterAxisLabel(
   key: ScatterAxisKey,
   lang: 'de' | 'en',
 ): string {
-  if (key === 'turnout') {
-    return lang === 'de' ? 'Wahlbeteiligung' : 'Turnout'
-  }
-  return PARTY_LABELS[key]?.[lang] ?? key
+  const base =
+    key === 'turnout'
+      ? lang === 'de'
+        ? 'Wahlbeteiligung'
+        : 'Turnout'
+      : (PARTY_LABELS[key]?.[lang] ?? key)
+  return `${base} (%)`
 }
 
 export function ScatterPlot({
@@ -53,6 +69,7 @@ export function ScatterPlot({
   winnersByAgs,
   lang,
   onPointClick,
+  stateLegendEmphasisPrefix = null,
 }: ScatterPlotProps) {
   const { c, t, theme } = useTheme()
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -66,7 +83,7 @@ export function ScatterPlot({
       const prefix = statePrefixFromAgs(r.ags)
       let fill: string
       if (colorMode === 'state') {
-        fill = colorForStatePrefix(prefix)
+        fill = STATE_COLORS[prefix] ?? '#888888'
       } else {
         const w = winnersByAgs?.get(r.ags)?.winning_party ?? 'other'
         fill = partyColors[w] ?? partyColors.other
@@ -75,8 +92,8 @@ export function ScatterPlot({
         ags: r.ags,
         name: r.name,
         state: r.state,
-        x: r.x,
-        y: r.y,
+        x: toDisplayPercent(r.x),
+        y: toDisplayPercent(r.y),
         fill,
       }
     })
@@ -146,6 +163,7 @@ export function ScatterPlot({
             dataKey="x"
             name={scatterAxisLabel(xKey, lang)}
             tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
+            tickFormatter={(v) => formatScatterPercent(Number(v), lang)}
             label={{
               value: scatterAxisLabel(xKey, lang),
               position: 'bottom',
@@ -158,6 +176,7 @@ export function ScatterPlot({
             dataKey="y"
             name={scatterAxisLabel(yKey, lang)}
             tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
+            tickFormatter={(v) => formatScatterPercent(Number(v), lang)}
             label={{
               value: scatterAxisLabel(yKey, lang),
               angle: -90,
@@ -187,12 +206,10 @@ export function ScatterPlot({
                 >
                   <div style={{ fontWeight: 600 }}>{p.name}</div>
                   <div style={{ fontFamily: fonts.mono, color: c.inkSoft }}>
-                    {scatterAxisLabel(xKey, lang)}:{' '}
-                    {p.x.toFixed(1).replace('.', lang === 'de' ? ',' : '.')}%
+                    {scatterAxisLabel(xKey, lang)}: {formatScatterPercent(p.x, lang)}
                   </div>
                   <div style={{ fontFamily: fonts.mono, color: c.inkSoft }}>
-                    {scatterAxisLabel(yKey, lang)}:{' '}
-                    {p.y.toFixed(1).replace('.', lang === 'de' ? ',' : '.')}%
+                    {scatterAxisLabel(yKey, lang)}: {formatScatterPercent(p.y, lang)}
                   </div>
                 </div>
               )
@@ -214,6 +231,108 @@ export function ScatterPlot({
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>
+      <ScatterColorLegend
+        colorMode={colorMode}
+        partyColors={partyColors}
+        lang={lang}
+        c={c}
+        stateEmphasisPrefix={stateLegendEmphasisPrefix}
+      />
+    </div>
+  )
+}
+
+const STATE_CODES_SORTED = (Object.keys(STATE_COLORS) as string[]).sort()
+
+const SCATTER_PARTY_LEGEND_KEYS = [...MAIN_PARTIES, 'other'] as const
+
+function ScatterColorLegend({
+  colorMode,
+  partyColors,
+  lang,
+  c,
+  stateEmphasisPrefix,
+}: {
+  colorMode: 'state' | 'winner'
+  partyColors: Record<string, string>
+  lang: 'de' | 'en'
+  c: { border: string; inkSoft: string }
+  stateEmphasisPrefix: string | null
+}) {
+  const items =
+    colorMode === 'state'
+      ? STATE_CODES_SORTED.map((code) => ({
+          key: code,
+          color: STATE_COLORS[code] ?? '#888888',
+          label: STATE_NAMES[code] ?? code,
+        }))
+      : SCATTER_PARTY_LEGEND_KEYS.map((key) => ({
+          key,
+          color: partyColors[key] ?? partyColors.other,
+          label: PARTY_LABELS[key]?.[lang] ?? key,
+        }))
+
+  return (
+    <div
+      role="list"
+      aria-label={colorMode === 'state' ? 'Bundesland-Farben' : 'Partei-Farben'}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+        gap: '10px 14px',
+        marginTop: 16,
+        paddingTop: 14,
+        borderTop: `1px solid ${c.border}`,
+        fontFamily: fonts.mono,
+        fontSize: '0.72rem',
+        color: c.inkSoft,
+      }}
+    >
+      {items.map(({ key, color, label }) => {
+        const dim =
+          colorMode === 'state' &&
+          stateEmphasisPrefix != null &&
+          stateEmphasisPrefix !== '' &&
+          key !== stateEmphasisPrefix
+        const hi =
+          colorMode === 'state' &&
+          stateEmphasisPrefix != null &&
+          stateEmphasisPrefix !== '' &&
+          key === stateEmphasisPrefix
+        return (
+        <div
+          key={key}
+          role="listitem"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            minWidth: 0,
+            opacity: dim ? 0.35 : 1,
+            fontWeight: hi ? 600 : 400,
+          }}
+        >
+          <span
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 2,
+              marginRight: 4,
+              flexShrink: 0,
+              background: color,
+            }}
+          />
+          <span
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {label}
+          </span>
+        </div>
+        )
+      })}
     </div>
   )
 }

@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useTheme } from '../../design-system'
 import { fonts } from '../../design-system/tokens'
 import { changeColor } from './mapColors'
@@ -10,6 +17,15 @@ function normAgs(ags: string): string {
   return ags.replace(/\s/g, '')
 }
 
+function agsDataAttr(ags: string): string {
+  const n = normAgs(ags)
+  try {
+    return typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(n) : n
+  } catch {
+    return n
+  }
+}
+
 type ChangeMapProps = {
   mapBuild: KreiseMapBuild | null
   changeByAgs: Map<string, ChangeRow>
@@ -17,6 +33,8 @@ type ChangeMapProps = {
   kreisNameByAgs: Map<string, string>
   onSelectAgs: (ags: string) => void
   selectedAgs?: string | null
+  /** Wenn gesetzt: andere Bundesländer mit niedriger Opazität. */
+  filterStatePrefix?: string | null
 }
 
 function formatDeltaPp(n: number, lang: 'de' | 'en'): string {
@@ -36,14 +54,19 @@ export function ChangeMap({
   kreisNameByAgs,
   onSelectAgs,
   selectedAgs,
+  filterStatePrefix,
 }: ChangeMapProps) {
   const { c, lang, t } = useTheme()
-  const [tip, setTip] = useState<{
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [layoutTick, setLayoutTick] = useState(0)
+  const [hoverTip, setHoverTip] = useState<{
     x: number
     y: number
     name: string
     line: string
   } | null>(null)
+  const [zoomVB, setZoomVB] = useState<[number, number, number, number] | null>(null)
+  const [pinPos, setPinPos] = useState<{ x: number; y: number } | null>(null)
 
   const paths = mapBuild?.prepared ?? []
   const borders = mapBuild?.borderSegments ?? []
@@ -69,15 +92,90 @@ export function ChangeMap({
       const line = row
         ? `${formatDeltaPp(row.change, lang)} (${formatDisplayPct(row.value_from, lang)} → ${formatDisplayPct(row.value_to, lang)})`
         : t('noData')
-      setTip({ x: e.clientX + 12, y: e.clientY + 12, name, line })
+      setHoverTip({ x: e.clientX + 12, y: e.clientY + 12, name, line })
     },
     [changeByAgs, kreisNameByAgs, lang, t],
   )
 
+  useEffect(() => {
+    const onResize = () => setLayoutTick((n) => n + 1)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current
+    if (!svg || !selectedAgs) {
+      setZoomVB(null)
+      setPinPos(null)
+      return
+    }
+    const sel = normAgs(selectedAgs)
+    const path = svg.querySelector(`path[data-ags="${agsDataAttr(sel)}"]`) as
+      | SVGGraphicsElement
+      | null
+    if (!path) {
+      setZoomVB(null)
+      setPinPos(null)
+      return
+    }
+    const b = path.getBBox()
+    const padBase = Math.max(b.width, b.height) * 0.35 || 24
+    const pad = Math.max(padBase, 16)
+    let vx = b.x - pad
+    let vy = b.y - pad
+    let vw = b.width + 2 * pad
+    let vh = b.height + 2 * pad
+    const minSpan = 48
+    if (vw < minSpan) {
+      vx -= (minSpan - vw) / 2
+      vw = minSpan
+    }
+    if (vh < minSpan) {
+      vy -= (minSpan - vh) / 2
+      vh = minSpan
+    }
+    setZoomVB([vx, vy, vw, vh])
+    const r = path.getBoundingClientRect()
+    setPinPos({ x: r.left + r.width / 2, y: r.bottom })
+  }, [selectedAgs, paths.length, layoutTick])
+
+  const pinnedContent = useMemo(() => {
+    if (!selectedAgs) return null
+    const key = normAgs(selectedAgs)
+    const row = changeByAgs.get(key)
+    const name = resolveKreisDisplayName(selectedAgs, kreisNameByAgs, row?.name)
+    const line = row
+      ? `${formatDeltaPp(row.change, lang)} (${formatDisplayPct(row.value_from, lang)} → ${formatDisplayPct(row.value_to, lang)})`
+      : t('noData')
+    return { name, line }
+  }, [selectedAgs, changeByAgs, kreisNameByAgs, lang, t])
+
+  const activeTip = hoverTip
+    ? { mode: 'hover' as const, ...hoverTip }
+    : pinnedContent && pinPos
+      ? {
+          mode: 'pin' as const,
+          x: pinPos.x,
+          y: pinPos.y,
+          name: pinnedContent.name,
+          line: pinnedContent.line,
+        }
+      : null
+
+  const viewBoxStr =
+    zoomVB != null
+      ? `${zoomVB[0]} ${zoomVB[1]} ${zoomVB[2]} ${zoomVB[3]}`
+      : `0 0 ${vbW} ${vbH}`
+
+  const legendLeft = changeColor(-maxAbs, maxAbs, neutral)
+  const legendRight = changeColor(maxAbs, maxAbs, neutral)
+
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <svg
-        viewBox={`0 0 ${vbW} ${vbH}`}
+        ref={svgRef}
+        viewBox={viewBoxStr}
         role="img"
         aria-label="Change map"
         preserveAspectRatio="xMidYMid meet"
@@ -91,28 +189,29 @@ export function ChangeMap({
         }}
       >
         <g>
-          {paths.map((p) => (
-            <path
-              key={p.ags}
-              d={p.d}
-              fill={fillFor(p.ags)}
-              stroke={
-                selectedAgs != null && normAgs(selectedAgs) === normAgs(p.ags)
-                  ? c.red
-                  : c.border
-              }
-              strokeWidth={
-                selectedAgs != null && normAgs(selectedAgs) === normAgs(p.ags)
-                  ? 1.75
-                  : 0.5
-              }
-              vectorEffect="non-scaling-stroke"
-              style={{ cursor: 'pointer' }}
-              onMouseMove={(e) => onMove(e, p.ags)}
-              onMouseLeave={() => setTip(null)}
-              onClick={() => onSelectAgs(p.ags)}
-            />
-          ))}
+          {paths.map((p) => {
+            const dim =
+              filterStatePrefix != null &&
+              filterStatePrefix !== '' &&
+              p.statePrefix !== filterStatePrefix
+            const selected = selectedAgs != null && normAgs(selectedAgs) === normAgs(p.ags)
+            return (
+              <path
+                key={p.ags}
+                data-ags={normAgs(p.ags)}
+                d={p.d}
+                fill={fillFor(p.ags)}
+                opacity={dim ? 0.3 : 1}
+                stroke={selected ? c.red : c.border}
+                strokeWidth={selected ? 3 : 0.5}
+                vectorEffect="non-scaling-stroke"
+                style={{ cursor: 'pointer' }}
+                onMouseMove={(e) => onMove(e, p.ags)}
+                onMouseLeave={() => setHoverTip(null)}
+                onClick={() => onSelectAgs(p.ags)}
+              />
+            )
+          })}
         </g>
         <g>
           {borders.map((seg, i) => (
@@ -130,12 +229,13 @@ export function ChangeMap({
           ))}
         </g>
       </svg>
-      {tip && (
+      {activeTip && (
         <div
           style={{
             position: 'fixed',
-            left: tip.x,
-            top: tip.y,
+            left: activeTip.x,
+            top: activeTip.y,
+            transform: activeTip.mode === 'pin' ? 'translate(-50%, 8px)' : 'none',
             zIndex: 50,
             padding: '10px 12px',
             background: c.cardBg,
@@ -149,12 +249,41 @@ export function ChangeMap({
             maxWidth: 280,
           }}
         >
-          <div style={{ fontWeight: 600 }}>{tip.name}</div>
+          <div style={{ fontWeight: 600 }}>{activeTip.name}</div>
           <div style={{ fontFamily: fonts.mono, fontSize: '0.8rem', color: c.inkSoft, marginTop: 4 }}>
-            {tip.line}
+            {activeTip.line}
           </div>
         </div>
       )}
+      <div style={{ width: 300, maxWidth: '100%', marginTop: 14 }}>
+        <div
+          style={{
+            width: 300,
+            maxWidth: '100%',
+            height: 20,
+            borderRadius: 4,
+            background: `linear-gradient(to right, ${legendLeft}, ${neutral}, ${legendRight})`,
+            border: `1px solid ${c.border}`,
+            boxSizing: 'border-box',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: 6,
+            fontFamily: fonts.mono,
+            fontSize: '0.72rem',
+            color: c.muted,
+            width: 300,
+            maxWidth: '100%',
+          }}
+        >
+          <span>{formatDeltaPp(-maxAbs, lang)}</span>
+          <span>0</span>
+          <span>{formatDeltaPp(maxAbs, lang)}</span>
+        </div>
+      </div>
     </div>
   )
 }

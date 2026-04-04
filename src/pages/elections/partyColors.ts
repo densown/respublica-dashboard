@@ -88,6 +88,26 @@ export const STATE_PREFIX_COLORS: Record<string, string> = {
   '16': '#D37295',
 }
 
+/** Bundesland-Farben für Streudiagramm (Punkte + Legende). */
+export const STATE_COLORS: Record<string, string> = {
+  '01': '#E41A1C',
+  '02': '#377EB8',
+  '03': '#4DAF4A',
+  '04': '#984EA3',
+  '05': '#FF7F00',
+  '06': '#A65628',
+  '07': '#F781BF',
+  '08': '#999999',
+  '09': '#8B4513',
+  '10': '#00CED1',
+  '11': '#2F4F4F',
+  '12': '#FF6347',
+  '13': '#7B68EE',
+  '14': '#3CB371',
+  '15': '#DAA520',
+  '16': '#DC143C',
+}
+
 /** Bundesland aus AGS-Präfix (erste zwei Ziffern). */
 export const STATE_NAMES: Record<string, string> = {
   '01': 'Schleswig-Holstein',
