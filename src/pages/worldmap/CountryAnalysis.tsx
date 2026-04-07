@@ -1,11 +1,11 @@
 import {
-  Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
 } from 'react'
 import {
   CartesianGrid,
@@ -22,8 +22,9 @@ import {
   YAxis,
 } from 'recharts'
 import { DataCard, EmptyState, useTheme } from '../../design-system'
+import { interpolate, messages, type I18nKey } from '../../design-system/i18n'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, spacing } from '../../design-system/tokens'
+import { breakpoints, fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { IndicatorSelector } from './IndicatorSelector'
 import { worldIndicatorLowerIsBetter } from './worldIndicatorDirection'
@@ -32,7 +33,10 @@ import {
   countryPercentileFromMapRows,
   fetchWorldMapRows,
 } from './worldMapData'
-import { worldIndicatorShortLabel } from './worldIndicatorShortNames'
+import {
+  worldIndicatorDisplayLabel,
+  worldIndicatorShortLabel,
+} from './worldIndicatorShortNames'
 import type {
   WorldCategoryApi,
   WorldCountryDetail,
@@ -41,7 +45,9 @@ import type {
 } from './worldTypes'
 import {
   formatWorldIndicatorValue,
+  formatWorldTableParts,
   formatWorldValue,
+  type WorldTableUnitKind,
 } from './worldValueFormat'
 
 const KEY_FACT_CODES = [
@@ -72,8 +78,6 @@ const RADAR_CODES = [
 const YEAR_MIN = 2000
 const YEAR_MAX = 2024
 
-type SortKey = 'category' | 'indicator' | 'value' | 'year' | 'unit'
-
 type FlatIndRow = {
   categoryId: string
   categoryLabel: string
@@ -82,6 +86,36 @@ type FlatIndRow = {
   value: number | null
   year: number | null
   unit: string | null
+}
+
+function categoryTitle(cat: WorldCategoryApi, L: Lang): string {
+  const key = `worldCat_${cat.id}`
+  const loc = messages[L] as Record<string, string | undefined>
+  if (loc[key] !== undefined) return loc[key]!
+  return L === 'de' ? cat.label_de : cat.label_en
+}
+
+function tableUnitLabel(kind: WorldTableUnitKind, t: (k: I18nKey) => string): string {
+  switch (kind) {
+    case 'none':
+      return ''
+    case 'percent':
+      return '%'
+    case 'per_1000':
+      return t('worldUnitPer1000')
+    case 'usd':
+      return t('worldUnitUsd')
+    case 'years':
+      return t('worldUnitYears')
+    case 'per_100k':
+      return t('worldUnitPer100k')
+    case 'per_100':
+      return t('worldUnitPer100')
+    case 'index':
+      return t('worldUnitIndex')
+    case 'per_woman':
+      return t('worldUnitPerWoman')
+  }
 }
 
 type CountryAnalysisProps = {
@@ -180,7 +214,7 @@ export function CountryAnalysis({
   setCategoryId,
   statsYears,
 }: CountryAnalysisProps) {
-  const { c, t, lang } = useTheme()
+  const { c, t, lang, theme } = useTheme()
   const L = lang as Lang
 
   const countryEp = countryCode
@@ -282,57 +316,96 @@ export function CountryAnalysis({
     return out
   }, [detail, categories, L])
 
-  const [sortKey, setSortKey] = useState<SortKey>('category')
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
-
-  const toggleSort = useCallback((k: SortKey) => {
-    setSortKey((prev) => {
-      if (prev === k) {
-        setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-        return prev
-      }
-      setSortDir('asc')
-      return k
+  const indicatorGroups = useMemo(() => {
+    if (!detail) return []
+    const byCat = new Map<string, FlatIndRow[]>()
+    for (const r of flatTableRows) {
+      const id = r.categoryId
+      if (!byCat.has(id)) byCat.set(id, [])
+      byCat.get(id)!.push(r)
+    }
+    const orderIndex = new Map<string, number>()
+    detail.indicators.forEach((ind, i) => {
+      orderIndex.set(ind.indicator_code, i)
     })
+    for (const rows of byCat.values()) {
+      rows.sort(
+        (a, b) =>
+          (orderIndex.get(a.indicator_code) ?? 0) -
+          (orderIndex.get(b.indicator_code) ?? 0),
+      )
+    }
+    const out: {
+      categoryId: string
+      title: string
+      rows: FlatIndRow[]
+    }[] = []
+    const seen = new Set<string>()
+    if (categories?.length) {
+      for (const cat of categories) {
+        const rows = byCat.get(cat.id)
+        if (rows?.length) {
+          out.push({
+            categoryId: cat.id,
+            title: categoryTitle(cat, L),
+            rows,
+          })
+          seen.add(cat.id)
+        }
+      }
+    }
+    for (const [id, rows] of byCat) {
+      if (!seen.has(id) && rows.length) {
+        out.push({
+          categoryId: id,
+          title: rows[0]!.categoryLabel,
+          rows,
+        })
+      }
+    }
+    return out
+  }, [detail, flatTableRows, categories, L])
+
+  const groupsInitKey = useMemo(
+    () =>
+      detail
+        ? `${detail.country_code}:${indicatorGroups.map((g) => g.categoryId).join(',')}`
+        : '',
+    [detail?.country_code, indicatorGroups],
+  )
+  const prevGroupsKey = useRef('')
+  const [accordionOpen, setAccordionOpen] = useState<Record<string, boolean>>(
+    {},
+  )
+  useLayoutEffect(() => {
+    if (!groupsInitKey || !indicatorGroups.length) {
+      setAccordionOpen({})
+      if (!groupsInitKey) prevGroupsKey.current = ''
+      return
+    }
+    if (prevGroupsKey.current === groupsInitKey) return
+    prevGroupsKey.current = groupsInitKey
+    const firstId = indicatorGroups[0]!.categoryId
+    setAccordionOpen(
+      Object.fromEntries(
+        indicatorGroups.map((g) => [g.categoryId, g.categoryId === firstId]),
+      ),
+    )
+  }, [groupsInitKey, indicatorGroups])
+
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoints.mobile - 1}px)`)
+    const apply = () => setIsMobile(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
   }, [])
 
-  const sortedRows = useMemo(() => {
-    const rows = [...flatTableRows]
-    const dir = sortDir === 'asc' ? 1 : -1
-    const cmpStr = (a: string, b: string) => a.localeCompare(b, L === 'de' ? 'de' : 'en') * dir
-    const cmpNum = (a: number | null, b: number | null) => {
-      const av = a ?? -Infinity
-      const bv = b ?? -Infinity
-      return av === bv ? 0 : av < bv ? -1 * dir : 1 * dir
-    }
-    rows.sort((a, b) => {
-      switch (sortKey) {
-        case 'category':
-          return cmpStr(a.categoryLabel, b.categoryLabel) || cmpStr(a.name, b.name)
-        case 'indicator':
-          return cmpStr(a.name, b.name)
-        case 'value':
-          return cmpNum(a.value, b.value) || cmpStr(a.name, b.name)
-        case 'year':
-          return cmpNum(a.year, b.year) || cmpStr(a.name, b.name)
-        case 'unit':
-          return cmpStr(a.unit ?? '', b.unit ?? '') || cmpStr(a.name, b.name)
-        default:
-          return 0
-      }
-    })
-    return rows
-  }, [flatTableRows, sortKey, sortDir, L])
-
-  const groupedSorted = useMemo(() => {
-    const m = new Map<string, FlatIndRow[]>()
-    for (const r of sortedRows) {
-      const k = r.categoryLabel
-      if (!m.has(k)) m.set(k, [])
-      m.get(k)!.push(r)
-    }
-    return [...m.entries()].sort((a, b) => a[0].localeCompare(b[0], L === 'de' ? 'de' : 'en'))
-  }, [sortedRows, L])
+  const zebraMuted =
+    theme === 'dark' ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)'
+  const rowHoverBg =
+    theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'
 
   const [radarRows, setRadarRows] = useState<
     { code: string; p: number | null }[] | null
@@ -453,29 +526,6 @@ export function CountryAnalysis({
 
   const trendSymbol = (tr: 'up' | 'down' | 'flat') =>
     tr === 'up' ? '↑' : tr === 'down' ? '↓' : '→'
-
-  const th = (k: SortKey, label: string): ReactNode => (
-    <th
-      style={{
-        textAlign: 'left',
-        padding: `${spacing.sm} ${spacing.md}`,
-        borderBottom: `1px solid ${c.border}`,
-        fontFamily: fonts.mono,
-        fontSize: '0.72rem',
-        textTransform: 'uppercase',
-        letterSpacing: '0.06em',
-        color: c.muted,
-        cursor: 'pointer',
-        userSelect: 'none',
-        whiteSpace: 'nowrap',
-      }}
-      onClick={() => toggleSort(k)}
-      title={t('worldTableSort')}
-    >
-      {label}
-      {sortKey === k ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ''}
-    </th>
-  )
 
   return (
     <div style={{ marginTop: spacing.lg }}>
@@ -780,95 +830,231 @@ export function CountryAnalysis({
             </h3>
             <div
               style={{
-                overflowX: 'auto',
-                WebkitOverflowScrolling: 'touch',
+                marginTop: 24,
+                background: c.cardBg,
                 border: `1px solid ${c.border}`,
                 borderRadius: 8,
-                background: c.cardBg,
+                overflow: 'hidden',
               }}
             >
-              <table
+              <div
                 style={{
-                  width: '100%',
-                  borderCollapse: 'collapse',
-                  fontFamily: fonts.body,
-                  fontSize: '0.88rem',
-                  minWidth: 520,
+                  overflowX: 'auto',
+                  WebkitOverflowScrolling: 'touch',
                 }}
               >
-                <thead>
-                  <tr style={{ background: c.bg }}>
-                    {th('category', t('worldTableCategory'))}
-                    {th('indicator', t('worldTableIndicator'))}
-                    {th('value', t('worldTableValue'))}
-                    {th('year', t('worldTableYear'))}
-                    {th('unit', t('worldTableUnit'))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {groupedSorted.map(([catLabel, rows]) => (
-                    <Fragment key={catLabel}>
-                      <tr>
-                        <td
-                          colSpan={5}
+                {indicatorGroups.map((group) => {
+                  const open = accordionOpen[group.categoryId] === true
+                  const rowPad = isMobile ? '8px 12px' : '10px 16px'
+                  return (
+                    <div key={group.categoryId}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        onClick={() =>
+                          setAccordionOpen((m) => ({
+                            ...m,
+                            [group.categoryId]: !m[group.categoryId],
+                          }))
+                        }
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 12,
+                          padding: isMobile ? '12px 12px' : '12px 16px',
+                          border: 'none',
+                          borderBottom: `1px solid ${c.border}`,
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        <span
                           style={{
-                            padding: `${spacing.sm} ${spacing.md}`,
                             fontFamily: fonts.mono,
-                            fontSize: '0.72rem',
-                            fontWeight: 700,
+                            fontSize: 11,
                             textTransform: 'uppercase',
-                            letterSpacing: '0.06em',
-                            color: c.text,
-                            background: c.bgAlt,
-                            borderTop: `1px solid ${c.border}`,
+                            letterSpacing: '1.5px',
+                            color: c.muted,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            minWidth: 0,
                           }}
                         >
-                          {catLabel}
-                        </td>
-                      </tr>
-                      {rows.map((r) => (
-                        <tr
-                          key={r.indicator_code}
-                          style={{ borderTop: `1px solid ${c.border}` }}
+                          <span aria-hidden style={{ flexShrink: 0 }}>
+                            {open ? '▼' : '▶'}
+                          </span>
+                          <span
+                            style={{
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {group.title}
+                          </span>
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: 11,
+                            textTransform: 'uppercase',
+                            letterSpacing: '1.5px',
+                            color: c.muted,
+                            flexShrink: 0,
+                          }}
                         >
-                          <td style={{ padding: `${spacing.sm} ${spacing.md}` }}>
-                            {r.categoryLabel}
-                          </td>
-                          <td style={{ padding: `${spacing.sm} ${spacing.md}` }}>
-                            {r.name}
-                          </td>
-                          <td
-                            style={{
-                              padding: `${spacing.sm} ${spacing.md}`,
-                              fontFamily: fonts.mono,
-                            }}
-                          >
-                            {r.value != null
-                              ? formatWorldValue(
-                                  r.value,
-                                  r.unit,
-                                  r.indicator_code,
-                                  L,
-                                )
-                              : '—'}
-                          </td>
-                          <td
-                            style={{
-                              padding: `${spacing.sm} ${spacing.md}`,
-                              fontFamily: fonts.mono,
-                            }}
-                          >
-                            {r.year ?? '—'}
-                          </td>
-                          <td style={{ padding: `${spacing.sm} ${spacing.md}` }}>
-                            {r.unit ?? '—'}
-                          </td>
-                        </tr>
-                      ))}
-                    </Fragment>
-                  ))}
-                </tbody>
-              </table>
+                          {interpolate(t('worldIndicatorCount'), {
+                            n: group.rows.length,
+                          })}
+                        </span>
+                      </button>
+                      <div
+                        style={{
+                          maxHeight: open ? 4000 : 0,
+                          overflow: 'hidden',
+                          transition: 'max-height 0.35s ease',
+                        }}
+                      >
+                        <table
+                          style={{
+                            width: '100%',
+                            tableLayout: 'fixed',
+                            borderCollapse: 'collapse',
+                          }}
+                        >
+                          <colgroup>
+                            <col style={{ width: 'auto' }} />
+                            <col
+                              style={{
+                                width: isMobile ? '140px' : '120px',
+                              }}
+                            />
+                            <col style={{ width: '60px' }} />
+                            <col
+                              style={
+                                isMobile
+                                  ? { display: 'none' }
+                                  : { width: '80px' }
+                              }
+                            />
+                          </colgroup>
+                          <tbody>
+                            {group.rows.map((r, idx) => {
+                              const odd = idx % 2 === 1
+                              const { valueText, unitKind } =
+                                r.value != null
+                                  ? formatWorldTableParts(
+                                      r.value,
+                                      r.unit,
+                                      r.indicator_code,
+                                      L,
+                                    )
+                                  : {
+                                      valueText: '—',
+                                      unitKind: 'none' as WorldTableUnitKind,
+                                    }
+                              const unitStr = tableUnitLabel(unitKind, t)
+                              const valueCell =
+                                r.value == null
+                                  ? '—'
+                                  : isMobile
+                                    ? unitKind === 'percent'
+                                      ? `${valueText} %`
+                                      : unitStr
+                                        ? `${valueText} (${unitStr})`
+                                        : valueText
+                                    : valueText
+                              const indLabel = worldIndicatorDisplayLabel(
+                                r.indicator_code,
+                                L,
+                                r.name,
+                              )
+                              return (
+                                <tr
+                                  key={r.indicator_code}
+                                  style={{
+                                    background: odd ? zebraMuted : 'transparent',
+                                    transition: 'background 0.1s ease',
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.background =
+                                      rowHoverBg
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = odd
+                                      ? zebraMuted
+                                      : 'transparent'
+                                  }}
+                                >
+                                  <td
+                                    style={{
+                                      padding: rowPad,
+                                      fontFamily: fonts.body,
+                                      fontSize: 13,
+                                      color: c.text,
+                                      verticalAlign: 'middle',
+                                      wordBreak: 'break-word',
+                                      textAlign: 'left',
+                                    }}
+                                  >
+                                    {indLabel}
+                                  </td>
+                                  <td
+                                    style={{
+                                      padding: rowPad,
+                                      fontFamily: fonts.mono,
+                                      fontSize: 13,
+                                      fontWeight: 500,
+                                      color: c.text,
+                                      textAlign: 'right',
+                                      verticalAlign: 'middle',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                  >
+                                    {valueCell}
+                                  </td>
+                                  <td
+                                    style={{
+                                      padding: rowPad,
+                                      fontFamily: fonts.mono,
+                                      fontSize: 11,
+                                      color: c.muted,
+                                      textAlign: 'right',
+                                      verticalAlign: 'middle',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                  >
+                                    {r.year ?? '—'}
+                                  </td>
+                                  <td
+                                    style={{
+                                      display: isMobile ? 'none' : 'table-cell',
+                                      padding: rowPad,
+                                      fontFamily: fonts.mono,
+                                      fontSize: 11,
+                                      color: c.muted,
+                                      textAlign: 'right',
+                                      verticalAlign: 'middle',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                  >
+                                    {unitKind === 'percent' ? '%' : unitStr}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </section>
 

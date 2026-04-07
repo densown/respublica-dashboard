@@ -61,6 +61,16 @@ export function worldIndicatorShortLabel(code: string, lang: Lang): string {
   return lang === 'de' ? row.de : row.en
 }
 
+/** Kurzlabel aus Mapping, sonst API-Anzeigename (z. B. in Tabellen). */
+export function worldIndicatorDisplayLabel(
+  code: string,
+  lang: Lang,
+  apiName: string,
+): string {
+  if (WORLD_INDICATOR_SHORT[code]) return worldIndicatorShortLabel(code, lang)
+  return apiName
+}
+
 export function worldIndicatorLongTitle(
   row: {
     code: string

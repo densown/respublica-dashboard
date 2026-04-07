@@ -168,3 +168,132 @@ export function formatWorldIndicatorValue(
 ): string {
   return formatWorldValue(v, ctx.unit, ctx.indicatorCode, ctx.lang)
 }
+
+/** Einheitenspalte in Tabellen (Wert getrennt von Einheit). */
+export type WorldTableUnitKind =
+  | 'none'
+  | 'percent'
+  | 'per_1000'
+  | 'usd'
+  | 'years'
+  | 'per_100k'
+  | 'per_100'
+  | 'index'
+  | 'per_woman'
+
+export function formatWorldTableParts(
+  value: number,
+  unit: string | null,
+  indicator_code: string,
+  lang: Lang,
+): { valueText: string; unitKind: WorldTableUnitKind } {
+  const u = (unit || '').toLowerCase()
+  const abs = Math.abs(value)
+  const sign = value < 0 ? '−' : ''
+
+  if (
+    isGovernanceCode(indicator_code) ||
+    (u.includes('estimate') && u.includes('2.5'))
+  ) {
+    return { valueText: formatFixed(value, 2, lang), unitKind: 'index' }
+  }
+
+  if (isPercentUnit(unit)) {
+    return { valueText: formatFixed(value, 1, lang), unitKind: 'percent' }
+  }
+
+  if (indicator_code === 'NY.GDP.MKTP.CD') {
+    return {
+      valueText: formatWorldValue(value, unit, indicator_code, lang),
+      unitKind: 'none',
+    }
+  }
+
+  if (
+    indicator_code === 'NY.GDP.PCAP.CD' ||
+    (u.includes('current us$') && abs < 1e6)
+  ) {
+    return { valueText: formatInt(value, lang), unitKind: 'usd' }
+  }
+
+  if (u.includes('current us$')) {
+    return { valueText: formatInt(value, lang), unitKind: 'usd' }
+  }
+
+  if (indicator_code === 'SP.POP.TOTL') {
+    return {
+      valueText: formatWorldValue(value, unit, indicator_code, lang),
+      unitKind: 'none',
+    }
+  }
+
+  if (u.includes('per 1,000')) {
+    return { valueText: formatFixed(value, 1, lang), unitKind: 'per_1000' }
+  }
+
+  if (u.includes('per 100,000')) {
+    return {
+      valueText: formatFixed(value, value >= 100 ? 0 : 1, lang),
+      unitKind: 'per_100k',
+    }
+  }
+
+  if (u.includes('per 100 people')) {
+    return { valueText: formatFixed(value, 1, lang), unitKind: 'per_100' }
+  }
+
+  if (u.includes('births per woman') || u.includes('per woman')) {
+    return { valueText: formatFixed(value, 2, lang), unitKind: 'per_woman' }
+  }
+
+  if (abs < 1 && abs > 0 && !isPercentUnit(unit)) {
+    return { valueText: formatFixed(value, 2, lang), unitKind: 'none' }
+  }
+
+  if (u.includes('metric tons')) {
+    return {
+      valueText: formatWorldValue(value, unit, indicator_code, lang),
+      unitKind: 'none',
+    }
+  }
+
+  if (u.includes('kg of oil')) {
+    return {
+      valueText: formatWorldValue(value, unit, indicator_code, lang),
+      unitKind: 'none',
+    }
+  }
+
+  if (u.includes('years') && !u.includes('%')) {
+    return { valueText: formatFixed(value, 1, lang), unitKind: 'years' }
+  }
+
+  if (abs >= 1e9) {
+    const x = abs / 1e9
+    const n = x >= 100 ? formatFixed(x, 0, lang) : formatFixed(x, 1, lang)
+    return {
+      valueText: lang === 'de' ? `${sign}${n} Mrd.` : `${sign}${n} bn`,
+      unitKind: 'none',
+    }
+  }
+  if (abs >= 1e6) {
+    const x = abs / 1e6
+    const n = x >= 100 ? formatFixed(x, 0, lang) : formatFixed(x, 1, lang)
+    return {
+      valueText: lang === 'de' ? `${sign}${n} Mio.` : `${sign}${n} m`,
+      unitKind: 'none',
+    }
+  }
+  if (abs >= 1e3) {
+    return { valueText: formatInt(value, lang), unitKind: 'none' }
+  }
+
+  return {
+    valueText: formatFixed(
+      value,
+      abs > 0 && abs < 20 && !Number.isInteger(value) ? 2 : 1,
+      lang,
+    ),
+    unitKind: 'none',
+  }
+}
