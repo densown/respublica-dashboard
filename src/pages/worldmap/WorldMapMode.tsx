@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { DataCard, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import { isRealCountry } from '../../utils/worldFilters'
 import type { Lang } from '../../design-system/ThemeContext'
 import { useDebouncedValue } from '../elections/useDebouncedValue'
 import { CountryAutocomplete } from './CountryAutocomplete'
@@ -103,12 +104,17 @@ export function WorldMapMode({
   const { data: mapRows, loading: mapLoading, error: mapError } =
     useApi<WorldMapRow[]>(mapEp)
 
+  const mapRowsCountries = useMemo(
+    () => (mapRows ?? []).filter(isRealCountry),
+    [mapRows],
+  )
+
   const mapHasNumericData = useMemo(
     () =>
-      (mapRows ?? []).some(
+      mapRowsCountries.some(
         (r) => r.value != null && !Number.isNaN(r.value as number),
       ),
-    [mapRows],
+    [mapRowsCountries],
   )
 
   useEffect(() => {
@@ -176,7 +182,7 @@ export function WorldMapMode({
   }, [geojson])
 
   const { minV, maxV, avgV, withData, hiRow, loRow } = useMemo(() => {
-    const rows = (mapRows ?? []).filter(
+    const rows = mapRowsCountries.filter(
       (r) => r.value != null && !Number.isNaN(r.value as number),
     )
     if (!rows.length) {
@@ -208,7 +214,7 @@ export function WorldMapMode({
       hiRow: hi,
       loRow: lo,
     }
-  }, [mapRows])
+  }, [mapRowsCountries])
 
   const hiName =
     hiRow &&
@@ -364,7 +370,7 @@ export function WorldMapMode({
       >
         <WorldGlMap
           geojson={geojson}
-          mapData={mapRows ?? []}
+          mapData={mapRowsCountries}
           category={category}
           valueMin={minV}
           valueMax={maxV}

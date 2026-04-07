@@ -115,34 +115,38 @@ export function worldChoroplethColor(category: string, t: number): string {
   return mix(scale.lo, scale.hi, Math.min(1, Math.max(0, t)))
 }
 
-const SCATTER_REGION_COLORS = [
-  '#C8102E',
-  '#08519c',
-  '#016c59',
-  '#7f2704',
-  '#6a3d9a',
-  '#ff7f00',
-  '#33a02c',
-  '#1f78b4',
-  '#b15928',
-]
-
-function hashRegionLabel(s: string): number {
-  let h = 2166136261
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return Math.abs(h)
+/** Feste WB-Geographieregion → Farbe (Scatter + Legende). */
+export const REGION_COLORS: Record<string, string> = {
+  'Sub-Saharan Africa': '#2D8B4E',
+  'Europe & Central Asia': '#3B82F6',
+  'East Asia & Pacific': '#8B5CF6',
+  'Middle East & North Africa': '#EF4444',
+  'Latin America & Caribbean': '#F59E0B',
+  'South Asia': '#EC4899',
+  'North America': '#06B6D4',
 }
 
-/** Farbe für Streudiagramm-Punkte nach Weltbank-Region (stabil pro String). */
+/** API-Region (inkl. abweichender WB-Bezeichner) → Schlüssel in REGION_COLORS. */
+const REGION_COLOR_KEY_ALIASES: Record<string, string> = {
+  'Middle East, North Africa, Afghanistan & Pakistan':
+    'Middle East & North Africa',
+}
+
+function canonicalRegionForScatterColor(region: string): string | null {
+  const s = region.trim()
+  if (s in REGION_COLORS) return s
+  const alias = REGION_COLOR_KEY_ALIASES[s]
+  return alias ?? null
+}
+
+/** Farbe für Streudiagramm-Punkte nach Weltbank-Region (Lookup, sonst grau). */
 export function worldRegionScatterColor(
   region: string | null | undefined,
 ): string {
   if (!region?.trim()) return '#888888'
-  const i = hashRegionLabel(region.trim()) % SCATTER_REGION_COLORS.length
-  return SCATTER_REGION_COLORS[i]!
+  const canon = canonicalRegionForScatterColor(region)
+  if (!canon) return '#888888'
+  return REGION_COLORS[canon] ?? '#888888'
 }
 
 export function worldChoroplethGradientCss(

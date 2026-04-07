@@ -1,3 +1,4 @@
+import { isRealCountry } from '../../utils/worldFilters'
 import type { WorldMapRow } from './worldTypes'
 
 export function worldApiUrl(pathWithLeadingSlash: string): string {
@@ -36,6 +37,7 @@ export function countryPercentileFromMapRows(
   const key = iso3.trim().toUpperCase()
   const pairs: { iso: string; score: number }[] = []
   for (const r of rows) {
+    if (!isRealCountry(r)) continue
     if (r.value == null || Number.isNaN(r.value as number)) continue
     const v = r.value as number
     pairs.push({

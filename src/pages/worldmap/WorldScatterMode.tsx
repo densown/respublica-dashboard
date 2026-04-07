@@ -1,4 +1,10 @@
-import { useMemo, type CSSProperties, type ReactNode } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import {
   CartesianGrid,
   ResponsiveContainer,
@@ -9,13 +15,15 @@ import {
   YAxis,
 } from 'recharts'
 import { EmptyState, useTheme } from '../../design-system'
+import type { I18nKey } from '../../design-system/i18n'
 import type { Lang } from '../../design-system/ThemeContext'
 import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
-import { worldIndicatorShortLabel } from './worldIndicatorShortNames'
-import type { WorldCategoryApi, WorldMapRow, WorldScatterRow } from './worldTypes'
-import { formatWorldIndicatorValue } from './worldValueFormat'
+import { isRealCountry } from '../../utils/worldFilters'
 import { worldRegionScatterColor } from './worldColors'
+import { worldIndicatorShortLabel } from './worldIndicatorShortNames'
+import { worldBankRegionLabel } from './worldRegionLabels'
+import type { WorldCategoryApi, WorldMapRow, WorldScatterRow } from './worldTypes'
 
 type WorldScatterModeProps = {
   narrow: boolean
@@ -29,6 +37,27 @@ type WorldScatterModeProps = {
   setYear: (y: number) => void
   statsYears: { min: number; max: number } | null
   onSelectCountry: (iso3: string) => void
+}
+
+function formatAxisValue(
+  value: number,
+  lang: Lang,
+  t: (key: I18nKey) => string,
+): string {
+  const abs = Math.abs(value)
+  const dec = (v: number) => {
+    const s = v.toFixed(1)
+    return lang === 'de' ? s.replace('.', ',') : s
+  }
+  if (abs >= 1_000_000_000_000)
+    return dec(value / 1_000_000_000_000) + ' ' + t('worldScatterAxisTrillion')
+  if (abs >= 1_000_000_000)
+    return dec(value / 1_000_000_000) + ' ' + t('worldScatterAxisBillion')
+  if (abs >= 1_000_000)
+    return dec(value / 1_000_000) + ' ' + t('worldScatterAxisMillion')
+  if (abs >= 1_000)
+    return dec(value / 1_000) + t('worldScatterAxisThousand')
+  return dec(value)
 }
 
 function selectCss(c: {
@@ -51,18 +80,6 @@ function selectCss(c: {
   }
 }
 
-function metaCtx(
-  categories: WorldCategoryApi[] | null,
-  code: string,
-): { unit: string | null; category: string } {
-  if (!categories) return { unit: null, category: 'economy' }
-  for (const cat of categories) {
-    const hit = cat.indicators.find((i) => i.code === code)
-    if (hit) return { unit: hit.unit, category: cat.id }
-  }
-  return { unit: null, category: 'economy' }
-}
-
 function categoryIdForCode(
   categories: WorldCategoryApi[] | null,
   code: string,
@@ -78,6 +95,8 @@ type ScatterPoint = WorldScatterRow & {
   pop: number
   size: number
   fill: string
+  /** Leerstring = keine Region (i. d. Legende wie „Keine Region“). */
+  regionKey: string
 }
 
 export function WorldScatterMode({
@@ -93,8 +112,17 @@ export function WorldScatterMode({
   statsYears,
   onSelectCountry,
 }: WorldScatterModeProps) {
-  const { c, t, lang } = useTheme()
+  const { c, t, lang, theme } = useTheme()
   const L = lang as Lang
+  const [hoveredIso, setHoveredIso] = useState<string | null>(null)
+  const [hiddenRegions, setHiddenRegions] = useState<Set<string>>(
+    () => new Set(),
+  )
+  const [legendHoverKey, setLegendHoverKey] = useState<string | null>(null)
+
+  useEffect(() => {
+    setHiddenRegions(new Set())
+  }, [indicatorX, indicatorY, year])
 
   const scatterEp =
     indicatorX && indicatorY
@@ -117,11 +145,17 @@ export function WorldScatterMode({
   const popByIso = useMemo(() => {
     const m = new Map<string, number>()
     for (const r of popRows ?? []) {
+      if (!isRealCountry(r)) continue
       if (r.value == null) continue
       m.set(r.country_code.trim().toUpperCase(), r.value as number)
     }
     return m
   }, [popRows])
+
+  const scatterRows = useMemo(
+    () => (scatterRaw ?? []).filter(isRealCountry),
+    [scatterRaw],
+  )
 
   const chartPoints = useMemo((): ScatterPoint[] => {
     const pops = [...popByIso.values()].filter((v) => v > 0)
@@ -129,24 +163,42 @@ export function WorldScatterMode({
     const minLog = Math.log10(1)
     const maxLog = Math.log10(maxPop)
     const span = Math.max(maxLog - minLog, 1e-6)
-    return (scatterRaw ?? []).map((p) => {
+    return scatterRows.map((p) => {
       const pop = popByIso.get(p.country_code.trim().toUpperCase()) ?? 1
       const logP = Math.log10(Math.max(pop, 1))
       const tNorm = (logP - minLog) / span
       const size = 120 + tNorm * 520
+      const regionKey = p.region?.trim() ?? ''
       return {
         ...p,
         pop,
         size,
+        regionKey,
         fill: worldRegionScatterColor(p.region),
       }
     })
-  }, [scatterRaw, popByIso])
+  }, [scatterRows, popByIso])
 
-  const xMeta = metaCtx(categories, indicatorX)
-  const yMeta = metaCtx(categories, indicatorY)
-  const xLabel = worldIndicatorShortLabel(indicatorX, L)
-  const yLabel = worldIndicatorShortLabel(indicatorY, L)
+  const regionLegend = useMemo(() => {
+    const map = new Map<string, string | null>()
+    for (const p of chartPoints) {
+      const key = p.region?.trim() || ''
+      if (!map.has(key)) map.set(key, p.region?.trim() ? p.region : null)
+    }
+    const items = [...map.entries()].map(([key, region]) => ({
+      key,
+      region,
+      color: worldRegionScatterColor(region),
+      label: worldBankRegionLabel(region, t),
+    }))
+    items.sort((a, b) => a.label.localeCompare(b.label, lang))
+    return items
+  }, [chartPoints, t, lang])
+
+  const axisTickFormatter = (v: number) => formatAxisValue(v, L, t)
+
+  const xAxisLabel = worldIndicatorShortLabel(indicatorX, L)
+  const yAxisLabel = worldIndicatorShortLabel(indicatorY, L)
 
   const labelSpan = (text: string): ReactNode => (
     <span
@@ -200,6 +252,22 @@ export function WorldScatterMode({
   const dotRadius = (size: number) =>
     Math.min(26, Math.max(5, Math.sqrt(size / Math.PI)))
 
+  const toggleRegionLegend = (key: string) => {
+    setHiddenRegions((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
+
+  const showWorldLegendReset =
+    regionLegend.length > 1 &&
+    hiddenRegions.size === regionLegend.length - 1
+
+  const tooltipBg =
+    theme === 'dark' ? '#1A1A1Aee' : '#FFFFFFee'
+
   return (
     <div style={{ marginTop: spacing.lg }}>
       <h2
@@ -252,119 +320,251 @@ export function WorldScatterMode({
         <EmptyState text={t('worldNoValue')} />
       )}
       {chartPoints.length > 0 && (
-        <div style={{ width: '100%', height: narrow ? 360 : 480 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 12, right: 24, bottom: 48, left: 8 }}>
-              <CartesianGrid stroke={c.border} strokeDasharray="3 3" />
-              <XAxis
-                type="number"
-                dataKey="x"
-                name={xLabel}
-                tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
-                label={{
-                  value: xLabel,
-                  position: 'bottom',
-                  offset: 28,
-                  fill: c.muted,
+        <>
+          <div style={{ width: '100%', height: narrow ? 360 : 480 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart
+                margin={{ top: 12, right: 24, bottom: 64, left: 100 }}
+              >
+                <CartesianGrid stroke={c.border} strokeDasharray="3 3" />
+                <XAxis
+                  type="number"
+                  dataKey="x"
+                  name={xAxisLabel}
+                  tickFormatter={axisTickFormatter}
+                  tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
+                  label={{
+                    value: xAxisLabel,
+                    position: 'bottom',
+                    offset: 36,
+                    fill: c.muted,
+                    style: { fontSize: 11, fontFamily: fonts.mono },
+                  }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  name={yAxisLabel}
+                  tickFormatter={axisTickFormatter}
+                  tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
+                  width={56}
+                  label={{
+                    value: yAxisLabel,
+                    angle: -90,
+                    position: 'insideLeft',
+                    fill: c.muted,
+                    style: { fontSize: 11, fontFamily: fonts.mono },
+                  }}
+                />
+                <Tooltip
+                  cursor={{ strokeDasharray: '3 3' }}
+                  wrapperStyle={{ zIndex: 10 }}
+                  content={({ active, payload }) => {
+                    if (!active || !payload?.[0]) return null
+                    const d = payload[0].payload as ScatterPoint
+                    if (hiddenRegions.has(d.regionKey)) return null
+                    return (
+                      <div
+                        style={{
+                          background: tooltipBg,
+                          border: `1px solid ${c.border}`,
+                          borderRadius: 6,
+                          padding: '10px 14px',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                          maxWidth: 220,
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontFamily: fonts.body,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            color: c.text,
+                            marginBottom: 8,
+                          }}
+                        >
+                          {d.country_name}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: 11,
+                            color: c.text,
+                            marginBottom: 4,
+                            lineHeight: 1.35,
+                          }}
+                        >
+                          {xAxisLabel}:{' '}
+                          {formatAxisValue(d.x, L, t)}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: 11,
+                            color: c.text,
+                            marginBottom: 6,
+                            lineHeight: 1.35,
+                          }}
+                        >
+                          {yAxisLabel}:{' '}
+                          {formatAxisValue(d.y, L, t)}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: 11,
+                            color: c.muted,
+                          }}
+                        >
+                          {worldBankRegionLabel(d.region, t)}
+                        </div>
+                      </div>
+                    )
+                  }}
+                />
+                <Scatter
+                  data={chartPoints}
+                  shape={(props) => {
+                    const p = props as {
+                      cx?: number
+                      cy?: number
+                      payload: ScatterPoint
+                    }
+                    const cx = p.cx ?? 0
+                    const cy = p.cy ?? 0
+                    const iso = p.payload.country_code.trim().toUpperCase()
+                    const hiddenPoint = hiddenRegions.has(p.payload.regionKey)
+                    const hovered = !hiddenPoint && hoveredIso === iso
+                    const r = dotRadius(p.payload.size) + (hovered ? 2 : 0)
+                    return (
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={r}
+                        fill={p.payload.fill}
+                        stroke={hovered ? c.text : c.border}
+                        strokeWidth={hovered ? 2 : 1}
+                        style={{
+                          cursor: hiddenPoint ? 'default' : 'pointer',
+                          opacity: hiddenPoint ? 0 : 1,
+                          transition: 'opacity 0.15s',
+                          pointerEvents: hiddenPoint ? 'none' : 'auto',
+                        }}
+                        onClick={() =>
+                          !hiddenPoint && onSelectCountry(iso)
+                        }
+                        onMouseEnter={() =>
+                          !hiddenPoint && setHoveredIso(iso)
+                        }
+                        onMouseLeave={() => setHoveredIso(null)}
+                        onKeyDown={(e) => {
+                          if (hiddenPoint) return
+                          if (e.key === 'Enter' || e.key === ' ')
+                            onSelectCountry(iso)
+                        }}
+                        tabIndex={hiddenPoint ? -1 : 0}
+                        role="button"
+                        aria-hidden={hiddenPoint}
+                        aria-label={p.payload.country_name}
+                      />
+                    )
+                  }}
+                />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div
+            role="list"
+            aria-label={t('worldScatterRegionLegend')}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 16,
+              justifyContent: 'center',
+              marginTop: spacing.lg,
+              fontFamily: fonts.mono,
+              fontSize: 11,
+              color: c.muted,
+            }}
+          >
+            {regionLegend.map(({ key, color, label }) => {
+              const hiddenLeg = hiddenRegions.has(key)
+              const hov = legendHoverKey === key
+              const legOp = hiddenLeg
+                ? hov
+                  ? 0.7
+                  : 0.3
+                : hov
+                  ? 0.7
+                  : 1
+              return (
+                <div
+                  key={key || '∅'}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => toggleRegionLegend(key)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      toggleRegionLegend(key)
+                    }
+                  }}
+                  onMouseEnter={() => setLegendHoverKey(key)}
+                  onMouseLeave={() => setLegendHoverKey(null)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    cursor: 'pointer',
+                    opacity: legOp,
+                    transition: 'opacity 0.15s',
+                    userSelect: 'none',
+                    textDecoration: hiddenLeg ? 'line-through' : undefined,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      background: color,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span>{label}</span>
+                </div>
+              )
+            })}
+          </div>
+          {showWorldLegendReset && (
+            <div style={{ textAlign: 'center', marginTop: spacing.md }}>
+              <button
+                type="button"
+                onClick={() => setHiddenRegions(new Set())}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
                   fontSize: 11,
+                  color: c.muted,
+                  textDecoration: 'none',
                 }}
-              />
-              <YAxis
-                type="number"
-                dataKey="y"
-                name={yLabel}
-                tick={{ fill: c.muted, fontSize: 11, fontFamily: fonts.mono }}
-                width={56}
-                label={{
-                  value: yLabel,
-                  angle: -90,
-                  position: 'insideLeft',
-                  fill: c.muted,
-                  fontSize: 11,
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = 'underline'
                 }}
-              />
-              <Tooltip
-                cursor={{ strokeDasharray: '3 3' }}
-                content={({ active, payload }) => {
-                  if (!active || !payload?.[0]) return null
-                  const d = payload[0].payload as ScatterPoint
-                  return (
-                    <div
-                      style={{
-                        background: c.cardBg,
-                        border: `1px solid ${c.border}`,
-                        borderRadius: 8,
-                        padding: '10px 12px',
-                        fontFamily: fonts.mono,
-                        fontSize: 12,
-                        color: c.text,
-                        maxWidth: 280,
-                      }}
-                    >
-                      <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                        {d.country_name}
-                      </div>
-                      <div>
-                        {xLabel}:{' '}
-                        {formatWorldIndicatorValue(d.x, {
-                          indicatorCode: indicatorX,
-                          category: xMeta.category,
-                          unit: xMeta.unit,
-                          lang: L,
-                        })}
-                      </div>
-                      <div>
-                        {yLabel}:{' '}
-                        {formatWorldIndicatorValue(d.y, {
-                          indicatorCode: indicatorY,
-                          category: yMeta.category,
-                          unit: yMeta.unit,
-                          lang: L,
-                        })}
-                      </div>
-                      <div style={{ color: c.muted, marginTop: 4, fontSize: 11 }}>
-                        {t('worldOpenAnalysis')}
-                      </div>
-                    </div>
-                  )
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = 'none'
                 }}
-              />
-              <Scatter
-                data={chartPoints}
-                shape={(props) => {
-                  const p = props as {
-                    cx?: number
-                    cy?: number
-                    payload: ScatterPoint
-                  }
-                  const cx = p.cx ?? 0
-                  const cy = p.cy ?? 0
-                  const r = dotRadius(p.payload.size)
-                  const iso = p.payload.country_code.trim().toUpperCase()
-                  return (
-                    <circle
-                      cx={cx}
-                      cy={cy}
-                      r={r}
-                      fill={p.payload.fill}
-                      stroke={c.border}
-                      strokeWidth={1}
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => onSelectCountry(iso)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ')
-                          onSelectCountry(iso)
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={p.payload.country_name}
-                    />
-                  )
-                }}
-              />
-            </ScatterChart>
-          </ResponsiveContainer>
-        </div>
+              >
+                {t('showAll')}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

@@ -1,16 +1,15 @@
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
-  ZAxis,
 } from 'recharts'
 import { useTheme } from '../../design-system'
+import type { I18nKey } from '../../design-system/i18n'
 import { fonts } from '../../design-system/tokens'
 import { toDisplayPercent } from './normalizeWahlen'
 import {
@@ -73,6 +72,14 @@ export function ScatterPlot({
 }: ScatterPlotProps) {
   const { c, t, theme } = useTheme()
   const wrapRef = useRef<HTMLDivElement>(null)
+  const [hiddenLegendKeys, setHiddenLegendKeys] = useState<Set<string>>(
+    () => new Set(),
+  )
+
+  useEffect(() => {
+    setHiddenLegendKeys(new Set())
+  }, [colorMode, xKey, yKey])
+
   const partyColors = useMemo(
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
@@ -82,10 +89,13 @@ export function ScatterPlot({
     return rows.map((r) => {
       const prefix = statePrefixFromAgs(r.ags)
       let fill: string
+      let legendKey: string
       if (colorMode === 'state') {
+        legendKey = prefix
         fill = STATE_COLORS[prefix] ?? '#888888'
       } else {
         const w = winnersByAgs?.get(r.ags)?.winning_party ?? 'other'
+        legendKey = w
         fill = partyColors[w] ?? partyColors.other
       }
       return {
@@ -95,9 +105,19 @@ export function ScatterPlot({
         x: toDisplayPercent(r.x),
         y: toDisplayPercent(r.y),
         fill,
+        legendKey,
       }
     })
   }, [rows, colorMode, winnersByAgs, partyColors])
+
+  const toggleLegendKey = useCallback((key: string) => {
+    setHiddenLegendKeys((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }, [])
 
   const exportPng = useCallback(() => {
     const root = wrapRef.current
@@ -185,13 +205,13 @@ export function ScatterPlot({
               fontSize: 11,
             }}
           />
-          <ZAxis range={[48, 48]} />
           <Tooltip
             cursor={{ strokeDasharray: '3 3' }}
             content={({ active, payload }) => {
               if (!active || !payload?.length) return null
               const p = payload[0]?.payload as (typeof data)[0]
               if (!p) return null
+              if (hiddenLegendKeys.has(p.legendKey)) return null
               return (
                 <div
                   style={{
@@ -219,16 +239,39 @@ export function ScatterPlot({
             name={t('counties')}
             data={data}
             fill={c.red}
-            onClick={(e: unknown) => {
-              const p = (e as { payload?: { ags?: string } })?.payload
-              if (p?.ags) onPointClick?.(p.ags)
+            shape={(props) => {
+              const p = props as {
+                cx?: number
+                cy?: number
+                payload: (typeof data)[0]
+              }
+              const cx = p.cx ?? 0
+              const cy = p.cy ?? 0
+              const pl = p.payload
+              const hiddenPoint = hiddenLegendKeys.has(pl.legendKey)
+              const r = 6
+              return (
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill={pl.fill}
+                  stroke={c.border}
+                  strokeWidth={1}
+                  style={{
+                    cursor: hiddenPoint ? 'default' : 'pointer',
+                    opacity: hiddenPoint ? 0 : 1,
+                    transition: 'opacity 0.15s',
+                    pointerEvents: hiddenPoint ? 'none' : 'auto',
+                  }}
+                  onClick={() =>
+                    !hiddenPoint && onPointClick?.(pl.ags)
+                  }
+                  aria-hidden={hiddenPoint}
+                />
+              )
             }}
-            shape="circle"
-          >
-            {data.map((entry, i) => (
-              <Cell key={`${entry.ags}-${i}`} fill={entry.fill} />
-            ))}
-          </Scatter>
+          />
         </ScatterChart>
       </ResponsiveContainer>
       <ScatterColorLegend
@@ -237,6 +280,10 @@ export function ScatterPlot({
         lang={lang}
         c={c}
         stateEmphasisPrefix={stateLegendEmphasisPrefix}
+        hiddenKeys={hiddenLegendKeys}
+        onToggleKey={toggleLegendKey}
+        onResetHidden={() => setHiddenLegendKeys(new Set())}
+        t={t}
       />
     </div>
   )
@@ -252,13 +299,22 @@ function ScatterColorLegend({
   lang,
   c,
   stateEmphasisPrefix,
+  hiddenKeys,
+  onToggleKey,
+  onResetHidden,
+  t,
 }: {
   colorMode: 'state' | 'winner'
   partyColors: Record<string, string>
   lang: 'de' | 'en'
-  c: { border: string; inkSoft: string }
+  c: { border: string; inkSoft: string; muted: string }
   stateEmphasisPrefix: string | null
+  hiddenKeys: Set<string>
+  onToggleKey: (key: string) => void
+  onResetHidden: () => void
+  t: (key: I18nKey) => string
 }) {
+  const [hoveredLegendKey, setHoveredLegendKey] = useState<string | null>(null)
   const items =
     colorMode === 'state'
       ? STATE_CODES_SORTED.map((code) => ({
@@ -272,7 +328,11 @@ function ScatterColorLegend({
           label: PARTY_LABELS[key]?.[lang] ?? key,
         }))
 
+  const showReset =
+    items.length > 1 && hiddenKeys.size === items.length - 1
+
   return (
+    <>
     <div
       role="list"
       aria-label={colorMode === 'state' ? 'Bundesland-Farben' : 'Partei-Farben'}
@@ -299,16 +359,36 @@ function ScatterColorLegend({
           stateEmphasisPrefix != null &&
           stateEmphasisPrefix !== '' &&
           key === stateEmphasisPrefix
+        const hiddenLeg = hiddenKeys.has(key)
+        const hov = hoveredLegendKey === key
+        let opacity: number
+        if (hiddenLeg) opacity = hov ? 0.7 : 0.3
+        else if (dim) opacity = hov ? 0.7 : 0.35
+        else opacity = hov ? 0.7 : 1
         return (
         <div
           key={key}
-          role="listitem"
+          role="button"
+          tabIndex={0}
+          onClick={() => onToggleKey(key)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onToggleKey(key)
+            }
+          }}
+          onMouseEnter={() => setHoveredLegendKey(key)}
+          onMouseLeave={() => setHoveredLegendKey(null)}
           style={{
             display: 'flex',
             alignItems: 'center',
             minWidth: 0,
-            opacity: dim ? 0.35 : 1,
+            opacity,
+            transition: 'opacity 0.15s',
             fontWeight: hi ? 600 : 400,
+            cursor: 'pointer',
+            userSelect: 'none',
+            textDecoration: hiddenLeg ? 'line-through' : undefined,
           }}
         >
           <span
@@ -334,6 +414,33 @@ function ScatterColorLegend({
         )
       })}
     </div>
+    {showReset ? (
+      <div style={{ textAlign: 'center', marginTop: 12 }}>
+        <button
+          type="button"
+          onClick={onResetHidden}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            fontFamily: fonts.mono,
+            fontSize: 11,
+            color: c.muted,
+            textDecoration: 'none',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none'
+          }}
+        >
+          {t('showAll')}
+        </button>
+      </div>
+    ) : null}
+    </>
   )
 }
 

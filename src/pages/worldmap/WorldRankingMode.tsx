@@ -3,6 +3,10 @@ import { EmptyState, useTheme } from '../../design-system'
 import type { Lang } from '../../design-system/ThemeContext'
 import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import {
+  hasWorldBankRegionOnAnyRow,
+  isRealCountry,
+} from '../../utils/worldFilters'
 import { IndicatorSelector } from './IndicatorSelector'
 import { iso3ToFlagIso2 } from './worldIso3ToIso2'
 import { worldIndicatorShortLabel } from './worldIndicatorShortNames'
@@ -70,6 +74,13 @@ export function WorldRankingMode({
       : ''
   const { data: rankingRaw, loading, error } = useApi<WorldRankingRow[]>(rankEp)
 
+  const rankingRows = useMemo(() => {
+    const raw = rankingRaw ?? []
+    const regionAware = hasWorldBankRegionOnAnyRow(raw)
+    const list = regionAware ? raw.filter(isRealCountry) : raw
+    return list.map((r, i) => ({ ...r, rank: i + 1 }))
+  }, [rankingRaw])
+
   const [query, setQuery] = useState('')
 
   const yearOpts = useMemo(() => {
@@ -91,14 +102,14 @@ export function WorldRankingMode({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    const rows = rankingRaw ?? []
+    const rows = rankingRows
     if (!q) return rows
     return rows.filter(
       (r) =>
         r.country_name?.toLowerCase().includes(q) ||
         r.country_code.toLowerCase().includes(q),
     )
-  }, [rankingRaw, query])
+  }, [rankingRows, query])
 
   const maxV = useMemo(() => {
     if (!filtered.length) return 1
@@ -236,7 +247,7 @@ export function WorldRankingMode({
       {loading && !rankingRaw && (
         <p style={{ color: c.muted }}>{t('loading')}</p>
       )}
-      {!loading && (rankingRaw?.length ?? 0) === 0 && (
+      {!loading && rankingRows.length === 0 && (
         <EmptyState text={t('worldNoValue')} />
       )}
 

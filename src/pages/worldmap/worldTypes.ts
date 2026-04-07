@@ -72,6 +72,8 @@ export type WorldScatterRow = {
 export type WorldRankingRow = {
   country_code: string
   country_name: string
+  /** World Bank region; fehlt sie, gilt der Eintrag nicht als sicherer Nationalstaat. */
+  region?: string | null
   value: number
   rank: number
 }
