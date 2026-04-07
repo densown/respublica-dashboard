@@ -24,14 +24,39 @@ const CountryCompare = lazy(() =>
     default: m.CountryCompare,
   })),
 )
+const WorldScatterMode = lazy(() =>
+  import('./worldmap/WorldScatterMode').then((m) => ({
+    default: m.WorldScatterMode,
+  })),
+)
+const WorldRankingMode = lazy(() =>
+  import('./worldmap/WorldRankingMode').then((m) => ({
+    default: m.WorldRankingMode,
+  })),
+)
 
-export type WorldActiveMode = 'map' | 'analysis' | 'compare'
+export type WorldActiveMode =
+  | 'map'
+  | 'analysis'
+  | 'compare'
+  | 'scatter'
+  | 'ranking'
 
 const MODE_TAB_KEYS = {
   map: 'worldTabMap',
   analysis: 'worldTabCountry',
   compare: 'worldTabCompare',
+  scatter: 'worldTabScatter',
+  ranking: 'worldTabRanking',
 } as const
+
+const MODE_ORDER: WorldActiveMode[] = [
+  'map',
+  'analysis',
+  'compare',
+  'scatter',
+  'ranking',
+]
 
 export default function WorldMap() {
   const { c, t } = useTheme()
@@ -42,6 +67,7 @@ export default function WorldMap() {
   const [activeMode, setActiveMode] = useState<WorldActiveMode>('map')
   const [categoryId, setCategoryId] = useState('')
   const [indicatorCode, setIndicatorCode] = useState('NY.GDP.PCAP.CD')
+  const [scatterIndicatorY, setScatterIndicatorY] = useState('SP.DYN.LE00.IN')
   const [year, setYear] = useState(2023)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
 
@@ -112,7 +138,7 @@ export default function WorldMap() {
     setActiveMode('map')
   }, [])
 
-  const modeTabs = (['map', 'analysis', 'compare'] as const).map((id) => ({
+  const modeTabs = MODE_ORDER.map((id) => ({
     id,
     label: t(MODE_TAB_KEYS[id]),
   }))
@@ -165,15 +191,15 @@ export default function WorldMap() {
                 onClick={() => setActiveMode(id)}
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: narrow ? '0.75rem' : '0.85rem',
+                  fontSize: '13px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  padding: narrow ? '10px 14px' : '12px 24px',
+                  padding: narrow ? '10px 12px' : '12px 18px',
                   flexShrink: 0,
                   border: 'none',
                   borderBottom: isActive
-                    ? '3px solid #C8102E'
-                    : '3px solid transparent',
+                    ? '2px solid #C8102E'
+                    : '2px solid transparent',
                   background: 'transparent',
                   cursor: 'pointer',
                   fontWeight: isActive ? 700 : 400,
@@ -226,11 +252,18 @@ export default function WorldMap() {
         )}
         {activeMode === 'analysis' && (
           <CountryAnalysis
+            narrow={narrow}
             geojson={geojson}
             countryCode={selectedCountry}
             onCountryCode={setSelectedCountry}
             onBack={onBackToMap}
             indicatorCode={indicatorCode}
+            setIndicatorCode={setIndicatorCode}
+            year={year}
+            categories={categories}
+            categoryId={categoryId}
+            setCategoryId={setCategoryId}
+            statsYears={stats?.years_range ?? null}
           />
         )}
         {activeMode === 'compare' && (
@@ -243,6 +276,37 @@ export default function WorldMap() {
             setIndicatorCode={setIndicatorCode}
             statsYears={stats?.years_range ?? null}
             categories={categories}
+            year={year}
+          />
+        )}
+        {activeMode === 'scatter' && (
+          <WorldScatterMode
+            narrow={narrow}
+            categories={categories}
+            setCategoryId={setCategoryId}
+            indicatorX={indicatorCode}
+            setIndicatorX={setIndicatorCode}
+            indicatorY={scatterIndicatorY}
+            setIndicatorY={setScatterIndicatorY}
+            year={year}
+            setYear={setYear}
+            statsYears={stats?.years_range ?? null}
+            onSelectCountry={onSelectCountry}
+          />
+        )}
+        {activeMode === 'ranking' && (
+          <WorldRankingMode
+            narrow={narrow}
+            geojson={geojson}
+            categories={categories}
+            categoryId={categoryId}
+            setCategoryId={setCategoryId}
+            indicatorCode={indicatorCode}
+            setIndicatorCode={setIndicatorCode}
+            year={year}
+            setYear={setYear}
+            statsYears={stats?.years_range ?? null}
+            highlightIso3="DEU"
           />
         )}
       </Suspense>

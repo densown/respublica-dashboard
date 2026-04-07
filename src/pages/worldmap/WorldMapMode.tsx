@@ -274,14 +274,16 @@ export function WorldMapMode({
     <div style={{ marginTop: spacing.lg }}>
       <div
         style={{
-          display: 'flex',
-          flexDirection: narrow ? 'column' : 'row',
-          flexWrap: narrow ? 'nowrap' : 'wrap',
-          gap: spacing.lg,
-          marginBottom: spacing.xl,
+          display: 'grid',
+          gridTemplateColumns: narrow
+            ? 'repeat(2, minmax(0, 1fr))'
+            : 'repeat(4, minmax(0, 1fr))',
+          gap: narrow ? spacing.sm : spacing.md,
+          marginBottom: spacing.lg,
           width: '100%',
           maxWidth: '100%',
           boxSizing: 'border-box',
+          alignItems: 'end',
         }}
       >
         <IndicatorSelector
@@ -295,23 +297,10 @@ export function WorldMapMode({
           narrow={narrow}
           selectCss={() => selectCss(c)}
           labelSpan={labelSpan}
+          asGridCells
+          compact
         />
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: narrow ? 'column' : 'row',
-          flexWrap: narrow ? 'nowrap' : 'wrap',
-          gap: spacing.lg,
-          marginBottom: spacing.xl,
-          width: '100%',
-          maxWidth: '100%',
-          boxSizing: 'border-box',
-          alignItems: narrow ? 'stretch' : 'flex-end',
-        }}
-      >
-        <label style={{ flex: narrow ? '1 1 100%' : '1 1 160px' }}>
+        <label style={{ minWidth: 0 }}>
           {labelSpan(t('worldYear'))}
           <select
             value={year}
@@ -326,7 +315,7 @@ export function WorldMapMode({
             ))}
           </select>
         </label>
-        <div style={{ flex: narrow ? '1 1 100%' : '2 1 280px', minWidth: 0 }}>
+        <div style={{ minWidth: 0 }}>
           {labelSpan(t('worldSearchCountry'))}
           <CountryAutocomplete
             geojson={geojson}
@@ -385,6 +374,7 @@ export function WorldMapMode({
           formatValue={formatValue}
           loading={mapLoading}
           narrow={narrow}
+          mapHeightPx={narrow ? 350 : 500}
         />
       </div>
 

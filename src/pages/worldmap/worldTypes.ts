@@ -60,3 +60,18 @@ export type WorldGeoJson = {
   type: 'FeatureCollection'
   features: WorldGeoJsonFeature[]
 }
+
+export type WorldScatterRow = {
+  country_code: string
+  country_name: string
+  region: string | null
+  x: number
+  y: number
+}
+
+export type WorldRankingRow = {
+  country_code: string
+  country_name: string
+  value: number
+  rank: number
+}

@@ -67,6 +67,8 @@ export type WorldGlMapProps = {
   formatValue: (v: number | null | undefined) => string
   loading?: boolean
   narrow?: boolean
+  /** Kartenhöhe in px (Mobile-first; Standard 350 / 500) */
+  mapHeightPx?: number
 }
 
 type MapHandlers = {
@@ -107,6 +109,7 @@ export function WorldGlMap({
   formatValue,
   loading,
   narrow,
+  mapHeightPx,
 }: WorldGlMapProps) {
   const { c, t, theme } = useTheme()
   const isDark = theme === 'dark'
@@ -181,7 +184,8 @@ export function WorldGlMap({
   borderLineColorRef.current = borderLineColor
   borderLineWidthRef.current = borderLineWidth
 
-  const mapHeight = narrow ? 300 : 500
+  const mapHeight =
+    mapHeightPx ?? (narrow ? 350 : 500)
 
   const installChoropleth = (map: maplibregl.Map) => {
     const data = geojsonRef.current

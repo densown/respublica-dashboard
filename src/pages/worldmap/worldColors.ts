@@ -115,6 +115,36 @@ export function worldChoroplethColor(category: string, t: number): string {
   return mix(scale.lo, scale.hi, Math.min(1, Math.max(0, t)))
 }
 
+const SCATTER_REGION_COLORS = [
+  '#C8102E',
+  '#08519c',
+  '#016c59',
+  '#7f2704',
+  '#6a3d9a',
+  '#ff7f00',
+  '#33a02c',
+  '#1f78b4',
+  '#b15928',
+]
+
+function hashRegionLabel(s: string): number {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return Math.abs(h)
+}
+
+/** Farbe für Streudiagramm-Punkte nach Weltbank-Region (stabil pro String). */
+export function worldRegionScatterColor(
+  region: string | null | undefined,
+): string {
+  if (!region?.trim()) return '#888888'
+  const i = hashRegionLabel(region.trim()) % SCATTER_REGION_COLORS.length
+  return SCATTER_REGION_COLORS[i]!
+}
+
 export function worldChoroplethGradientCss(
   category: string,
   options?: WorldFillColorOptions,
