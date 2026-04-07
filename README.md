@@ -1,50 +1,81 @@
-# React + TypeScript + Vite
+# Res.Publica Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite + TypeScript App unter [https://app.respublica.media](https://app.respublica.media). Nginx liefert das gebaute SPA aus `/root/apps/dashboard/dist` (siehe `/root/SERVER.md`).
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React **18.3.1** (laut `package.json`)
+- Vite **5.4.10**
+- TypeScript **5.6.2**
+- Recharts **3.8.0** (Diagramme)
+- MapLibre GL **5.22.0** (Weltkarte)
 
-## Expanding the ESLint configuration
+## Seiten
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 
-- Configure the top-level `parserOptions` property like this:
+| Pfad / Datei | Kurzbeschreibung |
+|--------------|------------------|
+| `/` — `Overview.tsx` | Dashboard-Übersicht, KPIs und Einstieg |
+| `/wahlen` — `Elections.tsx` | Wahlen, regionale Auswertungen |
+| `/quellen` — `Sources.tsx` | Datenquellen und Credits |
+| `/bundestag`, `/bundestag/:pollId` — `Bundestag.tsx` | Abstimmungen, namentliche Abstimmungen |
+| `/gesetze`, `/gesetze/:id` — `Legislation.tsx` | Gesetzgebung, Änderungsdetails |
+| `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
+| `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
+| `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
+| `/weltkarte` — `WorldMap.tsx` | Globale Datenkarte (MapLibre) |
+| `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
+| `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister |
+| `/admin` — `Admin.tsx` | Admin-Ansicht |
+| `*` — `NotFound.tsx` | 404 |
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponenten für die obigen Seiten).
+
+## Design System
+
+- Pfad: `src/design-system/`
+- Fonts: Playfair Display, Source Serif 4, IBM Plex Mono (Einbindung in `App.tsx` über Google Fonts)
+- Farben: Rot `#C8102E`, Tinte `#0F0F0F`, Papier `#F5F0E8` (siehe `tokens.ts`)
+- Themes: Light + Dark über `ThemeProvider` / `useTheme()` in `ThemeContext.tsx`
+- i18n: DE + EN (`src/design-system/i18n.ts`)
+
+## API
+
+- Öffentliche Base-URL: `https://api.respublica.media` (serverseitig Node auf Port **3002**; dasselbe API-Prefix kann unter `app.respublica.media` über `/api/` erreicht werden)
+- Hook: `src/hooks/useApi.ts`
+- **Wichtig:** Query-Parameter direkt in den Endpoint-String einbetten, **nicht** als zweites Argument-Objekt an `useApi`
+
+## Entwicklung
+
+```bash
+# Lokal (z. B. Cursor Remote SSH)
+cd /root/apps/dashboard
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Deploy
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+cd /root/apps/dashboard
+./deploy.sh
 ```
+
+`deploy.sh` macht derzeit: `git pull origin main`, `npm ci`, `npm run build`. Auslieferung: Nginx `root` zeigt auf `/root/apps/dashboard/dist` (kein separates Kopieren nach `/var/www/...` nötig).
+
+Alternativ manuell:
+
+```bash
+cd /root/apps/dashboard
+npm run build
+# bei Bedarf: rsync oder erneut ./deploy.sh
+```
+
+## Git
+
+- Repo: [densown/respublica-dashboard](https://github.com/densown/respublica-dashboard)
+- Branch: `main`
+
+---
+
+**Zuletzt aktualisiert:** 7. April 2026
