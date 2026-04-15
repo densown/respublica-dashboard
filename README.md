@@ -26,7 +26,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
 | `/weltkarte` — `WorldMap.tsx` | Globale Datenkarte (MapLibre) |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
-| `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht |
+| `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |
 | `*` — `NotFound.tsx` | 404 |
 

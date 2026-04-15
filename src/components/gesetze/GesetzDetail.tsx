@@ -10,6 +10,23 @@ export type GesetzDetailProps = {
   error: string | null
   notFound?: boolean
   linkedUrteile: Urteil[]
+  lobbyItems: LobbyLawResponse
+  lobbyLoading: boolean
+  lobbyError: string | null
+}
+
+export type LobbyLawItem = {
+  id: number
+  title: string | null
+  project_number: string | null
+  project_url: string | null
+  lobbyist_name: string | null
+  financial_expenses_euro: number | null
+}
+
+export type LobbyLawResponse = {
+  exact: LobbyLawItem[]
+  related: LobbyLawItem[]
 }
 
 function DiffSynopse({ diff }: { diff: string }) {
@@ -72,6 +89,9 @@ export function GesetzDetail({
   error,
   notFound = false,
   linkedUrteile,
+  lobbyItems,
+  lobbyLoading,
+  lobbyError,
 }: GesetzDetailProps) {
   const { c, t, lang } = useTheme()
   const [kontextOpen, setKontextOpen] = useState(false)
@@ -132,6 +152,27 @@ export function GesetzDetail({
     textDecoration: 'underline',
     textUnderlineOffset: 3,
   }
+
+  const formatMoney = (value: number | null): string => {
+    if (value == null) return '—'
+    const locale = lang === 'de' ? 'de-DE' : 'en-GB'
+    if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toLocaleString(locale, {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })} ${lang === 'de' ? 'Mrd €' : 'bn €'}`
+    }
+    if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toLocaleString(locale, {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })} ${lang === 'de' ? 'Mio €' : 'm €'}`
+    }
+    return `${value.toLocaleString(locale)} €`
+  }
+
+  const hasExactLobby = lobbyItems.exact.length > 0
+  const hasRelatedLobby = lobbyItems.related.length > 0
 
   return (
     <div
@@ -241,6 +282,227 @@ export function GesetzDetail({
           </div>
         ) : null}
       </div>
+
+      <section>
+        <h3
+          style={{
+            fontFamily: fonts.display,
+            fontWeight: 700,
+            fontSize: '1.1rem',
+            color: c.ink,
+            marginBottom: spacing.md,
+          }}
+        >
+          {t('lobbyActivityTitle')}
+        </h3>
+        {lobbyLoading ? (
+          <LoadingSpinner />
+        ) : lobbyError ? (
+          <p
+            style={{
+              fontFamily: fonts.body,
+              color: c.no,
+              fontSize: '0.86rem',
+              marginBottom: spacing.lg,
+            }}
+          >
+            {t('dataLoadError')}
+          </p>
+        ) : !hasExactLobby && !hasRelatedLobby ? (
+          <p
+            style={{
+              fontFamily: fonts.body,
+              color: c.muted,
+              fontSize: '0.9rem',
+              marginBottom: spacing.lg,
+            }}
+          >
+            {t('lobbyActivityEmpty')}
+          </p>
+        ) : (
+          <>
+            {hasExactLobby ? (
+              <div style={{ marginBottom: spacing.lg }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    marginBottom: spacing.xs,
+                  }}
+                >
+                  <h4
+                    style={{
+                      fontFamily: fonts.display,
+                      fontWeight: 700,
+                      fontSize: '0.98rem',
+                      color: c.ink,
+                      margin: 0,
+                    }}
+                  >
+                    {t('lobbyActivityExactTitle')}
+                  </h4>
+                  <Badge text={t('lobbyActivityExactBadge')} variant="yes" />
+                </div>
+                <p
+                  style={{
+                    fontFamily: fonts.body,
+                    color: c.muted,
+                    fontSize: '0.84rem',
+                    marginTop: 0,
+                    marginBottom: spacing.md,
+                  }}
+                >
+                  {t('lobbyActivityExactSubtext')}
+                </p>
+                <ul
+                  style={{
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: spacing.sm,
+                  }}
+                >
+                  {lobbyItems.exact.map((item) => (
+                    <li
+                      key={`exact-${item.id}-${item.project_number ?? ''}`}
+                      style={{
+                        borderBottom: `1px solid ${c.border}`,
+                        paddingBottom: spacing.sm,
+                      }}
+                    >
+                      <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
+                        {item.lobbyist_name || '—'}
+                      </div>
+                      <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
+                        {formatMoney(item.financial_expenses_euro)}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: fonts.body,
+                          fontStyle: 'italic',
+                          color: c.inkSoft,
+                          fontSize: '0.9rem',
+                          marginTop: 2,
+                        }}
+                      >
+                        {item.title || '—'}
+                      </div>
+                      {item.project_url ? (
+                        <a
+                          href={item.project_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: '0.75rem',
+                            color: c.red,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {t('lobbyProjectLinkProject')} →
+                        </a>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {hasRelatedLobby ? (
+              <div style={{ marginBottom: spacing.xl }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    marginBottom: spacing.xs,
+                  }}
+                >
+                  <h4
+                    style={{
+                      fontFamily: fonts.display,
+                      fontWeight: 700,
+                      fontSize: '0.98rem',
+                      color: c.ink,
+                      margin: 0,
+                    }}
+                  >
+                    {t('lobbyActivityRelatedTitle')}
+                  </h4>
+                  <Badge text={t('lobbyActivityRelatedBadge')} variant="muted" />
+                </div>
+                <p
+                  style={{
+                    fontFamily: fonts.body,
+                    color: c.muted,
+                    fontSize: '0.84rem',
+                    marginTop: 0,
+                    marginBottom: spacing.md,
+                  }}
+                >
+                  {t('lobbyActivityRelatedSubtext')}
+                </p>
+                <ul
+                  style={{
+                    listStyle: 'none',
+                    margin: 0,
+                    padding: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: spacing.sm,
+                  }}
+                >
+                  {lobbyItems.related.map((item) => (
+                    <li
+                      key={`related-${item.id}-${item.project_number ?? ''}`}
+                      style={{
+                        borderBottom: `1px solid ${c.border}`,
+                        paddingBottom: spacing.sm,
+                      }}
+                    >
+                      <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
+                        {item.lobbyist_name || '—'}
+                      </div>
+                      <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
+                        {formatMoney(item.financial_expenses_euro)}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: fonts.body,
+                          fontStyle: 'italic',
+                          color: c.inkSoft,
+                          fontSize: '0.9rem',
+                          marginTop: 2,
+                        }}
+                      >
+                        {item.title || '—'}
+                      </div>
+                      {item.project_url ? (
+                        <a
+                          href={item.project_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontFamily: fonts.mono,
+                            fontSize: '0.75rem',
+                            color: c.red,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {t('lobbyProjectLinkProject')} →
+                        </a>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </>
+        )}
+      </section>
 
       <section>
         <h3

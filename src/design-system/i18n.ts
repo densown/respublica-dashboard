@@ -150,6 +150,14 @@ export const de = {
   lobbyEmptyTitle: 'Keine Lobbyeinträge gefunden',
   lobbyEmptyBody: 'Passe Suche oder Sortierung an.',
   lobbyNoDescription: 'Keine Tätigkeitsbeschreibung verfügbar.',
+  lobbyDetailTabsAria: 'Tabs zur Lobby-Detailansicht',
+  lobbyDetailTabOverview: 'Übersicht',
+  lobbyDetailTabProjects: 'Gesetzesprojekte',
+  lobbyProjectsEmpty: 'Keine Gesetzesprojekte verfügbar.',
+  lobbyProjectUntitled: 'Ohne Projekttitel',
+  lobbyProjectMinistry: 'Zuständiges Ministerium',
+  lobbyProjectLinkProject: 'Projektseite',
+  lobbyProjectLinkDocument: 'Dokument (PDF)',
   lobbyTreemapTitle: 'Lobbying-Ausgaben nach Branche',
   lobbyTreemapSubtitle:
     'Gesamtausgaben aktiver Organisationen pro Interessensgebiet (Klick zum Filtern)',
@@ -327,6 +335,16 @@ export const de = {
   gesetzeDiffHeading: 'Änderung (Diff)',
   gesetzeContextHeading: 'Kontext',
   linkedRulings: 'Verknüpfte Urteile',
+  lobbyActivityTitle: 'Lobbyaktivität',
+  lobbyActivityExactTitle: 'Direkte Lobbyaktivität',
+  lobbyActivityExactSubtext:
+    'Diese Organisationen haben dieses Gesetz explizit im Lobbyregister als betroffen gelistet.',
+  lobbyActivityExactBadge: 'Verifiziert',
+  lobbyActivityRelatedTitle: 'Thematisch aktiv',
+  lobbyActivityRelatedSubtext:
+    'Diese Organisationen haben Projekte mit diesem Gesetzkürzel im Titel - automatisches Matching, keine Gewähr.',
+  lobbyActivityRelatedBadge: 'Automatisch',
+  lobbyActivityEmpty: 'Keine Lobbyaktivität im Register erfasst.',
   noRulingsForLaw:
     'Keine Urteile mit Bezug zu diesem Kürzel in der Datenbank.',
   gesetzeShowAllUrteile: 'Alle {count} anzeigen',
@@ -706,6 +724,14 @@ export const en = {
   lobbyEmptyTitle: 'No lobby entries found',
   lobbyEmptyBody: 'Adjust search or sorting.',
   lobbyNoDescription: 'No activity description available.',
+  lobbyDetailTabsAria: 'Tabs for lobby detail view',
+  lobbyDetailTabOverview: 'Overview',
+  lobbyDetailTabProjects: 'Legislative projects',
+  lobbyProjectsEmpty: 'No legislative projects available.',
+  lobbyProjectUntitled: 'Untitled project',
+  lobbyProjectMinistry: 'Responsible ministry',
+  lobbyProjectLinkProject: 'Project page',
+  lobbyProjectLinkDocument: 'Document (PDF)',
   lobbyTreemapTitle: 'Lobbying expenses by sector',
   lobbyTreemapSubtitle:
     'Total expenses of active organizations per field of interest (click to filter)',
@@ -878,6 +904,16 @@ export const en = {
   gesetzeDiffHeading: 'Change (diff)',
   gesetzeContextHeading: 'Context',
   linkedRulings: 'Linked rulings',
+  lobbyActivityTitle: 'Lobby activity',
+  lobbyActivityExactTitle: 'Direct lobby activity',
+  lobbyActivityExactSubtext:
+    'These organizations explicitly listed this law as affected in the lobby register.',
+  lobbyActivityExactBadge: 'Verified',
+  lobbyActivityRelatedTitle: 'Thematically active',
+  lobbyActivityRelatedSubtext:
+    'These organizations have projects mentioning this law identifier - automatic matching, no guarantee.',
+  lobbyActivityRelatedBadge: 'Automatic',
+  lobbyActivityEmpty: 'No lobby activity recorded in the register.',
   noRulingsForLaw:
     'No rulings referencing this short title in the database.',
   gesetzeShowAllUrteile: 'Show all {count}',

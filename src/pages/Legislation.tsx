@@ -20,6 +20,9 @@ import {
 } from '../design-system'
 import type { I18nKey } from '../design-system/i18n'
 import { GesetzDetail } from '../components/gesetze/GesetzDetail'
+import type {
+  LobbyLawResponse,
+} from '../components/gesetze/GesetzDetail'
 import { UrteilCard } from '../components/gesetze/UrteilCard'
 import type { Gesetz, GesetzeStats, Urteil } from '../components/gesetze/types'
 import {
@@ -353,6 +356,19 @@ export default function Legislation() {
     }
     return listEntry
   }, [detail, listEntry, hasValidId, activeNumericId])
+
+  const lobbyLawEndpoint = useMemo(() => {
+    if (mainTab !== 'gesetze') return ''
+    const kuerzel = (gesetzMerged?.kuerzel ?? '').trim()
+    if (!kuerzel) return ''
+    return `/api/lobby-projects/by-law?q=${encodeURIComponent(kuerzel)}`
+  }, [mainTab, gesetzMerged?.kuerzel])
+
+  const {
+    data: lobbyLawData,
+    loading: lobbyLawLoading,
+    error: lobbyLawError,
+  } = useApi<LobbyLawResponse>(lobbyLawEndpoint)
 
   const linkedUrteile = useMemo(() => {
     const ku = gesetzMerged?.kuerzel?.trim() ?? ''
@@ -883,6 +899,12 @@ export default function Legislation() {
           loading={Boolean(detailEndpoint) && showDetailSpinner}
           error={errorForDetail}
           linkedUrteile={linkedUrteile}
+          lobbyItems={{
+            exact: lobbyLawData?.exact ?? [],
+            related: lobbyLawData?.related ?? [],
+          }}
+          lobbyLoading={lobbyLawLoading}
+          lobbyError={lobbyLawError}
         />
       )}
     </section>

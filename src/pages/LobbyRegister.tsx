@@ -76,6 +76,23 @@ type LobbyDetail = LobbyListItem & {
   last_update: string | null
 }
 
+type LobbyProjectItem = {
+  id: number
+  project_number: string | null
+  title: string | null
+  description: string | null
+  affected_laws: unknown
+  leading_ministries: unknown
+  purpose_description: string | null
+  project_url: string | null
+  document_url: string | null
+  federal_ministry: string | null
+}
+
+type LobbyProjectsResponse = {
+  items: LobbyProjectItem[]
+}
+
 type LobbyByFieldItem = {
   code: string
   de: string | null
@@ -158,6 +175,8 @@ export default function LobbyRegister() {
   const [minExpense, setMinExpense] = useState(0)
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedRegisterNumber, setSelectedRegisterNumber] = useState<string | null>(null)
+  const [detailTab, setDetailTab] = useState<'overview' | 'projects'>('overview')
+  const [expandedProject, setExpandedProject] = useState<string | null>(null)
   const [hoveredTile, setHoveredTile] = useState<{ code: string; x: number; y: number } | null>(null)
   const [geoTab, setGeoTab] = useState<'map' | 'ranking'>('map')
   const treemapRef = useRef<HTMLDivElement | null>(null)
@@ -206,6 +225,13 @@ export default function LobbyRegister() {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
+  useEffect(() => {
+    if (!selectedRegisterNumber) {
+      setDetailTab('overview')
+      setExpandedProject(null)
+    }
+  }, [selectedRegisterNumber])
+
   const {
     data: listData,
     loading: listLoading,
@@ -225,6 +251,21 @@ export default function LobbyRegister() {
       ? `/api/lobbyregister/${encodeURIComponent(selectedRegisterNumber)}`
       : '',
   )
+  const {
+    data: projectsData,
+    loading: projectsLoading,
+    error: projectsError,
+  } = useApi<LobbyProjectsResponse>(
+    selectedRegisterNumber
+      ? `/api/lobbyregister/${encodeURIComponent(selectedRegisterNumber)}/projects`
+      : '',
+  )
+  useEffect(() => {
+    if (projectsData?.items) {
+      // Temporary debug output to verify API project shape in browser devtools.
+      console.log('Lobby projects response', projectsData.items)
+    }
+  }, [projectsData])
   const {
     data: byFieldData,
     loading: byFieldLoading,
@@ -442,6 +483,45 @@ export default function LobbyRegister() {
     const locale = lang === 'de' ? 'de-DE' : 'en-GB'
     const normalized = value > 10_000_000 ? value / 1000 : value
     return `${Math.round(normalized).toLocaleString(locale)} €`
+  }
+
+  const getMinistry = (lm: unknown): string => {
+    if (!lm) return ''
+    let parsed = lm
+    if (typeof lm === 'string') {
+      try {
+        parsed = JSON.parse(lm)
+      } catch {
+        return ''
+      }
+    }
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      const first = parsed[0] as { shortTitle?: unknown; short_title?: unknown; title?: unknown }
+      return String(first.shortTitle ?? first.short_title ?? first.title ?? '')
+    }
+    return ''
+  }
+
+  const getAffectedLaws = (al: unknown): string[] => {
+    if (!al) return []
+    let parsed = al
+    if (typeof al === 'string') {
+      try {
+        parsed = JSON.parse(al)
+      } catch {
+        return []
+      }
+    }
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .map((law) => {
+        if (law && typeof law === 'object') {
+          const entry = law as { shortTitle?: unknown; short_title?: unknown; title?: unknown }
+          return String(entry.shortTitle ?? entry.short_title ?? entry.title ?? '').trim()
+        }
+        return String(law ?? '').trim()
+      })
+      .filter(Boolean)
   }
 
   const chartWidth = Math.max(360, Math.min(900, viewportWidth - 80))
@@ -1534,7 +1614,10 @@ export default function LobbyRegister() {
               return (
                 <DataCard
                   key={item.register_number}
-                  onClick={() => setSelectedRegisterNumber(item.register_number)}
+                  onClick={() => {
+                    setDetailTab('overview')
+                    setSelectedRegisterNumber(item.register_number)
+                  }}
                   header={
                     <div
                       style={{
@@ -1686,28 +1769,172 @@ export default function LobbyRegister() {
                   >
                     {t('electionsClose')}
                   </button>
-                  {(() => {
-                    const detailFields = fieldArray(detailData.fields_of_interest)
-                    const detailLegalForm = getLegalFormLabel(detailData.legal_form)
-                    return (
-                      <>
                   <h3 style={{ margin: 0, fontFamily: fonts.display, color: c.ink }}>
                     {detailData.name || detailData.register_number}
                   </h3>
                   <p style={{ margin: 0, fontFamily: fonts.body, color: c.inkSoft }}>
-                    {[detailLegalForm, detailData.city].filter(Boolean).join(' · ') || '—'}
+                    {[
+                      getLegalFormLabel(detailData.legal_form),
+                      detailData.city,
+                    ].filter(Boolean).join(' · ') || '—'}
                   </p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.sm }}>
-                    {detailFields.slice(0, 6).map((field) => (
-                      <Badge key={`${detailData.register_number}-${field}`} text={field} variant="gray" />
-                    ))}
+                  <div
+                    role="tablist"
+                    aria-label={t('lobbyDetailTabsAria')}
+                    style={{
+                      display: 'flex',
+                      gap: spacing.sm,
+                      borderBottom: `1px solid ${c.border}`,
+                      overflowX: 'auto',
+                      paddingBottom: spacing.sm,
+                    }}
+                  >
+                    {([
+                      { key: 'overview', label: t('lobbyDetailTabOverview') },
+                      { key: 'projects', label: t('lobbyDetailTabProjects') },
+                    ] as const).map((tab) => {
+                      const active = detailTab === tab.key
+                      return (
+                        <button
+                          key={tab.key}
+                          type="button"
+                          role="tab"
+                          aria-selected={active}
+                          onClick={() => setDetailTab(tab.key)}
+                          style={{
+                            minHeight: 44,
+                            padding: `0 ${spacing.md}px`,
+                            borderRadius: 8,
+                            border: `1px solid ${active ? c.red : c.border}`,
+                            background: active ? c.bgHover : c.bgAlt,
+                            color: active ? c.red : c.muted,
+                            fontFamily: fonts.mono,
+                            fontSize: '0.72rem',
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {tab.label}
+                        </button>
+                      )
+                    })}
                   </div>
-                  <p style={{ margin: 0, fontFamily: fonts.body, color: c.inkSoft, lineHeight: 1.6 }}>
-                    {detailData.activity_description || t('lobbyNoDescription')}
-                  </p>
-                      </>
-                    )
-                  })()}
+                  {detailTab === 'overview' ? (
+                    <>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.sm }}>
+                        {fieldArray(detailData.fields_of_interest).slice(0, 6).map((field) => (
+                          <Badge key={`${detailData.register_number}-${field}`} text={field} variant="gray" />
+                        ))}
+                      </div>
+                      <p style={{ margin: 0, fontFamily: fonts.body, color: c.inkSoft, lineHeight: 1.6 }}>
+                        {detailData.activity_description || t('lobbyNoDescription')}
+                      </p>
+                    </>
+                  ) : projectsLoading ? (
+                    <LoadingSpinner />
+                  ) : projectsError ? (
+                    <p style={{ margin: 0, color: c.muted, fontFamily: fonts.body }}>{t('dataLoadError')}</p>
+                  ) : !(projectsData?.items?.length) ? (
+                    <EmptyState text={t('lobbyProjectsEmpty')} />
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
+                      {projectsData.items.map((project) => {
+                        const lawTags = getAffectedLaws(project.affected_laws).slice(0, 8)
+                        const ministry = getMinistry(project.leading_ministries)
+                        const projectKey = project.project_number || String(project.id)
+                        const isExpanded = expandedProject === projectKey
+                        const description = (project.description || '').trim()
+                        const shortDesc =
+                          description.length > 200
+                            ? `${description.slice(0, 200)}...`
+                            : description
+                        return (
+                          <div
+                            key={`${project.id}-${project.project_number ?? ''}`}
+                            style={{
+                              border: `1px solid ${c.border}`,
+                              borderRadius: 8,
+                              padding: spacing.md,
+                              background: c.bgAlt,
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: spacing.sm,
+                            }}
+                          >
+                            <div style={{ fontFamily: fonts.body, color: c.ink, fontWeight: 700 }}>
+                              {project.title || t('lobbyProjectUntitled')}
+                            </div>
+                            {lawTags.length ? (
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.xs }}>
+                                {lawTags.map((tag) => (
+                                  <Badge key={`${project.id}-${tag}`} text={tag} variant="gray" />
+                                ))}
+                              </div>
+                            ) : null}
+                            <p
+                              style={{
+                                margin: 0,
+                                fontFamily: fonts.body,
+                                color: c.inkSoft,
+                                lineHeight: 1.6,
+                              }}
+                            >
+                              {description ? (isExpanded ? description : shortDesc) : '—'}
+                            </p>
+                            {description.length > 200 ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setExpandedProject(isExpanded ? null : projectKey)
+                                }
+                                style={{
+                                  alignSelf: 'flex-start',
+                                  minHeight: 32,
+                                  padding: `0 ${spacing.sm}px`,
+                                  borderRadius: 6,
+                                  border: `1px solid ${c.border}`,
+                                  background: c.cardBg,
+                                  color: c.red,
+                                  fontFamily: fonts.mono,
+                                  fontSize: '0.72rem',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                {isExpanded ? t('expandLess') : t('expandMore')}
+                              </button>
+                            ) : null}
+                            <div style={{ fontFamily: fonts.mono, fontSize: '0.74rem', color: c.muted }}>
+                              {t('lobbyProjectMinistry')}: {ministry || project.federal_ministry || '—'}
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.md }}>
+                              {project.project_url ? (
+                                <a
+                                  href={project.project_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: '0.75rem' }}
+                                >
+                                  {t('lobbyProjectLinkProject')} →
+                                </a>
+                              ) : null}
+                              {project.document_url ? (
+                                <a
+                                  href={project.document_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: '0.75rem' }}
+                                >
+                                  {t('lobbyProjectLinkDocument')} →
+                                </a>
+                              ) : null}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </DataCard>
