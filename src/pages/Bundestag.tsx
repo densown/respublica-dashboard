@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
+  Badge,
   LoadingSpinner,
   PageHeader,
   useTheme,
@@ -20,16 +21,41 @@ import { RAW_SEAT_COUNT, RAW_SEATS } from '../data/bundestag-seats'
 import type { AbstimmungsDetailData } from '../components/bundestag/AbstimmungsDetail'
 
 type AbgeordnetenApiRow = {
+  id: number
+  aw_id: number
   name: string
   fraktion: string
   wahlkreis: string
+  foto_url: string | null
+  profil_url: string | null
   nachname?: string
 }
 
-type AbgeordnetenTooltipRow = {
+type AbgeordnetenSeatRow = {
+  id: number
+  aw_id: number
   name: string
   fraktion: string
   wahlkreis: string
+  foto_url: string | null
+  profil_url: string | null
+}
+
+type AbgeordnetenVoteRow = {
+  poll_id: number
+  vote: string
+  poll_titel: string
+  poll_datum: string
+}
+
+type PollVoteApiRow = {
+  mandate_id: number
+  vote: string
+  abgeordneter_name: string
+}
+
+type PollVoteApiResponse = {
+  votes: PollVoteApiRow[]
 }
 
 type RawKategorie =
@@ -41,9 +67,28 @@ type RawKategorie =
   | 'AfD'
   | 'Fraktionslos'
 
+const normalizeFraktion = (f: string): string => f.replace(/\u00AD/g, '').trim()
+const SSW_NAME = 'Stefan Seidler'
+
+function getEffektiveFraktion(abgeordneter: { name: string; fraktion: string }): string {
+  if (normalizeFraktion(abgeordneter.name) === SSW_NAME) return 'SSW'
+  return normalizeFraktion(abgeordneter.fraktion)
+}
+
+function canonicalKey(fraktion: string): string {
+  const f = normalizeFraktion(fraktion).toLowerCase()
+  if (f.includes('grün') || f.includes('bündnis')) return 'Grüne'
+  if (f.includes('linke')) return 'Linke'
+  if (f.includes('spd')) return 'SPD'
+  if (f.includes('cdu') || f.includes('csu')) return 'CDU/CSU'
+  if (f.includes('afd')) return 'AfD'
+  if (f.includes('ssw')) return 'SSW'
+  if (f === 'fraktionslos') return 'Fraktionslos'
+  return fraktion
+}
+
 function normalizeForMatch(s: string): string {
-  return s
-    .trim()
+  return normalizeFraktion(s)
     .toLowerCase()
     .replace(/ß/g, 'ss')
     .replace(/ä/g, 'ae')
@@ -52,13 +97,15 @@ function normalizeForMatch(s: string): string {
 }
 
 function apiFraktionToRawKategorie(apiFraktion: string): RawKategorie {
+  const key = canonicalKey(apiFraktion)
+  if (key === 'Linke') return 'Die Linke'
+  if (key === 'SPD') return 'SPD'
+  if (key === 'Grüne') return 'Grüne'
+  if (key === 'SSW') return 'SSW'
+  if (key === 'CDU/CSU') return 'CDU/CSU'
+  if (key === 'AfD') return 'AfD'
   const n = normalizeForMatch(apiFraktion)
-  if (n.includes('linke')) return 'Die Linke'
-  if (n.includes('spd')) return 'SPD'
-  if (n.includes('grune') || n.includes('bundnis')) return 'Grüne'
-  if (n.includes('ssw')) return 'SSW'
-  if (n.includes('cdu') || n.includes('csu')) return 'CDU/CSU'
-  if (n.includes('afd')) return 'AfD'
+  if (n.includes('fraktionslos')) return 'Fraktionslos'
   return 'Fraktionslos'
 }
 
@@ -76,6 +123,7 @@ export default function Bundestag() {
 
   const [selectedPollId, setSelectedPollId] = useState<number | null>(null)
   const [animating, setAnimating] = useState(false)
+  const [selectedSeatId, setSelectedSeatId] = useState<number | null>(null)
 
   const { data: sitzverteilung, loading: loadingSitz, error: errSitz } =
     useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
@@ -83,9 +131,7 @@ export default function Bundestag() {
     { poll_id: number; poll_titel: string; poll_datum: string }[]
   >('/api/bundestag/abstimmungen')
 
-  const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>(
-    '/api/bundestag/abgeordnete',
-  )
+  const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete')
 
   const detailEndpoint =
     selectedPollId != null
@@ -96,7 +142,9 @@ export default function Bundestag() {
     loading: loadingDetail,
     error: errDetail,
   } = useApi<AbstimmungsDetailData>(detailEndpoint)
-
+  const pollVotesEndpoint =
+    selectedPollId != null ? `/api/bundestag/poll-votes/${selectedPollId}` : ''
+  const { data: pollVotesResponse } = useApi<PollVoteApiResponse>(pollVotesEndpoint)
   useEffect(() => {
     if (pollIdParam) {
       const p = Number.parseInt(pollIdParam, 10)
@@ -129,18 +177,8 @@ export default function Bundestag() {
   const list = abstimmungen ?? []
 
   const abgeordneteBySeatId = useMemo(() => {
-    const map = new Map<number, AbgeordnetenTooltipRow>()
+    const map = new Map<number, AbgeordnetenSeatRow>()
     if (!abgeordnete) return map
-
-    const rawLabelToKategorie: Partial<Record<string, RawKategorie>> = {
-      'Die Linke': 'Die Linke',
-      SPD: 'SPD',
-      Grüne: 'Grüne',
-      SSW: 'SSW',
-      'CDU/CSU': 'CDU/CSU',
-      AfD: 'AfD',
-      Fraktionslos: 'Fraktionslos',
-    }
 
     const seatsByKategorie: Record<RawKategorie, number[]> = {
       'Die Linke': [],
@@ -153,8 +191,8 @@ export default function Bundestag() {
     }
 
     for (let seatId = 0; seatId < RAW_SEATS.length; seatId++) {
-      const rawLabel = RAW_SEATS[seatId][2]
-      const k = rawLabelToKategorie[rawLabel]
+      const rawLabel = normalizeFraktion(RAW_SEATS[seatId][2])
+      const k = apiFraktionToRawKategorie(canonicalKey(rawLabel))
       if (!k) continue
       seatsByKategorie[k].push(seatId)
     }
@@ -172,9 +210,12 @@ export default function Bundestag() {
     const abgByFraktion = new Map<string, AbgeordnetenApiRow[]>()
     for (const a of abgeordnete) {
       if (!a?.fraktion) continue
-      const list = abgByFraktion.get(a.fraktion) ?? []
+      const fraktionKey = canonicalKey(
+        getEffektiveFraktion({ name: a.name, fraktion: a.fraktion }),
+      )
+      const list = abgByFraktion.get(fraktionKey) ?? []
       list.push(a)
-      abgByFraktion.set(a.fraktion, list)
+      abgByFraktion.set(fraktionKey, list)
     }
 
     // Pro RAW-Kategorie fortlaufend zuordnen (falls API mehrere Fraktionen
@@ -197,9 +238,13 @@ export default function Bundestag() {
         const seatId = seatIndices[start + i]
         const abg = abgListSorted[i]
         map.set(seatId, {
+          id: abg.id,
+          aw_id: abg.aw_id,
           name: abg.name,
           fraktion: shortFraktionName(abg.fraktion),
           wahlkreis: abg.wahlkreis,
+          foto_url: abg.foto_url ?? null,
+          profil_url: abg.profil_url ?? null,
         })
       }
       offsetByKategorie[k] = start + take
@@ -207,6 +252,61 @@ export default function Bundestag() {
 
     return map
   }, [abgeordnete])
+
+  const selectedAbgeordneter = useMemo(
+    () =>
+      selectedSeatId != null
+        ? (abgeordneteBySeatId.get(selectedSeatId) ?? null)
+        : null,
+    [abgeordneteBySeatId, selectedSeatId],
+  )
+  const memberVotesEndpoint =
+    selectedAbgeordneter != null
+      ? `/api/abgeordnete/${selectedAbgeordneter.aw_id}/votes`
+      : ''
+  const {
+    data: memberVotes,
+    loading: loadingMemberVotes,
+    error: errMemberVotes,
+  } = useApi<AbgeordnetenVoteRow[]>(memberVotesEndpoint)
+
+  const individualVotesByMandateId = useMemo(() => {
+    const map = new Map<number, 'yes' | 'no' | 'abstain' | 'no_show'>()
+    for (const row of pollVotesResponse?.votes ?? []) {
+      const raw = row.vote.trim().toLowerCase()
+      if (raw === 'yes') map.set(row.mandate_id, 'yes')
+      else if (raw === 'no') map.set(row.mandate_id, 'no')
+      else if (raw === 'abstain' || raw === 'abstention') {
+        map.set(row.mandate_id, 'abstain')
+      } else if (raw === 'no_show' || raw === 'not_voted') {
+        map.set(row.mandate_id, 'no_show')
+      }
+    }
+    return map
+  }, [pollVotesResponse])
+
+  const voteVariant = useCallback((voteRaw: string) => {
+    const vote = voteRaw.trim().toLowerCase()
+    if (vote === 'yes') return { label: t('yes'), variant: 'yes' as const }
+    if (vote === 'no') return { label: t('no'), variant: 'no' as const }
+    if (vote === 'abstention' || vote === 'abstain') {
+      return { label: t('abstain'), variant: 'muted' as const }
+    }
+    if (vote === 'not_voted' || vote === 'no_show') {
+      return { label: t('absentL'), variant: 'gray' as const }
+    }
+    return { label: voteRaw, variant: 'default' as const }
+  }, [t])
+
+  const selectedAbgInitials = useMemo(() => {
+    if (!selectedAbgeordneter) return ''
+    return selectedAbgeordneter.name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? '')
+      .join('')
+  }, [selectedAbgeordneter])
 
   return (
     <>
@@ -278,6 +378,29 @@ export default function Bundestag() {
                 {RAW_SEAT_COUNT} {t('seats')}
               </span>
             </div>
+            {selectedPollId != null && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPollId(null)
+                  navigate('/bundestag')
+                }}
+                style={{
+                  border: `1px solid ${c.border}`,
+                  borderRadius: 4,
+                  background: c.bg,
+                  color: c.ink,
+                  fontFamily: fonts.body,
+                  fontSize: '0.84rem',
+                  cursor: 'pointer',
+                  minHeight: 44,
+                  padding: `${spacing.xs}px ${spacing.sm}px`,
+                  marginBottom: spacing.md,
+                }}
+              >
+                {t('backToSeating')}
+              </button>
+            )}
             <Hemicycle
               sitzverteilung={sitz}
               abstimmung={
@@ -285,8 +408,10 @@ export default function Bundestag() {
                   ? { fraktionen: abstimmungsDetail.fraktionen }
                   : undefined
               }
+              individuelleVotes={individualVotesByMandateId}
               abgeordnete={abgeordneteBySeatId}
               animating={animating}
+              onSeatSelect={setSelectedSeatId}
             />
           </div>
 
@@ -354,6 +479,193 @@ export default function Bundestag() {
                 {t('noVoteSelected')}
               </p>
             )}
+          </div>
+        </div>
+      )}
+      {selectedAbgeordneter && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setSelectedSeatId(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 40,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: spacing.md,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: 'min(920px, 100%)',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              background: c.cardBg,
+              border: `1px solid ${c.cardBorder}`,
+              borderRadius: 10,
+              padding: spacing.lg,
+              boxShadow: c.shadow,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={() => setSelectedSeatId(null)}
+                style={{
+                  border: `1px solid ${c.border}`,
+                  borderRadius: 4,
+                  background: c.bg,
+                  color: c.ink,
+                  fontFamily: fonts.mono,
+                  fontSize: '0.72rem',
+                  cursor: 'pointer',
+                  padding: `${spacing.xs}px ${spacing.sm}px`,
+                }}
+              >
+                X
+              </button>
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(0, 1fr)',
+                gap: spacing.md,
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: spacing.md,
+                  flexWrap: 'wrap',
+                }}
+              >
+                {selectedAbgeordneter.foto_url ? (
+                  <img
+                    src={selectedAbgeordneter.foto_url}
+                    alt={selectedAbgeordneter.name}
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: `1px solid ${c.border}`,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      border: `1px solid ${c.border}`,
+                      background: c.bg,
+                      display: 'grid',
+                      placeItems: 'center',
+                      fontFamily: fonts.display,
+                      color: c.muted,
+                      fontSize: '1.2rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {selectedAbgInitials}
+                  </div>
+                )}
+                <div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontFamily: fonts.display,
+                      color: c.ink,
+                    }}
+                  >
+                    {selectedAbgeordneter.name}
+                  </h3>
+                  <p style={{ margin: `${spacing.xs}px 0 0`, color: c.muted }}>
+                    {selectedAbgeordneter.fraktion} - {selectedAbgeordneter.wahlkreis}
+                  </p>
+                  {selectedAbgeordneter.profil_url && (
+                    <a
+                      href={selectedAbgeordneter.profil_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        display: 'inline-block',
+                        marginTop: spacing.sm,
+                        color: c.red,
+                        fontFamily: fonts.mono,
+                        fontSize: '0.74rem',
+                      }}
+                    >
+                      Abgeordnetenwatch
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h4
+                  style={{
+                    margin: `0 0 ${spacing.sm}px`,
+                    fontFamily: fonts.display,
+                    color: c.ink,
+                  }}
+                >
+                  {t('votes')}
+                </h4>
+                {loadingMemberVotes && <LoadingSpinner />}
+                {errMemberVotes && (
+                  <p style={{ color: c.red, margin: 0 }}>{t('dataLoadError')}</p>
+                )}
+                {!loadingMemberVotes && !errMemberVotes && (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table
+                      style={{
+                        width: '100%',
+                        borderCollapse: 'collapse',
+                        fontFamily: fonts.body,
+                        fontSize: '0.84rem',
+                      }}
+                    >
+                      <thead>
+                        <tr style={{ borderBottom: `1px solid ${c.border}` }}>
+                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
+                            {t('votes')}
+                          </th>
+                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
+                            {t('electionYear')}
+                          </th>
+                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
+                            {t('result')}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(memberVotes ?? []).map((row) => {
+                          const vote = voteVariant(row.vote)
+                          return (
+                            <tr key={`${row.poll_id}-${row.vote}`}>
+                              <td style={{ padding: `${spacing.xs}px 0`, color: c.ink }}>
+                                {row.poll_titel}
+                              </td>
+                              <td style={{ padding: `${spacing.xs}px 0`, color: c.muted }}>
+                                {row.poll_datum}
+                              </td>
+                              <td style={{ padding: `${spacing.xs}px 0` }}>
+                                <Badge text={vote.label} variant={vote.variant} />
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

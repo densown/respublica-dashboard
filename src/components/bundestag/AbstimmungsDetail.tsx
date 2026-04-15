@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Badge, ShareToolbar, VoteBar, useTheme } from '../../design-system'
+import { Badge, ShareToolbar, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 
 export type AbstimmungsDetailData = {
@@ -26,19 +26,12 @@ export interface AbstimmungsDetailProps {
   sitzverteilung: { partei: string; farbe: string }[]
 }
 
-/** Stimmfarben im Fraktionsbalken (Bundestag) */
-const BUNDESTAG_VOTE_SEG = {
-  ja: '#2D8E4E',
-  nein: '#C92A2A',
-  enthalten: '#8899AA',
-  abwesend: '#CDD5DE',
-} as const
-
 const BUNDESTAG_WP_SUFFIX = /\s*\(Bundestag\s+2025\s*[-–]\s*2029\)\s*$/i
+const normalizeFraktion = (f: string): string => f.replace(/\u00AD/g, '').trim()
 
 /** Kürzt API-Parteilabel für die Ansicht */
 export function shortFraktionName(apiPartei: string): string {
-  let s = apiPartei.replace(BUNDESTAG_WP_SUFFIX, '').trim()
+  let s = normalizeFraktion(apiPartei).replace(BUNDESTAG_WP_SUFFIX, '').trim()
   const l = s.toLowerCase()
   if (
     (l.includes('bündnis') || l.includes('b90')) &&
@@ -47,11 +40,9 @@ export function shortFraktionName(apiPartei: string): string {
     return 'Grüne'
   if (l.includes('linke')) return 'Die Linke'
   if (l.includes('cdu') || l.includes('csu')) return 'CDU/CSU'
-  if (/\bfdp\b/.test(l)) return 'FDP'
   if (/\bspd\b/.test(l)) return 'SPD'
   if (/\bafd\b/.test(l)) return 'AfD'
   if (l.includes('fraktionslos')) return 'Fraktionslos'
-  if (l.includes('bsw')) return 'BSW'
   if (l.includes('ssw')) return 'SSW'
   return s
 }
@@ -59,27 +50,21 @@ export function shortFraktionName(apiPartei: string): string {
 /** Politische Reihenfolge links → rechts; nicht Gematchtes ans Ende */
 export const PARTEI_ORDER = [
   'Linke',
-  'BSW',
   'Grüne',
   'BÜNDNIS',
   'SPD',
-  'FDP',
   'CDU',
   'AfD',
   'fraktionslos',
 ] as const
 
-const FDP_LABEL_COLOR = '#B8860B'
-
 function matchesOrderToken(apiPartei: string, token: string): boolean {
-  const p = apiPartei.toLowerCase()
+  const p = normalizeFraktion(apiPartei).toLowerCase()
   const tok = token.toLowerCase()
   if (tok === 'grüne' || tok === 'bündnis')
     return p.includes('grün') || p.includes('bündnis')
   if (tok === 'linke') return p.includes('linke')
-  if (tok === 'bsw') return p.includes('bsw')
   if (tok === 'spd') return /\bspd\b/.test(p)
-  if (tok === 'fdp') return /\bfdp\b/.test(p)
   if (tok === 'cdu') return p.includes('cdu') || p.includes('csu')
   if (tok === 'afd') return /\bafd\b/.test(p)
   if (tok === 'fraktionslos') return p.includes('fraktionslos')
@@ -94,21 +79,19 @@ function politicalSortIndex(apiPartei: string): number {
 }
 
 function matchesSitzRow(apiPartei: string, stamm: string): boolean {
-  const p = apiPartei.toLowerCase()
-  const s = stamm.toLowerCase()
+  const p = normalizeFraktion(apiPartei).toLowerCase()
+  const s = normalizeFraktion(stamm).toLowerCase()
   if (s === 'grüne') return p.includes('grün') || p.includes('bündnis')
   if (s.includes('cdu') || stamm === 'CDU/CSU')
     return p.includes('cdu') || p.includes('csu')
   if (s === 'linke') return p.includes('linke')
   if (s === 'fraktionslos') return p.includes('fraktionslos')
   if (s === 'afd') return /\bafd\b/.test(p)
-  if (s === 'fdp') return /\bfdp\b/.test(p)
   if (s === 'spd') return /\bspd\b/.test(p)
-  if (s === 'bsw') return p.includes('bsw')
-  return p.includes(s) || apiPartei.includes(stamm)
+  return p.includes(s) || normalizeFraktion(apiPartei).includes(normalizeFraktion(stamm))
 }
 
-/** Farbe aus sitzverteilung; FDP-Label wegen Kontrast dunkelgold */
+/** Farbe aus sitzverteilung */
 export function labelColorFromSitzverteilung(
   apiPartei: string,
   rows: { partei: string; farbe: string }[],
@@ -116,11 +99,10 @@ export function labelColorFromSitzverteilung(
   const row = rows.find((r) => matchesSitzRow(apiPartei, r.partei))
   const farbe = row?.farbe
   if (!farbe) return '#888888'
-  if (row?.partei === 'FDP' || /\bfdp\b/i.test(apiPartei)) return FDP_LABEL_COLOR
   return farbe
 }
 
-function labelColorForVoteBar(
+function labelColorForLegendDot(
   apiPartei: string,
   rows: { partei: string; farbe: string }[],
   theme: 'light' | 'dark',
@@ -229,33 +211,69 @@ export function AbstimmungsDetail({
         {ergebnis.abwesend_gesamt}
       </p>
 
-      <p
+      <div
         style={{
-          fontFamily: fonts.mono,
-          fontSize: '0.6rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: c.muted,
-          marginBottom: spacing.sm,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+          gap: spacing.sm,
+          marginBottom: spacing.lg,
         }}
       >
-        {t('result')}
-      </p>
-
-      {fraktionenSorted.map((f) => (
-        <VoteBar
-          key={f.partei}
-          label={shortFraktionName(f.partei)}
-          labelColor={labelColorForVoteBar(f.partei, sitzverteilung, theme)}
-          ja={f.ja}
-          nein={f.nein}
-          enthalten={f.enthalten}
-          abwesend={f.abwesend}
-          trackVariant="outline"
-          segmentColors={BUNDESTAG_VOTE_SEG}
-          expandedDetails="secondary"
-        />
-      ))}
+        {fraktionenSorted.map((f) => (
+          <div
+            key={f.partei}
+            style={{
+              border: `1px solid ${c.border}`,
+              borderRadius: 8,
+              padding: spacing.sm,
+              background: c.bg,
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: spacing.xs,
+                marginBottom: spacing.xs,
+              }}
+            >
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  background: labelColorForLegendDot(f.partei, sitzverteilung, theme),
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: fonts.body,
+                  color: c.ink,
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                }}
+              >
+                {shortFraktionName(f.partei)}
+              </span>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 8,
+                fontFamily: fonts.mono,
+                fontSize: '0.68rem',
+                color: c.muted,
+              }}
+            >
+              <span>{t('yes')}: {f.ja}</span>
+              <span>{t('no')}: {f.nein}</span>
+              <span>{t('abstained')}: {f.enthalten}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <ShareToolbar title={data.poll_titel} url={shareUrl} />
     </div>

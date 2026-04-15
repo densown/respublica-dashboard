@@ -26,8 +26,20 @@ export type FraktionVote = {
 export interface HemicycleProps {
   sitzverteilung: SitzverteilungRow[]
   abstimmung?: { fraktionen: FraktionVote[] }
-  abgeordnete?: Map<number, { name: string; fraktion: string; wahlkreis: string }>
+  individuelleVotes?: Map<number, 'yes' | 'no' | 'abstain' | 'no_show'>
+  abgeordnete?: Map<
+    number,
+    {
+      aw_id: number
+      name: string
+      fraktion: string
+      wahlkreis: string
+      foto_url: string | null
+      profil_url: string | null
+    }
+  >
   animating?: boolean
+  onSeatSelect?: (seatId: number) => void
 }
 
 type MergedParty = {
@@ -48,23 +60,25 @@ type SeatDerived = {
   idxInFrak: number
 }
 
-function canonicalKey(partei: string): string {
-  const s = partei.trim().toLowerCase()
-  if (/\blinke\b|die linke|dielinke/.test(s)) return 'linke'
-  if (/\bbsw\b|bündnis sarah wagenknecht/.test(s)) return 'bsw'
-  if (
-    /\bgrün|grüne|bündnis\s*90|b90/.test(s) ||
-    (s.includes('grün') && !s.includes('grünwald'))
-  )
-    return 'grüne'
-  if (/\bspd\b|sozialdemokrat/.test(s)) return 'spd'
-  if (/\bcdu\b|\bcsu\b|cdu\/csu/.test(s)) return 'cdu/csu'
-  if (/\bafd\b/.test(s)) return 'afd'
-  if (/fraktionslos|fraktionslose|parteilos|unabhängig/.test(s))
-    return 'fraktionslos'
-  if (/\bfdp\b|freie demokraten/.test(s)) return 'fdp'
-  if (/\bssw\b/.test(s)) return 'ssw'
-  return 'unknown'
+const normalizeFraktion = (f: string): string => f.replace(/\u00AD/g, '').trim()
+const SSW_COLOR = '#003F8E'
+const SSW_NAME = 'Stefan Seidler'
+
+function getEffektiveFraktion(abgeordneter: { name: string; fraktion: string }): string {
+  if (normalizeFraktion(abgeordneter.name) === SSW_NAME) return 'SSW'
+  return normalizeFraktion(abgeordneter.fraktion)
+}
+
+function canonicalKey(fraktion: string): string {
+  const f = normalizeFraktion(fraktion).toLowerCase()
+  if (f.includes('grün') || f.includes('bündnis')) return 'Grüne'
+  if (f.includes('linke')) return 'Linke'
+  if (f.includes('spd')) return 'SPD'
+  if (f.includes('cdu') || f.includes('csu')) return 'CDU/CSU'
+  if (f.includes('afd')) return 'AfD'
+  if (f.includes('ssw')) return 'SSW'
+  if (f === 'fraktionslos') return 'Fraktionslos'
+  return fraktion
 }
 
 function sortedSitz(sitz: SitzverteilungRow[]): SitzverteilungRow[] {
@@ -79,15 +93,14 @@ function mergePartiesForLegend(
   const map = new Map<string, MergedParty>()
 
   for (const r of sorted) {
-    let key = canonicalKey(r.partei)
-    if (key === 'unknown') key = `ext:${r.partei.trim().toLowerCase()}`
-    const farbe = key === 'cdu/csu' ? cduFill : r.farbe
+    const key = canonicalKey(r.partei)
+    const farbe = key === 'CDU/CSU' ? cduFill : r.farbe
     const prev = map.get(key)
     if (prev) {
       map.set(key, {
         key,
         partei: r.partei,
-        farbe: key === 'cdu/csu' ? cduFill : prev.farbe,
+        farbe: key === 'CDU/CSU' ? cduFill : prev.farbe,
         sitze: prev.sitze + r.sitze,
         position: Math.min(prev.position, r.position),
       })
@@ -102,19 +115,34 @@ function mergePartiesForLegend(
     }
   }
 
+  const fraktionslos = map.get('Fraktionslos')
+  const hasSsw = map.has('SSW')
+  if (!hasSsw && fraktionslos && fraktionslos.sitze > 0) {
+    map.set('SSW', {
+      key: 'SSW',
+      partei: 'SSW',
+      farbe: SSW_COLOR,
+      sitze: 1,
+      position: fraktionslos.position,
+    })
+    map.set('Fraktionslos', {
+      ...fraktionslos,
+      sitze: Math.max(0, fraktionslos.sitze - 1),
+    })
+  }
+
   return { legendByKey: map }
 }
 
 /** Legenden-Reihenfolge: Kurzname für die Anzeige */
 const LEGEND_ORDER: readonly { key: string; kurz: string }[] = [
-  { key: 'linke', kurz: 'Die Linke' },
-  { key: 'bsw', kurz: 'BSW' },
-  { key: 'grüne', kurz: 'Grüne' },
-  { key: 'spd', kurz: 'SPD' },
-  { key: 'fdp', kurz: 'FDP' },
-  { key: 'cdu/csu', kurz: 'CDU/CSU' },
-  { key: 'afd', kurz: 'AfD' },
-  { key: 'fraktionslos', kurz: 'Fraktionslos' },
+  { key: 'Linke', kurz: 'Die Linke' },
+  { key: 'SSW', kurz: 'SSW' },
+  { key: 'Grüne', kurz: 'Grüne' },
+  { key: 'SPD', kurz: 'SPD' },
+  { key: 'CDU/CSU', kurz: 'CDU/CSU' },
+  { key: 'AfD', kurz: 'AfD' },
+  { key: 'Fraktionslos', kurz: 'Fraktionslos' },
 ]
 
 function orderedLegend(
@@ -130,7 +158,7 @@ function orderedLegend(
       ordered.push({
         ...p,
         partei: kurz,
-        farbe: key === 'cdu/csu' ? cduFill : p.farbe,
+        farbe: key === 'CDU/CSU' ? cduFill : p.farbe,
       })
     }
   }
@@ -146,14 +174,13 @@ function matchApiRowForSeat(
 ): SitzverteilungRow | undefined {
   const sorted = sortedSitz(rows)
   const sk = canonicalKey(seatLabel)
-  if (sk !== 'unknown') {
-    const hit = sorted.find((r) => canonicalKey(r.partei) === sk)
-    if (hit) return hit
-  }
+  const hit = sorted.find((r) => canonicalKey(r.partei) === sk)
+  if (hit) return hit
   const sl = seatLabel.toLowerCase()
+  const slNorm = normalizeFraktion(sl)
   return sorted.find((r) => {
-    const rl = r.partei.toLowerCase()
-    return rl.includes(sl) || sl.includes(rl)
+    const rl = normalizeFraktion(r.partei).toLowerCase()
+    return rl.includes(slNorm) || slNorm.includes(rl)
   })
 }
 
@@ -165,9 +192,9 @@ function partyFillForSeat(
 ): string {
   const row = matchApiRowForSeat(seatLabel, rows)
   if (!row) {
-    return canonicalKey(seatLabel) === 'cdu/csu' ? cduFill : rawFarbe
+    return canonicalKey(seatLabel) === 'CDU/CSU' ? cduFill : rawFarbe
   }
-  return canonicalKey(row.partei) === 'cdu/csu' ? cduFill : row.farbe
+  return canonicalKey(row.partei) === 'CDU/CSU' ? cduFill : row.farbe
 }
 
 function displayParteiForSeat(
@@ -182,24 +209,20 @@ function matchFraktionVote(
   fraktionen: FraktionVote[],
 ): FraktionVote | undefined {
   const sk = canonicalKey(seatLabel)
-  const s = seatLabel.toLowerCase()
+  const s = normalizeFraktion(seatLabel).toLowerCase()
   return fraktionen.find((f) => {
-    const fl = f.partei.toLowerCase()
-    if (sk !== 'unknown') {
-      const fk = canonicalKey(f.partei)
-      if (fk !== 'unknown' && fk === sk) return true
-    }
+    const fl = normalizeFraktion(f.partei).toLowerCase()
+    const fk = canonicalKey(f.partei)
+    if (fk === sk) return true
     if (fl.includes(s) || s.includes(fl)) return true
-    if (sk === 'grüne' && fl.includes('grün')) return true
-    if (sk === 'linke' && fl.includes('linke')) return true
-    if (sk === 'cdu/csu' && (fl.includes('cdu') || fl.includes('csu')))
+    if (sk === 'Grüne' && fl.includes('grün')) return true
+    if (sk === 'Linke' && fl.includes('linke')) return true
+    if (sk === 'CDU/CSU' && (fl.includes('cdu') || fl.includes('csu')))
       return true
-    if (sk === 'afd' && /\bafd\b/i.test(fl)) return true
-    if (sk === 'fdp' && /\bfdp\b/i.test(fl)) return true
-    if (sk === 'spd' && /\bspd\b/i.test(fl)) return true
-    if (sk === 'bsw' && fl.includes('bsw')) return true
-    if (sk === 'ssw' && fl.includes('ssw')) return true
-    if (sk === 'fraktionslos' && fl.includes('fraktionslos')) return true
+    if (sk === 'AfD' && /\bafd\b/i.test(fl)) return true
+    if (sk === 'SPD' && /\bspd\b/i.test(fl)) return true
+    if (sk === 'SSW' && fl.includes('ssw')) return true
+    if (sk === 'Fraktionslos' && fl.includes('fraktionslos')) return true
     return false
   })
 }
@@ -241,11 +264,14 @@ function buildSeatDerived(): SeatDerived[] {
 export function Hemicycle({
   sitzverteilung,
   abstimmung,
+  individuelleVotes,
   abgeordnete,
   animating,
+  onSeatSelect,
 }: HemicycleProps) {
   const { c, t, theme } = useTheme()
   const [voteReveal, setVoteReveal] = useState(false)
+  const [hoveredSeatId, setHoveredSeatId] = useState<number | null>(null)
 
   const cduSeat = theme === 'dark' ? '#CCCCCC' : '#000000'
 
@@ -274,28 +300,42 @@ export function Hemicycle({
         abstimmung != null
           ? matchFraktionVote(d.rawPartei, abstimmung.fraktionen)
           : undefined
-      const voteColor =
-        fv != null
-          ? voteColorForSeatInPartei(
-              d.idxInFrak,
-              fv,
-              c.yes,
-              c.no,
-              c.abstain,
-              c.absent,
-            )
-          : partyColor
+      const abg = abgeordnete?.get(d.seatId)
+      const individuellerVote =
+        abg != null ? individuelleVotes?.get(abg.aw_id) : undefined
 
-      const voteLabel =
-        fv != null
-          ? d.idxInFrak < fv.ja
+      let voteColor = partyColor
+      let voteLabel: string | undefined
+      if (individuellerVote === 'yes') {
+        voteColor = c.yes
+        voteLabel = t('yes')
+      } else if (individuellerVote === 'no') {
+        voteColor = c.no
+        voteLabel = t('no')
+      } else if (individuellerVote === 'abstain') {
+        voteColor = c.abstain
+        voteLabel = t('abstain')
+      } else if (individuellerVote === 'no_show') {
+        voteColor = c.absent
+        voteLabel = t('absentL')
+      } else if (fv != null) {
+        voteColor = voteColorForSeatInPartei(
+          d.idxInFrak,
+          fv,
+          c.yes,
+          c.no,
+          c.abstain,
+          c.absent,
+        )
+        voteLabel =
+          d.idxInFrak < fv.ja
             ? t('yes')
             : d.idxInFrak < fv.ja + fv.nein
               ? t('no')
               : d.idxInFrak < fv.ja + fv.nein + fv.enthalten
-                ? t('abstained')
+                ? t('abstain')
                 : t('absentL')
-          : undefined
+      }
       return {
         ...d,
         partyColor,
@@ -315,6 +355,8 @@ export function Hemicycle({
     c.abstain,
     c.absent,
     t,
+    abgeordnete,
+    individuelleVotes,
   ])
 
   useEffect(() => {
@@ -328,9 +370,11 @@ export function Hemicycle({
   }, [abstimmung])
 
   const showVoteFill = Boolean(abstimmung && voteReveal)
+  const hoveredSeat = hoveredSeatId != null ? seatRender[hoveredSeatId] : null
+  const hoveredAbg = hoveredSeatId != null ? abgeordnete?.get(hoveredSeatId) : null
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         role="img"
@@ -377,9 +421,13 @@ export function Hemicycle({
           const fill =
             showVoteFill && abstimmung ? s.voteColor : s.partyColor
           const abg = abgeordnete?.get(s.seatId)
+          const effektiveFraktion =
+            abg != null
+              ? getEffektiveFraktion({ name: abg.name, fraktion: abg.fraktion })
+              : null
           const title =
             abg != null
-              ? `${abg.name} (${abg.fraktion})\nWahlkreis: ${abg.wahlkreis}${
+              ? `${abg.name} (${effektiveFraktion ?? abg.fraktion})\nWahlkreis: ${abg.wahlkreis}${
                   abstimmung && s.voteLabel ? `\nStimme: ${s.voteLabel}` : ''
                 }`
               : s.partei
@@ -390,9 +438,15 @@ export function Hemicycle({
               cy={s.cy}
               r={SEAT_R}
               fill={fill}
+              onMouseEnter={() => setHoveredSeatId(s.seatId)}
+              onMouseLeave={() => setHoveredSeatId((prev) => (prev === s.seatId ? null : prev))}
+              onClick={() => {
+                if (abgeordnete?.has(s.seatId)) onSeatSelect?.(s.seatId)
+              }}
               style={{
                 transition: abstimmung ? 'fill 0.4s ease' : 'fill 0.2s ease',
                 transitionDelay: abstimmung ? `${s.delay}ms` : '0ms',
+                cursor: abgeordnete?.has(s.seatId) ? 'pointer' : 'default',
               }}
             >
               <title>{title}</title>
@@ -400,6 +454,49 @@ export function Hemicycle({
           )
         })}
       </svg>
+      {hoveredSeat && hoveredAbg && (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${(hoveredSeat.cx / VIEW_W) * 100}%`,
+            top: `${(hoveredSeat.cy / VIEW_H) * 100}%`,
+            transform: 'translate(-50%, calc(-100% - 12px))',
+            pointerEvents: 'none',
+            zIndex: 3,
+            background: c.cardBg,
+            border: `1px solid ${c.border}`,
+            borderRadius: 6,
+            padding: `${spacing.xs}px ${spacing.sm}px`,
+            boxShadow: c.shadow,
+            minWidth: 140,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: fonts.body,
+              color: c.ink,
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              lineHeight: 1.3,
+            }}
+          >
+            {hoveredAbg.name}
+          </div>
+          <div
+            style={{
+              fontFamily: fonts.mono,
+              color: c.muted,
+              fontSize: '0.66rem',
+              marginTop: 2,
+            }}
+          >
+            {getEffektiveFraktion({
+              name: hoveredAbg.name,
+              fraktion: hoveredAbg.fraktion,
+            })}
+          </div>
+        </div>
+      )}
 
       <div
         style={{
@@ -500,7 +597,7 @@ export function Hemicycle({
                     background: c.abstain,
                   }}
                 />
-                <span style={{ color: c.ink }}>{t('abstained')}</span>
+                <span style={{ color: c.ink }}>{t('abstain')}</span>
               </span>
               <span
                 style={{

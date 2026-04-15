@@ -19,7 +19,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/` — `Overview.tsx` | Dashboard-Übersicht, KPIs und Einstieg |
 | `/wahlen` — `Elections.tsx` | Wahlen, regionale Auswertungen |
 | `/quellen` — `Sources.tsx` | Datenquellen und Credits |
-| `/bundestag`, `/bundestag/:pollId` — `Bundestag.tsx` | Abstimmungen, namentliche Abstimmungen |
+| `/bundestag`, `/bundestag/:pollId` — `Bundestag.tsx` | Abstimmungen, namentliche Abstimmungen, Hemicycle-Tooltip und MdB-Modal mit persönlicher Abstimmungshistorie |
 | `/gesetze`, `/gesetze/:id` — `Legislation.tsx` | Gesetzgebung, Änderungsdetails |
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
