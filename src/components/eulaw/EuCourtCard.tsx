@@ -84,8 +84,8 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
 
   const summary =
     lang === 'de'
-      ? (item.zusammenfassung_de ?? item.zusammenfassung_en ?? '').trim()
-      : (item.zusammenfassung_en ?? item.zusammenfassung_de ?? '').trim()
+      ? (item.zusammenfassung_de ?? '').trim()
+      : (item.zusammenfassung_en ?? '').trim()
 
   const preview = summary ? trunc(summary, PREVIEW_LEN) : ''
 
@@ -94,20 +94,10 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
       ? (item.zusammenfassung_de ?? '').trim()
       : (item.zusammenfassung_en ?? '').trim()
 
-  const altSummary =
-    lang === 'de'
-      ? (item.zusammenfassung_en ?? '').trim()
-      : (item.zusammenfassung_de ?? '').trim()
-
   const impact =
     lang === 'de'
       ? (item.auswirkung_de ?? '').trim()
       : (item.auswirkung_en ?? '').trim()
-
-  const impactAlt =
-    lang === 'de'
-      ? (item.auswirkung_en ?? '').trim()
-      : (item.auswirkung_de ?? '').trim()
 
   const cc = courtColors(item.gericht)
   const badgeText = courtLabel(item.gericht, t)
@@ -273,36 +263,8 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
             >
               {preview}
             </p>
-            {lang === 'en' && !item.zusammenfassung_en?.trim() ? (
-              <p
-                style={{
-                  fontFamily: fonts.body,
-                  fontSize: '0.75rem',
-                  color: c.muted,
-                  fontStyle: 'italic',
-                  marginTop: spacing.sm,
-                  marginBottom: 0,
-                }}
-              >
-                {t('euLawCourtSummaryFallbackDe')}
-              </p>
-            ) : null}
             {disclaimerBlock}
           </>
-        ) : null}
-
-        {!summary && !expanded ? (
-          <p
-            style={{
-              fontFamily: fonts.body,
-              fontSize: '0.85rem',
-              color: c.muted,
-              marginTop: spacing.md,
-              marginBottom: 0,
-            }}
-          >
-            {t('euLawCourtSummaryPending')}
-          </p>
         ) : null}
 
         {expanded ? (
@@ -367,33 +329,6 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                   {impact}
                 </p>
               </>
-            ) : null}
-
-            {altSummary || impactAlt ? (
-              <p
-                style={{
-                  fontFamily: fonts.body,
-                  fontSize: '0.78rem',
-                  lineHeight: 1.55,
-                  color: c.muted,
-                  marginTop: 0,
-                  marginBottom: spacing.md,
-                }}
-              >
-                {lang === 'de' ? t('euLawCourtOtherLangHintEn') : t('euLawCourtOtherLangHintDe')}
-                {altSummary ? (
-                  <>
-                    {' '}
-                    {t('euLawCourtSummarySection')}: {altSummary}
-                  </>
-                ) : null}
-                {impactAlt ? (
-                  <>
-                    {' '}
-                    {t('euLawCourtImpactSection')}: {impactAlt}
-                  </>
-                ) : null}
-              </p>
             ) : null}
 
             {disclaimerBlock}

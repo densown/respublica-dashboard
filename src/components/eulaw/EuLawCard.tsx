@@ -111,7 +111,10 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
       ? (item.titel_de ?? item.titel_en ?? '—')
       : (item.titel_en ?? item.titel_de ?? '—')
 
-  const summaryFull = (item.zusammenfassung ?? '').trim()
+  const summaryFull =
+    lang === 'de'
+      ? (item.zusammenfassung_de ?? '').trim()
+      : (item.zusammenfassung_en ?? '').trim()
   const preview = summaryFull ? trunc(summaryFull, PREVIEW_LEN) : ''
 
   const tc = typColors(String(item.typ))
@@ -132,15 +135,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
     },
     [toggle],
   )
-
-  const summaryGermanOnlyStyle: CSSProperties = {
-    fontFamily: fonts.body,
-    fontSize: '0.75rem',
-    color: c.muted,
-    fontStyle: 'italic',
-    marginTop: spacing.sm,
-    marginBottom: 0,
-  }
 
   const titleStyle: CSSProperties = {
     fontFamily: fonts.body,
@@ -253,9 +247,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             >
               {preview}
             </p>
-            {lang === 'en' ? (
-              <p style={summaryGermanOnlyStyle}>{t('euLawSummaryGermanOnly')}</p>
-            ) : null}
             <p
               style={{
                 fontFamily: fonts.body,
@@ -280,6 +271,18 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
               <>
                 <p
                   style={{
+                    fontFamily: fonts.mono,
+                    fontSize: '0.58rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: c.muted,
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  {t('euLawCourtSummarySection')}
+                </p>
+                <p
+                  style={{
                     fontFamily: fonts.body,
                     fontSize: '0.88rem',
                     lineHeight: 1.6,
@@ -290,11 +293,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 >
                   {summaryFull}
                 </p>
-                {lang === 'en' ? (
-                  <p style={{ ...summaryGermanOnlyStyle, marginBottom: 0 }}>
-                    {t('euLawSummaryGermanOnly')}
-                  </p>
-                ) : null}
                 <p
                   style={{
                     fontFamily: fonts.body,

@@ -11,6 +11,8 @@ export type EuRechtListItem = {
   typ_label: string | null
   datum: string | null
   in_kraft: string | null
+  zusammenfassung_de: string | null
+  zusammenfassung_en: string | null
   zusammenfassung: string | null
   rechtsgebiet: string | null
   eurlex_url: string | null
