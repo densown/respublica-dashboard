@@ -17,3 +17,64 @@
   transform: scale(0.85);
   transform-origin: center;
 }
+
+/* Vollbild: Zoom-Controls etwas nach links, Platz für Schließen rechts */
+.world-gl-map--fullscreen .maplibregl-ctrl-top-right {
+  right: 46px;
+}
+
+.world-gl-map__fs-btn {
+  position: absolute;
+  z-index: 30;
+  top: 6px;
+  right: 46px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.world-gl-map__fs-btn:focus-visible {
+  outline: 2px solid #c8102e;
+  outline-offset: 1px;
+}
+
+.world-gl-map__close-fs {
+  position: absolute;
+  z-index: 31;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.world-gl-map__close-fs:focus-visible {
+  outline: 2px solid #c8102e;
+  outline-offset: 1px;
+}
+
+.world-gl-map__canvas-host {
+  width: 100%;
+  height: 100%;
+}
+
+.world-gl-map button.world-gl-map__fs-btn,
+.world-gl-map button.world-gl-map__close-fs {
+  appearance: none;
+}

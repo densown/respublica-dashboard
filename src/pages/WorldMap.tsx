@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { PageHeader, useTheme } from '../design-system'
+import { useTheme } from '../design-system'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import type { WorldCategoryApi, WorldGeoJson, WorldStats } from './worldmap/worldTypes'
@@ -145,7 +145,30 @@ export default function WorldMap() {
 
   return (
     <div style={{ paddingBottom: spacing.xl }}>
-      <PageHeader title={t('worldMap')} subtitle={t('worldPageSubtitle')} />
+      <div style={{ marginBottom: spacing.sm }}>
+        <h1
+          style={{
+            margin: 0,
+            fontFamily: fonts.display,
+            fontSize: narrow ? '1.55rem' : '1.85rem',
+            lineHeight: 1.1,
+            color: c.text,
+          }}
+        >
+          {t('worldMap')}
+        </h1>
+        <p
+          style={{
+            margin: `${spacing.xs}px 0 0`,
+            fontFamily: fonts.body,
+            fontSize: narrow ? '0.86rem' : '0.92rem',
+            lineHeight: 1.35,
+            color: c.muted,
+          }}
+        >
+          {t('worldPageSubtitle')}
+        </p>
+      </div>
 
       {geoErr && (
         <p
@@ -162,7 +185,7 @@ export default function WorldMap() {
 
       <div
         style={{
-          marginTop: spacing.md,
+          marginTop: spacing.sm,
           width: '100%',
           maxWidth: '100%',
           overflowX: 'auto',
@@ -194,7 +217,7 @@ export default function WorldMap() {
                   fontSize: '13px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  padding: narrow ? '10px 12px' : '12px 18px',
+                  padding: narrow ? '8px 10px' : '9px 14px',
                   flexShrink: 0,
                   border: 'none',
                   borderBottom: isActive
@@ -235,20 +258,29 @@ export default function WorldMap() {
         }
       >
         {activeMode === 'map' && (
-          <WorldMapMode
-            narrow={narrow}
-            geojson={geojson}
-            categories={categories}
-            categoryId={categoryId}
-            setCategoryId={setCategoryId}
-            indicatorCode={indicatorCode}
-            setIndicatorCode={setIndicatorCode}
-            year={year}
-            setYear={setYear}
-            stats={stats}
-            selectedIso={selectedCountry}
-            onSelectCountry={onSelectCountry}
-          />
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
+              minHeight: narrow ? '60vh' : 'calc(100vh - 260px)',
+            }}
+          >
+            <WorldMapMode
+              narrow={narrow}
+              geojson={geojson}
+              categories={categories}
+              categoryId={categoryId}
+              setCategoryId={setCategoryId}
+              indicatorCode={indicatorCode}
+              setIndicatorCode={setIndicatorCode}
+              year={year}
+              setYear={setYear}
+              stats={stats}
+              selectedIso={selectedCountry}
+              onSelectCountry={onSelectCountry}
+            />
+          </div>
         )}
         {activeMode === 'analysis' && (
           <CountryAnalysis

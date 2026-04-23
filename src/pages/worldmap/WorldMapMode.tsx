@@ -41,14 +41,14 @@ function selectCss(c: {
   text: string
 }): CSSProperties {
   return {
-    minHeight: 44,
-    padding: '0 12px',
+    minHeight: 40,
+    padding: '0 10px',
     borderRadius: 8,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: '0.86rem',
     width: '100%',
     maxWidth: '100%',
     boxSizing: 'border-box',
@@ -241,7 +241,7 @@ export function WorldMapMode({
         <span
           style={{
             fontFamily: fonts.body,
-            fontSize: narrow ? '0.72rem' : '0.8rem',
+            fontSize: narrow ? '0.68rem' : '0.74rem',
             color: c.muted,
           }}
         >
@@ -252,9 +252,9 @@ export function WorldMapMode({
       <div
         style={{
           fontFamily: fonts.mono,
-          fontSize: narrow ? '0.92rem' : '1.05rem',
+          fontSize: narrow ? '0.84rem' : '0.95rem',
           color: c.text,
-          lineHeight: 1.45,
+          lineHeight: 1.35,
         }}
       >
         {body}
@@ -267,9 +267,9 @@ export function WorldMapMode({
       style={{
         display: 'block',
         fontFamily: fonts.body,
-        fontSize: '0.8rem',
+        fontSize: '0.76rem',
         color: c.muted,
-        marginBottom: 6,
+        marginBottom: 4,
       }}
     >
       {text}
@@ -277,15 +277,15 @@ export function WorldMapMode({
   )
 
   return (
-    <div style={{ marginTop: spacing.lg }}>
+    <div style={{ marginTop: spacing.md }}>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: narrow
             ? 'repeat(2, minmax(0, 1fr))'
             : 'repeat(4, minmax(0, 1fr))',
-          gap: narrow ? spacing.sm : spacing.md,
-          marginBottom: spacing.lg,
+          gap: narrow ? spacing.xs : spacing.sm,
+          marginBottom: spacing.sm,
           width: '100%',
           maxWidth: '100%',
           boxSizing: 'border-box',
@@ -347,11 +347,11 @@ export function WorldMapMode({
       {showYearFallbackHint && (
         <p
           style={{
-            marginBottom: spacing.sm,
+            marginBottom: spacing.xs,
             color: c.muted,
             fontFamily: fonts.body,
-            fontSize: narrow ? '0.8rem' : '0.88rem',
-            lineHeight: 1.45,
+            fontSize: narrow ? '0.76rem' : '0.82rem',
+            lineHeight: 1.35,
           }}
         >
           {t('worldMapYearFallback')
@@ -389,7 +389,7 @@ export function WorldMapMode({
         labelMin={formatValue(minV)}
         labelMax={formatValue(maxV)}
         unitShort={unitShort}
-        compact={narrow}
+        compact
       />
 
       <div
@@ -398,8 +398,8 @@ export function WorldMapMode({
           gridTemplateColumns: narrow
             ? 'repeat(2, minmax(0, 1fr))'
             : 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: spacing.md,
-          marginTop: spacing.xl,
+          gap: spacing.sm,
+          marginTop: spacing.md,
           width: '100%',
           maxWidth: '100%',
         }}

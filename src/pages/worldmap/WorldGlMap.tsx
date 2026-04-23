@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, type MutableRefObject } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from 'react'
 import maplibregl from 'maplibre-gl'
 import type { ExpressionSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -8,10 +15,8 @@ import { fonts } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
 
-const STYLE_LIGHT =
-  'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
-const STYLE_DARK =
-  'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+const STYLE_LIGHT = 'https://tiles.openfreemap.org/styles/positron'
+const STYLE_DARK = 'https://tiles.openfreemap.org/styles/dark'
 
 const LAND_NODATA_LIGHT = '#e0e0e0'
 const LAND_NODATA_DARK = '#3a3a3a'
@@ -184,8 +189,18 @@ export function WorldGlMap({
   borderLineColorRef.current = borderLineColor
   borderLineWidthRef.current = borderLineWidth
 
-  const mapHeight =
-    mapHeightPx ?? (narrow ? 350 : 500)
+  const mapHeight = mapHeightPx ?? (narrow ? 350 : 500)
+  const mapViewportMinHeight = narrow ? '60vh' : 'calc(100vh - 260px)'
+
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  const exitFullscreen = useCallback(() => {
+    setIsFullscreen(false)
+  }, [])
+
+  const toggleFullscreen = useCallback(() => {
+    setIsFullscreen((v) => !v)
+  }, [])
 
   const installChoropleth = (map: maplibregl.Map) => {
     const data = geojsonRef.current
@@ -309,11 +324,20 @@ export function WorldGlMap({
       zoom: 1.5,
       maxZoom: 8,
       minZoom: 1,
+      attributionControl: false,
     })
 
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
       'top-right',
+    )
+    map.addControl(
+      new maplibregl.AttributionControl({
+        compact: true,
+        customAttribution:
+          '© <a href="https://openfreemap.org/" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
+      }),
+      'bottom-right',
     )
     mapRef.current = map
     prevThemeDarkRef.current = isDark
@@ -334,6 +358,26 @@ export function WorldGlMap({
       prevThemeDarkRef.current = null
     }
   }, [geojson])
+
+  useEffect(() => {
+    if (!isFullscreen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFullscreen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [isFullscreen])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+    const run = () => {
+      map.resize()
+    }
+    requestAnimationFrame(run)
+    const t = window.setTimeout(run, 160)
+    return () => window.clearTimeout(t)
+  }, [isFullscreen, mapViewportMinHeight, mapHeight, narrow])
 
   useEffect(() => {
     const map = mapRef.current
@@ -379,6 +423,24 @@ export function WorldGlMap({
     map.setPaintProperty('country-borders', 'line-width', borderLineWidth)
   }, [borderLineColor, borderLineWidth])
 
+  const shellBase = useMemo(
+    () => ({
+      border: `1px solid ${c.border}`,
+    }),
+    [c.border],
+  )
+
+  const ctrlSurface = useMemo(
+    () => ({
+      background: c.cardBg,
+      border: `1px solid ${c.border}`,
+      color: c.text,
+      zIndex: 30,
+    }),
+    [c.border, c.cardBg, c.text],
+  )
+  const fullscreenLabel = t('worldMapFullscreen') || 'Fullscreen'
+
   if (!geojson) {
     return (
       <div
@@ -386,9 +448,10 @@ export function WorldGlMap({
           position: 'relative',
           width: '100%',
           height: mapHeight,
+          minHeight: mapViewportMinHeight,
           borderRadius: 8,
           overflow: 'hidden',
-          border: `1px solid ${c.border}`,
+          ...shellBase,
           background: c.cardBg,
           display: 'flex',
           alignItems: 'center',
@@ -403,19 +466,105 @@ export function WorldGlMap({
     )
   }
 
-  return (
-    <div
-      className="world-gl-map"
-      style={{
-        position: 'relative',
+  const shellStyle = isFullscreen
+    ? {
+        position: 'fixed' as const,
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999,
+        background: c.bg,
+        borderRadius: 0,
+        overflow: 'hidden' as const,
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        border: 'none',
+        boxShadow: 'none',
+      }
+    : {
+        position: 'relative' as const,
         width: '100%',
         height: mapHeight,
+        minHeight: mapViewportMinHeight,
         borderRadius: 8,
-        overflow: 'hidden',
-        border: `1px solid ${c.border}`,
-      }}
+        overflow: 'hidden' as const,
+        ...shellBase,
+        boxShadow: isDark
+          ? '0 2px 16px rgba(0,0,0,0.45)'
+          : '0 2px 12px rgba(0,0,0,0.06)',
+      }
+
+  return (
+    <div
+      className={`world-gl-map${isFullscreen ? ' world-gl-map--fullscreen' : ''}`}
+      style={shellStyle}
     >
-      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      <div
+        ref={containerRef}
+        className="world-gl-map__canvas-host"
+        style={
+          isFullscreen
+            ? { flex: 1, minHeight: 0, width: '100%' }
+            : { width: '100%', height: '100%' }
+        }
+      />
+      {!isFullscreen && (
+        <button
+          type="button"
+          className="world-gl-map__fs-btn"
+          style={ctrlSurface}
+          onClick={toggleFullscreen}
+          title={fullscreenLabel}
+          aria-label={fullscreenLabel}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            aria-hidden
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 3 3 3 3 9" />
+            <line x1="3" y1="3" x2="10" y2="10" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="21" y1="3" x2="14" y2="10" />
+            <polyline points="3 15 3 21 9 21" />
+            <line x1="3" y1="21" x2="10" y2="14" />
+            <polyline points="21 15 21 21 15 21" />
+            <line x1="21" y1="21" x2="14" y2="14" />
+          </svg>
+        </button>
+      )}
+      {isFullscreen && (
+        <button
+          type="button"
+          className="world-gl-map__close-fs"
+          style={ctrlSurface}
+          onClick={exitFullscreen}
+          title={t('electionsClose')}
+          aria-label={t('electionsClose')}
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            aria-hidden
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      )}
       {loading && (
         <div
           style={{
