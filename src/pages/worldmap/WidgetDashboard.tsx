@@ -7,12 +7,6 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react'
-import ReactGridLayout, {
-  WidthProvider,
-  type Layout,
-  type LayoutItem,
-} from 'react-grid-layout/legacy'
-import 'react-grid-layout/css/styles.css'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
@@ -26,10 +20,13 @@ export type WidgetType =
   | 'trade-flow'
   | 'sparkline'
 
+/** Nur schwebende Panels; die Karte liegt als Vollfläche darunter. */
+export type FloatingWidgetType = Exclude<WidgetType, 'map'>
+
 const LS_KEY = 'rp-widget-layout-v1'
+const LS_VERSION = 2
 
-const ALL_WIDGET_TYPES: WidgetType[] = [
-  'map',
+const FLOATING_WIDGETS: FloatingWidgetType[] = [
   'ranking',
   'stat-card',
   'bar-chart',
@@ -37,26 +34,16 @@ const ALL_WIDGET_TYPES: WidgetType[] = [
   'sparkline',
 ]
 
-const MOBILE_STACK_ORDER: WidgetType[] = [
-  'map',
-  'ranking',
-  'stat-card',
-  'bar-chart',
-  'trade-flow',
-  'sparkline',
-]
-
-/** Standard-Layout Desktop, 12 Spalten */
-export const DEFAULT_WIDGET_LAYOUT: Layout = [
-  { i: 'map', x: 0, y: 0, w: 8, h: 8, minW: 4, minH: 4 },
-  { i: 'ranking', x: 8, y: 0, w: 4, h: 4, minW: 2, minH: 2 },
-  { i: 'stat-card', x: 8, y: 4, w: 4, h: 4, minW: 2, minH: 2 },
-  { i: 'bar-chart', x: 0, y: 8, w: 6, h: 4, minW: 3, minH: 2 },
-  { i: 'trade-flow', x: 6, y: 8, w: 6, h: 4, minW: 3, minH: 2 },
-  { i: 'sparkline', x: 0, y: 12, w: 12, h: 3, minW: 4, minH: 2 },
-]
-
-const GridWithWidth = WidthProvider(ReactGridLayout)
+const PANEL_DEFAULT_STYLE: Record<
+  FloatingWidgetType,
+  Pick<CSSProperties, 'top' | 'right' | 'left' | 'bottom' | 'width'>
+> = {
+  ranking: { top: 8, right: 8, width: 260 },
+  'stat-card': { top: 8, right: 276, width: 200 },
+  'trade-flow': { bottom: 60, left: 8, width: 280 },
+  'bar-chart': { bottom: 60, left: 296, width: 280 },
+  sparkline: { bottom: 60, right: 8, width: 260 },
+}
 
 const WIDGET_TITLE_KEYS: Record<WidgetType, I18nKey> = {
   map: 'worldWidgetMap',
@@ -76,56 +63,62 @@ const WIDGET_INFO_KEYS: Record<WidgetType, I18nKey> = {
   sparkline: 'worldWidgetInfoSparkline',
 }
 
-function isWidgetType(s: string): s is WidgetType {
-  return (ALL_WIDGET_TYPES as string[]).includes(s)
+type PanelOffsets = Partial<Record<FloatingWidgetType, { dx: number; dy: number }>>
+
+type StoredStateV2 = {
+  v: typeof LS_VERSION
+  visible?: FloatingWidgetType[]
+  offsets?: PanelOffsets
 }
 
-function parseStoredLayout(): Layout | null {
+function defaultVisible(): FloatingWidgetType[] {
+  return [...FLOATING_WIDGETS]
+}
+
+function parseStored(): { visible: FloatingWidgetType[]; offsets: PanelOffsets } {
   try {
     const raw = localStorage.getItem(LS_KEY)
-    if (!raw) return null
-    const data = JSON.parse(raw) as { layout?: unknown }
-    if (!Array.isArray(data.layout)) return null
-    const out: LayoutItem[] = []
-    for (const row of data.layout) {
-      if (!row || typeof row !== 'object') continue
-      const o = row as Record<string, unknown>
-      const i = o.i
-      if (typeof i !== 'string' || !isWidgetType(i)) continue
-      const x = Number(o.x)
-      const y = Number(o.y)
-      const w = Number(o.w)
-      const h = Number(o.h)
-      if ([x, y, w, h].some((n) => !Number.isFinite(n))) continue
-      out.push({
-        i,
-        x,
-        y,
-        w,
-        h,
-        minW: typeof o.minW === 'number' ? o.minW : undefined,
-        minH: typeof o.minH === 'number' ? o.minH : undefined,
-      })
+    if (!raw) {
+      return { visible: defaultVisible(), offsets: {} }
     }
-    return out.length ? (out as Layout) : null
-  } catch {
-    return null
-  }
-}
-
-function persistLayout(layout: Layout) {
-  try {
-    localStorage.setItem(LS_KEY, JSON.stringify({ layout }))
+    const data = JSON.parse(raw) as StoredStateV2 & { layout?: unknown }
+    if (data.v === LS_VERSION && Array.isArray(data.visible)) {
+      const vis = data.visible.filter((x): x is FloatingWidgetType =>
+        FLOATING_WIDGETS.includes(x as FloatingWidgetType),
+      )
+      const offsets: PanelOffsets = {}
+      if (data.offsets && typeof data.offsets === 'object') {
+        for (const id of FLOATING_WIDGETS) {
+          const o = data.offsets[id]
+          if (
+            o &&
+            typeof o === 'object' &&
+            typeof o.dx === 'number' &&
+            typeof o.dy === 'number'
+          ) {
+            offsets[id] = { dx: o.dx, dy: o.dy }
+          }
+        }
+      }
+      return { visible: vis.length ? vis : defaultVisible(), offsets }
+    }
   } catch {
     /* ignore */
   }
+  return { visible: defaultVisible(), offsets: {} }
 }
 
-function defaultItemFor(id: WidgetType): LayoutItem {
-  const hit = DEFAULT_WIDGET_LAYOUT.find((x) => x.i === id)
-  return hit
-    ? { ...hit }
-    : { i: id, x: 0, y: 0, w: 4, h: 3, minW: 2, minH: 2 }
+function persistState(visible: FloatingWidgetType[], offsets: PanelOffsets) {
+  try {
+    const payload: StoredStateV2 = {
+      v: LS_VERSION,
+      visible,
+      offsets,
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(payload))
+  } catch {
+    /* ignore */
+  }
 }
 
 export type WidgetShellProps = {
@@ -133,11 +126,20 @@ export type WidgetShellProps = {
   onClose: () => void
   infoText: string
   children: ReactNode
+  /** Ziehen am Header (außer Steuer-Elementen mit data-panel-control) */
+  onDragMouseDown?: (e: React.MouseEvent) => void
 }
 
-export function WidgetShell({ title, onClose, infoText, children }: WidgetShellProps) {
+export function WidgetShell({
+  title,
+  onClose,
+  infoText,
+  children,
+  onDragMouseDown,
+}: WidgetShellProps) {
   const { c, t } = useTheme()
   const [infoOpen, setInfoOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
   const infoWrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -154,7 +156,7 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
   const shellStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
+    height: collapsed ? 'auto' : '100%',
     minHeight: 0,
     minWidth: 0,
     background: c.cardBg,
@@ -169,9 +171,10 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
     alignItems: 'center',
     gap: spacing.sm,
     padding: `${spacing.sm}px ${spacing.md}px`,
-    borderBottom: `1px solid ${c.border}`,
+    borderBottom: collapsed ? 'none' : `1px solid ${c.border}`,
     flexShrink: 0,
     minHeight: 44,
+    cursor: onDragMouseDown ? 'grab' : undefined,
   }
 
   const btnReset: CSSProperties = {
@@ -188,9 +191,26 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
     borderRadius: 6,
   }
 
+  const headerMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('[data-panel-control]')) return
+    onDragMouseDown?.(e)
+  }
+
   return (
     <div style={shellStyle}>
-      <div style={headerStyle}>
+      <div style={headerStyle} onMouseDown={headerMouseDown} role="presentation">
+        <button
+          type="button"
+          data-panel-control
+          aria-expanded={!collapsed}
+          aria-label={
+            collapsed ? t('worldWidgetExpandPanel') : t('worldWidgetCollapsePanel')
+          }
+          onClick={() => setCollapsed((v) => !v)}
+          style={btnReset}
+        >
+          {collapsed ? '▸' : '▾'}
+        </button>
         <h2
           style={{
             margin: 0,
@@ -209,7 +229,7 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
         <div ref={infoWrapRef} style={{ position: 'relative', flexShrink: 0 }}>
           <button
             type="button"
-            className="widget-no-drag"
+            data-panel-control
             aria-expanded={infoOpen}
             aria-label={infoText}
             onClick={() => setInfoOpen((v) => !v)}
@@ -244,7 +264,7 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
         </div>
         <button
           type="button"
-          className="widget-no-drag"
+          data-panel-control
           aria-label={t('worldWidgetClose')}
           onClick={onClose}
           style={btnReset}
@@ -252,18 +272,23 @@ export function WidgetShell({ title, onClose, infoText, children }: WidgetShellP
           ×
         </button>
       </div>
-      <div
-        style={{
-          flex: 1,
-          minHeight: 0,
-          minWidth: 0,
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </div>
+      {!collapsed ? (
+        <div
+          className="world-widget-shell-body"
+          style={{
+            flex: 1,
+            minHeight: 0,
+            minWidth: 0,
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+          }}
+        >
+          {children}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -280,7 +305,7 @@ function PlaceholderBody({
     <div
       style={{
         flex: 1,
-        minHeight: 120,
+        minHeight: 80,
         padding: spacing.md,
         display: 'flex',
         flexDirection: 'column',
@@ -314,18 +339,17 @@ export function WidgetDashboard({
   mapSlot,
 }: WidgetDashboardProps) {
   const { c, t } = useTheme()
-  const [layout, setLayout] = useState<Layout>(() => {
-    const stored = parseStoredLayout()
-    if (stored) return stored
-    return DEFAULT_WIDGET_LAYOUT.map((x) => ({ ...x })) as Layout
-  })
+  const initial = useMemo(() => parseStored(), [])
+  const [visible, setVisible] = useState<FloatingWidgetType[]>(initial.visible)
+  const [offsets, setOffsets] = useState<PanelOffsets>(initial.offsets)
   const [widgetsMenuOpen, setWidgetsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const visibleRef = useRef(visible)
+  const offsetsRef = useRef(offsets)
+  visibleRef.current = visible
+  offsetsRef.current = offsets
 
-  const visibleIds = useMemo(
-    () => new Set(layout.map((x) => x.i as WidgetType)),
-    [layout],
-  )
+  const visibleSet = useMemo(() => new Set(visible), [visible])
 
   useEffect(() => {
     if (!widgetsMenuOpen) return
@@ -338,62 +362,92 @@ export function WidgetDashboard({
     return () => document.removeEventListener('mousedown', onDoc)
   }, [widgetsMenuOpen])
 
-  const onLayoutChange = useCallback((next: Layout) => {
-    setLayout(next)
-    persistLayout(next)
+  const persist = useCallback((v: FloatingWidgetType[], o: PanelOffsets) => {
+    persistState(v, o)
   }, [])
 
-  const hideWidget = useCallback((id: WidgetType) => {
-    setLayout((prev) => {
-      if (prev.length <= 1) return prev
-      const next = prev.filter((x) => x.i !== id)
-      persistLayout(next)
-      return next
-    })
-  }, [])
+  const hideWidget = useCallback(
+    (id: FloatingWidgetType) => {
+      setVisible((prev) => {
+        const next = prev.filter((x) => x !== id)
+        persist(next, offsetsRef.current)
+        return next
+      })
+    },
+    [persist],
+  )
 
-  const showWidget = useCallback((id: WidgetType) => {
-    setLayout((prev) => {
-      if (prev.some((x) => x.i === id)) return prev
-      const next = [...prev, defaultItemFor(id)]
-      persistLayout(next)
-      return next
-    })
-  }, [])
+  const showWidget = useCallback(
+    (id: FloatingWidgetType) => {
+      setVisible((prev) => {
+        if (prev.includes(id)) return prev
+        const next = [...prev, id]
+        persist(next, offsetsRef.current)
+        return next
+      })
+    },
+    [persist],
+  )
 
-  const resetLayout = useCallback(() => {
-    const next = DEFAULT_WIDGET_LAYOUT.map((x) => ({ ...x })) as Layout
-    setLayout(next)
-    persistLayout(next)
+  const resetPanels = useCallback(() => {
+    const next = defaultVisible()
+    setVisible(next)
+    setOffsets({})
+    persist(next, {})
     setWidgetsMenuOpen(false)
-  }, [])
+  }, [persist])
 
   const setWidgetChecked = useCallback(
-    (id: WidgetType, checked: boolean) => {
-      if (checked) {
-        showWidget(id)
-        return
+    (id: FloatingWidgetType, checked: boolean) => {
+      if (checked) showWidget(id)
+      else hideWidget(id)
+    },
+    [hideWidget, showWidget],
+  )
+
+  const onDragMouseDown = useCallback(
+    (id: FloatingWidgetType, e: React.MouseEvent) => {
+      if (e.button !== 0) return
+      const cur = offsetsRef.current[id] ?? { dx: 0, dy: 0 }
+      const startX = e.clientX
+      const startY = e.clientY
+      const baseDx = cur.dx
+      const baseDy = cur.dy
+      e.preventDefault()
+
+      const onMove = (ev: MouseEvent) => {
+        const dx = baseDx + (ev.clientX - startX)
+        const dy = baseDy + (ev.clientY - startY)
+        setOffsets((prev) => ({
+          ...prev,
+          [id]: { dx, dy },
+        }))
       }
-      if (layout.length <= 1) return
-      hideWidget(id)
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove)
+        document.removeEventListener('mouseup', onUp)
+        setOffsets((prev) => {
+          persist(visibleRef.current, prev)
+          return prev
+        })
+      }
+      document.addEventListener('mousemove', onMove)
+      document.addEventListener('mouseup', onUp)
     },
-    [hideWidget, showWidget, layout.length],
+    [persist],
   )
 
-  const renderWidgetBody = useCallback(
-    (id: WidgetType) => {
-      if (id === 'map') return mapSlot
-      return (
-        <PlaceholderBody
-          selectedCountry={selectedCountry}
-          indicatorCode={indicatorCode}
-        />
-      )
-    },
-    [mapSlot, selectedCountry, indicatorCode],
+  const renderPlaceholder = useCallback(
+    () => (
+      <PlaceholderBody
+        selectedCountry={selectedCountry}
+        indicatorCode={indicatorCode}
+      />
+    ),
+    [selectedCountry, indicatorCode],
   )
 
-  const mapToolbar = (
+  const mapToolbar = !narrow ? (
     <div
       className="widget-no-drag"
       style={{
@@ -447,7 +501,7 @@ export function WidgetDashboard({
               zIndex: 60,
             }}
           >
-            {ALL_WIDGET_TYPES.map((wid) => (
+            {FLOATING_WIDGETS.map((wid) => (
               <label
                 key={wid}
                 style={{
@@ -463,7 +517,7 @@ export function WidgetDashboard({
               >
                 <input
                   type="checkbox"
-                  checked={visibleIds.has(wid)}
+                  checked={visibleSet.has(wid)}
                   onChange={(e) => setWidgetChecked(wid, e.target.checked)}
                 />
                 {t(WIDGET_TITLE_KEYS[wid])}
@@ -474,7 +528,7 @@ export function WidgetDashboard({
       </div>
       <button
         type="button"
-        onClick={resetLayout}
+        onClick={resetPanels}
         style={{
           minHeight: 44,
           padding: `0 ${spacing.md}px`,
@@ -493,54 +547,20 @@ export function WidgetDashboard({
         {t('worldWidgetToolbarReset')}
       </button>
     </div>
-  )
-
-  const wrapShell = (id: WidgetType, body: ReactNode) => (
-    <WidgetShell
-      title={t(WIDGET_TITLE_KEYS[id])}
-      infoText={t(WIDGET_INFO_KEYS[id])}
-      onClose={() => hideWidget(id)}
-    >
-      {id === 'map' ? (
-        <>
-          {mapToolbar}
-          {body}
-        </>
-      ) : (
-        body
-      )}
-    </WidgetShell>
-  )
-
-  const gridChildFor = (id: WidgetType) => (
-    <div key={id} style={{ height: '100%', minHeight: 0 }}>
-      {wrapShell(id, renderWidgetBody(id))}
-    </div>
-  )
-
-  const mobileOrdered = useMemo(() => {
-    const byId = new Map(layout.map((x) => [x.i as WidgetType, x]))
-    return MOBILE_STACK_ORDER.filter((id) => byId.has(id))
-  }, [layout])
+  ) : null
 
   if (narrow) {
     return (
       <div
         style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
           flex: 1,
           minHeight: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: spacing.md,
-          padding: spacing.md,
-          overflow: 'auto',
         }}
       >
-        {mobileOrdered.map((id) => (
-          <div key={id} style={{ minHeight: id === 'map' ? 360 : 200, flexShrink: 0 }}>
-            {wrapShell(id, renderWidgetBody(id))}
-          </div>
-        ))}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>{mapSlot}</div>
       </div>
     )
   }
@@ -548,44 +568,45 @@ export function WidgetDashboard({
   return (
     <div
       style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
         flex: 1,
         minHeight: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: spacing.md,
-        boxSizing: 'border-box',
       }}
     >
-      <div
-        style={{
-          flex: 1,
-          minHeight: 0,
-          width: '100%',
-          position: 'relative',
-        }}
-      >
-        <GridWithWidth
-          className="world-widget-grid layout"
-          style={{ minHeight: '100%' }}
-          cols={12}
-          rowHeight={52}
-          margin={[12, 12]}
-          containerPadding={[0, 0]}
-          layout={layout}
-          onLayoutChange={onLayoutChange}
-          compactType="vertical"
-          isDraggable
-          isResizable
-          isBounded
-          draggableCancel=".widget-no-drag"
-          useCSSTransforms
-          autoSize
-        >
-          {layout
-            .filter((item) => isWidgetType(item.i))
-            .map((item) => gridChildFor(item.i as WidgetType))}
-        </GridWithWidth>
-      </div>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>{mapSlot}</div>
+      {mapToolbar}
+      {visible.map((id) => {
+        const base = PANEL_DEFAULT_STYLE[id]
+        const off = offsets[id] ?? { dx: 0, dy: 0 }
+        return (
+          <div
+            key={id}
+            className="world-widget-floating-panel"
+            style={{
+              position: 'absolute',
+              zIndex: 30,
+              maxHeight: '40vh',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 0,
+              ...base,
+              transform: `translate(${off.dx}px, ${off.dy}px)`,
+              boxSizing: 'border-box',
+            }}
+          >
+            <WidgetShell
+              title={t(WIDGET_TITLE_KEYS[id])}
+              infoText={t(WIDGET_INFO_KEYS[id])}
+              onClose={() => hideWidget(id)}
+              onDragMouseDown={(e) => onDragMouseDown(id, e)}
+            >
+              {renderPlaceholder()}
+            </WidgetShell>
+          </div>
+        )
+      })}
     </div>
   )
 }

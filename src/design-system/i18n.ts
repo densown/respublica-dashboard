@@ -149,6 +149,8 @@ export const de = {
   worldWidgetTradeFlow: 'Handelsströme',
   worldWidgetSparkline: 'Zeitreihe',
   worldWidgetClose: 'Ausblenden',
+  worldWidgetCollapsePanel: 'Widget einklappen',
+  worldWidgetExpandPanel: 'Widget ausklappen',
   worldWidgetPlaceholderBody: 'Inhalt folgt.',
   worldWidgetInfoMap:
     'MapLibre-Weltkarte mit Choropleth-Färbung nach gewähltem Indikator und Jahr.',
@@ -783,6 +785,8 @@ export const en = {
   worldWidgetTradeFlow: 'Trade flows',
   worldWidgetSparkline: 'Sparkline',
   worldWidgetClose: 'Hide',
+  worldWidgetCollapsePanel: 'Collapse widget',
+  worldWidgetExpandPanel: 'Expand widget',
   worldWidgetPlaceholderBody: 'Content coming soon.',
   worldWidgetInfoMap:
     'MapLibre world map with choropleth shading for the selected indicator and year.',

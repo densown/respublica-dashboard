@@ -24,7 +24,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
-| `/weltkarte` — `WorldMap.tsx` | MapLibre-Weltkarte in `WidgetDashboard.tsx` (react-grid-layout, Layout in `localStorage` `rp-widget-layout-v1`), Steuerleiste, `CountrySidebar` als Overlay (Desktop) bzw. Bottom-Sheet (Mobile), CARTO-Basemaps |
+| `/weltkarte` — `WorldMap.tsx` | MapLibre-Vollfläche mit schwebenden Widget-Panels in `WidgetDashboard.tsx` (Positionen/Offsets in `localStorage` `rp-widget-layout-v1`), Steuerleiste, `CountrySidebar` als Overlay (Desktop) bzw. Bottom-Sheet (Mobile), CARTO-Basemaps |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
 | `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |
