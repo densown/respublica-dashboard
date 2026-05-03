@@ -52,6 +52,11 @@ export const de = {
   worldLowest: 'Niedrigster',
   worldMapAverage: 'Ø (mit Daten)',
   worldOpenAnalysis: 'Klick für Länderanalyse',
+  worldContextMenuStatTrend: '📊 Kennzahl & Trend anzeigen',
+  worldContextMenuSparkline: '📈 Zeitreihe anzeigen',
+  worldContextMenuTrade: '🔄 Handelsströme anzeigen',
+  worldContextMenuProfile: '📋 Länderprofil öffnen',
+  worldContextMenuClearSelection: '✕ Auswahl aufheben',
   worldCountryAnalysisTitle: 'Länderanalyse',
   worldCompareTitle: 'Ländervergleich',
   worldAnalysisPlaceholder:
@@ -693,6 +698,11 @@ export const en = {
   worldLowest: 'Lowest',
   worldMapAverage: 'Avg. (with data)',
   worldOpenAnalysis: 'Click for country analysis',
+  worldContextMenuStatTrend: '📊 Show stat & trend',
+  worldContextMenuSparkline: '📈 Show sparkline',
+  worldContextMenuTrade: '🔄 Show trade flows',
+  worldContextMenuProfile: '📋 Open country profile',
+  worldContextMenuClearSelection: '✕ Clear selection',
   worldCountryAnalysisTitle: 'Country analysis',
   worldCompareTitle: 'Country comparison',
   worldAnalysisPlaceholder:

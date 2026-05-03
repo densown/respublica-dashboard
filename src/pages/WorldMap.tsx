@@ -6,6 +6,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
+import type { LngLat } from 'maplibre-gl'
 import { useTheme } from '../design-system'
 import type { I18nKey } from '../design-system/i18n'
 import type { Lang } from '../design-system/ThemeContext'
@@ -14,7 +15,10 @@ import { useApi } from '../hooks/useApi'
 import { isRealCountry } from '../utils/worldFilters'
 import { useDebouncedValue } from './elections/useDebouncedValue'
 import { CountrySidebar } from './worldmap/CountrySidebar'
-import { WidgetDashboard } from './worldmap/WidgetDashboard'
+import {
+  WidgetDashboard,
+  type WidgetDashboardHandle,
+} from './worldmap/WidgetDashboard'
 import { WorldGlMap } from './worldmap/WorldGlMap'
 import { WorldMapLegend } from './worldmap/WorldMapLegend'
 import { worldApiUrl } from './worldmap/worldMapData'
@@ -86,7 +90,8 @@ function selectCss(c: {
 }
 
 export default function WorldMap() {
-  const { c, t, lang } = useTheme()
+  const { c, t, lang, theme } = useTheme()
+  const isDark = theme === 'dark'
   const geoRef = useRef<WorldGeoJson | null>(null)
   const [geojson, setGeojson] = useState<WorldGeoJson | null>(null)
   const [geoErr, setGeoErr] = useState(false)
@@ -97,6 +102,13 @@ export default function WorldMap() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
+  const [mapContextMenu, setMapContextMenu] = useState<{
+    iso3: string
+    x: number
+    y: number
+  } | null>(null)
+  const widgetDashboardRef = useRef<WidgetDashboardHandle | null>(null)
+  const mapContextMenuRef = useRef<HTMLDivElement | null>(null)
 
   const [narrow, setNarrow] = useState(
     typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
@@ -338,9 +350,38 @@ export default function WorldMap() {
     setSidebarOpen(true)
   }, [])
 
+  const onCountryContextMenu = useCallback(
+    (_iso3: string, _lngLat: LngLat, clientX: number, clientY: number) => {
+      setMapContextMenu({
+        iso3: _iso3.trim().toUpperCase(),
+        x: clientX,
+        y: clientY,
+      })
+    },
+    [],
+  )
+
+  useEffect(() => {
+    if (!mapContextMenu) return
+    const onDocMouseDown = (e: MouseEvent) => {
+      if (mapContextMenuRef.current?.contains(e.target as Node)) return
+      setMapContextMenu(null)
+    }
+    document.addEventListener('mousedown', onDocMouseDown)
+    return () => document.removeEventListener('mousedown', onDocMouseDown)
+  }, [mapContextMenu])
+
+  useEffect(() => {
+    if (!mapContextMenu) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMapContextMenu(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [mapContextMenu])
+
   const onCloseSidebar = useCallback(() => {
     setSidebarOpen(false)
-    setSelectedCountry(null)
   }, [])
 
   const stepYear = useCallback(
@@ -609,12 +650,173 @@ export default function WorldMap() {
             valueMax={maxV}
             nameByIso={nameByIso}
             onSelectCountry={onSelectCountry}
+            onCountryContextMenu={onCountryContextMenu}
             selectedIso={selectedCountry}
             formatValue={formatValue}
             loading={mapLoading}
             narrow={narrow}
             layout="fullViewport"
           />
+          {mapContextMenu ? (
+            <div
+              ref={mapContextMenuRef}
+              role="menu"
+              aria-label={t('worldCountryAnalysisTitle')}
+              style={{
+                position: 'fixed',
+                left: mapContextMenu.x,
+                top: mapContextMenu.y,
+                zIndex: 400,
+                minWidth: 220,
+                maxWidth: 'min(92vw, 280px)',
+                background: c.cardBg,
+                border: `1px solid ${c.border}`,
+                borderRadius: 6,
+                boxShadow: isDark
+                  ? '0 4px 24px rgba(0,0,0,0.45)'
+                  : '0 4px 20px rgba(0,0,0,0.12)',
+                overflow: 'hidden',
+              }}
+            >
+              <button
+                type="button"
+                role="menuitem"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  minHeight: 44,
+                  padding: '8px 12px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  color: c.text,
+                  boxSizing: 'border-box',
+                }}
+                onClick={() => {
+                  const iso = mapContextMenu.iso3
+                  setMapContextMenu(null)
+                  setSelectedCountry(iso)
+                  widgetDashboardRef.current?.showWidget('stat-card')
+                }}
+              >
+                {t('worldContextMenuStatTrend')}
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  minHeight: 44,
+                  padding: '8px 12px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  color: c.text,
+                  boxSizing: 'border-box',
+                }}
+                onClick={() => {
+                  const iso = mapContextMenu.iso3
+                  setMapContextMenu(null)
+                  setSelectedCountry(iso)
+                  widgetDashboardRef.current?.showWidget('sparkline')
+                }}
+              >
+                {t('worldContextMenuSparkline')}
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  minHeight: 44,
+                  padding: '8px 12px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  color: c.text,
+                  boxSizing: 'border-box',
+                }}
+                onClick={() => {
+                  const iso = mapContextMenu.iso3
+                  setMapContextMenu(null)
+                  setSelectedCountry(iso)
+                  widgetDashboardRef.current?.showWidget('trade-flow')
+                }}
+              >
+                {t('worldContextMenuTrade')}
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  minHeight: 44,
+                  padding: '8px 12px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  color: c.text,
+                  boxSizing: 'border-box',
+                }}
+                onClick={() => {
+                  const iso = mapContextMenu.iso3
+                  setMapContextMenu(null)
+                  setSelectedCountry(iso)
+                  setSidebarOpen(true)
+                }}
+              >
+                {t('worldContextMenuProfile')}
+              </button>
+              <div
+                role="separator"
+                style={{
+                  height: 1,
+                  margin: '4px 0',
+                  background: c.border,
+                }}
+              />
+              <button
+                type="button"
+                role="menuitem"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'left',
+                  minHeight: 44,
+                  padding: '8px 12px',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  color: c.muted,
+                  boxSizing: 'border-box',
+                }}
+                onClick={() => {
+                  setMapContextMenu(null)
+                  setSelectedCountry(null)
+                  setSidebarOpen(false)
+                }}
+              >
+                {t('worldContextMenuClearSelection')}
+              </button>
+            </div>
+          ) : null}
         </div>
 
         <div
@@ -665,14 +867,15 @@ export default function WorldMap() {
       maxV,
       nameByIso,
       onSelectCountry,
+      onCountryContextMenu,
+      mapContextMenu,
       selectedCountry,
       formatValue,
       mapLoading,
       unitShort,
+      isDark,
     ],
   )
-
-  const sidebarOpenActive = sidebarOpen && Boolean(selectedCountry)
 
   return (
     <div
@@ -688,6 +891,7 @@ export default function WorldMap() {
       }}
     >
       <WidgetDashboard
+        ref={widgetDashboardRef}
         narrow={narrow}
         selectedCountry={selectedCountry}
         indicatorCode={indicatorCode}
@@ -705,15 +909,15 @@ export default function WorldMap() {
             right: 0,
             bottom: 0,
             zIndex: 500,
-            width: sidebarOpenActive ? 320 : 0,
+            width: sidebarOpen ? 320 : 0,
             overflow: 'hidden',
             transition: 'width 0.25s ease',
-            pointerEvents: sidebarOpenActive ? 'auto' : 'none',
+            pointerEvents: sidebarOpen ? 'auto' : 'none',
           }}
         >
           <CountrySidebar
             iso3={selectedCountry}
-            isOpen={sidebarOpenActive}
+            isOpen={sidebarOpen}
             onClose={onCloseSidebar}
             sheetLayout={false}
             geojson={geojson}

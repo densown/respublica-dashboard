@@ -76,12 +76,20 @@ export type WorldGlMapProps = {
   mapHeightPx?: number
   /** Volle Elternfläche (World-Page) statt fixer Kartenhöhe */
   layout?: 'card' | 'fullViewport'
+  /** Rechtsklick auf ein Land: ISO3 und Zeigerposition (Viewport) */
+  onCountryContextMenu?: (
+    iso3: string,
+    lngLat: maplibregl.LngLat,
+    clientX: number,
+    clientY: number,
+  ) => void
 }
 
 type MapHandlers = {
   onClick: (e: maplibregl.MapLayerMouseEvent) => void
   onMove: (e: maplibregl.MapLayerMouseEvent) => void
   onLeave: () => void
+  onContextMenu: (e: maplibregl.MapLayerMouseEvent) => void
 }
 
 function detachHandlers(
@@ -93,6 +101,7 @@ function detachHandlers(
   map.off('click', 'country-fills', h.onClick)
   map.off('mousemove', 'country-fills', h.onMove)
   map.off('mouseleave', 'country-fills', h.onLeave)
+  map.off('contextmenu', 'country-fills', h.onContextMenu)
   const prev = hoveredIsoRef.current
   if (prev && map.getSource('countries')) {
     try {
@@ -132,6 +141,7 @@ export function WorldGlMap({
   narrow,
   mapHeightPx,
   layout = 'card',
+  onCountryContextMenu,
 }: WorldGlMapProps) {
   const { c, t, theme } = useTheme()
   const isDark = theme === 'dark'
@@ -150,6 +160,7 @@ export function WorldGlMap({
   const nameByIsoRef = useRef(nameByIso)
   const tRef = useRef(t)
   const cRef = useRef(c)
+  const onCountryContextMenuRef = useRef(onCountryContextMenu)
   mapDataRef.current = mapData
   geojsonRef.current = geojson
   onSelectRef.current = onSelectCountry
@@ -157,6 +168,7 @@ export function WorldGlMap({
   nameByIsoRef.current = nameByIso
   tRef.current = t
   cRef.current = c
+  onCountryContextMenuRef.current = onCountryContextMenu
 
   const landNoData = isDark ? LAND_NODATA_DARK : LAND_NODATA_LIGHT
 
@@ -356,10 +368,22 @@ export function WorldGlMap({
       map.getCanvas().style.cursor = ''
     }
 
-    handlersRef.current = { onClick, onMove, onLeave }
+    const onContextMenu = (e: maplibregl.MapLayerMouseEvent) => {
+      e.preventDefault()
+      const cb = onCountryContextMenuRef.current
+      if (!cb) return
+      const f = e.features?.[0]
+      const raw = f?.properties?.iso3
+      if (typeof raw !== 'string') return
+      const me = e.originalEvent
+      cb(normIso(raw), e.lngLat, me.clientX, me.clientY)
+    }
+
+    handlersRef.current = { onClick, onMove, onLeave, onContextMenu }
     map.on('click', 'country-fills', onClick)
     map.on('mousemove', 'country-fills', onMove)
     map.on('mouseleave', 'country-fills', onLeave)
+    map.on('contextmenu', 'country-fills', onContextMenu)
   }
 
   useEffect(() => {

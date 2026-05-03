@@ -1,6 +1,8 @@
 import {
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -1068,15 +1070,26 @@ export type WidgetDashboardProps = {
   mapSlot: ReactNode
 }
 
-export function WidgetDashboard({
-  narrow,
-  selectedCountry,
-  indicatorCode,
-  year,
-  categories,
-  geojson,
-  mapSlot,
-}: WidgetDashboardProps) {
+/** Schwebende Widgets per Ref einblenden (z. B. Kontextmenü auf der Karte). */
+export type WidgetDashboardHandle = {
+  showWidget: (type: FloatingWidgetType) => void
+}
+
+export const WidgetDashboard = forwardRef<
+  WidgetDashboardHandle | null,
+  WidgetDashboardProps
+>(function WidgetDashboard(
+  {
+    narrow,
+    selectedCountry,
+    indicatorCode,
+    year,
+    categories,
+    geojson,
+    mapSlot,
+  },
+  ref,
+) {
   const { c, t } = useTheme()
   const initial = useMemo(() => parseStored(), [])
   const [visible, setVisible] = useState<FloatingWidgetType[]>(initial.visible)
@@ -1126,6 +1139,14 @@ export function WidgetDashboard({
       })
     },
     [persist],
+  )
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      showWidget,
+    }),
+    [showWidget],
   )
 
   const resetPanels = useCallback(() => {
@@ -1206,6 +1227,14 @@ export function WidgetDashboard({
             selectedCountry={selectedCountry}
             year={year}
             geojson={geojson}
+          />
+        )
+      case 'sparkline':
+      case 'bar-chart':
+        return (
+          <PlaceholderBody
+            selectedCountry={selectedCountry}
+            indicatorCode={indicatorCode}
           />
         )
       default:
@@ -1380,4 +1409,4 @@ export function WidgetDashboard({
       })}
     </div>
   )
-}
+})
