@@ -27,6 +27,7 @@ import { WorldMapLegend } from './worldmap/WorldMapLegend'
 import { worldApiUrl } from './worldmap/worldMapData'
 import type {
   CountrySelection,
+  DockPosition,
   WorldCategoryApi,
   WorldCountryDetail,
   WorldGeoJson,
@@ -170,12 +171,14 @@ export default function WorldMap() {
   const widgetDashboardRef = useRef<WidgetDashboardHandle | null>(null)
   const mapContextMenuRef = useRef<HTMLDivElement | null>(null)
 
-  const [dock, setDock] = useState<'left' | 'right'>(() => {
+  const [dock, setDock] = useState<DockPosition>(() => {
     try {
-      return localStorage.getItem(LS_CONSOLE_DOCK) === 'left' ? 'left' : 'right'
+      const saved = localStorage.getItem(LS_CONSOLE_DOCK)
+      if (saved === 'left' || saved === 'right' || saved === 'bottom') return saved
     } catch {
-      return 'right'
+      /* ignore */
     }
+    return 'right'
   })
 
   const [visibleFloatingWidgets, setVisibleFloatingWidgets] = useState<
@@ -976,49 +979,118 @@ export default function WorldMap() {
         style={{
           flex: 1,
           display: 'flex',
-          flexDirection: narrow ? 'column' : dock === 'left' ? 'row' : 'row-reverse',
+          flexDirection: 'column',
           minHeight: 0,
           minWidth: 0,
+          transition: 'all 0.25s ease',
         }}
       >
-        {!narrow && (
+        {narrow ? (
           <div
             style={{
-              width: sidebarWidth,
-              flexShrink: 0,
-              transition: 'width 0.25s ease',
-              overflow: 'hidden',
+              flex: 1,
+              minWidth: 0,
+              minHeight: 0,
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
-            {sidebarOpen ? <CountrySidebar {...countrySidebarProps} sheetLayout={false} /> : null}
+            <WidgetDashboard
+              ref={widgetDashboardRef}
+              narrow={narrow}
+              selectedCountry={selectedCountry}
+              indicatorCode={indicatorCode}
+              year={year}
+              categories={categories ?? null}
+              geojson={geojson}
+              mapSlot={mapSlot}
+              floatingVisible={visibleFloatingWidgets}
+              onShowFloating={onShowFloating}
+              onToggleFloating={onToggleFloating}
+              onRemoveFloating={onRemoveFloating}
+            />
+          </div>
+        ) : dock === 'bottom' ? (
+          <>
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                minHeight: 0,
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <WidgetDashboard
+                ref={widgetDashboardRef}
+                narrow={narrow}
+                selectedCountry={selectedCountry}
+                indicatorCode={indicatorCode}
+                year={year}
+                categories={categories ?? null}
+                geojson={geojson}
+                mapSlot={mapSlot}
+                floatingVisible={visibleFloatingWidgets}
+                onShowFloating={onShowFloating}
+                onToggleFloating={onToggleFloating}
+                onRemoveFloating={onRemoveFloating}
+              />
+            </div>
+            {sidebarOpen ? (
+              <CountrySidebar {...countrySidebarProps} sheetLayout={false} />
+            ) : null}
+          </>
+        ) : (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: dock === 'left' ? 'row' : 'row-reverse',
+              minHeight: 0,
+              minWidth: 0,
+            }}
+          >
+            <div
+              style={{
+                width: sidebarWidth,
+                flexShrink: 0,
+                transition: 'width 0.25s ease',
+                overflow: 'hidden',
+              }}
+            >
+              {sidebarOpen ? (
+                <CountrySidebar {...countrySidebarProps} sheetLayout={false} />
+              ) : null}
+            </div>
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                minHeight: 0,
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <WidgetDashboard
+                ref={widgetDashboardRef}
+                narrow={narrow}
+                selectedCountry={selectedCountry}
+                indicatorCode={indicatorCode}
+                year={year}
+                categories={categories ?? null}
+                geojson={geojson}
+                mapSlot={mapSlot}
+                floatingVisible={visibleFloatingWidgets}
+                onShowFloating={onShowFloating}
+                onToggleFloating={onToggleFloating}
+                onRemoveFloating={onRemoveFloating}
+              />
+            </div>
           </div>
         )}
-
-        <div
-          style={{
-            flex: 1,
-            minWidth: 0,
-            minHeight: 0,
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <WidgetDashboard
-            ref={widgetDashboardRef}
-            narrow={narrow}
-            selectedCountry={selectedCountry}
-            indicatorCode={indicatorCode}
-            year={year}
-            categories={categories ?? null}
-            geojson={geojson}
-            mapSlot={mapSlot}
-            floatingVisible={visibleFloatingWidgets}
-            onShowFloating={onShowFloating}
-            onToggleFloating={onToggleFloating}
-            onRemoveFloating={onRemoveFloating}
-          />
-        </div>
       </div>
 
       {narrow ? (

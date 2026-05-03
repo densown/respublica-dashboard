@@ -24,7 +24,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
-| `/weltkarte` — `WorldMap.tsx` | `MapTopbar.tsx` (Kategorie-Pills, Indikator, Jahr, „+ Widget“-Menü); schwebende Widgets in `WidgetDashboard.tsx` nur bei aktivem Typ, Sichtbarkeit `localStorage` `rp-visible-widgets-v1`, Panel-Offsets `rp-widget-layout-v1` (ohne Sichtbarkeits-Default). Console `CountrySidebar.tsx`: sechs Tabs mit Land, ohne Land nur GlobalView; Snap links/rechts `localStorage` `rp-console-dock`. **Multi-Select:** ein Primärland plus bis zu drei Vergleichsländer (Strg/Cmd-Klick, Kontextmenü, Vergleich-Tab); Karte: fester roter Rand (Primär), gestrichelt (Vergleich). Handel lazy per `/api/world/trade/:iso3`, CARTO-Basemaps, Kontextmenü auf der Karte |
+| `/weltkarte` — `WorldMap.tsx` | `MapTopbar.tsx` (Kategorie-Pills, Indikator, Jahr, „+ Widget“-Menü); schwebende Widgets in `WidgetDashboard.tsx` nur bei aktivem Typ, Sichtbarkeit `localStorage` `rp-visible-widgets-v1`, Panel-Offsets `rp-widget-layout-v1` (ohne Sichtbarkeits-Default). Console `CountrySidebar.tsx`: sechs Tabs mit Land, ohne Land nur GlobalView; Snap links/rechts `localStorage` `rp-console-dock`. **Multi-Select:** ein Primärland plus bis zu drei Vergleichsländer (Strg/Cmd-Klick, Kontextmenü, Vergleich-Tab); Karte: fester roter Rand (Primär), gestrichelt (Vergleich). **Console-Dock:** links / rechts / unten (`rp-console-dock`), Tab-Strip horizontal scrollbar; Unten: ca. 40vh Panel unter der Karte. Handel lazy per `/api/world/trade/:iso3`, CARTO-Basemaps, Kontextmenü auf der Karte |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
 | `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |
@@ -78,4 +78,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 3. Mai 2026 (Weltkarte: Multi-Select / Vergleich, Kontextmenü, `WorldGlMap`-Highlights)
+**Zuletzt aktualisiert:** 3. Mai 2026 (Weltkarte: Console-Dock unten, Tab-Strip-Scroll, Multi-Select)

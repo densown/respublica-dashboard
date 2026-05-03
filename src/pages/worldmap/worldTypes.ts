@@ -4,6 +4,9 @@ export type CountrySelection = {
   compare: string[]
 }
 
+/** Desktop: Konsole links, rechts oder unten (Mobile: Bottom-Sheet unabhängig davon) */
+export type DockPosition = 'left' | 'right' | 'bottom'
+
 export type WorldMapRow = {
   country_code: string
   country_name: string | null

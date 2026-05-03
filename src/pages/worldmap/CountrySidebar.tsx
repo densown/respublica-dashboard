@@ -17,6 +17,7 @@ import { fonts, spacing } from '../../design-system/tokens'
 import { findInd, fmtNumber, fmtPopulation, fmtUsd, latestValue, tailSeries, trendFromValues } from './worldConsoleHelpers'
 import type {
   CountrySelection,
+  DockPosition,
   WorldCountryDetail,
   WorldGeoJson,
   WorldMapRow,
@@ -90,8 +91,8 @@ export type CountrySidebarProps = {
   minimized: boolean
   /** Sichtbarkeit Bottom-Sheet / offen */
   isOpen?: boolean
-  dock: 'left' | 'right'
-  onDockChange: (d: 'left' | 'right') => void
+  dock: DockPosition
+  onDockChange: (d: DockPosition) => void
   selection: CountrySelection
   allCountryDetails: Map<string, WorldCountryDetail>
   mapRowsCountries: WorldMapRow[]
@@ -100,6 +101,8 @@ export type CountrySidebarProps = {
   onRemoveFromSelection: (iso3: string) => void
   onClearAllSelection: () => void
 }
+
+export type ConsoleTabLayoutDirection = 'vertical' | 'horizontal'
 
 type ConsoleTabId =
   | 'uebersicht'
@@ -123,18 +126,107 @@ function GlobalView({
   ranking,
   stats,
   totalCountries,
+  layoutDirection,
 }: {
   activeIndicatorLabel: string | undefined
   ranking: WorldRankingRow[] | null
   stats: CountrySidebarProps['globalStats']
   totalCountries: number | undefined
+  layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
   const top5 = (ranking ?? []).slice(0, 5)
   const bot5 = (ranking ?? []).slice(-5).reverse()
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+
+  const top5Block = (
+    <>
+      {top5.length > 0 && (
+        <>
+          <SectionDivider label={t('worldConsoleGlobalTop5')} />
+          {top5.map((row, i) => (
+            <div
+              key={row.country_code}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: spacing.md,
+                padding: `${spacing.sm}px 0`,
+                borderBottom: `1px solid ${c.border}`,
+              }}
+            >
+              <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.muted, width: 16 }}>
+                {i + 1}
+              </span>
+              <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink, flex: 1 }}>
+                {row.country_name ?? row.country_code}
+              </span>
+              <span style={{ fontFamily: fonts.mono, fontSize: 12, color: c.ink }}>
+                {fmtNumber(row.value, 2, locale)}
+              </span>
+            </div>
+          ))}
+        </>
+      )}
+    </>
+  )
+
+  const bot5Block = (
+    <>
+      {bot5.length > 0 && (
+        <>
+          <SectionDivider label={t('worldConsoleGlobalBottom5')} />
+          {bot5.map((row, i) => (
+            <div
+              key={row.country_code}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: spacing.md,
+                padding: `${spacing.sm}px 0`,
+                borderBottom: `1px solid ${c.border}`,
+              }}
+            >
+              <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.muted, width: 16 }}>
+                {(totalCountries || 0) - i}
+              </span>
+              <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink, flex: 1 }}>
+                {row.country_name ?? row.country_code}
+              </span>
+              <span style={{ fontFamily: fonts.mono, fontSize: 12, color: c.no }}>
+                {fmtNumber(row.value, 2, locale)}
+              </span>
+            </div>
+          ))}
+        </>
+      )}
+    </>
+  )
+
+  const hintBlock = (
+    <div
+      style={{
+        marginTop: spacing.xl,
+        padding: spacing.lg,
+        border: `1px dashed ${c.border}`,
+        borderRadius: 8,
+        textAlign: 'center',
+      }}
+    >
+      <div style={{ fontSize: 20, marginBottom: spacing.sm }}>⊕</div>
+      <p style={{ fontFamily: fonts.body, fontSize: 13, color: c.muted, lineHeight: 1.5 }}>
+        {t('worldConsoleMapHintBody').split('\n').map((line, i, arr) => (
+          <span key={i}>
+            {line}
+            {i < arr.length - 1 ? <br /> : null}
+          </span>
+        ))}
+      </p>
+    </div>
+  )
+
+  const headerStatsBlock = (
+    <>
       <div style={{ marginBottom: spacing.lg }}>
         <MonoLabel>{t('worldConsoleGlobalOverview')}</MonoLabel>
         <h2
@@ -164,7 +256,6 @@ function GlobalView({
             : `${t('worldNoValue')}…`}
         </p>
       </div>
-
       {stats && (
         <div
           style={{
@@ -188,82 +279,40 @@ function GlobalView({
           />
         </div>
       )}
+    </>
+  )
 
-      {top5.length > 0 && (
-        <>
-          <SectionDivider label={t('worldConsoleGlobalTop5')} />
-          {top5.map((row, i) => (
-            <div
-              key={row.country_code}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: spacing.md,
-                padding: `${spacing.sm}px 0`,
-                borderBottom: `1px solid ${c.border}`,
-              }}
-            >
-              <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.muted, width: 16 }}>
-                {i + 1}
-              </span>
-              <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink, flex: 1 }}>
-                {row.country_name ?? row.country_code}
-              </span>
-              <span style={{ fontFamily: fonts.mono, fontSize: 12, color: c.ink }}>
-                {fmtNumber(row.value, 2, locale)}
-              </span>
-            </div>
-          ))}
-        </>
-      )}
-
-      {bot5.length > 0 && (
-        <>
-          <SectionDivider label={t('worldConsoleGlobalBottom5')} />
-          {bot5.map((row, i) => (
-            <div
-              key={row.country_code}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: spacing.md,
-                padding: `${spacing.sm}px 0`,
-                borderBottom: `1px solid ${c.border}`,
-              }}
-            >
-              <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.muted, width: 16 }}>
-                {(totalCountries || 0) - i}
-              </span>
-              <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink, flex: 1 }}>
-                {row.country_name ?? row.country_code}
-              </span>
-              <span style={{ fontFamily: fonts.mono, fontSize: 12, color: c.no }}>
-                {fmtNumber(row.value, 2, locale)}
-              </span>
-            </div>
-          ))}
-        </>
-      )}
-
+  if (layoutDirection === 'horizontal') {
+    return (
       <div
         style={{
-          marginTop: spacing.xl,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          gap: spacing.xl,
           padding: spacing.lg,
-          border: `1px dashed ${c.border}`,
-          borderRadius: 8,
-          textAlign: 'center',
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
         }}
       >
-        <div style={{ fontSize: 20, marginBottom: spacing.sm }}>⊕</div>
-        <p style={{ fontFamily: fonts.body, fontSize: 13, color: c.muted, lineHeight: 1.5 }}>
-          {t('worldConsoleMapHintBody').split('\n').map((line, i, arr) => (
-            <span key={i}>
-              {line}
-              {i < arr.length - 1 ? <br /> : null}
-            </span>
-          ))}
-        </p>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{headerStatsBlock}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {top5Block}
+        </div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {bot5Block}
+          {hintBlock}
+        </div>
       </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {headerStatsBlock}
+      {top5Block}
+      {bot5Block}
+      {hintBlock}
     </div>
   )
 }
@@ -275,6 +324,7 @@ function TabUebersicht({
   percentile,
   lowerIsBetter,
   mapYear,
+  layoutDirection,
 }: {
   countryDetail: WorldCountryDetail | null
   selectedRow: WorldMapRow | null
@@ -282,6 +332,7 @@ function TabUebersicht({
   percentile: number | null
   lowerIsBetter: boolean
   mapYear: number
+  layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
@@ -332,64 +383,67 @@ function TabUebersicht({
     },
   ]
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
-      <div style={{ marginBottom: spacing.lg }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <MonoLabel>{activeIndicator?.name || t('worldConsoleActiveIndicatorFallback')}</MonoLabel>
-          {activeTrend != null && <TrendArrow value={activeTrend} inverted={lowerIsBetter} />}
-        </div>
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontWeight: 900,
-            fontSize: 40,
-            color: c.ink,
-            lineHeight: 1,
-            marginTop: spacing.xs,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          {activeLatest ? fmtNumber(activeLatest.value, 2, locale) : '—'}
-        </div>
-        <div style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, marginTop: spacing.xs }}>
-          {activeIndicator?.code} · {activeLatest?.year ?? '—'}
-        </div>
-        {activeSpark.length >= 2 && (
-          <div style={{ marginTop: spacing.md }}>
-            <Sparkline data={activeSpark} height={52} showMarkers />
-          </div>
-        )}
+  const heroBlock = (
+    <div style={{ marginBottom: layoutDirection === 'horizontal' ? spacing.md : spacing.lg }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <MonoLabel>{activeIndicator?.name || t('worldConsoleActiveIndicatorFallback')}</MonoLabel>
+        {activeTrend != null && <TrendArrow value={activeTrend} inverted={lowerIsBetter} />}
       </div>
-
-      {percentile != null && (
-        <div style={{ marginBottom: spacing.lg }}>
-          <PercentileBar
-            pct={percentile}
-            label={interpolate(t('worldConsolePercentilePosition'), {
-              name: activeIndicator?.name || t('worldConsoleActiveIndicatorFallback'),
-            })}
-            inverted={lowerIsBetter}
-          />
-          <div
-            style={{
-              marginTop: spacing.sm,
-              fontFamily: fonts.body,
-              fontSize: 12,
-              color: c.muted,
-              fontStyle: 'italic',
-              lineHeight: 1.5,
-            }}
-          >
-            {interpolate(t('worldConsolePercentileCountryLine'), {
-              country: countryDetail?.country_name || t('worldConsoleMapHintTitle'),
-              pct: String(Math.round(lowerIsBetter ? 100 - percentile : percentile)),
-            })}{' '}
-            <InfoToggle text={t('worldConsolePercentileExplainer')} />
-          </div>
+      <div
+        style={{
+          fontFamily: fonts.display,
+          fontWeight: 900,
+          fontSize: layoutDirection === 'horizontal' ? 32 : 40,
+          color: c.ink,
+          lineHeight: 1,
+          marginTop: spacing.xs,
+          letterSpacing: '-0.02em',
+        }}
+      >
+        {activeLatest ? fmtNumber(activeLatest.value, 2, locale) : '—'}
+      </div>
+      <div style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, marginTop: spacing.xs }}>
+        {activeIndicator?.code} · {activeLatest?.year ?? '—'}
+      </div>
+      {activeSpark.length >= 2 && (
+        <div style={{ marginTop: spacing.md }}>
+          <Sparkline data={activeSpark} height={layoutDirection === 'horizontal' ? 44 : 52} showMarkers />
         </div>
       )}
+    </div>
+  )
 
+  const percentileBlock =
+    percentile != null ? (
+      <div style={{ marginBottom: layoutDirection === 'horizontal' ? spacing.md : spacing.lg }}>
+        <PercentileBar
+          pct={percentile}
+          label={interpolate(t('worldConsolePercentilePosition'), {
+            name: activeIndicator?.name || t('worldConsoleActiveIndicatorFallback'),
+          })}
+          inverted={lowerIsBetter}
+        />
+        <div
+          style={{
+            marginTop: spacing.sm,
+            fontFamily: fonts.body,
+            fontSize: 12,
+            color: c.muted,
+            fontStyle: 'italic',
+            lineHeight: 1.5,
+          }}
+        >
+          {interpolate(t('worldConsolePercentileCountryLine'), {
+            country: countryDetail?.country_name || t('worldConsoleMapHintTitle'),
+            pct: String(Math.round(lowerIsBetter ? 100 - percentile : percentile)),
+          })}{' '}
+          <InfoToggle text={t('worldConsolePercentileExplainer')} />
+        </div>
+      </div>
+    ) : null
+
+  const coreDataBlock = (
+    <>
       <SectionDivider label={t('worldConsoleCoreData')} />
       <div
         style={{
@@ -403,33 +457,77 @@ function TabUebersicht({
           <StatTile key={i} {...tile} />
         ))}
       </div>
+    </>
+  )
 
+  const profileRows = (
+    [
+      [t('worldConsoleIsoRow'), countryDetail?.country_code || '—'],
+      [t('worldConsoleRegion'), countryDetail?.region || '—'],
+      [t('worldConsoleIncome'), countryDetail?.income_level || '—'],
+    ] as const
+  ).map(([k, v]) => (
+    <div
+      key={String(k)}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: `${spacing.sm}px 0`,
+        borderBottom: `1px solid ${c.border}`,
+      }}
+    >
+      <MonoLabel style={{ margin: 0 }}>{k}</MonoLabel>
+      <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink }}>{v}</span>
+    </div>
+  ))
+
+  const profileBlock = (
+    <>
       <SectionDivider label={t('worldConsoleProfile')} />
-      {(
-        [
-          [t('worldConsoleIsoRow'), countryDetail?.country_code || '—'],
-          [t('worldConsoleRegion'), countryDetail?.region || '—'],
-          [t('worldConsoleIncome'), countryDetail?.income_level || '—'],
-        ] as const
-      ).map(([k, v]) => (
-        <div
-          key={String(k)}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: `${spacing.sm}px 0`,
-            borderBottom: `1px solid ${c.border}`,
-          }}
-        >
-          <MonoLabel style={{ margin: 0 }}>{k}</MonoLabel>
-          <span style={{ fontFamily: fonts.body, fontSize: 13, color: c.ink }}>{v}</span>
+      {profileRows}
+    </>
+  )
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '320px 1fr 320px',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {heroBlock}
+          {percentileBlock}
         </div>
-      ))}
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{coreDataBlock}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{profileBlock}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {heroBlock}
+      {percentileBlock}
+      {coreDataBlock}
+      {profileBlock}
     </div>
   )
 }
 
-function TabDemokratie({ countryDetail }: { countryDetail: WorldCountryDetail | null }) {
+function TabDemokratie({
+  countryDetail,
+  layoutDirection,
+}: {
+  countryDetail: WorldCountryDetail | null
+  layoutDirection: ConsoleTabLayoutDirection
+}) {
   const { c, t } = useTheme()
 
   const vdemIndicators = useMemo(() => {
@@ -477,73 +575,137 @@ function TabDemokratie({ countryDetail }: { countryDetail: WorldCountryDetail | 
     )
   }
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+  const ldiHero = (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+        marginBottom: spacing.md,
+      }}
+    >
+      <div>
+        <MonoLabel>{t('worldConsoleLdiHeading')}</MonoLabel>
+        <div
+          style={{
+            fontFamily: fonts.display,
+            fontWeight: 900,
+            fontSize: 30,
+            color: c.ink,
+            lineHeight: 1.1,
+            marginTop: spacing.xs,
+          }}
+        >
+          {ldiLatest ? ldiLatest.value.toFixed(2) : '—'}
+          <span style={{ color: c.red }}>.</span>
+        </div>
+        <div style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, marginTop: 2 }}>
+          {interpolate(t('worldConsoleVdemSource'), { year: String(ldiLatest?.year ?? '—') })}
+        </div>
+      </div>
+      {trend10 != null && (
+        <div style={{ textAlign: 'right' }}>
+          <MonoLabel>{t('worldConsoleTrend10y')}</MonoLabel>
+          <span
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 13,
+              color: trend10 >= 0 ? c.yes : c.no,
+            }}
+          >
+            {trend10 >= 0 ? '↑' : '↓'} {trend10 >= 0 ? '+' : ''}
+            {trend10.toFixed(2)}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+
+  const lineChartBlock =
+    ldiSeries.length >= 2 ? (
+      <>
+        <SectionDivider label={t('worldConsoleSectionLdiSeries')} />
+        <LineChart data={ldiSeries} yLabel={t('worldConsoleLdiYLabel')} height={90} />
+      </>
+    ) : null
+
+  const radarBlock = (
+    <>
+      <SectionDivider label={t('worldConsoleSectionVdemDims')} />
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
+          justifyContent: 'center',
           marginBottom: spacing.md,
+          ...(layoutDirection === 'horizontal'
+            ? { maxWidth: 280, width: '100%', marginLeft: 'auto', marginRight: 'auto' }
+            : {}),
         }}
       >
-        <div>
-          <MonoLabel>{t('worldConsoleLdiHeading')}</MonoLabel>
-          <div
-            style={{
-              fontFamily: fonts.display,
-              fontWeight: 900,
-              fontSize: 30,
-              color: c.ink,
-              lineHeight: 1.1,
-              marginTop: spacing.xs,
-            }}
-          >
-            {ldiLatest ? ldiLatest.value.toFixed(2) : '—'}
-            <span style={{ color: c.red }}>.</span>
-          </div>
-          <div style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, marginTop: 2 }}>
-            {interpolate(t('worldConsoleVdemSource'), { year: String(ldiLatest?.year ?? '—') })}
-          </div>
-        </div>
-        {trend10 != null && (
-          <div style={{ textAlign: 'right' }}>
-            <MonoLabel>{t('worldConsoleTrend10y')}</MonoLabel>
-            <span
-              style={{
-                fontFamily: fonts.mono,
-                fontSize: 13,
-                color: trend10 >= 0 ? c.yes : c.no,
-              }}
-            >
-              {trend10 >= 0 ? '↑' : '↓'} {trend10 >= 0 ? '+' : ''}
-              {trend10.toFixed(2)}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {ldiSeries.length >= 2 && (
-        <>
-          <SectionDivider label={t('worldConsoleSectionLdiSeries')} />
-          <LineChart data={ldiSeries} yLabel={t('worldConsoleLdiYLabel')} height={90} />
-        </>
-      )}
-
-      <SectionDivider label={t('worldConsoleSectionVdemDims')} />
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: spacing.md }}>
         <RadarChart axes={radarAxes} />
       </div>
+    </>
+  )
 
+  const barsBlock = (
+    <>
       <SectionDivider label={t('worldConsoleSectionVdemAll')} />
       {bars.map((b, i) => (
         <HBar key={i} label={b.label} value={b.value} max={1} formatted={b.formatted} color={c.red} />
       ))}
+    </>
+  )
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 280px 1fr',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {ldiHero}
+          {lineChartBlock}
+        </div>
+        <div
+          style={{
+            overflowY: 'auto',
+            minWidth: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {radarBlock}
+        </div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{barsBlock}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {ldiHero}
+      {lineChartBlock}
+      {radarBlock}
+      {barsBlock}
     </div>
   )
 }
 
-function TabWirtschaft({ countryDetail }: { countryDetail: WorldCountryDetail | null }) {
+function TabWirtschaft({
+  countryDetail,
+  layoutDirection,
+}: {
+  countryDetail: WorldCountryDetail | null
+  layoutDirection: ConsoleTabLayoutDirection
+}) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
 
@@ -568,29 +730,31 @@ function TabWirtschaft({ countryDetail }: { countryDetail: WorldCountryDetail | 
     )
   }
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+  const gdpInflationCol = (
+    <>
       {gdpSeries.length >= 2 && (
         <>
           <SectionDivider label={t('worldConsoleSectionGdpPc')} />
           <LineChart data={gdpSeries} yLabel={t('worldConsoleGdpYLabel')} height={90} />
         </>
       )}
-
       {inflationSeries.length >= 2 && (
         <>
           <SectionDivider label={t('worldConsoleSectionInflation')} />
           <LineChart data={inflationSeries} color={c.no} height={70} showArea={false} />
         </>
       )}
+    </>
+  )
 
+  const unempGiniCol = (
+    <>
       {unempSeries.length >= 2 && (
         <>
           <SectionDivider label={t('worldConsoleSectionUnemployment')} />
           <LineChart data={unempSeries} color={c.yes} height={70} showArea={false} />
         </>
       )}
-
       {giniLatest && (
         <>
           <SectionDivider label={t('worldConsoleSectionInequality')} />
@@ -623,6 +787,32 @@ function TabWirtschaft({ countryDetail }: { countryDetail: WorldCountryDetail | 
           </div>
         </>
       )}
+    </>
+  )
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{gdpInflationCol}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{unempGiniCol}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {gdpInflationCol}
+      {unempGiniCol}
     </div>
   )
 }
@@ -630,9 +820,11 @@ function TabWirtschaft({ countryDetail }: { countryDetail: WorldCountryDetail | 
 function TabHandel({
   tradeData,
   loading,
+  layoutDirection,
 }: {
   tradeData: WorldTradeResponse | null
   loading: boolean
+  layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
@@ -667,42 +859,103 @@ function TabHandel({
   const maxExp = topExp.length ? Math.max(...topExp.map((x) => Number(x.value_usd))) : 1
   const maxImp = topImp.length ? Math.max(...topImp.map((x) => Number(x.value_usd))) : 1
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+  const exportLabel = (t('worldConsoleTradeExportsLine').split(':')[0] ?? 'Export').trim()
+  const importLabel = (t('worldConsoleTradeImportsLine').split(':')[0] ?? 'Import').trim()
+
+  const balanceBlock = (
+    <>
       <SectionDivider label={interpolate(t('worldConsoleTradeBalanceYear'), { year: String(tradeData.year) })} />
       <TradeBalance exports={Math.round(expBn)} imports={Math.round(impBn)} currency="Mrd. $" />
+    </>
+  )
 
-      {topExp.length > 0 && (
-        <>
-          <SectionDivider label={t('worldConsoleTopExports')} />
-          {topExp.map((p, i) => (
-            <HBar
-              key={i}
-              label={p.partner_name}
-              value={Number(p.value_usd)}
-              max={maxExp}
-              formatted={fmtUsd(Number(p.value_usd), locale)}
-              color={c.yes}
-            />
-          ))}
-        </>
-      )}
+  const kpiTiles = (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: spacing.sm,
+        marginTop: spacing.md,
+        marginBottom: spacing.md,
+      }}
+    >
+      <StatTile
+        label={exportLabel}
+        value={fmtNumber(expBn, 1, locale)}
+        sub={`Mrd. $ · ${tradeData.year}`}
+        icon="▲"
+      />
+      <StatTile
+        label={importLabel}
+        value={fmtNumber(impBn, 1, locale)}
+        sub={`Mrd. $ · ${tradeData.year}`}
+        icon="▼"
+      />
+    </div>
+  )
 
-      {topImp.length > 0 && (
-        <>
-          <SectionDivider label={t('worldConsoleTopImports')} />
-          {topImp.map((p, i) => (
-            <HBar
-              key={i}
-              label={p.partner_name}
-              value={Number(p.value_usd)}
-              max={maxImp}
-              formatted={fmtUsd(Number(p.value_usd), locale)}
-              color={c.no}
-            />
-          ))}
-        </>
-      )}
+  const exportsBlock =
+    topExp.length > 0 ? (
+      <>
+        <SectionDivider label={t('worldConsoleTopExports')} />
+        {topExp.map((p, i) => (
+          <HBar
+            key={i}
+            label={p.partner_name}
+            value={Number(p.value_usd)}
+            max={maxExp}
+            formatted={fmtUsd(Number(p.value_usd), locale)}
+            color={c.yes}
+          />
+        ))}
+      </>
+    ) : null
+
+  const importsBlock =
+    topImp.length > 0 ? (
+      <>
+        <SectionDivider label={t('worldConsoleTopImports')} />
+        {topImp.map((p, i) => (
+          <HBar
+            key={i}
+            label={p.partner_name}
+            value={Number(p.value_usd)}
+            max={maxImp}
+            formatted={fmtUsd(Number(p.value_usd), locale)}
+            color={c.no}
+          />
+        ))}
+      </>
+    ) : null
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {balanceBlock}
+          {kpiTiles}
+          {exportsBlock}
+        </div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{importsBlock}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {balanceBlock}
+      {exportsBlock}
+      {importsBlock}
     </div>
   )
 }
@@ -720,6 +973,7 @@ function TabVergleich({
   geojson,
   onRemoveFromSelection,
   onClearAllSelection,
+  layoutDirection,
 }: {
   selection: CountrySelection
   allCountryDetails: Map<string, WorldCountryDetail>
@@ -729,6 +983,7 @@ function TabVergleich({
   geojson: WorldGeoJson | null
   onRemoveFromSelection: (iso3: string) => void
   onClearAllSelection: () => void
+  layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t } = useTheme()
 
@@ -753,198 +1008,232 @@ function TabVergleich({
   )
   const barColors = [c.red, c.yes, c.no, c.ink]
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
-      <SectionDivider label={t('worldCompareTabSelectedCountries')} />
-
-      {ordered.map((iso, idx) => {
-        const det = allCountryDetails.get(iso)
-        const mapRow = mapRowsCountries.find((r) => normIso3(r.country_code) === iso)
-        const iso2 = iso3ToFlagIso2(iso, geojson)
-        const flagUrl = iso2 ? `https://flagcdn.com/w40/${iso2}.png` : null
-        const isPrimary = idx === 0
-        const regionLine = [det?.region, det?.income_level].filter(Boolean).join(' · ')
-        return (
-          <div
-            key={iso}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: spacing.md,
-              padding: `${spacing.md}px 0`,
-              borderBottom: `1px solid ${c.border}`,
-            }}
-          >
-            {flagUrl ? (
-              <img
-                src={flagUrl}
-                alt=""
-                width={40}
-                height={28}
-                style={{
-                  borderRadius: 4,
-                  objectFit: 'cover',
-                  flexShrink: 0,
-                  border: `1px solid ${c.border}`,
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: 40,
-                  height: 28,
-                  borderRadius: 4,
-                  background: c.bgHover,
-                  flexShrink: 0,
-                }}
-              />
-            )}
-            <div style={{ minWidth: 0, flex: 1 }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: spacing.sm,
-                  flexWrap: 'wrap',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: fonts.body,
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: c.ink,
-                  }}
-                >
-                  {det?.country_name ?? mapRow?.country_name ?? iso}
-                </span>
-                {isPrimary && (
-                  <span
-                    style={{
-                      fontFamily: fonts.mono,
-                      fontSize: 8,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      color: c.red,
-                      border: `1px solid ${c.red}`,
-                      borderRadius: 4,
-                      padding: '2px 6px',
-                    }}
-                  >
-                    {t('worldCompareTabPrimary')}
-                  </span>
-                )}
-              </div>
-              <div
-                style={{
-                  fontFamily: fonts.mono,
-                  fontSize: 10,
-                  color: c.muted,
-                  marginTop: 4,
-                  letterSpacing: '0.04em',
-                }}
-              >
-                {iso}
-                {regionLine ? ` · ${regionLine}` : ''}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => onRemoveFromSelection(iso)}
-              title={t('worldConsoleClose')}
-              style={{
-                minWidth: 44,
-                minHeight: 44,
-                padding: 0,
-                border: `1px solid ${c.border}`,
-                borderRadius: 4,
-                background: 'transparent',
-                color: c.muted,
-                cursor: 'pointer',
-                fontFamily: fonts.mono,
-                fontSize: 14,
-                lineHeight: 1,
-                flexShrink: 0,
-              }}
-            >
-              ×
-            </button>
-          </div>
-        )
-      })}
-
-      {ordered.length < 4 && (
-        <div
-          style={{
-            marginTop: spacing.lg,
-            padding: spacing.md,
-            border: `1px dashed ${c.border}`,
-            borderRadius: 8,
-          }}
-        >
-          <p
-            style={{
-              fontFamily: fonts.body,
-              fontSize: 12,
-              color: c.muted,
-              lineHeight: 1.5,
-              margin: 0,
-            }}
-          >
-            {t('worldCompareTabHintRightclick')}
-            <br />
-            {t('worldCompareTabHintCmdclick')}
-          </p>
-        </div>
-      )}
-
-      <button
-        type="button"
-        onClick={onClearAllSelection}
+  const listRows = ordered.map((iso, idx) => {
+    const det = allCountryDetails.get(iso)
+    const mapRow = mapRowsCountries.find((r) => normIso3(r.country_code) === iso)
+    const iso2 = iso3ToFlagIso2(iso, geojson)
+    const flagUrl = iso2 ? `https://flagcdn.com/w40/${iso2}.png` : null
+    const isPrimary = idx === 0
+    const regionLine = [det?.region, det?.income_level].filter(Boolean).join(' · ')
+    return (
+      <div
+        key={iso}
         style={{
-          marginTop: spacing.lg,
-          width: '100%',
-          minHeight: 44,
-          padding: `${spacing.sm}px ${spacing.md}px`,
-          border: `1px solid ${c.border}`,
-          borderRadius: 6,
-          background: c.bg,
-          color: c.ink,
-          fontFamily: fonts.mono,
-          fontSize: 11,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: spacing.md,
+          padding: `${spacing.md}px 0`,
+          borderBottom: `1px solid ${c.border}`,
         }}
       >
-        {t('worldCompareTabClearAll')}
-      </button>
+        {flagUrl ? (
+          <img
+            src={flagUrl}
+            alt=""
+            width={40}
+            height={28}
+            style={{
+              borderRadius: 4,
+              objectFit: 'cover',
+              flexShrink: 0,
+              border: `1px solid ${c.border}`,
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: 40,
+              height: 28,
+              borderRadius: 4,
+              background: c.bgHover,
+              flexShrink: 0,
+            }}
+          />
+        )}
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: spacing.sm,
+              flexWrap: 'wrap',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: fonts.body,
+                fontSize: 14,
+                fontWeight: 600,
+                color: c.ink,
+              }}
+            >
+              {det?.country_name ?? mapRow?.country_name ?? iso}
+            </span>
+            {isPrimary && (
+              <span
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 8,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: c.red,
+                  border: `1px solid ${c.red}`,
+                  borderRadius: 4,
+                  padding: '2px 6px',
+                }}
+              >
+                {t('worldCompareTabPrimary')}
+              </span>
+            )}
+          </div>
+          <div
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 10,
+              color: c.muted,
+              marginTop: 4,
+              letterSpacing: '0.04em',
+            }}
+          >
+            {iso}
+            {regionLine ? ` · ${regionLine}` : ''}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => onRemoveFromSelection(iso)}
+          title={t('worldConsoleClose')}
+          style={{
+            minWidth: 44,
+            minHeight: 44,
+            padding: 0,
+            border: `1px solid ${c.border}`,
+            borderRadius: 4,
+            background: 'transparent',
+            color: c.muted,
+            cursor: 'pointer',
+            fontFamily: fonts.mono,
+            fontSize: 14,
+            lineHeight: 1,
+            flexShrink: 0,
+          }}
+        >
+          ×
+        </button>
+      </div>
+    )
+  })
 
-      <div style={{ marginTop: spacing.xl }}>
-        <SectionDivider label={t('worldCompareTabActiveIndicator')} />
+  const hintsBlock =
+    ordered.length < 4 ? (
+      <div
+        style={{
+          marginTop: spacing.lg,
+          padding: spacing.md,
+          border: `1px dashed ${c.border}`,
+          borderRadius: 8,
+        }}
+      >
         <p
           style={{
             fontFamily: fonts.body,
-            fontSize: 14,
-            fontWeight: 600,
-            color: c.ink,
-            marginTop: spacing.sm,
-            marginBottom: spacing.md,
+            fontSize: 12,
+            color: c.muted,
+            lineHeight: 1.5,
+            margin: 0,
           }}
         >
-          {activeIndicator?.name || t('worldConsoleActiveIndicatorFallback')}
+          {t('worldCompareTabHintRightclick')}
+          <br />
+          {t('worldCompareTabHintCmdclick')}
         </p>
-        {rowsForHbar.map((r, i) => (
-          <HBar
-            key={r.iso}
-            label={r.name}
-            value={r.val != null ? Math.abs(r.val) : 0}
-            max={maxBar}
-            formatted={r.val != null ? formatIndicatorValue(r.val) : t('worldNoValue')}
-            color={barColors[i % barColors.length]!}
-          />
-        ))}
       </div>
+    ) : null
+
+  const clearAllBtn = (
+    <button
+      type="button"
+      onClick={onClearAllSelection}
+      style={{
+        marginTop: spacing.lg,
+        width: '100%',
+        minHeight: 44,
+        padding: `${spacing.sm}px ${spacing.md}px`,
+        border: `1px solid ${c.border}`,
+        borderRadius: 6,
+        background: c.bg,
+        color: c.ink,
+        fontFamily: fonts.mono,
+        fontSize: 11,
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        cursor: 'pointer',
+      }}
+    >
+      {t('worldCompareTabClearAll')}
+    </button>
+  )
+
+  const compareListColumn = (
+    <>
+      <SectionDivider label={t('worldCompareTabSelectedCountries')} />
+      {listRows}
+      {hintsBlock}
+      {clearAllBtn}
+    </>
+  )
+
+  const indicatorColumn = (
+    <>
+      <SectionDivider label={t('worldCompareTabActiveIndicator')} />
+      <p
+        style={{
+          fontFamily: fonts.body,
+          fontSize: 14,
+          fontWeight: 600,
+          color: c.ink,
+          marginTop: spacing.sm,
+          marginBottom: spacing.md,
+        }}
+      >
+        {activeIndicator?.name || t('worldConsoleActiveIndicatorFallback')}
+      </p>
+      {rowsForHbar.map((r, i) => (
+        <HBar
+          key={r.iso}
+          label={r.name}
+          value={r.val != null ? Math.abs(r.val) : 0}
+          max={maxBar}
+          formatted={r.val != null ? formatIndicatorValue(r.val) : t('worldNoValue')}
+          color={barColors[i % barColors.length]!}
+        />
+      ))}
+    </>
+  )
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '320px 1fr',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{compareListColumn}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{indicatorColumn}</div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {compareListColumn}
+      <div style={{ marginTop: spacing.xl }}>{indicatorColumn}</div>
     </div>
   )
 }
@@ -952,9 +1241,11 @@ function TabVergleich({
 function TabKontext({
   countryDetail: _countryDetail,
   articles,
+  layoutDirection,
 }: {
   countryDetail: WorldCountryDetail | null
   articles?: WorldConsoleArticle[]
+  layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t } = useTheme()
 
@@ -964,80 +1255,8 @@ function TabKontext({
     { source: t('worldConsoleSourceComtrade'), desc: t('worldConsoleSourceComtradeDesc') },
   ]
 
-  return (
-    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
-      {articles && articles.length > 0 && (
-        <>
-          <SectionDivider label={t('worldConsoleArticlesHeading')} />
-          {articles.map((a, i) => (
-            <a
-              key={i}
-              href={a.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block',
-                padding: `${spacing.md}px 0`,
-                borderBottom: `1px solid ${c.border}`,
-                textDecoration: 'none',
-              }}
-            >
-              {a.tag && (
-                <div style={{ display: 'flex', gap: spacing.sm, marginBottom: spacing.xs }}>
-                  <span
-                    style={{
-                      fontFamily: fonts.mono,
-                      fontSize: 9,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      color: '#fff',
-                      background: c.badgeBg,
-                      borderRadius: 3,
-                      padding: '2px 6px',
-                    }}
-                  >
-                    {a.tag}
-                  </span>
-                </div>
-              )}
-              <div
-                style={{
-                  fontFamily: fonts.body,
-                  fontWeight: 600,
-                  fontSize: 13,
-                  color: c.ink,
-                  lineHeight: 1.45,
-                }}
-              >
-                {a.title}
-              </div>
-              {a.date && (
-                <div
-                  style={{
-                    fontFamily: fonts.mono,
-                    fontSize: 10,
-                    color: c.muted,
-                    marginTop: spacing.xs,
-                  }}
-                >
-                  {a.date}
-                </div>
-              )}
-              <div
-                style={{
-                  fontFamily: fonts.mono,
-                  fontSize: 11,
-                  color: c.red,
-                  marginTop: spacing.xs,
-                }}
-              >
-                {t('worldConsoleReadArticle')}
-              </div>
-            </a>
-          ))}
-        </>
-      )}
-
+  const sourcesAndMethods = (
+    <>
       <SectionDivider label={t('worldConsoleSourcesHeading')} />
       {dataSources.map((u, i) => (
         <div key={i} style={{ padding: `${spacing.sm}px 0`, borderBottom: `1px solid ${c.border}` }}>
@@ -1045,29 +1264,136 @@ function TabKontext({
           <div style={{ fontFamily: fonts.body, fontSize: 11, color: c.muted, marginTop: 2 }}>{u.desc}</div>
         </div>
       ))}
-
       <SectionDivider label={t('worldConsoleMethodsHeading')} />
       <p style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, lineHeight: 1.6 }}>
         {t('worldConsoleMethodsBody')}
       </p>
-      <a
-        href="https://respublica.media"
-        target="_blank"
-        rel="noopener noreferrer"
+    </>
+  )
+
+  const visitLink = (
+    <a
+      href="https://respublica.media"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        fontFamily: fonts.mono,
+        fontSize: 11,
+        color: c.red,
+        marginTop: spacing.md,
+        cursor: 'pointer',
+        textDecoration: 'none',
+      }}
+    >
+      {t('worldConsoleVisitRp')} <span>→</span>
+    </a>
+  )
+
+  const articlesBlock =
+    articles && articles.length > 0 ? (
+      <>
+        <SectionDivider label={t('worldConsoleArticlesHeading')} />
+        {articles.map((a, i) => (
+          <a
+            key={i}
+            href={a.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              padding: `${spacing.md}px 0`,
+              borderBottom: `1px solid ${c.border}`,
+              textDecoration: 'none',
+            }}
+          >
+            {a.tag && (
+              <div style={{ display: 'flex', gap: spacing.sm, marginBottom: spacing.xs }}>
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    fontSize: 9,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    background: c.badgeBg,
+                    borderRadius: 3,
+                    padding: '2px 6px',
+                  }}
+                >
+                  {a.tag}
+                </span>
+              </div>
+            )}
+            <div
+              style={{
+                fontFamily: fonts.body,
+                fontWeight: 600,
+                fontSize: 13,
+                color: c.ink,
+                lineHeight: 1.45,
+              }}
+            >
+              {a.title}
+            </div>
+            {a.date && (
+              <div
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 10,
+                  color: c.muted,
+                  marginTop: spacing.xs,
+                }}
+              >
+                {a.date}
+              </div>
+            )}
+            <div
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: 11,
+                color: c.red,
+                marginTop: spacing.xs,
+              }}
+            >
+              {t('worldConsoleReadArticle')}
+            </div>
+          </a>
+        ))}
+      </>
+    ) : null
+
+  if (layoutDirection === 'horizontal') {
+    return (
+      <div
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 6,
-          fontFamily: fonts.mono,
-          fontSize: 11,
-          color: c.red,
-          marginTop: spacing.md,
-          cursor: 'pointer',
-          textDecoration: 'none',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: spacing.xl,
+          padding: spacing.lg,
+          height: '100%',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
         }}
       >
-        {t('worldConsoleVisitRp')} <span>→</span>
-      </a>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {sourcesAndMethods}
+        </div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>
+          {articlesBlock}
+          {visitLink}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
+      {articlesBlock}
+      {sourcesAndMethods}
+      {visitLink}
     </div>
   )
 }
@@ -1107,6 +1433,14 @@ export function CountrySidebar({
   const hasCountry = !!iso3
   const lowerIsBetter = activeIndicator?.lowerIsBetter || false
 
+  const layoutDirection: ConsoleTabLayoutDirection =
+    dock === 'bottom' && !sheetLayout ? 'horizontal' : 'vertical'
+
+  const headerBlockPadding =
+    layoutDirection === 'horizontal'
+      ? `${spacing.sm}px ${spacing.lg}px ${spacing.xs}px`
+      : `${spacing.md}px ${spacing.lg}px ${spacing.sm}px`
+
   useEffect(() => {
     if (!hasCountry) {
       setActiveTab('uebersicht')
@@ -1128,15 +1462,19 @@ export function CountrySidebar({
         className={`country-sidebar ${isOpen ? 'country-sidebar--open' : ''}`}
         style={
           {
-            width: 32,
+            width: dock === 'bottom' ? '100%' : 32,
+            height: dock === 'bottom' ? 44 : undefined,
+            minHeight: dock === 'bottom' ? 44 : undefined,
             flexShrink: 0,
             background: c.cardBg,
+            borderTop: dock === 'bottom' ? `1px solid ${c.border}` : 'none',
             borderLeft: dock === 'right' ? `1px solid ${c.border}` : 'none',
             borderRight: dock === 'left' ? `1px solid ${c.border}` : 'none',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: dock === 'bottom' ? 'row' : 'column',
             alignItems: 'center',
-            padding: `${spacing.md}px 0`,
+            justifyContent: dock === 'bottom' ? 'center' : undefined,
+            padding: dock === 'bottom' ? `${spacing.sm}px` : `${spacing.md}px 0`,
             cursor: 'pointer',
             gap: spacing.md,
           } as CSSProperties
@@ -1149,17 +1487,48 @@ export function CountrySidebar({
             fontFamily: fonts.mono,
             fontSize: 9,
             color: c.muted,
-            writingMode: 'vertical-rl',
+            ...(dock === 'bottom' ? {} : { writingMode: 'vertical-rl' as const }),
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
           }}
         >
           {iso3 || t('worldConsoleWorldStrip')}
         </span>
-        <span style={{ fontFamily: fonts.mono, fontSize: 11, color: c.muted }}>▸</span>
+        {dock === 'bottom' ? null : (
+          <span style={{ fontFamily: fonts.mono, fontSize: 11, color: c.muted }}>▸</span>
+        )}
       </aside>
     )
   }
+
+  const cycleDock = () => {
+    const order: DockPosition[] = ['right', 'bottom', 'left']
+    const i = order.indexOf(dock)
+    const next = order[(i + 1) % order.length]!
+    onDockChange(next)
+  }
+
+  const dockSnapTitle =
+    dock === 'right'
+      ? t('worldConsoleDockBottom')
+      : dock === 'bottom'
+        ? t('worldConsoleDockLeft')
+        : t('worldConsoleDockRight')
+
+  const dockSnapSymbol = dock === 'right' ? '▬' : dock === 'bottom' ? '◧' : '◨'
+
+  const bottomContentFrame: CSSProperties | undefined =
+    layoutDirection === 'vertical' &&
+    !sheetLayout &&
+    dock === 'bottom' &&
+    (!hasCountry || activeTab !== 'uebersicht')
+      ? {
+          maxWidth: 720,
+          margin: '0 auto',
+          width: '100%',
+          boxSizing: 'border-box',
+        }
+      : undefined
 
   const content = !hasCountry ? (
     <GlobalView
@@ -1167,6 +1536,7 @@ export function CountrySidebar({
       ranking={ranking}
       stats={globalStats}
       totalCountries={globalStats?.total}
+      layoutDirection={layoutDirection}
     />
   ) : (
     (() => {
@@ -1180,14 +1550,21 @@ export function CountrySidebar({
               percentile={percentile}
               lowerIsBetter={lowerIsBetter}
               mapYear={mapYear}
+              layoutDirection={layoutDirection}
             />
           )
         case 'demokratie':
-          return <TabDemokratie countryDetail={countryDetail} />
+          return <TabDemokratie countryDetail={countryDetail} layoutDirection={layoutDirection} />
         case 'wirtschaft':
-          return <TabWirtschaft countryDetail={countryDetail} />
+          return <TabWirtschaft countryDetail={countryDetail} layoutDirection={layoutDirection} />
         case 'handel':
-          return <TabHandel tradeData={tradeData} loading={tradeLoading} />
+          return (
+            <TabHandel
+              tradeData={tradeData}
+              loading={tradeLoading}
+              layoutDirection={layoutDirection}
+            />
+          )
         case 'vergleich':
           return (
             <TabVergleich
@@ -1199,10 +1576,17 @@ export function CountrySidebar({
               geojson={geojson}
               onRemoveFromSelection={onRemoveFromSelection}
               onClearAllSelection={onClearAllSelection}
+              layoutDirection={layoutDirection}
             />
           )
         case 'kontext':
-          return <TabKontext countryDetail={countryDetail} articles={articles} />
+          return (
+            <TabKontext
+              countryDetail={countryDetail}
+              articles={articles}
+              layoutDirection={layoutDirection}
+            />
+          )
         default:
           return null
       }
@@ -1226,17 +1610,34 @@ export function CountrySidebar({
         zIndex: 200,
         overflow: 'hidden',
       }
-    : {
-        width: 320,
-        flexShrink: 0,
-        background: c.cardBg,
-        borderLeft: dock === 'right' ? `1px solid ${c.border}` : 'none',
-        borderRight: dock === 'left' ? `1px solid ${c.border}` : 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        overflow: 'hidden',
-      }
+    : dock === 'bottom'
+      ? {
+          width: '100%',
+          height: '40vh',
+          minHeight: 320,
+          maxHeight: '60vh',
+          flexShrink: 0,
+          background: c.cardBg,
+          borderTop: `1px solid ${c.border}`,
+          borderLeft: 'none',
+          borderRight: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          minWidth: 0,
+        }
+      : {
+          width: 320,
+          flexShrink: 0,
+          background: c.cardBg,
+          borderLeft: dock === 'right' ? `1px solid ${c.border}` : 'none',
+          borderRight: dock === 'left' ? `1px solid ${c.border}` : 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          overflow: 'hidden',
+          minWidth: 0,
+        }
 
   const countryName = countryDetail?.country_name || iso3 || t('worldConsoleWorldMapTitle')
   const countryRegion = countryDetail?.region
@@ -1261,11 +1662,11 @@ export function CountrySidebar({
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between',
-            padding: `${spacing.md}px ${spacing.lg}px ${spacing.sm}px`,
+            padding: headerBlockPadding,
             gap: spacing.sm,
           }}
         >
-          <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
             <h2
               style={{
                 fontFamily: fonts.display,
@@ -1302,7 +1703,7 @@ export function CountrySidebar({
             {!sheetLayout && (
               <button
                 type="button"
-                onClick={() => onDockChange(dock === 'right' ? 'left' : 'right')}
+                onClick={cycleDock}
                 style={{
                   width: 28,
                   height: 28,
@@ -1318,9 +1719,9 @@ export function CountrySidebar({
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                title={dock === 'right' ? t('worldConsoleDockLeft') : t('worldConsoleDockRight')}
+                title={dockSnapTitle}
               >
-                {dock === 'right' ? '◧' : '◨'}
+                {dockSnapSymbol}
               </button>
             )}
             {!sheetLayout && onMinimize && (
@@ -1377,64 +1778,103 @@ export function CountrySidebar({
         {hasCountry && (
           <div
             style={{
-              display: 'flex',
-              overflowX: 'auto',
-              gap: 0,
-              borderTop: `1px solid ${c.border}`,
-              scrollbarWidth: 'none',
+              position: 'relative',
+              flexShrink: 0,
+              minWidth: 0,
+              width: '100%',
             }}
           >
-            {TAB_DEF.map((tab) => {
-              const active = activeTab === tab.id
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    flexShrink: 0,
-                    padding: `${spacing.sm}px ${spacing.md}px`,
-                    border: 'none',
-                    borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
-                    background: 'transparent',
-                    color: active ? c.red : c.muted,
-                    fontFamily: fonts.mono,
-                    fontSize: 9,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'color 0.15s, border-color 0.15s',
-                  }}
-                >
-                  {t(tab.labelKey)}
-                  {tab.id === 'vergleich' && selection.compare.length > 0 ? (
-                    <span
-                      style={{
-                        marginLeft: 4,
-                        background: c.red,
-                        color: '#fff',
-                        borderRadius: 999,
-                        padding: '0 5px',
-                        fontSize: 8,
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        lineHeight: 1.4,
-                        minWidth: 14,
-                        textAlign: 'center',
-                      }}
-                    >
-                      {selection.compare.length + 1}
-                    </span>
-                  ) : null}
-                </button>
-              )
-            })}
+            <div
+              className="country-sidebar__tab-strip"
+              style={{
+                display: 'flex',
+                overflowX: layoutDirection === 'horizontal' ? 'visible' : 'auto',
+                gap: 0,
+                borderTop: `1px solid ${c.border}`,
+                minWidth: 0,
+              }}
+            >
+              {TAB_DEF.map((tab) => {
+                const active = activeTab === tab.id
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    style={{
+                      flexShrink: 0,
+                      padding: `${spacing.sm}px ${spacing.md}px`,
+                      border: 'none',
+                      borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
+                      background: 'transparent',
+                      color: active ? c.red : c.muted,
+                      fontFamily: fonts.mono,
+                      fontSize: 9,
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'color 0.15s, border-color 0.15s',
+                    }}
+                  >
+                    {t(tab.labelKey)}
+                    {tab.id === 'vergleich' && selection.compare.length > 0 ? (
+                      <span
+                        style={{
+                          marginLeft: 4,
+                          background: c.red,
+                          color: '#fff',
+                          borderRadius: 999,
+                          padding: '0 5px',
+                          fontSize: 8,
+                          display: 'inline-block',
+                          verticalAlign: 'middle',
+                          lineHeight: 1.4,
+                          minWidth: 14,
+                          textAlign: 'center',
+                        }}
+                      >
+                        {selection.compare.length + 1}
+                      </span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+            {layoutDirection === 'vertical' ? (
+              <div
+                aria-hidden
+                style={{
+                  pointerEvents: 'none',
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: 20,
+                  background: `linear-gradient(to right, transparent, ${c.cardBg})`,
+                  zIndex: 1,
+                }}
+              />
+            ) : null}
           </div>
         )}
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, scrollbarWidth: 'thin' }}>{content}</div>
+      <div
+        style={{
+          flex: 1,
+          minHeight: 0,
+          minWidth: 0,
+          overflow: layoutDirection === 'horizontal' ? 'hidden' : 'auto',
+          scrollbarWidth: 'thin',
+        }}
+      >
+        {layoutDirection === 'horizontal' ? (
+          content
+        ) : (
+          <div style={bottomContentFrame}>{content}</div>
+        )}
+      </div>
     </aside>
   )
 }
