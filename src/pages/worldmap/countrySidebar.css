@@ -14,6 +14,10 @@
   animation: rpdSlideIn 0.38s ease-out both;
 }
 
+.country-sidebar.country-sidebar--compact {
+  box-shadow: none;
+}
+
 /* Desktop: Breite/Clip steuert WorldMap (Inline). Mobile: Bottom-Sheet. */
 @media (max-width: 768px) {
   .country-sidebar.country-sidebar--sheet {

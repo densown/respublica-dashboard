@@ -101,6 +101,7 @@ export default function WorldMap() {
   const [year, setYear] = useState(2023)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarCompact, setSidebarCompact] = useState(false)
   const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
   const [mapContextMenu, setMapContextMenu] = useState<{
     iso3: string
@@ -382,6 +383,7 @@ export default function WorldMap() {
 
   const onCloseSidebar = useCallback(() => {
     setSidebarOpen(false)
+    setSidebarCompact(false)
   }, [])
 
   const stepYear = useCallback(
@@ -909,7 +911,7 @@ export default function WorldMap() {
             right: 0,
             bottom: 0,
             zIndex: 500,
-            width: sidebarOpen ? 320 : 0,
+            width: sidebarOpen ? (sidebarCompact ? 32 : 320) : 0,
             overflow: 'hidden',
             transition: 'width 0.25s ease',
             pointerEvents: sidebarOpen ? 'auto' : 'none',
@@ -931,6 +933,9 @@ export default function WorldMap() {
             formatIndicatorValue={formatValue}
             formatAnyIndicatorValue={formatAnyIndicatorValue}
             countryDetail={countryDetail}
+            mapData={mapRowsCountries}
+            dockCompact={sidebarCompact}
+            onDockCompactChange={setSidebarCompact}
           />
         </div>
       ) : (
@@ -950,6 +955,9 @@ export default function WorldMap() {
           formatIndicatorValue={formatValue}
           formatAnyIndicatorValue={formatAnyIndicatorValue}
           countryDetail={countryDetail}
+          mapData={mapRowsCountries}
+          dockCompact={false}
+          onDockCompactChange={() => {}}
         />
       )}
     </div>
