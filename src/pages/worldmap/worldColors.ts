@@ -11,6 +11,7 @@ const SEQUENTIAL: Record<string, { lo: string; hi: string }> = {
   trade: { lo: '#f7fcfd', hi: '#00441b' },
   /** Höher = schlechter (z. B. Tötungsrate): hell = niedrig, dunkel = hoch. */
   security: { lo: '#fff5f0', hi: '#67000d' },
+  democracy: { lo: '#fff7f3', hi: '#49006a' },
 }
 
 const GOV_RED = '#b2182b'
@@ -41,35 +42,8 @@ function mix(a: string, b: string, t: number): string {
   )
 }
 
-/** WCAG relative luminance (sRGB), ~0 = dark, ~1 = light */
-function relativeLuminance(hex: string): number {
-  const { r, g, b } = hexToRgb(hex)
-  const lin = (u: number) => {
-    const x = u / 255
-    return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4
-  }
-  const R = lin(r)
-  const G = lin(g)
-  const B = lin(b)
-  return 0.2126 * R + 0.7152 * G + 0.0722 * B
-}
-
-const DARK_MAP_LUM_FLOOR_HEX = '#2a4a6a'
-const DARK_MAP_LUM_FLOOR = relativeLuminance(DARK_MAP_LUM_FLOOR_HEX)
-const DARK_MAP_LIFT_TOWARD = '#8ebfe8'
-
-/**
- * Auf hellere Töne anheben, damit Choropleth auf fast schwarzem Basemap lesbar bleibt.
- * Ziel: keine Füllfarbe dunkler als ca. #2a4a6a (Luminanz-Floor).
- */
 export function liftChoroplethColorForDarkBasemap(hex: string): string {
-  let c = hex
-  let guard = 0
-  while (relativeLuminance(c) < DARK_MAP_LUM_FLOOR && guard < 14) {
-    c = mix(c, DARK_MAP_LIFT_TOWARD, 0.22)
-    guard += 1
-  }
-  return c
+  return mix(hex, '#ffffff', 0.35)
 }
 
 export type WorldFillColorOptions = {

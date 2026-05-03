@@ -21,7 +21,7 @@ type IndicatorSelectorProps = {
   labelSpan: (text: string) => ReactNode
   /**
    * Zwei Raster-Zellen (Kategorie + Indikator) ohne äußeren Flex-Container —
-   * für WorldMapMode-Filtergitter neben Jahr/Suche.
+   * für Weltkarten-/Länder-Filter (Kategorie + Indikator).
    */
   asGridCells?: boolean
   /** Kleinere Abstände in Filterzeilen */

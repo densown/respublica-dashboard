@@ -15,8 +15,8 @@ import { fonts } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
 
-const STYLE_LIGHT = 'https://tiles.openfreemap.org/styles/positron'
-const STYLE_DARK = 'https://tiles.openfreemap.org/styles/dark'
+const STYLE_LIGHT = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
+const STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json'
 
 const LAND_NODATA_LIGHT = '#e0e0e0'
 const LAND_NODATA_DARK = '#3a3a3a'
@@ -74,6 +74,8 @@ export type WorldGlMapProps = {
   narrow?: boolean
   /** Kartenhöhe in px (Mobile-first; Standard 350 / 500) */
   mapHeightPx?: number
+  /** Volle Elternfläche (World-Page) statt fixer Kartenhöhe */
+  layout?: 'card' | 'fullViewport'
 }
 
 type MapHandlers = {
@@ -102,6 +104,20 @@ function detachHandlers(
   hoveredIsoRef.current = null
 }
 
+function hideBasemapLabels(map: maplibregl.Map) {
+  const style = map.getStyle()
+  if (!style?.layers) return
+  style.layers.forEach((layer) => {
+    if (layer.type === 'symbol' && layer.id !== 'country-labels') {
+      try {
+        map.setLayoutProperty(layer.id, 'visibility', 'none')
+      } catch {
+        /* ignore */
+      }
+    }
+  })
+}
+
 export function WorldGlMap({
   geojson,
   mapData,
@@ -115,6 +131,7 @@ export function WorldGlMap({
   loading,
   narrow,
   mapHeightPx,
+  layout = 'card',
 }: WorldGlMapProps) {
   const { c, t, theme } = useTheme()
   const isDark = theme === 'dark'
@@ -165,9 +182,9 @@ export function WorldGlMap({
       '#C8102E',
       ['boolean', ['feature-state', 'hover'], false],
       '#ffffff',
-      isDark ? '#666666' : '#cccccc',
+      '#000000',
     ],
-    [selectedKey, isDark],
+    [selectedKey],
   )
 
   const borderLineWidth: ExpressionSpecification = useMemo(
@@ -177,7 +194,7 @@ export function WorldGlMap({
       2,
       ['boolean', ['feature-state', 'hover'], false],
       2,
-      0.5,
+      0.8,
     ],
     [selectedKey],
   )
@@ -189,7 +206,8 @@ export function WorldGlMap({
   borderLineColorRef.current = borderLineColor
   borderLineWidthRef.current = borderLineWidth
 
-  const mapHeight = mapHeightPx ?? (narrow ? 350 : 500)
+  const isFullViewport = layout === 'fullViewport'
+  const cardMapHeightPx = mapHeightPx ?? (narrow ? 350 : 500)
   const mapViewportMinHeight = narrow ? '60vh' : 'calc(100vh - 260px)'
 
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -212,13 +230,21 @@ export function WorldGlMap({
       promoteId: 'iso3',
     })
 
+    if (!map.getSource('country-centroids')) {
+      const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || ''
+      map.addSource('country-centroids', {
+        type: 'geojson',
+        data: `${base}/data/world-centroids.geojson`,
+      })
+    }
+
     map.addLayer({
       id: 'country-fills',
       type: 'fill',
       source: 'countries',
       paint: {
         'fill-color': fillExprRef.current,
-        'fill-opacity': 0.9,
+        'fill-opacity': 1.0,
       },
     })
 
@@ -229,6 +255,29 @@ export function WorldGlMap({
       paint: {
         'line-color': borderLineColorRef.current,
         'line-width': borderLineWidthRef.current,
+      },
+    })
+
+    map.addLayer({
+      id: 'country-labels',
+      type: 'symbol',
+      source: 'country-centroids',
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 1, 7, 3, 10, 5, 13],
+        'text-max-width': 6,
+        'text-allow-overlap': false,
+        'text-ignore-placement': false,
+        'symbol-placement': 'point',
+        'text-anchor': 'center',
+        'text-padding': 10,
+      },
+      paint: {
+        'text-color': isDark ? '#ffffff' : '#0F0F0F',
+        'text-halo-color': isDark ? '#1a1a2e' : '#F5F0E8',
+        'text-halo-width': 1.5,
+        'text-opacity': ['interpolate', ['linear'], ['zoom'], 1, 0.6, 3, 1],
       },
     })
 
@@ -334,8 +383,7 @@ export function WorldGlMap({
     map.addControl(
       new maplibregl.AttributionControl({
         compact: true,
-        customAttribution:
-          '© <a href="https://openfreemap.org/" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
+        customAttribution: '© <a href="https://carto.com/" target="_blank" rel="noopener noreferrer">CARTO</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
       }),
       'bottom-right',
     )
@@ -344,6 +392,7 @@ export function WorldGlMap({
 
     const onLoad = () => {
       installChoropleth(map)
+      hideBasemapLabels(map)
     }
     map.on('load', onLoad)
 
@@ -377,7 +426,7 @@ export function WorldGlMap({
     requestAnimationFrame(run)
     const t = window.setTimeout(run, 160)
     return () => window.clearTimeout(t)
-  }, [isFullscreen, mapViewportMinHeight, mapHeight, narrow])
+  }, [isFullscreen, mapViewportMinHeight, cardMapHeightPx, narrow, isFullViewport])
 
   useEffect(() => {
     const map = mapRef.current
@@ -395,10 +444,11 @@ export function WorldGlMap({
 
     const onStyleReady = () => {
       installChoropleth(map)
+      hideBasemapLabels(map)
     }
-    map.once('load', onStyleReady)
+    map.once('style.load', onStyleReady)
     return () => {
-      map.off('load', onStyleReady)
+      map.off('style.load', onStyleReady)
     }
   }, [isDark, geojson])
 
@@ -413,7 +463,7 @@ export function WorldGlMap({
     const map = mapRef.current
     if (!map?.getLayer('country-fills')) return
     map.setPaintProperty('country-fills', 'fill-color', fillExpr)
-    map.setPaintProperty('country-fills', 'fill-opacity', 0.9)
+    map.setPaintProperty('country-fills', 'fill-opacity', 1)
   }, [fillExpr])
 
   useEffect(() => {
@@ -422,6 +472,21 @@ export function WorldGlMap({
     map.setPaintProperty('country-borders', 'line-color', borderLineColor)
     map.setPaintProperty('country-borders', 'line-width', borderLineWidth)
   }, [borderLineColor, borderLineWidth])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map?.getLayer('country-labels')) return
+    map.setPaintProperty(
+      'country-labels',
+      'text-color',
+      isDark ? '#ffffff' : '#0F0F0F',
+    )
+    map.setPaintProperty(
+      'country-labels',
+      'text-halo-color',
+      isDark ? '#1a1a2e' : '#F5F0E8',
+    )
+  }, [isDark])
 
   const shellBase = useMemo(
     () => ({
@@ -447,11 +512,12 @@ export function WorldGlMap({
         style={{
           position: 'relative',
           width: '100%',
-          height: mapHeight,
-          minHeight: mapViewportMinHeight,
-          borderRadius: 8,
+          height: isFullViewport ? '100%' : cardMapHeightPx,
+          minHeight: isFullViewport ? 0 : mapViewportMinHeight,
+          flex: isFullViewport ? 1 : undefined,
+          borderRadius: isFullViewport ? 0 : 8,
           overflow: 'hidden',
-          ...shellBase,
+          ...(isFullViewport ? {} : shellBase),
           background: c.cardBg,
           display: 'flex',
           alignItems: 'center',
@@ -482,18 +548,30 @@ export function WorldGlMap({
         border: 'none',
         boxShadow: 'none',
       }
-    : {
-        position: 'relative' as const,
-        width: '100%',
-        height: mapHeight,
-        minHeight: mapViewportMinHeight,
-        borderRadius: 8,
-        overflow: 'hidden' as const,
-        ...shellBase,
-        boxShadow: isDark
-          ? '0 2px 16px rgba(0,0,0,0.45)'
-          : '0 2px 12px rgba(0,0,0,0.06)',
-      }
+    : isFullViewport
+      ? {
+          position: 'relative' as const,
+          width: '100%',
+          height: '100%',
+          minHeight: 0,
+          flex: 1,
+          borderRadius: 0,
+          overflow: 'hidden' as const,
+          border: 'none',
+          boxShadow: 'none',
+        }
+      : {
+          position: 'relative' as const,
+          width: '100%',
+          height: cardMapHeightPx,
+          minHeight: mapViewportMinHeight,
+          borderRadius: 8,
+          overflow: 'hidden' as const,
+          ...shellBase,
+          boxShadow: isDark
+            ? '0 2px 16px rgba(0,0,0,0.45)'
+            : '0 2px 12px rgba(0,0,0,0.06)',
+        }
 
   return (
     <div
@@ -506,9 +584,28 @@ export function WorldGlMap({
         style={
           isFullscreen
             ? { flex: 1, minHeight: 0, width: '100%' }
-            : { width: '100%', height: '100%' }
+            : isFullViewport
+              ? { flex: 1, minHeight: 0, width: '100%' }
+              : { width: '100%', height: '100%' }
         }
       />
+      <div
+        className="world-gl-map__watermark"
+        aria-hidden
+        style={{
+          position: 'absolute',
+          left: 10,
+          bottom: 10,
+          zIndex: 26,
+          fontFamily: fonts.mono,
+          fontSize: 11,
+          opacity: 0.4,
+          color: c.text,
+          pointerEvents: 'none',
+        }}
+      >
+        Res.Publica
+      </div>
       {!isFullscreen && (
         <button
           type="button"

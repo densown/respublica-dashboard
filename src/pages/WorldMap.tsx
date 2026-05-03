@@ -1,75 +1,96 @@
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useTheme } from '../design-system'
+import type { I18nKey } from '../design-system/i18n'
+import type { Lang } from '../design-system/ThemeContext'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
-import type { WorldCategoryApi, WorldGeoJson, WorldStats } from './worldmap/worldTypes'
+import { isRealCountry } from '../utils/worldFilters'
+import { useDebouncedValue } from './elections/useDebouncedValue'
+import { CountrySidebar } from './worldmap/CountrySidebar'
+import { WorldGlMap } from './worldmap/WorldGlMap'
+import { WorldMapLegend } from './worldmap/WorldMapLegend'
+import { worldApiUrl } from './worldmap/worldMapData'
+import type {
+  WorldCategoryApi,
+  WorldCountryDetail,
+  WorldGeoJson,
+  WorldMapRow,
+  WorldStats,
+} from './worldmap/worldTypes'
+import {
+  formatWorldIndicatorValue,
+  shortenWorldUnit,
+} from './worldmap/worldValueFormat'
 
-const WorldMapMode = lazy(() =>
-  import('./worldmap/WorldMapMode').then((m) => ({ default: m.WorldMapMode })),
-)
-const CountryAnalysis = lazy(() =>
-  import('./worldmap/CountryAnalysis').then((m) => ({
-    default: m.CountryAnalysis,
-  })),
-)
-const CountryCompare = lazy(() =>
-  import('./worldmap/CountryCompare').then((m) => ({
-    default: m.CountryCompare,
-  })),
-)
-const WorldScatterMode = lazy(() =>
-  import('./worldmap/WorldScatterMode').then((m) => ({
-    default: m.WorldScatterMode,
-  })),
-)
-const WorldRankingMode = lazy(() =>
-  import('./worldmap/WorldRankingMode').then((m) => ({
-    default: m.WorldRankingMode,
-  })),
-)
+const SIDEBAR_W = 320
 
-export type WorldActiveMode =
-  | 'map'
-  | 'analysis'
-  | 'compare'
-  | 'scatter'
-  | 'ranking'
+function categoryAndUnitForIndicator(
+  categories: WorldCategoryApi[] | null,
+  code: string,
+): { category: string; unit: string | null; indicatorName: string } {
+  if (!categories) return { category: 'economy', unit: null, indicatorName: code }
+  for (const cat of categories) {
+    const hit = cat.indicators.find((i) => i.code === code)
+    if (hit) return { category: cat.id, unit: hit.unit, indicatorName: hit.name }
+  }
+  return { category: 'economy', unit: null, indicatorName: code }
+}
 
-const MODE_TAB_KEYS = {
-  map: 'worldTabMap',
-  analysis: 'worldTabCountry',
-  compare: 'worldTabCompare',
-  scatter: 'worldTabScatter',
-  ranking: 'worldTabRanking',
-} as const
+function normIso(code: string): string {
+  return code.trim().toUpperCase()
+}
 
-const MODE_ORDER: WorldActiveMode[] = [
-  'map',
-  'analysis',
-  'compare',
-  'scatter',
-  'ranking',
-]
+const WORLD_CAT_I18N: Record<string, I18nKey> = {
+  population: 'worldCat_population',
+  economy: 'worldCat_economy',
+  health: 'worldCat_health',
+  education: 'worldCat_education',
+  governance: 'worldCat_governance',
+  trade: 'worldCat_trade',
+  military: 'worldCat_military',
+  security: 'worldCat_security',
+  technology: 'worldCat_technology',
+  environment: 'worldCat_environment',
+  inequality: 'worldCat_inequality',
+}
+
+function worldCategoryLabel(id: string, t: (key: I18nKey) => string): string {
+  const k = WORLD_CAT_I18N[id]
+  return k ? t(k) : id
+}
+
+function selectCss(c: {
+  cardBg: string
+  border: string
+  text: string
+}): CSSProperties {
+  return {
+    minHeight: 44,
+    padding: '0 12px',
+    borderRadius: 8,
+    border: `1px solid ${c.border}`,
+    background: c.cardBg,
+    color: c.text,
+    fontFamily: fonts.body,
+    fontSize: '0.86rem',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+  }
+}
 
 export default function WorldMap() {
-  const { c, t } = useTheme()
+  const { c, t, lang } = useTheme()
   const geoRef = useRef<WorldGeoJson | null>(null)
   const [geojson, setGeojson] = useState<WorldGeoJson | null>(null)
   const [geoErr, setGeoErr] = useState(false)
 
-  const [activeMode, setActiveMode] = useState<WorldActiveMode>('map')
   const [categoryId, setCategoryId] = useState('')
   const [indicatorCode, setIndicatorCode] = useState('NY.GDP.PCAP.CD')
-  const [scatterIndicatorY, setScatterIndicatorY] = useState('SP.DYN.LE00.IN')
   const [year, setYear] = useState(2023)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
 
   const [narrow, setNarrow] = useState(
     typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
@@ -81,6 +102,31 @@ export default function WorldMap() {
     window.addEventListener('resize', onR)
     return () => window.removeEventListener('resize', onR)
   }, [])
+
+  useEffect(() => {
+    if (!selectedCountry) {
+      setCountryDetail(null)
+      return
+    }
+    let cancelled = false
+    const url = worldApiUrl(
+      `/api/world/country/${encodeURIComponent(selectedCountry)}`,
+    )
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status))
+        return r.json() as Promise<WorldCountryDetail>
+      })
+      .then((data) => {
+        if (!cancelled) setCountryDetail(data)
+      })
+      .catch(() => {
+        if (!cancelled) setCountryDetail(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [selectedCountry])
 
   useEffect(() => {
     if (geoRef.current) {
@@ -129,219 +175,499 @@ export default function WorldMap() {
     if (year > yr.max || year < yr.min) setYear(yr.max)
   }, [stats, year])
 
+  const debInd = useDebouncedValue(indicatorCode, 280)
+  const debYear = useDebouncedValue(year, 280)
+
+  const yrRange = stats?.years_range
+  const [mapFallbackSteps, setMapFallbackSteps] = useState(0)
+
+  useEffect(() => {
+    setMapFallbackSteps(0)
+  }, [debInd, debYear])
+
+  const mapQueryYear = useMemo(() => {
+    if (!yrRange) return debYear
+    return Math.max(yrRange.min, debYear - mapFallbackSteps)
+  }, [debYear, mapFallbackSteps, yrRange])
+
+  const mapEp = debInd
+    ? `/api/world/map?indicator=${encodeURIComponent(debInd)}&year=${String(mapQueryYear)}`
+    : ''
+  const { data: mapRows, loading: mapLoading, error: mapError } =
+    useApi<WorldMapRow[]>(mapEp)
+
+  const mapRowsCountries = useMemo(
+    () => (mapRows ?? []).filter(isRealCountry),
+    [mapRows],
+  )
+
+  const mapHasNumericData = useMemo(
+    () =>
+      mapRowsCountries.some(
+        (r) => r.value != null && !Number.isNaN(r.value as number),
+      ),
+    [mapRowsCountries],
+  )
+
+  useEffect(() => {
+    if (!debInd) return
+    if (mapLoading) return
+    if (mapError) return
+    if (!yrRange) return
+    if (mapHasNumericData) return
+    if (mapFallbackSteps >= 5) return
+    const curQy = Math.max(yrRange.min, debYear - mapFallbackSteps)
+    const nextQy = Math.max(yrRange.min, debYear - mapFallbackSteps - 1)
+    if (nextQy >= curQy) return
+    setMapFallbackSteps((s) => s + 1)
+  }, [
+    debInd,
+    debYear,
+    mapRows,
+    mapLoading,
+    mapError,
+    mapFallbackSteps,
+    yrRange,
+    mapHasNumericData,
+  ])
+
+  const showYearFallbackHint =
+    mapFallbackSteps > 0 &&
+    mapHasNumericData &&
+    mapQueryYear !== debYear
+
+  const { category, unit, indicatorName } = useMemo(
+    () => categoryAndUnitForIndicator(categories, indicatorCode),
+    [categories, indicatorCode],
+  )
+
+  const fmtCtx = useMemo(
+    () => ({
+      indicatorCode,
+      category,
+      unit,
+      lang: lang as Lang,
+    }),
+    [indicatorCode, category, unit, lang],
+  )
+
+  const formatValue = useMemo(() => {
+    return (v: number | null | undefined) => {
+      if (v == null || Number.isNaN(v)) return '—'
+      return formatWorldIndicatorValue(v, fmtCtx)
+    }
+  }, [fmtCtx])
+
+  const unitShort = useMemo(
+    () => shortenWorldUnit(unit, lang as Lang),
+    [unit, lang],
+  )
+
+  const nameByIso = useMemo(() => {
+    const m = new Map<string, string>()
+    if (!geojson) return m
+    for (const f of geojson.features) {
+      const iso = f.properties.iso3?.toUpperCase()
+      if (iso) m.set(iso, f.properties.name)
+    }
+    return m
+  }, [geojson])
+
+  const { minV, maxV } = useMemo(() => {
+    const rows = mapRowsCountries.filter(
+      (r) => r.value != null && !Number.isNaN(r.value as number),
+    )
+    if (!rows.length) {
+      return { minV: 0, maxV: 1 }
+    }
+    let hi = rows[0]!
+    let lo = rows[0]!
+    for (const r of rows) {
+      const v = r.value as number
+      if (v > (hi.value as number)) hi = r
+      if (v < (lo.value as number)) lo = r
+    }
+    const min = lo.value as number
+    const max = hi.value as number
+    return {
+      minV: min,
+      maxV: max === min ? min + 1e-9 : max,
+    }
+  }, [mapRowsCountries])
+
+  const selectedRow = useMemo(() => {
+    if (!selectedCountry) return null
+    const u = normIso(selectedCountry)
+    return mapRowsCountries.find((r) => normIso(r.country_code) === u) ?? null
+  }, [mapRowsCountries, selectedCountry])
+
+  const countryDisplayName = useMemo(() => {
+    if (!selectedCountry) return ''
+    const u = normIso(selectedCountry)
+    return (
+      nameByIso.get(u) ??
+      selectedRow?.country_name ??
+      u
+    )
+  }, [nameByIso, selectedCountry, selectedRow])
+
   const onSelectCountry = useCallback((iso3: string) => {
     setSelectedCountry(iso3.trim().toUpperCase())
-    setActiveMode('analysis')
+    setSidebarOpen(true)
   }, [])
 
-  const onBackToMap = useCallback(() => {
-    setActiveMode('map')
+  const onCloseSidebar = useCallback(() => {
+    setSidebarOpen(false)
+    setSelectedCountry(null)
   }, [])
 
-  const modeTabs = MODE_ORDER.map((id) => ({
-    id,
-    label: t(MODE_TAB_KEYS[id]),
-  }))
+  const stepYear = useCallback(
+    (delta: number) => {
+      const yr = stats?.years_range
+      if (!yr) return
+      setYear((y) => Math.min(yr.max, Math.max(yr.min, y + delta)))
+    },
+    [stats],
+  )
+
+  const pillBase = useCallback(
+    (active: boolean): CSSProperties => ({
+      minHeight: 44,
+      padding: `0 ${spacing.md}px`,
+      borderRadius: 999,
+      border: `1px solid ${active ? c.red : c.border}`,
+      background: active ? `${c.red}14` : c.cardBg,
+      color: active ? c.red : c.text,
+      fontFamily: fonts.mono,
+      fontSize: '0.68rem',
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      cursor: 'pointer',
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+    }),
+    [c.border, c.cardBg, c.red, c.text],
+  )
+
+  const stepBtnStyle: CSSProperties = useMemo(
+    () => ({
+      minWidth: 44,
+      minHeight: 44,
+      borderRadius: 8,
+      border: `1px solid ${c.border}`,
+      background: c.cardBg,
+      color: c.text,
+      fontFamily: fonts.mono,
+      fontSize: '1rem',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }),
+    [c.border, c.cardBg, c.text],
+  )
+
+  const yr = stats?.years_range
 
   return (
-    <div style={{ paddingBottom: spacing.xl }}>
-      <div style={{ marginBottom: spacing.sm }}>
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: fonts.display,
-            fontSize: narrow ? '1.55rem' : '1.85rem',
-            lineHeight: 1.1,
-            color: c.text,
-          }}
-        >
-          {t('worldMap')}
-        </h1>
-        <p
-          style={{
-            margin: `${spacing.xs}px 0 0`,
-            fontFamily: fonts.body,
-            fontSize: narrow ? '0.86rem' : '0.92rem',
-            lineHeight: 1.35,
-            color: c.muted,
-          }}
-        >
-          {t('worldPageSubtitle')}
-        </p>
-      </div>
-
-      {geoErr && (
-        <p
-          style={{
-            marginTop: spacing.md,
-            color: '#b00020',
-            fontFamily: fonts.body,
-            fontSize: '0.9rem',
-          }}
-        >
-          {t('dataLoadError')} (world.geojson)
-        </p>
-      )}
-
+    <div
+      style={{
+        flex: 1,
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        background: c.bg,
+        color: c.text,
+      }}
+    >
       <div
         style={{
-          marginTop: spacing.sm,
+          display: 'flex',
+          flex: 1,
+          minHeight: 0,
+          flexDirection: narrow ? 'column' : 'row',
           width: '100%',
-          maxWidth: '100%',
-          overflowX: 'auto',
-          WebkitOverflowScrolling: 'touch',
-          boxSizing: 'border-box',
         }}
       >
         <div
-          role="tablist"
-          aria-label={t('worldMap')}
           style={{
+            position: 'relative',
+            flex: 1,
+            minWidth: 0,
+            minHeight: 0,
             display: 'flex',
-            gap: 0,
-            borderBottom: `1px solid ${c.border}`,
-            minWidth: 'min-content',
+            flexDirection: 'column',
           }}
         >
-          {modeTabs.map(({ id, label }) => {
-            const isActive = activeMode === id
-            return (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveMode(id)}
-                style={{
-                  fontFamily: fonts.mono,
-                  fontSize: '13px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  padding: narrow ? '8px 10px' : '9px 14px',
-                  flexShrink: 0,
-                  border: 'none',
-                  borderBottom: isActive
-                    ? '2px solid #C8102E'
-                    : '2px solid transparent',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontWeight: isActive ? 700 : 400,
-                  color: isActive ? c.text : c.muted,
-                  boxSizing: 'border-box',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = c.text
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.color = c.muted
-                }}
-              >
-                {label}
-              </button>
-            )
-          })}
-        </div>
-      </div>
+          {geoErr && (
+            <p
+              style={{
+                position: 'absolute',
+                top: spacing.sm,
+                left: spacing.md,
+                right: spacing.md,
+                zIndex: 25,
+                margin: 0,
+                padding: spacing.sm,
+                borderRadius: 8,
+                background: c.cardBg,
+                border: `1px solid ${c.border}`,
+                color: c.red,
+                fontFamily: fonts.body,
+                fontSize: '0.88rem',
+              }}
+            >
+              {t('dataLoadError')} (world.geojson)
+            </p>
+          )}
 
-      <Suspense
-        fallback={
           <div
             style={{
-              padding: spacing.xl,
-              textAlign: 'center',
-              fontFamily: fonts.body,
-              color: c.muted,
+              position: 'absolute',
+              top: spacing.md,
+              left: spacing.md,
+              right: narrow ? spacing.md : `calc(${spacing.md}px + env(safe-area-inset-right, 0px))`,
+              zIndex: 20,
+              maxWidth: narrow ? 'none' : `calc(100% - ${SIDEBAR_W + spacing.md * 3}px)`,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: spacing.sm,
+              pointerEvents: 'none',
             }}
           >
-            {t('loading')}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'nowrap',
+                gap: spacing.xs,
+                overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                paddingBottom: 2,
+                pointerEvents: 'auto',
+              }}
+            >
+              {(categories ?? []).map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setCategoryId(cat.id)
+                    const first = cat.indicators[0]?.code
+                    if (first) setIndicatorCode(first)
+                  }}
+                  style={pillBase(categoryId === cat.id)}
+                >
+                  {worldCategoryLabel(cat.id, t)}
+                </button>
+              ))}
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: narrow ? '1fr' : 'minmax(0, 1.2fr) minmax(0, 0.55fr)',
+                gap: spacing.sm,
+                alignItems: 'end',
+                pointerEvents: 'auto',
+              }}
+            >
+              <label style={{ minWidth: 0, display: 'block' }}>
+                <span
+                  style={{
+                    display: 'block',
+                    fontFamily: fonts.body,
+                    fontSize: '0.76rem',
+                    color: c.muted,
+                    marginBottom: 4,
+                  }}
+                >
+                  {t('worldIndicator')}
+                </span>
+                <select
+                  value={indicatorCode}
+                  disabled={!categories?.length}
+                  onChange={(e) => setIndicatorCode(e.target.value)}
+                  style={selectCss(c)}
+                >
+                  {(categories ?? [])
+                    .find((x) => x.id === categoryId)
+                    ?.indicators.map((ind) => (
+                      <option key={ind.code} value={ind.code}>
+                        {ind.name}
+                      </option>
+                    )) ?? null}
+                </select>
+              </label>
+
+              <div style={{ minWidth: 0 }}>
+                <span
+                  style={{
+                    display: 'block',
+                    fontFamily: fonts.body,
+                    fontSize: '0.76rem',
+                    color: c.muted,
+                    marginBottom: 4,
+                  }}
+                >
+                  {t('worldYear')}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+                  <button
+                    type="button"
+                    style={stepBtnStyle}
+                    disabled={!yr || year <= yr.min}
+                    onClick={() => stepYear(-1)}
+                    aria-label={t('worldYearStepPrev')}
+                  >
+                    −
+                  </button>
+                  <span
+                    style={{
+                      flex: 1,
+                      textAlign: 'center',
+                      fontFamily: fonts.mono,
+                      fontSize: '0.95rem',
+                      color: c.text,
+                    }}
+                  >
+                    {year}
+                  </span>
+                  <button
+                    type="button"
+                    style={stepBtnStyle}
+                    disabled={!yr || year >= yr.max}
+                    onClick={() => stepYear(1)}
+                    aria-label={t('worldYearStepNext')}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        }
-      >
-        {activeMode === 'map' && (
+
+          {mapError && (
+            <p
+              style={{
+                position: 'absolute',
+                bottom: 120,
+                left: spacing.md,
+                zIndex: 22,
+                margin: 0,
+                color: c.red,
+                fontFamily: fonts.body,
+                fontSize: '0.88rem',
+                pointerEvents: 'none',
+              }}
+            >
+              {t('dataLoadError')}
+            </p>
+          )}
+
+          {showYearFallbackHint && (
+            <p
+              style={{
+                position: 'absolute',
+                bottom: 96,
+                left: spacing.md,
+                right: spacing.md,
+                zIndex: 22,
+                margin: 0,
+                color: c.muted,
+                fontFamily: fonts.body,
+                fontSize: '0.78rem',
+                lineHeight: 1.35,
+                pointerEvents: 'none',
+              }}
+            >
+              {t('worldMapYearFallback')
+                .replace('{requested}', String(debYear))
+                .replace('{shown}', String(mapQueryYear))}
+            </p>
+          )}
+
           <div
             style={{
+              flex: 1,
+              minHeight: 0,
               width: '100%',
-              maxWidth: '100%',
-              boxSizing: 'border-box',
-              minHeight: narrow ? '60vh' : 'calc(100vh - 260px)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
-            <WorldMapMode
-              narrow={narrow}
+            <WorldGlMap
               geojson={geojson}
-              categories={categories}
-              categoryId={categoryId}
-              setCategoryId={setCategoryId}
-              indicatorCode={indicatorCode}
-              setIndicatorCode={setIndicatorCode}
-              year={year}
-              setYear={setYear}
-              stats={stats}
-              selectedIso={selectedCountry}
+              mapData={mapRowsCountries}
+              category={category}
+              valueMin={minV}
+              valueMax={maxV}
+              nameByIso={nameByIso}
               onSelectCountry={onSelectCountry}
+              selectedIso={selectedCountry}
+              formatValue={formatValue}
+              loading={mapLoading}
+              narrow={narrow}
+              layout="fullViewport"
             />
           </div>
-        )}
-        {activeMode === 'analysis' && (
-          <CountryAnalysis
-            narrow={narrow}
+
+          <div
+            style={{
+              position: 'absolute',
+              left: spacing.md,
+              right: spacing.md,
+            bottom: spacing.md,
+            zIndex: 28,
+              maxWidth: narrow ? 'none' : 420,
+              pointerEvents: 'none',
+            }}
+          >
+            <div style={{ pointerEvents: 'auto' }}>
+              <WorldMapLegend
+                category={category}
+                labelMin={formatValue(minV)}
+                labelMax={formatValue(maxV)}
+                unitShort={unitShort}
+                compact
+              />
+            </div>
+          </div>
+        </div>
+
+        {!narrow && (
+          <CountrySidebar
+            iso3={selectedCountry}
+            isOpen={sidebarOpen}
+            onClose={onCloseSidebar}
+            sheetLayout={false}
             geojson={geojson}
-            countryCode={selectedCountry}
-            onCountryCode={setSelectedCountry}
-            onBack={onBackToMap}
-            indicatorCode={indicatorCode}
-            setIndicatorCode={setIndicatorCode}
-            year={year}
-            categories={categories}
-            categoryId={categoryId}
-            setCategoryId={setCategoryId}
-            statsYears={stats?.years_range ?? null}
+            countryName={countryDisplayName}
+            selectedRow={selectedRow}
+            activeIndicatorLabel={indicatorName}
+            activeIndicatorCode={indicatorCode}
+            formatIndicatorValue={formatValue}
+            countryDetail={countryDetail}
           />
         )}
-        {activeMode === 'compare' && (
-          <CountryCompare
-            narrow={narrow}
-            geojson={geojson}
-            categoryId={categoryId}
-            setCategoryId={setCategoryId}
-            indicatorCode={indicatorCode}
-            setIndicatorCode={setIndicatorCode}
-            statsYears={stats?.years_range ?? null}
-            categories={categories}
-            year={year}
-          />
-        )}
-        {activeMode === 'scatter' && (
-          <WorldScatterMode
-            narrow={narrow}
-            categories={categories}
-            setCategoryId={setCategoryId}
-            indicatorX={indicatorCode}
-            setIndicatorX={setIndicatorCode}
-            indicatorY={scatterIndicatorY}
-            setIndicatorY={setScatterIndicatorY}
-            year={year}
-            setYear={setYear}
-            statsYears={stats?.years_range ?? null}
-            onSelectCountry={onSelectCountry}
-          />
-        )}
-        {activeMode === 'ranking' && (
-          <WorldRankingMode
-            narrow={narrow}
-            geojson={geojson}
-            categories={categories}
-            categoryId={categoryId}
-            setCategoryId={setCategoryId}
-            indicatorCode={indicatorCode}
-            setIndicatorCode={setIndicatorCode}
-            year={year}
-            setYear={setYear}
-            statsYears={stats?.years_range ?? null}
-            highlightIso3="DEU"
-          />
-        )}
-      </Suspense>
+      </div>
+
+      {narrow && (
+        <CountrySidebar
+          iso3={selectedCountry}
+          isOpen={sidebarOpen}
+          onClose={onCloseSidebar}
+          sheetLayout
+          geojson={geojson}
+          countryName={countryDisplayName}
+          selectedRow={selectedRow}
+          activeIndicatorLabel={indicatorName}
+          activeIndicatorCode={indicatorCode}
+          formatIndicatorValue={formatValue}
+          countryDetail={countryDetail}
+        />
+      )}
     </div>
   )
 }

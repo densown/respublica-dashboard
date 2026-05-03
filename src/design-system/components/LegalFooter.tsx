@@ -1,8 +1,12 @@
+import { useLocation } from 'react-router-dom'
 import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import { footerSourcesLineKey } from '../../data/sourcesCatalog'
 
 export function LegalFooter() {
+  const { pathname } = useLocation()
   const { c, t } = useTheme()
+  const sourcesLineKey = footerSourcesLineKey(pathname)
 
   const linkStyle = {
     fontFamily: fonts.mono,
@@ -77,7 +81,7 @@ export function LegalFooter() {
           {t('joinReddit')}
         </a>
       </div>
-      <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t('sources')}</p>
+      <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t(sourcesLineKey)}</p>
       <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t('aiHint')}</p>
       <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t('noCookies')}</p>
       <p style={textStyle}>{t('copyright')}</p>

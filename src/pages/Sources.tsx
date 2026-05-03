@@ -1,27 +1,53 @@
+import { Link } from 'react-router-dom'
 import { PageHeader, useTheme } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
 import { interpolate } from '../design-system/i18n'
 import { useApi } from '../hooks/useApi'
+import { SOURCES_BY_PAGE } from '../data/sourcesCatalog'
+import type { I18nKey } from '../design-system/i18n'
 
 type WahlenStats = {
   total_records: number
   years_range: { min: number; max: number } | null
 }
 
-function sectionTitle(c: { inkSoft: string }, text: string) {
+function sectionHeading(
+  c: { ink: string; red: string },
+  pageTitleKey: I18nKey,
+  href: string,
+  headingId: string,
+  t: (k: I18nKey) => string,
+) {
   return (
     <h2
+      id={headingId}
       style={{
-        fontFamily: fonts.mono,
-        fontSize: '0.7rem',
-        textTransform: 'uppercase',
-        letterSpacing: '0.08em',
-        color: c.inkSoft,
+        fontFamily: fonts.display,
+        fontSize: '1.15rem',
+        fontWeight: 600,
         marginTop: spacing.xl,
-        marginBottom: spacing.sm,
+        marginBottom: spacing.md,
+        lineHeight: 1.35,
       }}
     >
-      {text}
+      <Link
+        to={href}
+        style={{
+          color: c.ink,
+          textDecoration: 'none',
+          borderBottom: `1px solid transparent`,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = c.red
+          e.currentTarget.style.borderBottomColor = c.red
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = c.ink
+          e.currentTarget.style.borderBottomColor = 'transparent'
+        }}
+      >
+        {t(pageTitleKey)}
+      </Link>
     </h2>
   )
 }
@@ -34,6 +60,24 @@ function bodyStyle(c: { ink: string; inkSoft: string }) {
     color: c.ink,
     marginBottom: spacing.md,
   } as const
+}
+
+function aiSectionTitle(c: { inkSoft: string }, text: string) {
+  return (
+    <h2
+      style={{
+        fontFamily: fonts.mono,
+        fontSize: '0.7rem',
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        color: c.inkSoft,
+        marginTop: spacing.xxxl,
+        marginBottom: spacing.sm,
+      }}
+    >
+      {text}
+    </h2>
+  )
 }
 
 export default function Sources() {
@@ -49,32 +93,80 @@ export default function Sources() {
           })
         : t('sourcesLastUpdatedUnknown')
 
+  const badgeStyle = {
+    fontFamily: fonts.mono,
+    fontSize: '0.62rem',
+    fontWeight: 500,
+    letterSpacing: '0.02em',
+    background: c.badgeBg,
+    color: c.badgeText,
+    padding: '4px 10px',
+    borderRadius: 6,
+    whiteSpace: 'nowrap' as const,
+  }
+
   return (
     <div style={{ paddingBottom: spacing.xl }}>
       <PageHeader title={t('sourcesPageTitle')} subtitle={t('sourcesIntro')} />
 
-      {sectionTitle(c, t('sourcesSecElections'))}
-      <p style={bodyStyle(c)}>{t('sourcesGerda1')}</p>
-      <p style={bodyStyle(c)}>{t('sourcesGerda2')}</p>
-      <p style={bodyStyle(c)}>{t('sourcesGerda3')}</p>
+      {SOURCES_BY_PAGE.map((block) => {
+        const headingId = `sources-section-${block.href.replace(/\//g, '')}`
+        return (
+        <section key={block.href} aria-labelledby={headingId}>
+          {sectionHeading(c, block.pageTitleKey, block.href, headingId, t)}
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {block.sources.map((src) => (
+              <li
+                key={`${block.href}-${src.nameKey}`}
+                style={{
+                  marginBottom: spacing.lg,
+                  paddingBottom: spacing.md,
+                  borderBottom: `1px solid ${c.border}`,
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  <a
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontFamily: fonts.body,
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      color: c.red,
+                      textDecoration: 'none',
+                      minHeight: 44,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.textDecoration = 'underline'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.textDecoration = 'none'
+                    }}
+                  >
+                    {t(src.nameKey)}
+                  </a>
+                  <span style={badgeStyle}>{t(src.licenseKey)}</span>
+                </div>
+                <p style={{ ...bodyStyle(c), marginBottom: 0 }}>{t(src.descKey)}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+        )
+      })}
 
-      {sectionTitle(c, t('sourcesSecParliament'))}
-      <p style={bodyStyle(c)}>{t('sourcesParliament1')}</p>
-      <p style={bodyStyle(c)}>{t('sourcesParliament2')}</p>
-
-      {sectionTitle(c, t('sourcesSecLegislation'))}
-      <p style={bodyStyle(c)}>{t('sourcesLegislation1')}</p>
-
-      {sectionTitle(c, t('sourcesSecEuLaw'))}
-      <p style={bodyStyle(c)}>{t('sourcesEuLaw1')}</p>
-
-      {sectionTitle(c, t('sourcesSecEuCourts'))}
-      <p style={bodyStyle(c)}>{t('sourcesEuCourts1')}</p>
-
-      {sectionTitle(c, t('sourcesSecGeo'))}
-      <p style={bodyStyle(c)}>{t('sourcesGeo1')}</p>
-
-      {sectionTitle(c, t('sourcesSecAi'))}
+      {aiSectionTitle(c, t('sourcesSecAi'))}
       <p style={bodyStyle(c)}>{t('sourcesAi1')}</p>
 
       <p

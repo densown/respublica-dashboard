@@ -7,9 +7,11 @@ export type StatWidgetProps = {
   value: string | number
   sub?: string
   icon?: ReactNode
+  /** Enge Grids (z. B. Sidebar): minWidth 0, kein fester 140px-Min */
+  fluid?: boolean
 }
 
-export function StatWidget({ label, value, sub, icon }: StatWidgetProps) {
+export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) {
   const { c } = useTheme()
 
   return (
@@ -20,8 +22,10 @@ export function StatWidget({ label, value, sub, icon }: StatWidgetProps) {
         borderRadius: 6,
         padding: spacing.lg,
         boxShadow: c.shadow,
-        minWidth: 140,
-        flex: '1 1 140px',
+        minWidth: fluid ? 0 : 140,
+        flex: fluid ? '1 1 0' : '1 1 140px',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <div

@@ -24,13 +24,13 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
-| `/weltkarte` — `WorldMap.tsx` | Globale Datenkarte (MapLibre) |
+| `/weltkarte` — `WorldMap.tsx` | Vollflächige MapLibre-Weltkarte mit Overlay (Kategorie, Indikator, Jahr), `CountrySidebar` (Desktop 320px / Mobile Bottom-Sheet), CARTO-Basemaps |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
 | `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |
 | `*` — `NotFound.tsx` | 404 |
 
-Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponenten für die obigen Seiten).
+Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponenten für die obigen Seiten), `src/data/sourcesCatalog.ts` (Quellenkatalog und Footer-Zuordnung je Route).
 
 ## Design System
 
@@ -78,4 +78,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 15. April 2026
+**Zuletzt aktualisiert:** 3. Mai 2026

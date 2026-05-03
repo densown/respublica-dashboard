@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+
+const WORLD_MAP_PATH = '/weltkarte'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { LegalFooter, MobileNav, Sidebar, useTheme } from '../design-system'
 
@@ -61,6 +63,7 @@ export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false)
 
   const activeModule = activeModuleFromPath(location.pathname)
+  const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
   const navEntries = useMemo(
     () => [
@@ -144,22 +147,28 @@ export default function DashboardLayout() {
           style={{
             flex: 1,
             minHeight: 0,
-            overflowY: 'auto',
+            overflowY: isWorldMapPage ? 'hidden' : 'auto',
             WebkitOverflowScrolling: 'touch',
+            display: isWorldMapPage ? 'flex' : 'block',
+            flexDirection: isWorldMapPage ? 'column' : undefined,
           }}
         >
           <div
             style={{
-              maxWidth: 1100,
+              maxWidth: isWorldMapPage ? 'none' : 1100,
               margin: '0 auto',
               width: '100%',
-              padding: mainPad,
+              padding: isWorldMapPage ? 0 : mainPad,
               paddingBottom: 0,
+              flex: isWorldMapPage ? 1 : undefined,
+              minHeight: isWorldMapPage ? 0 : undefined,
+              display: isWorldMapPage ? 'flex' : 'block',
+              flexDirection: isWorldMapPage ? 'column' : undefined,
             }}
           >
             <Outlet />
           </div>
-          <LegalFooter />
+          {!isWorldMapPage && <LegalFooter />}
         </div>
       </div>
     </div>
