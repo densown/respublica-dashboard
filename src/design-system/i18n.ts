@@ -152,6 +152,10 @@ export const de = {
   worldWidgetCollapsePanel: 'Widget einklappen',
   worldWidgetExpandPanel: 'Widget ausklappen',
   worldWidgetPlaceholderBody: 'Inhalt folgt.',
+  worldWidgetStatPickCountry: 'Klicke ein Land auf der Karte an.',
+  worldWidgetTradePickCountry: 'Wähle ein Land für Handelsdaten.',
+  worldWidgetExportLabel: 'Export',
+  worldWidgetImportLabel: 'Import',
   worldWidgetInfoMap:
     'MapLibre-Weltkarte mit Choropleth-Färbung nach gewähltem Indikator und Jahr.',
   worldWidgetInfoRanking:
@@ -788,6 +792,10 @@ export const en = {
   worldWidgetCollapsePanel: 'Collapse widget',
   worldWidgetExpandPanel: 'Expand widget',
   worldWidgetPlaceholderBody: 'Content coming soon.',
+  worldWidgetStatPickCountry: 'Click a country on the map.',
+  worldWidgetTradePickCountry: 'Select a country for trade data.',
+  worldWidgetExportLabel: 'Export',
+  worldWidgetImportLabel: 'Import',
   worldWidgetInfoMap:
     'MapLibre world map with choropleth shading for the selected indicator and year.',
   worldWidgetInfoRanking:

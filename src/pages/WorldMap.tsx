@@ -691,6 +691,9 @@ export default function WorldMap() {
         narrow={narrow}
         selectedCountry={selectedCountry}
         indicatorCode={indicatorCode}
+        year={year}
+        categories={categories ?? null}
+        geojson={geojson}
         mapSlot={mapSlot}
       />
 

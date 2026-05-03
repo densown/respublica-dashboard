@@ -77,3 +77,18 @@ export type WorldRankingRow = {
   value: number
   rank: number
 }
+
+export type WorldTradeFlowPartnerRow = {
+  partner_code: string
+  partner_name: string
+  value_usd: number
+}
+
+export type WorldTradeResponse = {
+  iso3: string
+  year: number
+  total_export_usd: number | null
+  total_import_usd: number | null
+  top_exports: WorldTradeFlowPartnerRow[]
+  top_imports: WorldTradeFlowPartnerRow[]
+}
