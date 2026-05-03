@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import type { LngLat } from 'maplibre-gl'
 import { useTheme } from '../design-system'
 import type { Lang } from '../design-system/ThemeContext'
@@ -19,6 +26,7 @@ import { WorldGlMap } from './worldmap/WorldGlMap'
 import { WorldMapLegend } from './worldmap/WorldMapLegend'
 import { worldApiUrl } from './worldmap/worldMapData'
 import type {
+  CountrySelection,
   WorldCategoryApi,
   WorldCountryDetail,
   WorldGeoJson,
@@ -94,7 +102,58 @@ export default function WorldMap() {
   const [categoryId, setCategoryId] = useState('')
   const [indicatorCode, setIndicatorCode] = useState('NY.GDP.PCAP.CD')
   const [year, setYear] = useState(2023)
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
+  const [selection, setSelection] = useState<CountrySelection>({
+    primary: null,
+    compare: [],
+  })
+  const [allCountryDetails, setAllCountryDetails] = useState<
+    Map<string, WorldCountryDetail>
+  >(() => new Map())
+
+  const setPrimaryCountry = useCallback((iso3: string | null) => {
+    const n = iso3 == null ? null : normIso(iso3)
+    setSelection({ primary: n, compare: [] })
+  }, [])
+
+  const addCompareCountry = useCallback((iso3: string) => {
+    const u = normIso(iso3)
+    setSelection((prev) => {
+      if (!prev.primary) return { primary: u, compare: [] }
+      if (prev.primary === u || prev.compare.includes(u)) return prev
+      if (prev.compare.length >= 3) {
+        return { ...prev, compare: [...prev.compare.slice(1), u] }
+      }
+      return { ...prev, compare: [...prev.compare, u] }
+    })
+  }, [])
+
+  const removeCompareCountry = useCallback((iso3: string) => {
+    const u = normIso(iso3)
+    setSelection((prev) => ({
+      ...prev,
+      compare: prev.compare.filter((c) => c !== u),
+    }))
+  }, [])
+
+  const clearSelection = useCallback(() => {
+    setSelection({ primary: null, compare: [] })
+  }, [])
+
+  const onRemoveFromSelection = useCallback((iso3: string) => {
+    const u = normIso(iso3)
+    setSelection((prev) => {
+      if (prev.primary === u) {
+        if (prev.compare.length > 0) {
+          const [nextPrimary, ...rest] = prev.compare
+          return { primary: nextPrimary!, compare: rest }
+        }
+        return { primary: null, compare: [] }
+      }
+      return { ...prev, compare: prev.compare.filter((c) => c !== u) }
+    })
+  }, [])
+
+  const selectedCountry = selection.primary
   const [sidebarOpen, setSidebarOpen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth >= breakpoints.mobile : true,
   )
@@ -196,6 +255,41 @@ export default function WorldMap() {
       cancelled = true
     }
   }, [selectedCountry])
+
+  useEffect(() => {
+    const allIsos = [selection.primary, ...selection.compare]
+      .filter((x): x is string => !!x)
+      .map(normIso)
+    if (!allIsos.length) return
+    let cancelled = false
+    const missing = allIsos.filter((iso) => !allCountryDetails.has(iso))
+    if (!missing.length) return
+    Promise.all(
+      missing.map((iso) =>
+        fetch(worldApiUrl(`/api/world/country/${encodeURIComponent(iso)}`)).then(
+          (r) => {
+            if (!r.ok) throw new Error(String(r.status))
+            return r.json() as Promise<WorldCountryDetail>
+          },
+        ),
+      ),
+    )
+      .then((details) => {
+        if (cancelled) return
+        setAllCountryDetails((prev) => {
+          const next = new Map(prev)
+          details.forEach((d, i) => {
+            const iso = missing[i]!
+            next.set(iso, d)
+          })
+          return next
+        })
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [selection.primary, selection.compare, allCountryDetails])
 
   useEffect(() => {
     setTradeData(null)
@@ -450,10 +544,17 @@ export default function WorldMap() {
     [mapQueryYear],
   )
 
-  const onSelectCountry = useCallback((iso3: string) => {
-    setSelectedCountry(iso3.trim().toUpperCase())
-    setSidebarOpen(true)
-  }, [])
+  const onSelectCountry = useCallback(
+    (iso3: string, modifiers: { meta: boolean; ctrl: boolean }) => {
+      if (modifiers.meta || modifiers.ctrl) {
+        addCompareCountry(iso3)
+      } else {
+        setPrimaryCountry(iso3)
+      }
+      setSidebarOpen(true)
+    },
+    [addCompareCountry, setPrimaryCountry],
+  )
 
   const onCountryContextMenu = useCallback(
     (_iso3: string, _lngLat: LngLat, clientX: number, clientY: number) => {
@@ -610,7 +711,8 @@ export default function WorldMap() {
             nameByIso={nameByIso}
             onSelectCountry={onSelectCountry}
             onCountryContextMenu={onCountryContextMenu}
-            selectedIso={selectedCountry}
+            selectedIso={selection.primary}
+            compareIso3List={selection.compare}
             formatValue={formatValue}
             loading={mapLoading}
             narrow={narrow}
@@ -637,143 +739,124 @@ export default function WorldMap() {
                 overflow: 'hidden',
               }}
             >
-              <button
-                type="button"
-                role="menuitem"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  minHeight: 44,
-                  padding: '8px 12px',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontFamily: fonts.mono,
-                  fontSize: 12,
-                  color: c.text,
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => {
-                  const iso = mapContextMenu.iso3
-                  setMapContextMenu(null)
-                  setSelectedCountry(iso)
-                  widgetDashboardRef.current?.showWidget('stat-card')
-                }}
-              >
-                {t('worldContextMenuStatTrend')}
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  minHeight: 44,
-                  padding: '8px 12px',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontFamily: fonts.mono,
-                  fontSize: 12,
-                  color: c.text,
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => {
-                  const iso = mapContextMenu.iso3
-                  setMapContextMenu(null)
-                  setSelectedCountry(iso)
-                  widgetDashboardRef.current?.showWidget('sparkline')
-                }}
-              >
-                {t('worldContextMenuSparkline')}
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  minHeight: 44,
-                  padding: '8px 12px',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontFamily: fonts.mono,
-                  fontSize: 12,
-                  color: c.text,
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => {
-                  const iso = mapContextMenu.iso3
-                  setMapContextMenu(null)
-                  setSelectedCountry(iso)
-                  widgetDashboardRef.current?.showWidget('trade-flow')
-                }}
-              >
-                {t('worldContextMenuTrade')}
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  minHeight: 44,
-                  padding: '8px 12px',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontFamily: fonts.mono,
-                  fontSize: 12,
-                  color: c.text,
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => {
-                  const iso = mapContextMenu.iso3
-                  setMapContextMenu(null)
-                  setSelectedCountry(iso)
-                  setSidebarOpen(true)
-                }}
-              >
-                {t('worldContextMenuProfile')}
-              </button>
-              <div
-                role="separator"
-                style={{
-                  height: 1,
-                  margin: '4px 0',
-                  background: c.border,
-                }}
-              />
-              <button
-                type="button"
-                role="menuitem"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'left',
-                  minHeight: 44,
-                  padding: '8px 12px',
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontFamily: fonts.mono,
-                  fontSize: 12,
-                  color: c.muted,
-                  boxSizing: 'border-box',
-                }}
-                onClick={() => {
-                  setMapContextMenu(null)
-                  setSelectedCountry(null)
-                  setSidebarOpen(false)
-                }}
-              >
-                {t('worldContextMenuClearSelection')}
-              </button>
+              {(() => {
+                const iso = mapContextMenu.iso3
+                const isPrimary = selection.primary === iso
+                const inCompare = selection.compare.includes(iso)
+                const menuBtn = (opts: {
+                  label: string
+                  onClick: () => void
+                  disabled?: boolean
+                  muted?: boolean
+                }) => (
+                  <button
+                    key={opts.label}
+                    type="button"
+                    role="menuitem"
+                    disabled={opts.disabled}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'left',
+                      minHeight: 44,
+                      padding: '8px 12px',
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: opts.disabled ? 'not-allowed' : 'pointer',
+                      opacity: opts.disabled ? 0.45 : 1,
+                      fontFamily: fonts.mono,
+                      fontSize: 12,
+                      color: opts.muted ? c.muted : c.text,
+                      boxSizing: 'border-box',
+                    }}
+                    onClick={() => {
+                      if (opts.disabled) return
+                      opts.onClick()
+                    }}
+                  >
+                    {opts.label}
+                  </button>
+                )
+                const sep = (
+                  <div
+                    key="sep"
+                    role="separator"
+                    style={{
+                      height: 1,
+                      margin: '4px 0',
+                      background: c.border,
+                    }}
+                  />
+                )
+                const rows: ReactNode[] = []
+                rows.push(
+                  menuBtn({
+                    label: isPrimary
+                      ? t('worldContextMenuClose')
+                      : t('worldContextMenuOpen'),
+                    onClick: () => {
+                      setMapContextMenu(null)
+                      if (isPrimary) {
+                        clearSelection()
+                        setSidebarOpen(false)
+                      } else {
+                        setPrimaryCountry(iso)
+                        setSidebarOpen(true)
+                      }
+                    },
+                  }),
+                )
+                if (!isPrimary) {
+                  if (inCompare) {
+                    rows.push(
+                      menuBtn({
+                        label: t('worldContextMenuRemoveCompare'),
+                        onClick: () => {
+                          setMapContextMenu(null)
+                          removeCompareCountry(iso)
+                        },
+                      }),
+                    )
+                  } else {
+                    rows.push(
+                      menuBtn({
+                        label: t('worldContextMenuAddCompare'),
+                        disabled:
+                          selection.primary === iso ||
+                          selection.compare.includes(iso) ||
+                          selection.compare.length >= 3,
+                        onClick: () => {
+                          setMapContextMenu(null)
+                          addCompareCountry(iso)
+                          setSidebarOpen(true)
+                        },
+                      }),
+                    )
+                  }
+                }
+                rows.push(sep)
+                rows.push(
+                  menuBtn({
+                    label: t('worldContextMenuShowStat'),
+                    onClick: () => {
+                      setMapContextMenu(null)
+                      setPrimaryCountry(iso)
+                      widgetDashboardRef.current?.showWidget('stat-card')
+                    },
+                  }),
+                )
+                rows.push(
+                  menuBtn({
+                    label: t('worldContextMenuShowTrade'),
+                    onClick: () => {
+                      setMapContextMenu(null)
+                      setPrimaryCountry(iso)
+                      widgetDashboardRef.current?.showWidget('trade-flow')
+                    },
+                  }),
+                )
+                return rows
+              })()}
             </div>
           ) : null}
         </div>
@@ -819,6 +902,11 @@ export default function WorldMap() {
       onSelectCountry,
       onCountryContextMenu,
       mapContextMenu,
+      selection,
+      clearSelection,
+      removeCompareCountry,
+      addCompareCountry,
+      setPrimaryCountry,
       selectedCountry,
       formatValue,
       mapLoading,
@@ -847,6 +935,13 @@ export default function WorldMap() {
     isOpen: sidebarOpen,
     dock,
     onDockChange: setDock,
+    selection,
+    allCountryDetails,
+    mapRowsCountries,
+    formatIndicatorValue: formatValue,
+    geojson,
+    onRemoveFromSelection,
+    onClearAllSelection: clearSelection,
   }
 
   return (

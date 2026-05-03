@@ -16,11 +16,14 @@ import { interpolate } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
 import { findInd, fmtNumber, fmtPopulation, fmtUsd, latestValue, tailSeries, trendFromValues } from './worldConsoleHelpers'
 import type {
+  CountrySelection,
   WorldCountryDetail,
+  WorldGeoJson,
   WorldMapRow,
   WorldRankingRow,
   WorldTradeResponse,
 } from './worldTypes'
+import { iso3ToFlagIso2 } from './worldIso3ToIso2'
 import './countrySidebar.css'
 
 const VDEM_CODES = [
@@ -89,6 +92,13 @@ export type CountrySidebarProps = {
   isOpen?: boolean
   dock: 'left' | 'right'
   onDockChange: (d: 'left' | 'right') => void
+  selection: CountrySelection
+  allCountryDetails: Map<string, WorldCountryDetail>
+  mapRowsCountries: WorldMapRow[]
+  formatIndicatorValue: (v: number | null | undefined) => string
+  geojson: WorldGeoJson | null
+  onRemoveFromSelection: (iso3: string) => void
+  onClearAllSelection: () => void
 }
 
 type ConsoleTabId =
@@ -697,47 +707,243 @@ function TabHandel({
   )
 }
 
-function TabVergleich({ countryDetail: _countryDetail }: { countryDetail: WorldCountryDetail | null }) {
+function normIso3(code: string): string {
+  return code.trim().toUpperCase()
+}
+
+function TabVergleich({
+  selection,
+  allCountryDetails,
+  mapRowsCountries,
+  formatIndicatorValue,
+  activeIndicator,
+  geojson,
+  onRemoveFromSelection,
+  onClearAllSelection,
+}: {
+  selection: CountrySelection
+  allCountryDetails: Map<string, WorldCountryDetail>
+  mapRowsCountries: WorldMapRow[]
+  formatIndicatorValue: (v: number | null | undefined) => string
+  activeIndicator: WorldConsoleActiveIndicator | null
+  geojson: WorldGeoJson | null
+  onRemoveFromSelection: (iso3: string) => void
+  onClearAllSelection: () => void
+}) {
   const { c, t } = useTheme()
-  const [q, setQ] = useState('')
+
+  const ordered: string[] = [
+    ...(selection.primary ? [normIso3(selection.primary)] : []),
+    ...selection.compare.map(normIso3),
+  ]
+
+  const rowsForHbar = ordered.map((iso) => {
+    const det = allCountryDetails.get(iso)
+    const mapRow = mapRowsCountries.find((r) => normIso3(r.country_code) === iso)
+    const name = det?.country_name ?? mapRow?.country_name ?? iso
+    const val =
+      mapRow?.value != null && !Number.isNaN(mapRow.value as number)
+        ? (mapRow.value as number)
+        : null
+    return { iso, name, val }
+  })
+  const maxBar = Math.max(
+    1e-9,
+    ...rowsForHbar.map((r) => (r.val != null ? Math.abs(r.val) : 0)),
+  )
+  const barColors = [c.red, c.yes, c.no, c.ink]
 
   return (
     <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
-      <div style={{ marginBottom: spacing.lg }}>
-        <MonoLabel style={{ marginBottom: spacing.xs }}>{t('worldConsoleComparePicker')}</MonoLabel>
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={t('worldConsoleCompareSearchPh')}
+      <SectionDivider label={t('worldCompareTabSelectedCountries')} />
+
+      {ordered.map((iso, idx) => {
+        const det = allCountryDetails.get(iso)
+        const mapRow = mapRowsCountries.find((r) => normIso3(r.country_code) === iso)
+        const iso2 = iso3ToFlagIso2(iso, geojson)
+        const flagUrl = iso2 ? `https://flagcdn.com/w40/${iso2}.png` : null
+        const isPrimary = idx === 0
+        const regionLine = [det?.region, det?.income_level].filter(Boolean).join(' · ')
+        return (
+          <div
+            key={iso}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: spacing.md,
+              padding: `${spacing.md}px 0`,
+              borderBottom: `1px solid ${c.border}`,
+            }}
+          >
+            {flagUrl ? (
+              <img
+                src={flagUrl}
+                alt=""
+                width={40}
+                height={28}
+                style={{
+                  borderRadius: 4,
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  border: `1px solid ${c.border}`,
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: 40,
+                  height: 28,
+                  borderRadius: 4,
+                  background: c.bgHover,
+                  flexShrink: 0,
+                }}
+              />
+            )}
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: fonts.body,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: c.ink,
+                  }}
+                >
+                  {det?.country_name ?? mapRow?.country_name ?? iso}
+                </span>
+                {isPrimary && (
+                  <span
+                    style={{
+                      fontFamily: fonts.mono,
+                      fontSize: 8,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: c.red,
+                      border: `1px solid ${c.red}`,
+                      borderRadius: 4,
+                      padding: '2px 6px',
+                    }}
+                  >
+                    {t('worldCompareTabPrimary')}
+                  </span>
+                )}
+              </div>
+              <div
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 10,
+                  color: c.muted,
+                  marginTop: 4,
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {iso}
+                {regionLine ? ` · ${regionLine}` : ''}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onRemoveFromSelection(iso)}
+              title={t('worldConsoleClose')}
+              style={{
+                minWidth: 44,
+                minHeight: 44,
+                padding: 0,
+                border: `1px solid ${c.border}`,
+                borderRadius: 4,
+                background: 'transparent',
+                color: c.muted,
+                cursor: 'pointer',
+                fontFamily: fonts.mono,
+                fontSize: 14,
+                lineHeight: 1,
+                flexShrink: 0,
+              }}
+            >
+              ×
+            </button>
+          </div>
+        )
+      })}
+
+      {ordered.length < 4 && (
+        <div
           style={{
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: `${spacing.sm}px ${spacing.md}px`,
-            border: `1px solid ${c.border}`,
-            borderRadius: 6,
-            background: c.bg,
-            color: c.ink,
-            fontFamily: fonts.body,
-            fontSize: 13,
-            outline: 'none',
+            marginTop: spacing.lg,
+            padding: spacing.md,
+            border: `1px dashed ${c.border}`,
+            borderRadius: 8,
           }}
-        />
-      </div>
-      <div
+        >
+          <p
+            style={{
+              fontFamily: fonts.body,
+              fontSize: 12,
+              color: c.muted,
+              lineHeight: 1.5,
+              margin: 0,
+            }}
+          >
+            {t('worldCompareTabHintRightclick')}
+            <br />
+            {t('worldCompareTabHintCmdclick')}
+          </p>
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={onClearAllSelection}
         style={{
-          marginTop: spacing.xl,
-          padding: spacing.lg,
-          border: `1px dashed ${c.border}`,
-          borderRadius: 8,
-          textAlign: 'center',
+          marginTop: spacing.lg,
+          width: '100%',
+          minHeight: 44,
+          padding: `${spacing.sm}px ${spacing.md}px`,
+          border: `1px solid ${c.border}`,
+          borderRadius: 6,
+          background: c.bg,
+          color: c.ink,
+          fontFamily: fonts.mono,
+          fontSize: 11,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          cursor: 'pointer',
         }}
       >
-        <p style={{ fontFamily: fonts.body, fontSize: 13, color: c.muted, lineHeight: 1.5 }}>
-          {t('worldConsoleCompareHint')}
-          <br />
-          <span style={{ fontStyle: 'italic', fontSize: 12 }}>{t('worldConsoleComparePhase')}</span>
+        {t('worldCompareTabClearAll')}
+      </button>
+
+      <div style={{ marginTop: spacing.xl }}>
+        <SectionDivider label={t('worldCompareTabActiveIndicator')} />
+        <p
+          style={{
+            fontFamily: fonts.body,
+            fontSize: 14,
+            fontWeight: 600,
+            color: c.ink,
+            marginTop: spacing.sm,
+            marginBottom: spacing.md,
+          }}
+        >
+          {activeIndicator?.name || t('worldConsoleActiveIndicatorFallback')}
         </p>
+        {rowsForHbar.map((r, i) => (
+          <HBar
+            key={r.iso}
+            label={r.name}
+            value={r.val != null ? Math.abs(r.val) : 0}
+            max={maxBar}
+            formatted={r.val != null ? formatIndicatorValue(r.val) : t('worldNoValue')}
+            color={barColors[i % barColors.length]!}
+          />
+        ))}
       </div>
     </div>
   )
@@ -886,6 +1092,13 @@ export function CountrySidebar({
   isOpen = true,
   dock,
   onDockChange,
+  selection,
+  allCountryDetails,
+  mapRowsCountries,
+  formatIndicatorValue,
+  geojson,
+  onRemoveFromSelection,
+  onClearAllSelection,
 }: CountrySidebarProps) {
   const { c, t } = useTheme()
   const [activeTab, setActiveTab] = useState<ConsoleTabId>('uebersicht')
@@ -976,7 +1189,18 @@ export function CountrySidebar({
         case 'handel':
           return <TabHandel tradeData={tradeData} loading={tradeLoading} />
         case 'vergleich':
-          return <TabVergleich countryDetail={countryDetail} />
+          return (
+            <TabVergleich
+              selection={selection}
+              allCountryDetails={allCountryDetails}
+              mapRowsCountries={mapRowsCountries}
+              formatIndicatorValue={formatIndicatorValue}
+              activeIndicator={activeIndicator}
+              geojson={geojson}
+              onRemoveFromSelection={onRemoveFromSelection}
+              onClearAllSelection={onClearAllSelection}
+            />
+          )
         case 'kontext':
           return <TabKontext countryDetail={countryDetail} articles={articles} />
         default:
@@ -1184,6 +1408,25 @@ export function CountrySidebar({
                   }}
                 >
                   {t(tab.labelKey)}
+                  {tab.id === 'vergleich' && selection.compare.length > 0 ? (
+                    <span
+                      style={{
+                        marginLeft: 4,
+                        background: c.red,
+                        color: '#fff',
+                        borderRadius: 999,
+                        padding: '0 5px',
+                        fontSize: 8,
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        lineHeight: 1.4,
+                        minWidth: 14,
+                        textAlign: 'center',
+                      }}
+                    >
+                      {selection.compare.length + 1}
+                    </span>
+                  ) : null}
                 </button>
               )
             })}

@@ -1,3 +1,9 @@
+/** Karten-/Console-Auswahl: ein Primärland + bis zu drei Vergleichsländer */
+export type CountrySelection = {
+  primary: string | null
+  compare: string[]
+}
+
 export type WorldMapRow = {
   country_code: string
   country_name: string | null

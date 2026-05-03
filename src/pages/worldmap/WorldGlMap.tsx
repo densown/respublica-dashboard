@@ -67,8 +67,12 @@ export type WorldGlMapProps = {
   valueMin: number
   valueMax: number
   nameByIso: Map<string, string>
-  onSelectCountry: (iso3: string) => void
+  onSelectCountry: (
+    iso3: string,
+    modifiers: { meta: boolean; ctrl: boolean },
+  ) => void
   selectedIso?: string | null
+  compareIso3List?: string[]
   formatValue: (v: number | null | undefined) => string
   loading?: boolean
   narrow?: boolean
@@ -136,6 +140,7 @@ export function WorldGlMap({
   nameByIso,
   onSelectCountry,
   selectedIso,
+  compareIso3List = [],
   formatValue,
   loading,
   narrow,
@@ -271,6 +276,18 @@ export function WorldGlMap({
     })
 
     map.addLayer({
+      id: 'country-borders-compare',
+      type: 'line',
+      source: 'countries',
+      filter: ['literal', false] as maplibregl.FilterSpecification,
+      paint: {
+        'line-color': '#C8102E',
+        'line-width': 1,
+        'line-dasharray': [3, 2],
+      },
+    })
+
+    map.addLayer({
       id: 'country-labels',
       type: 'symbol',
       source: 'country-centroids',
@@ -307,7 +324,11 @@ export function WorldGlMap({
       const f = e.features?.[0]
       const raw = f?.properties?.iso3
       if (typeof raw !== 'string') return
-      onSelectRef.current(normIso(raw))
+      const me = e.originalEvent
+      onSelectRef.current(normIso(raw), {
+        meta: me.metaKey,
+        ctrl: me.ctrlKey,
+      })
     }
 
     const onMove = (e: maplibregl.MapLayerMouseEvent) => {
@@ -496,6 +517,26 @@ export function WorldGlMap({
     map.setPaintProperty('country-borders', 'line-color', borderLineColor)
     map.setPaintProperty('country-borders', 'line-width', borderLineWidth)
   }, [borderLineColor, borderLineWidth])
+
+  const compareListKey = compareIso3List.map(normIso).join(',')
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map?.getLayer('country-borders-compare')) return
+    const primaryKey = selectedIso?.trim().toUpperCase() ?? ''
+    const list = compareIso3List
+      .map(normIso)
+      .filter((x) => x && x !== primaryKey)
+    if (!list.length) {
+      map.setFilter('country-borders-compare', ['literal', false])
+      return
+    }
+    map.setFilter('country-borders-compare', [
+      'all',
+      ['in', ['upcase', ['get', 'iso3']], ['literal', list]],
+      ['!=', ['upcase', ['get', 'iso3']], primaryKey],
+    ] as maplibregl.FilterSpecification)
+  }, [compareListKey, selectedIso])
 
   useEffect(() => {
     const map = mapRef.current
