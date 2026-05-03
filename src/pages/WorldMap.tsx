@@ -1,14 +1,6 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { LngLat } from 'maplibre-gl'
 import { useTheme } from '../design-system'
-import type { I18nKey } from '../design-system/i18n'
 import type { Lang } from '../design-system/ThemeContext'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
@@ -53,45 +45,6 @@ function normIso(code: string): string {
   return code.trim().toUpperCase()
 }
 
-const WORLD_CAT_I18N: Record<string, I18nKey> = {
-  population: 'worldCat_population',
-  economy: 'worldCat_economy',
-  health: 'worldCat_health',
-  education: 'worldCat_education',
-  governance: 'worldCat_governance',
-  trade: 'worldCat_trade',
-  military: 'worldCat_military',
-  security: 'worldCat_security',
-  technology: 'worldCat_technology',
-  environment: 'worldCat_environment',
-  inequality: 'worldCat_inequality',
-}
-
-function worldCategoryLabel(id: string, t: (key: I18nKey) => string): string {
-  const k = WORLD_CAT_I18N[id]
-  return k ? t(k) : id
-}
-
-function selectCss(c: {
-  cardBg: string
-  border: string
-  text: string
-}): CSSProperties {
-  return {
-    minHeight: 44,
-    padding: '0 12px',
-    borderRadius: 8,
-    border: `1px solid ${c.border}`,
-    background: c.cardBg,
-    color: c.text,
-    fontFamily: fonts.body,
-    fontSize: '0.86rem',
-    width: '100%',
-    maxWidth: '100%',
-    boxSizing: 'border-box',
-  }
-}
-
 /** Indikatoren bei denen niedrigere Werte „besser“ sind (Perzentil / Trend) */
 const LOWER_IS_BETTER_INDICATORS = new Set<string>([
   'SI.POV.GINI',
@@ -111,7 +64,9 @@ export default function WorldMap() {
   const [indicatorCode, setIndicatorCode] = useState('NY.GDP.PCAP.CD')
   const [year, setYear] = useState(2023)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= breakpoints.mobile : true,
+  )
   const [sidebarCompact, setSidebarCompact] = useState(false)
   const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
   const [tradeData, setTradeData] = useState<WorldTradeResponse | null>(null)
@@ -454,53 +409,26 @@ export default function WorldMap() {
     setSidebarCompact(false)
   }, [])
 
-  const stepYear = useCallback(
-    (delta: number) => {
+  const handleYearChange = useCallback(
+    (next: number) => {
       const yr = stats?.years_range
       if (!yr) return
-      setYear((y) => Math.min(yr.max, Math.max(yr.min, y + delta)))
+      setYear(Math.min(yr.max, Math.max(yr.min, next)))
     },
     [stats],
   )
 
-  const pillBase = useCallback(
-    (active: boolean): CSSProperties => ({
-      minHeight: 44,
-      padding: `0 ${spacing.md}px`,
-      borderRadius: 999,
-      border: `1px solid ${active ? c.red : c.border}`,
-      background: active ? `${c.red}14` : c.cardBg,
-      color: active ? c.red : c.text,
-      fontFamily: fonts.mono,
-      fontSize: '0.68rem',
-      letterSpacing: '0.06em',
-      textTransform: 'uppercase',
-      cursor: 'pointer',
-      flexShrink: 0,
-      whiteSpace: 'nowrap',
-    }),
-    [c.border, c.cardBg, c.red, c.text],
+  const handleCategoryChange = useCallback(
+    (cat: string) => {
+      setCategoryId(cat)
+      const catObj = categories?.find((x) => x.id === cat)
+      const first = catObj?.indicators[0]?.code
+      if (first) setIndicatorCode(first)
+    },
+    [categories],
   )
 
-  const stepBtnStyle: CSSProperties = useMemo(
-    () => ({
-      minWidth: 44,
-      minHeight: 44,
-      borderRadius: 8,
-      border: `1px solid ${c.border}`,
-      background: c.cardBg,
-      color: c.text,
-      fontFamily: fonts.mono,
-      fontSize: '1rem',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }),
-    [c.border, c.cardBg, c.text],
-  )
-
-  const yr = stats?.years_range
+  const yrRangeForSidebar = stats?.years_range
 
   const mapSlot = useMemo(
     () => (
@@ -536,131 +464,6 @@ export default function WorldMap() {
             {t('dataLoadError')} (world.geojson)
           </p>
         )}
-
-        <div
-          style={{
-            position: 'absolute',
-            top: spacing.md,
-            left: spacing.md,
-            right: spacing.md,
-            zIndex: 20,
-            maxWidth: narrow ? 'none' : 'min(960px, calc(100% - 16px))',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: spacing.sm,
-            pointerEvents: 'none',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'nowrap',
-              gap: spacing.xs,
-              overflowX: 'auto',
-              WebkitOverflowScrolling: 'touch',
-              paddingBottom: 2,
-              pointerEvents: 'auto',
-            }}
-          >
-            {(categories ?? []).map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  setCategoryId(cat.id)
-                  const first = cat.indicators[0]?.code
-                  if (first) setIndicatorCode(first)
-                }}
-                style={pillBase(categoryId === cat.id)}
-              >
-                {worldCategoryLabel(cat.id, t)}
-              </button>
-            ))}
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: narrow ? '1fr' : 'minmax(0, 1.2fr) minmax(0, 0.55fr)',
-              gap: spacing.sm,
-              alignItems: 'end',
-              pointerEvents: 'auto',
-            }}
-          >
-            <label style={{ minWidth: 0, display: 'block' }}>
-              <span
-                style={{
-                  display: 'block',
-                  fontFamily: fonts.body,
-                  fontSize: '0.76rem',
-                  color: c.muted,
-                  marginBottom: 4,
-                }}
-              >
-                {t('worldIndicator')}
-              </span>
-              <select
-                value={indicatorCode}
-                disabled={!categories?.length}
-                onChange={(e) => setIndicatorCode(e.target.value)}
-                style={selectCss(c)}
-              >
-                {(categories ?? [])
-                  .find((x) => x.id === categoryId)
-                  ?.indicators.map((ind) => (
-                    <option key={ind.code} value={ind.code}>
-                      {ind.name}
-                    </option>
-                  )) ?? null}
-              </select>
-            </label>
-
-            <div style={{ minWidth: 0 }}>
-              <span
-                style={{
-                  display: 'block',
-                  fontFamily: fonts.body,
-                  fontSize: '0.76rem',
-                  color: c.muted,
-                  marginBottom: 4,
-                }}
-              >
-                {t('worldYear')}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-                <button
-                  type="button"
-                  style={stepBtnStyle}
-                  disabled={!yr || year <= yr.min}
-                  onClick={() => stepYear(-1)}
-                  aria-label={t('worldYearStepPrev')}
-                >
-                  −
-                </button>
-                <span
-                  style={{
-                    flex: 1,
-                    textAlign: 'center',
-                    fontFamily: fonts.mono,
-                    fontSize: '0.95rem',
-                    color: c.text,
-                  }}
-                >
-                  {year}
-                </span>
-                <button
-                  type="button"
-                  style={stepBtnStyle}
-                  disabled={!yr || year >= yr.max}
-                  onClick={() => stepYear(1)}
-                  aria-label={t('worldYearStepNext')}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {mapError && (
           <p
@@ -917,15 +720,6 @@ export default function WorldMap() {
       t,
       c,
       narrow,
-      categories,
-      categoryId,
-      indicatorCode,
-      pillBase,
-      selectCss,
-      yr,
-      year,
-      stepYear,
-      stepBtnStyle,
       mapError,
       showYearFallbackHint,
       debYear,
@@ -1002,6 +796,15 @@ export default function WorldMap() {
             onMinimize={setSidebarCompact}
             minimized={sidebarCompact}
             isOpen={sidebarOpen}
+            categories={categories ?? []}
+            activeCategory={categoryId}
+            onCategoryChange={handleCategoryChange}
+            activeIndicatorCode={indicatorCode}
+            onIndicatorCodeChange={setIndicatorCode}
+            year={year}
+            onYearChange={handleYearChange}
+            yearMin={yrRangeForSidebar?.min ?? year}
+            yearMax={yrRangeForSidebar?.max ?? year}
           />
         </div>
       ) : (
@@ -1022,6 +825,15 @@ export default function WorldMap() {
           onMinimize={() => {}}
           minimized={false}
           isOpen={sidebarOpen}
+          categories={categories ?? []}
+          activeCategory={categoryId}
+          onCategoryChange={handleCategoryChange}
+          activeIndicatorCode={indicatorCode}
+          onIndicatorCodeChange={setIndicatorCode}
+          year={year}
+          onYearChange={handleYearChange}
+          yearMin={yrRangeForSidebar?.min ?? year}
+          yearMax={yrRangeForSidebar?.max ?? year}
         />
       )}
     </div>
