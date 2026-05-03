@@ -258,6 +258,22 @@ export default function WorldMap() {
     }
   }, [fmtCtx])
 
+  const formatAnyIndicatorValue = useCallback(
+    (code: string, value: number) => {
+      const { category: cat, unit: u } = categoryAndUnitForIndicator(
+        categories ?? null,
+        code,
+      )
+      return formatWorldIndicatorValue(value, {
+        indicatorCode: code,
+        category: cat,
+        unit: u,
+        lang: lang as Lang,
+      })
+    },
+    [categories, lang],
+  )
+
   const unitShort = useMemo(
     () => shortenWorldUnit(unit, lang as Lang),
     [unit, lang],
@@ -647,7 +663,11 @@ export default function WorldMap() {
             selectedRow={selectedRow}
             activeIndicatorLabel={indicatorName}
             activeIndicatorCode={indicatorCode}
+            activeIndicatorCategory={category}
+            mapDisplayYear={mapQueryYear}
+            activeIndicatorUnitShort={unitShort}
             formatIndicatorValue={formatValue}
+            formatAnyIndicatorValue={formatAnyIndicatorValue}
             countryDetail={countryDetail}
           />
         )}
@@ -664,7 +684,11 @@ export default function WorldMap() {
           selectedRow={selectedRow}
           activeIndicatorLabel={indicatorName}
           activeIndicatorCode={indicatorCode}
+          activeIndicatorCategory={category}
+          mapDisplayYear={mapQueryYear}
+          activeIndicatorUnitShort={unitShort}
           formatIndicatorValue={formatValue}
+          formatAnyIndicatorValue={formatAnyIndicatorValue}
           countryDetail={countryDetail}
         />
       )}

@@ -1,3 +1,19 @@
+@keyframes rpdSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.country-sidebar:not(.country-sidebar--sheet).country-sidebar--open
+  .country-sidebar__panel {
+  animation: rpdSlideIn 0.38s ease-out both;
+}
+
 /* Desktop: Breite/Clip steuert WorldMap (Inline). Mobile: Bottom-Sheet. */
 @media (max-width: 768px) {
   .country-sidebar.country-sidebar--sheet {

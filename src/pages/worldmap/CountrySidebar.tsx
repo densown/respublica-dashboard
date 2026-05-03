@@ -1,18 +1,9 @@
 import { useMemo, type CSSProperties } from 'react'
-import { useTheme, StatWidget } from '../../design-system'
+import { useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 import { iso3ToFlagIso2 } from './worldIso3ToIso2'
 import type { WorldCountryDetail, WorldGeoJson, WorldMapRow } from './worldTypes'
 import './countrySidebar.css'
-
-// FUTURE: CountryDataSection-Komponente pro Datenquelle
-// Geplante Sektionen:
-// - Wirtschaft (Weltbank)
-// - Demokratie-Index (V-Dem)
-// - Pressefreiheit (RSF)
-// - Militär (SIPRI)
-// - Wahlen (eigene DB)
-// Jede Sektion: { title, source, lastUpdated, indicators: {label, value, unit, trend}[] }
 
 export type CountrySidebarProps = {
   iso3: string | null
@@ -26,7 +17,15 @@ export type CountrySidebarProps = {
   activeIndicatorLabel: string
   /** z. B. World-Bank-Code; für Fallback aus countryDetail.indicators */
   activeIndicatorCode: string
+  /** Kategorie-ID des aktuellen Indikators (z. B. economy) — für „Weitere Indikatoren“ */
+  activeIndicatorCategory: string
+  /** Jahr des auf der Karte angezeigten Wertes */
+  mapDisplayYear: number
+  /** Kurz-Einheit des aktiven Indikators (Legende) */
+  activeIndicatorUnitShort: string
   formatIndicatorValue: (v: number | null | undefined) => string
+  /** Formatierung beliebiger Indikatoren-Codes (Weitere Indikatoren) */
+  formatAnyIndicatorValue: (indicatorCode: string, value: number) => string
   countryDetail: WorldCountryDetail | null
 }
 
@@ -44,6 +43,56 @@ function lastIndicatorNumeric(
   return null
 }
 
+function latestObservation(
+  ind: WorldCountryDetail['indicators'][number],
+): { year: number; value: number } | null {
+  if (!ind.values?.length) return null
+  const sorted = [...ind.values].sort((a, b) => b.year - a.year)
+  for (const row of sorted) {
+    if (row.value != null && !Number.isNaN(row.value)) {
+      return { year: row.year, value: row.value }
+    }
+  }
+  return null
+}
+
+function pickOtherIndicators(
+  detail: WorldCountryDetail | null,
+  activeCode: string,
+  activeCategory: string,
+  formatVal: (code: string, v: number) => string,
+  limit: number,
+): Array<{ name: string; displayValue: string }> {
+  if (!detail?.indicators?.length) return []
+  type Row = {
+    name: string
+    displayValue: string
+    year: number
+    preferOtherCat: boolean
+  }
+  const rows: Row[] = []
+  for (const ind of detail.indicators) {
+    if (ind.indicator_code === activeCode) continue
+    const obs = latestObservation(ind)
+    if (!obs) continue
+    const preferOtherCat = Boolean(
+      ind.category && ind.category !== activeCategory,
+    )
+    rows.push({
+      name: ind.name,
+      displayValue: formatVal(ind.indicator_code, obs.value),
+      year: obs.year,
+      preferOtherCat,
+    })
+  }
+  rows.sort((a, b) => {
+    if (a.preferOtherCat !== b.preferOtherCat) return a.preferOtherCat ? -1 : 1
+    if (b.year !== a.year) return b.year - a.year
+    return a.name.localeCompare(b.name)
+  })
+  return rows.slice(0, limit).map(({ name, displayValue }) => ({ name, displayValue }))
+}
+
 function formatPopulationStat(v: number | null, lang: string): string {
   if (v == null || Number.isNaN(v)) return '—'
   if (v > 1_000_000) {
@@ -55,9 +104,19 @@ function formatPopulationStat(v: number | null, lang: string): string {
   return Math.round(v).toLocaleString(lang === 'de' ? 'de-DE' : 'en-US')
 }
 
-function formatGdpPerCapStat(v: number | null): string {
+function formatGdpPerCapStat(v: number | null, lang: string): string {
   if (v == null || Number.isNaN(v)) return '—'
-  return `${v.toLocaleString('de-DE', { maximumFractionDigits: 0 })} $`
+  return `${v.toLocaleString(lang === 'de' ? 'de-DE' : 'en-US', { maximumFractionDigits: 0 })} $`
+}
+
+const MONO_LABEL: CSSProperties = {
+  display: 'block',
+  fontFamily: fonts.mono,
+  fontSize: 9,
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  marginBottom: 6,
+  lineHeight: 1.2,
 }
 
 export function CountrySidebar({
@@ -70,7 +129,11 @@ export function CountrySidebar({
   selectedRow,
   activeIndicatorLabel,
   activeIndicatorCode,
+  activeIndicatorCategory,
+  mapDisplayYear,
+  activeIndicatorUnitShort,
   formatIndicatorValue,
+  formatAnyIndicatorValue,
   countryDetail,
 }: CountrySidebarProps) {
   const { c, t, lang } = useTheme()
@@ -79,6 +142,9 @@ export function CountrySidebar({
   const flagUrl = iso2 ? `https://flagcdn.com/w40/${iso2}.png` : null
 
   const regionLabel = countryDetail?.region ?? '—'
+  const incomeDisplay =
+    countryDetail?.income_level ?? selectedRow?.income_level ?? '—'
+
   const populationDisplay = useMemo(() => {
     const v = lastIndicatorNumeric(countryDetail, 'SP.POP.TOTL')
     return formatPopulationStat(v, lang)
@@ -86,8 +152,8 @@ export function CountrySidebar({
 
   const gdpPerCapDisplay = useMemo(() => {
     const v = lastIndicatorNumeric(countryDetail, 'NY.GDP.PCAP.CD')
-    return formatGdpPerCapStat(v)
-  }, [countryDetail])
+    return formatGdpPerCapStat(v, lang)
+  }, [countryDetail, lang])
 
   const activeValue = useMemo(() => {
     const rv = selectedRow?.value
@@ -107,28 +173,71 @@ export function CountrySidebar({
     formatIndicatorValue,
   ])
 
-  const statLabelStyle = {
-    display: 'block' as const,
-    fontFamily: fonts.mono,
-    fontSize: '0.58rem',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase' as const,
-    color: c.muted,
-    marginBottom: spacing.xs,
-  }
+  const otherIndicators = useMemo(
+    () =>
+      pickOtherIndicators(
+        countryDetail,
+        activeIndicatorCode,
+        activeIndicatorCategory,
+        formatAnyIndicatorValue,
+        4,
+      ),
+    [
+      countryDetail,
+      activeIndicatorCode,
+      activeIndicatorCategory,
+      formatAnyIndicatorValue,
+    ],
+  )
 
-  const regionCellStyle: CSSProperties = {
-    minWidth: 0,
-    background: c.cardBg,
-    border: `1px solid ${c.cardBorder}`,
-    borderRadius: 6,
-    padding: spacing.md,
-    boxShadow: c.shadow,
-  }
+  const otherSlots = useMemo(() => {
+    const out = [...otherIndicators]
+    while (out.length < 4) {
+      out.push({ name: '', displayValue: '—' })
+    }
+    return out.slice(0, 4)
+  }, [otherIndicators])
+
+  const unitYearLine = useMemo(() => {
+    const u = activeIndicatorUnitShort.trim()
+    if (u) return `${u} · ${mapDisplayYear}`
+    return String(mapDisplayYear)
+  }, [activeIndicatorUnitShort, mapDisplayYear])
+
+  const coreCell = (label: string, value: string, title?: string) => (
+    <div
+      style={{
+        minWidth: 0,
+        background: c.cardBg,
+        border: `1px solid ${c.cardBorder}`,
+        borderRadius: 6,
+        padding: spacing.md,
+        boxShadow: c.shadow,
+      }}
+    >
+      <span style={{ ...MONO_LABEL, color: c.muted }}>{label}</span>
+      <div
+        title={title ?? value}
+        style={{
+          fontFamily: fonts.display,
+          fontSize: '1.15rem',
+          fontWeight: 700,
+          color: c.text,
+          lineHeight: 1.15,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          minWidth: 0,
+        }}
+      >
+        {value}
+      </div>
+    </div>
+  )
 
   const inner = (
-    <>
-      <div
+    <div className="country-sidebar__panel">
+      <header
         style={{
           display: 'flex',
           alignItems: 'flex-start',
@@ -139,7 +248,15 @@ export function CountrySidebar({
           flexShrink: 0,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, minWidth: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            minWidth: 0,
+            flex: 1,
+          }}
+        >
           {flagUrl ? (
             <img
               src={flagUrl}
@@ -147,6 +264,8 @@ export function CountrySidebar({
               height={28}
               alt=""
               style={{
+                width: 40,
+                height: 28,
                 borderRadius: 4,
                 objectFit: 'cover',
                 border: `1px solid ${c.border}`,
@@ -165,31 +284,26 @@ export function CountrySidebar({
               }}
             />
           )}
-          <div style={{ minWidth: 0 }}>
-            <h2
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <p
               style={{
                 margin: 0,
-                fontFamily: fonts.display,
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                color: c.text,
-                lineHeight: 1.2,
+                fontFamily: fonts.mono,
+                fontSize: 9,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: c.muted,
+                lineHeight: 1.3,
               }}
             >
-              {countryName}
-            </h2>
-            {iso3 && (
-              <p
-                style={{
-                  margin: `${spacing.xs}px 0 0`,
-                  fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
-                  color: c.muted,
-                }}
-              >
-                {iso3}
-              </p>
-            )}
+              {t('worldSidebarProfile')}
+              {iso3 ? (
+                <>
+                  {' '}
+                  <span style={{ color: c.subtle }}>·</span> {iso3}
+                </>
+              ) : null}
+            </p>
           </div>
         </div>
         <button
@@ -215,16 +329,76 @@ export function CountrySidebar({
         >
           ×
         </button>
-      </div>
+      </header>
 
       <div style={{ paddingTop: spacing.md, flexShrink: 0 }}>
+        <h2
+          style={{
+            margin: 0,
+            fontFamily: fonts.display,
+            fontSize: 28,
+            fontWeight: 700,
+            color: c.text,
+            lineHeight: 1.15,
+            display: 'flex',
+            alignItems: 'baseline',
+            flexWrap: 'wrap',
+            gap: 6,
+          }}
+        >
+          <span style={{ minWidth: 0 }}>{countryName}</span>
+          <span
+            aria-hidden
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: c.red,
+              flexShrink: 0,
+              position: 'relative',
+              top: 2,
+            }}
+          />
+        </h2>
+      </div>
+
+      <section style={{ paddingTop: spacing.lg, flexShrink: 0 }}>
+        <span style={{ ...MONO_LABEL, color: c.muted }}>{activeIndicatorLabel}</span>
+        <p
+          style={{
+            margin: `4px 0 0`,
+            fontFamily: fonts.display,
+            fontSize: 42,
+            fontWeight: 700,
+            color: c.text,
+            lineHeight: 1,
+            wordBreak: 'break-word',
+          }}
+        >
+          {activeValue}
+        </p>
+        <p
+          style={{
+            margin: `${spacing.sm}px 0 0`,
+            fontFamily: fonts.body,
+            fontSize: 13,
+            color: c.muted,
+            lineHeight: 1.35,
+          }}
+        >
+          {unitYearLine}
+        </p>
+      </section>
+
+      <section style={{ paddingTop: spacing.lg, flexShrink: 0 }}>
         <h3
           style={{
             margin: `0 0 ${spacing.sm}px`,
-            fontFamily: fonts.display,
-            fontSize: '0.95rem',
-            fontWeight: 700,
-            color: c.text,
+            fontFamily: fonts.mono,
+            fontSize: 9,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: c.muted,
           }}
         >
           {t('worldSidebarCoreTitle')}
@@ -237,68 +411,86 @@ export function CountrySidebar({
           }}
         >
           <div style={{ minWidth: 0 }}>
-            <div style={regionCellStyle}>
-              <span style={statLabelStyle}>{t('worldSidebarStatRegion')}</span>
-              <div
-                title={regionLabel}
+            {coreCell(t('worldSidebarStatRegion'), regionLabel, regionLabel)}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            {coreCell(t('worldSidebarStatPopulation'), populationDisplay)}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            {coreCell(t('worldSidebarStatGdpPc'), gdpPerCapDisplay)}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            {coreCell(t('worldSidebarStatIncomeLevel'), incomeDisplay, incomeDisplay)}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ paddingTop: spacing.lg, flexShrink: 0 }}>
+        <h3
+          style={{
+            margin: `0 0 ${spacing.sm}px`,
+            fontFamily: fonts.mono,
+            fontSize: 9,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: c.muted,
+          }}
+        >
+          {t('worldSidebarMoreIndicatorsTitle')}
+        </h3>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: spacing.sm,
+          }}
+        >
+          {otherSlots.map((slot, i) => (
+            <div
+              key={`${slot.name}-${i}`}
+              style={{
+                minWidth: 0,
+                background: c.cardBg,
+                border: `1px solid ${c.cardBorder}`,
+                borderRadius: 6,
+                padding: spacing.md,
+                boxShadow: c.shadow,
+              }}
+            >
+              <span
                 style={{
-                  fontFamily: fonts.body,
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
+                  ...MONO_LABEL,
+                  color: c.muted,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  whiteSpace: 'normal',
+                }}
+              >
+                {slot.name || t('worldSidebarMetricPending')}
+              </span>
+              <div
+                style={{
+                  fontFamily: fonts.display,
+                  fontSize: 18,
+                  fontWeight: 700,
                   color: c.text,
-                  lineHeight: 1.25,
+                  lineHeight: 1.2,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
                   minWidth: 0,
                 }}
               >
-                {regionLabel}
+                {slot.displayValue}
               </div>
             </div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <StatWidget
-              fluid
-              label={t('worldSidebarStatPopulation')}
-              value={populationDisplay}
-            />
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <StatWidget fluid label={t('worldSidebarStatGdpPc')} value={gdpPerCapDisplay} />
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <StatWidget fluid label={activeIndicatorLabel} value={activeValue} />
-          </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      <div style={{ paddingTop: spacing.lg, flexShrink: 0 }}>
-        <h3
-          style={{
-            margin: `0 0 ${spacing.sm}px`,
-            fontFamily: fonts.display,
-            fontSize: '0.95rem',
-            fontWeight: 700,
-            color: c.text,
-          }}
-        >
-          {t('worldSidebarMoreTitle')}
-        </h3>
-        <p
-          style={{
-            margin: 0,
-            fontFamily: fonts.body,
-            fontSize: '0.88rem',
-            lineHeight: 1.45,
-            color: c.muted,
-          }}
-        >
-          {t('worldSidebarMorePlaceholder')}
-        </p>
-      </div>
-
-      <div
+      <footer
         style={{
           marginTop: 'auto',
           paddingTop: spacing.lg,
@@ -310,17 +502,22 @@ export function CountrySidebar({
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            fontFamily: fonts.mono,
-            fontSize: '0.72rem',
-            letterSpacing: '0.06em',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            fontFamily: fonts.body,
+            fontSize: 13,
             color: c.muted,
             textDecoration: 'none',
           }}
         >
-          {t('worldSidebarFooterLink')}
+          <span>{t('worldSidebarSourcesLine')}</span>
+          <span style={{ fontFamily: fonts.mono, color: c.red }} aria-hidden>
+            →
+          </span>
         </a>
-      </div>
-    </>
+      </footer>
+    </div>
   )
 
   const asideStyle: CSSProperties = sheetLayout
@@ -364,6 +561,7 @@ export function CountrySidebar({
             height: '100%',
             minHeight: 0,
             overflowY: 'auto',
+            minWidth: 0,
           }}
         >
           {inner}
