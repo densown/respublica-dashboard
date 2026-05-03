@@ -8,8 +8,11 @@ import { isRealCountry } from '../utils/worldFilters'
 import { useDebouncedValue } from './elections/useDebouncedValue'
 import { countryPercentileFromMapRows } from './worldmap/worldConsoleHelpers'
 import { CountrySidebar, type WorldConsoleActiveIndicator } from './worldmap/CountrySidebar'
+import MapTopbar from './worldmap/MapTopbar'
 import {
+  FLOATING_WIDGETS,
   WidgetDashboard,
+  type FloatingWidgetType,
   type WidgetDashboardHandle,
 } from './worldmap/WidgetDashboard'
 import { WorldGlMap } from './worldmap/WorldGlMap'
@@ -43,6 +46,34 @@ function categoryAndUnitForIndicator(
 
 function normIso(code: string): string {
   return code.trim().toUpperCase()
+}
+
+const LS_VIS_WIDGETS = 'rp-visible-widgets-v1'
+const LS_CONSOLE_DOCK = 'rp-console-dock'
+
+function parseVisibleFloatingWidgets(): Set<FloatingWidgetType> {
+  try {
+    const raw = localStorage.getItem(LS_VIS_WIDGETS)
+    if (!raw) return new Set()
+    const arr = JSON.parse(raw) as unknown
+    if (!Array.isArray(arr)) return new Set()
+    return new Set(
+      arr.filter(
+        (x): x is FloatingWidgetType =>
+          typeof x === 'string' && FLOATING_WIDGETS.includes(x as FloatingWidgetType),
+      ),
+    )
+  } catch {
+    return new Set()
+  }
+}
+
+function persistVisibleFloatingWidgets(next: Set<FloatingWidgetType>) {
+  try {
+    localStorage.setItem(LS_VIS_WIDGETS, JSON.stringify([...next]))
+  } catch {
+    /* ignore */
+  }
 }
 
 /** Indikatoren bei denen niedrigere Werte „besser“ sind (Perzentil / Trend) */
@@ -79,6 +110,56 @@ export default function WorldMap() {
   } | null>(null)
   const widgetDashboardRef = useRef<WidgetDashboardHandle | null>(null)
   const mapContextMenuRef = useRef<HTMLDivElement | null>(null)
+
+  const [dock, setDock] = useState<'left' | 'right'>(() => {
+    try {
+      return localStorage.getItem(LS_CONSOLE_DOCK) === 'left' ? 'left' : 'right'
+    } catch {
+      return 'right'
+    }
+  })
+
+  const [visibleFloatingWidgets, setVisibleFloatingWidgets] = useState<
+    Set<FloatingWidgetType>
+  >(() => parseVisibleFloatingWidgets())
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LS_CONSOLE_DOCK, dock)
+    } catch {
+      /* ignore */
+    }
+  }, [dock])
+
+  const onShowFloating = useCallback((id: FloatingWidgetType) => {
+    setVisibleFloatingWidgets((prev) => {
+      if (prev.has(id)) return prev
+      const next = new Set(prev)
+      next.add(id)
+      persistVisibleFloatingWidgets(next)
+      return next
+    })
+  }, [])
+
+  const onToggleFloating = useCallback((id: FloatingWidgetType) => {
+    setVisibleFloatingWidgets((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      persistVisibleFloatingWidgets(next)
+      return next
+    })
+  }, [])
+
+  const onRemoveFloating = useCallback((id: FloatingWidgetType) => {
+    setVisibleFloatingWidgets((prev) => {
+      if (!prev.has(id)) return prev
+      const next = new Set(prev)
+      next.delete(id)
+      persistVisibleFloatingWidgets(next)
+      return next
+    })
+  }, [])
 
   const [narrow, setNarrow] = useState(
     typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
@@ -428,7 +509,12 @@ export default function WorldMap() {
     [categories],
   )
 
-  const yrRangeForSidebar = stats?.years_range
+  const topbarIndicators = useMemo(() => {
+    const cat = (categories ?? []).find((x) => x.id === categoryId)
+    return cat?.indicators ?? []
+  }, [categories, categoryId])
+
+  const yrRangeTopbar = stats?.years_range
 
   const mapSlot = useMemo(
     () => (
@@ -741,101 +827,113 @@ export default function WorldMap() {
     ],
   )
 
+  const sidebarWidth = !sidebarOpen ? 0 : sidebarCompact ? 32 : 320
+
+  const countrySidebarProps = {
+    iso3: selectedCountry,
+    countryDetail,
+    selectedRow,
+    activeIndicator: worldConsoleActiveIndicator,
+    percentile: sidebarPercentile,
+    mapYear: mapQueryYear,
+    tradeData,
+    tradeLoading,
+    onLoadTrade: loadTrade,
+    ranking: consoleRanking,
+    globalStats: consoleGlobalStats,
+    onClose: onCloseSidebar,
+    onMinimize: setSidebarCompact,
+    minimized: sidebarCompact,
+    isOpen: sidebarOpen,
+    dock,
+    onDockChange: setDock,
+  }
+
   return (
     <div
       style={{
         flex: 1,
         minHeight: 0,
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
         background: c.bg,
         color: c.text,
-        position: 'relative',
       }}
     >
-      <WidgetDashboard
-        ref={widgetDashboardRef}
-        narrow={narrow}
-        selectedCountry={selectedCountry}
-        indicatorCode={indicatorCode}
+      <MapTopbar
+        categories={categories ?? []}
+        activeCategory={categoryId}
+        onCategoryChange={handleCategoryChange}
+        indicators={topbarIndicators}
+        activeIndicatorCode={indicatorCode}
+        onIndicatorCodeChange={setIndicatorCode}
         year={year}
-        categories={categories ?? null}
-        geojson={geojson}
-        mapSlot={mapSlot}
+        onYearChange={handleYearChange}
+        yearMin={yrRangeTopbar?.min ?? year}
+        yearMax={yrRangeTopbar?.max ?? year}
+        visibleWidgets={visibleFloatingWidgets}
+        onToggleWidget={onToggleFloating}
       />
 
-      {!narrow ? (
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: narrow ? 'column' : dock === 'left' ? 'row' : 'row-reverse',
+          minHeight: 0,
+          minWidth: 0,
+        }}
+      >
+        {!narrow && (
+          <div
+            style={{
+              width: sidebarWidth,
+              flexShrink: 0,
+              transition: 'width 0.25s ease',
+              overflow: 'hidden',
+            }}
+          >
+            {sidebarOpen ? <CountrySidebar {...countrySidebarProps} sheetLayout={false} /> : null}
+          </div>
+        )}
+
         <div
           style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 500,
-            width: sidebarOpen ? (sidebarCompact ? 32 : 320) : 0,
-            overflow: 'hidden',
-            transition: 'width 0.25s ease',
-            pointerEvents: sidebarOpen ? 'auto' : 'none',
+            flex: 1,
+            minWidth: 0,
+            minHeight: 0,
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          <CountrySidebar
-            iso3={selectedCountry}
-            countryDetail={countryDetail}
-            selectedRow={selectedRow}
-            activeIndicator={worldConsoleActiveIndicator}
-            percentile={sidebarPercentile}
-            mapYear={mapQueryYear}
-            tradeData={tradeData}
-            tradeLoading={tradeLoading}
-            onLoadTrade={loadTrade}
-            ranking={consoleRanking}
-            globalStats={consoleGlobalStats}
-            sheetLayout={false}
-            onClose={onCloseSidebar}
-            onMinimize={setSidebarCompact}
-            minimized={sidebarCompact}
-            isOpen={sidebarOpen}
-            categories={categories ?? []}
-            activeCategory={categoryId}
-            onCategoryChange={handleCategoryChange}
-            activeIndicatorCode={indicatorCode}
-            onIndicatorCodeChange={setIndicatorCode}
+          <WidgetDashboard
+            ref={widgetDashboardRef}
+            narrow={narrow}
+            selectedCountry={selectedCountry}
+            indicatorCode={indicatorCode}
             year={year}
-            onYearChange={handleYearChange}
-            yearMin={yrRangeForSidebar?.min ?? year}
-            yearMax={yrRangeForSidebar?.max ?? year}
+            categories={categories ?? null}
+            geojson={geojson}
+            mapSlot={mapSlot}
+            floatingVisible={visibleFloatingWidgets}
+            onShowFloating={onShowFloating}
+            onToggleFloating={onToggleFloating}
+            onRemoveFloating={onRemoveFloating}
           />
         </div>
-      ) : (
+      </div>
+
+      {narrow ? (
         <CountrySidebar
-          iso3={selectedCountry}
-          countryDetail={countryDetail}
-          selectedRow={selectedRow}
-          activeIndicator={worldConsoleActiveIndicator}
-          percentile={sidebarPercentile}
-          mapYear={mapQueryYear}
-          tradeData={tradeData}
-          tradeLoading={tradeLoading}
-          onLoadTrade={loadTrade}
-          ranking={consoleRanking}
-          globalStats={consoleGlobalStats}
+          {...countrySidebarProps}
           sheetLayout
-          onClose={onCloseSidebar}
           onMinimize={() => {}}
           minimized={false}
-          isOpen={sidebarOpen}
-          categories={categories ?? []}
-          activeCategory={categoryId}
-          onCategoryChange={handleCategoryChange}
-          activeIndicatorCode={indicatorCode}
-          onIndicatorCodeChange={setIndicatorCode}
-          year={year}
-          onYearChange={handleYearChange}
-          yearMin={yrRangeForSidebar?.min ?? year}
-          yearMax={yrRangeForSidebar?.max ?? year}
         />
-      )}
+      ) : null}
     </div>
   )
 }

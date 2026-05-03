@@ -24,7 +24,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
-| `/weltkarte` — `WorldMap.tsx` | MapLibre-Vollfläche mit schwebenden Widget-Panels in `WidgetDashboard.tsx` (Positionen/Offsets in `localStorage` `rp-widget-layout-v1`), keine Overlay-Steuerleiste; Kategorie/Indikator/Jahr in `worldmap/MapControlsPanel.tsx` im ersten Console-Tab „KARTE“ (`CountrySidebar.tsx`). Ohne Land: Tabs KARTE, ÜBERSICHT (Global-Ansicht, `/api/world/ranking`), VERGLEICH; mit Land: alle Tabs inkl. KARTE. Handel lazy per `/api/world/trade/:iso3`, Dock-Minimize 32px, CARTO-Basemaps; Rechtsklick auf ein Land öffnet ein Kontextmenü; Console-Primitives unter `src/design-system/components/` |
+| `/weltkarte` — `WorldMap.tsx` | `MapTopbar.tsx` (Kategorie-Pills, Indikator, Jahr, „+ Widget“-Menü); schwebende Widgets in `WidgetDashboard.tsx` nur bei aktivem Typ, Sichtbarkeit `localStorage` `rp-visible-widgets-v1`, Panel-Offsets `rp-widget-layout-v1` (ohne Sichtbarkeits-Default). Console `CountrySidebar.tsx`: sechs Tabs mit Land, ohne Land nur GlobalView; Snap links/rechts `localStorage` `rp-console-dock`. Handel lazy per `/api/world/trade/:iso3`, CARTO-Basemaps, Kontextmenü auf der Karte |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
 | `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |
@@ -78,4 +78,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 3. Mai 2026 (Weltkarte: MapControlsPanel in Country Console)
+**Zuletzt aktualisiert:** 3. Mai 2026 (Weltkarte: MapTopbar, Widget-Visibility, Console-Dock)

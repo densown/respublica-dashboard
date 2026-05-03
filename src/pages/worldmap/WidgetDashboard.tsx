@@ -43,16 +43,16 @@ export type WidgetType =
 /** Nur schwebende Panels; die Karte liegt als Vollfläche darunter. */
 export type FloatingWidgetType = Exclude<WidgetType, 'map'>
 
-const LS_KEY = 'rp-widget-layout-v1'
-const LS_VERSION = 2
-
-const FLOATING_WIDGETS: FloatingWidgetType[] = [
+export const FLOATING_WIDGETS: FloatingWidgetType[] = [
   'ranking',
   'stat-card',
   'bar-chart',
   'trade-flow',
   'sparkline',
 ]
+
+const LS_KEY = 'rp-widget-layout-v1'
+const LS_VERSION = 2
 
 const PANEL_DEFAULT_STYLE: Record<
   FloatingWidgetType,
@@ -91,48 +91,37 @@ type StoredStateV2 = {
   offsets?: PanelOffsets
 }
 
-function defaultVisible(): FloatingWidgetType[] {
-  return [...FLOATING_WIDGETS]
-}
-
-function parseStored(): { visible: FloatingWidgetType[]; offsets: PanelOffsets } {
+/** Nur Panel-Offsets; Sichtbarkeit liegt in rp-visible-widgets-v1 (WorldMap). */
+function parseStoredOffsets(): PanelOffsets {
   try {
     const raw = localStorage.getItem(LS_KEY)
-    if (!raw) {
-      return { visible: defaultVisible(), offsets: {} }
-    }
+    if (!raw) return {}
     const data = JSON.parse(raw) as StoredStateV2 & { layout?: unknown }
-    if (data.v === LS_VERSION && Array.isArray(data.visible)) {
-      const vis = data.visible.filter((x): x is FloatingWidgetType =>
-        FLOATING_WIDGETS.includes(x as FloatingWidgetType),
-      )
+    if (data.v === LS_VERSION && data.offsets && typeof data.offsets === 'object') {
       const offsets: PanelOffsets = {}
-      if (data.offsets && typeof data.offsets === 'object') {
-        for (const id of FLOATING_WIDGETS) {
-          const o = data.offsets[id]
-          if (
-            o &&
-            typeof o === 'object' &&
-            typeof o.dx === 'number' &&
-            typeof o.dy === 'number'
-          ) {
-            offsets[id] = { dx: o.dx, dy: o.dy }
-          }
+      for (const id of FLOATING_WIDGETS) {
+        const o = data.offsets[id]
+        if (
+          o &&
+          typeof o === 'object' &&
+          typeof o.dx === 'number' &&
+          typeof o.dy === 'number'
+        ) {
+          offsets[id] = { dx: o.dx, dy: o.dy }
         }
       }
-      return { visible: vis.length ? vis : defaultVisible(), offsets }
+      return offsets
     }
   } catch {
     /* ignore */
   }
-  return { visible: defaultVisible(), offsets: {} }
+  return {}
 }
 
-function persistState(visible: FloatingWidgetType[], offsets: PanelOffsets) {
+function persistOffsets(offsets: PanelOffsets) {
   try {
     const payload: StoredStateV2 = {
       v: LS_VERSION,
-      visible,
       offsets,
     }
     localStorage.setItem(LS_KEY, JSON.stringify(payload))
@@ -1068,11 +1057,18 @@ export type WidgetDashboardProps = {
   categories: WorldCategoryApi[] | null
   geojson: WorldGeoJson | null
   mapSlot: ReactNode
+  /** Sichtbare schwebende Widgets (gesteuert von WorldMap / MapTopbar, rp-visible-widgets-v1). */
+  floatingVisible: Set<FloatingWidgetType>
+  onShowFloating: (id: FloatingWidgetType) => void
+  onToggleFloating: (id: FloatingWidgetType) => void
+  onRemoveFloating: (id: FloatingWidgetType) => void
 }
 
 /** Schwebende Widgets per Ref einblenden (z. B. Kontextmenü auf der Karte). */
 export type WidgetDashboardHandle = {
   showWidget: (type: FloatingWidgetType) => void
+  toggleWidget: (type: FloatingWidgetType) => void
+  isVisible: (type: FloatingWidgetType) => boolean
 }
 
 export const WidgetDashboard = forwardRef<
@@ -1087,86 +1083,46 @@ export const WidgetDashboard = forwardRef<
     categories,
     geojson,
     mapSlot,
+    floatingVisible,
+    onShowFloating,
+    onToggleFloating,
+    onRemoveFloating,
   },
   ref,
 ) {
-  const { c, t } = useTheme()
-  const initial = useMemo(() => parseStored(), [])
-  const [visible, setVisible] = useState<FloatingWidgetType[]>(initial.visible)
-  const [offsets, setOffsets] = useState<PanelOffsets>(initial.offsets)
-  const [widgetsMenuOpen, setWidgetsMenuOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const visibleRef = useRef(visible)
+  const { t } = useTheme()
+  const initialOffsets = useMemo(() => parseStoredOffsets(), [])
+  const [offsets, setOffsets] = useState<PanelOffsets>(initialOffsets)
   const offsetsRef = useRef(offsets)
-  visibleRef.current = visible
   offsetsRef.current = offsets
 
-  const visibleSet = useMemo(() => new Set(visible), [visible])
+  const floatingVisibleRef = useRef(floatingVisible)
+  floatingVisibleRef.current = floatingVisible
 
-  useEffect(() => {
-    if (!widgetsMenuOpen) return
-    const onDoc = (e: MouseEvent) => {
-      if (!menuRef.current?.contains(e.target as Node)) {
-        setWidgetsMenuOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', onDoc)
-    return () => document.removeEventListener('mousedown', onDoc)
-  }, [widgetsMenuOpen])
-
-  const persist = useCallback((v: FloatingWidgetType[], o: PanelOffsets) => {
-    persistState(v, o)
-  }, [])
+  const visibleOrdered = useMemo(
+    () => FLOATING_WIDGETS.filter((id) => floatingVisible.has(id)),
+    [floatingVisible],
+  )
 
   const hideWidget = useCallback(
     (id: FloatingWidgetType) => {
-      setVisible((prev) => {
-        const next = prev.filter((x) => x !== id)
-        persist(next, offsetsRef.current)
-        return next
-      })
+      onRemoveFloating(id)
     },
-    [persist],
-  )
-
-  const showWidget = useCallback(
-    (id: FloatingWidgetType) => {
-      setVisible((prev) => {
-        if (prev.includes(id)) return prev
-        const next = [...prev, id]
-        persist(next, offsetsRef.current)
-        return next
-      })
-    },
-    [persist],
+    [onRemoveFloating],
   )
 
   useImperativeHandle(
     ref,
     () => ({
-      showWidget,
+      showWidget: (type: FloatingWidgetType) => {
+        onShowFloating(type)
+      },
+      toggleWidget: (type: FloatingWidgetType) => {
+        onToggleFloating(type)
+      },
+      isVisible: (type: FloatingWidgetType) => floatingVisibleRef.current.has(type),
     }),
-    [showWidget],
-  )
-
-  const resetPanels = useCallback(() => {
-    const next = defaultVisible()
-    setVisible(next)
-    setOffsets({})
-    persist(next, {})
-    setWidgetsMenuOpen(false)
-  }, [persist])
-
-  const setWidgetChecked = useCallback(
-    (id: FloatingWidgetType, checked: boolean) => {
-      if (checked) {
-        showWidget(id)
-        return
-      }
-      if (visibleRef.current.length <= 1) return
-      hideWidget(id)
-    },
-    [hideWidget, showWidget],
+    [onShowFloating, onToggleFloating],
   )
 
   const onDragMouseDown = useCallback(
@@ -1191,14 +1147,14 @@ export const WidgetDashboard = forwardRef<
         document.removeEventListener('mousemove', onMove)
         document.removeEventListener('mouseup', onUp)
         setOffsets((prev) => {
-          persist(visibleRef.current, prev)
+          persistOffsets(prev)
           return prev
         })
       }
       document.addEventListener('mousemove', onMove)
       document.addEventListener('mouseup', onUp)
     },
-    [persist],
+    [],
   )
 
   const renderPanelBody = (id: FloatingWidgetType) => {
@@ -1247,108 +1203,6 @@ export const WidgetDashboard = forwardRef<
     }
   }
 
-  const mapToolbar = !narrow ? (
-    <div
-      className="widget-no-drag"
-      style={{
-        position: 'absolute',
-        top: spacing.md,
-        right: spacing.md,
-        zIndex: 45,
-        display: 'flex',
-        alignItems: 'center',
-        gap: spacing.xs,
-        flexWrap: 'wrap',
-        justifyContent: 'flex-end',
-        maxWidth: 'min(100% - 16px, 420px)',
-        pointerEvents: 'auto',
-      }}
-    >
-      <div ref={menuRef} style={{ position: 'relative' }}>
-        <button
-          type="button"
-          onClick={() => setWidgetsMenuOpen((o) => !o)}
-          style={{
-            minHeight: 44,
-            padding: `0 ${spacing.md}px`,
-            borderRadius: 8,
-            border: `1px solid ${c.border}`,
-            background: c.cardBg,
-            color: c.text,
-            fontFamily: fonts.mono,
-            fontSize: '0.68rem',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
-            boxShadow: c.shadow,
-          }}
-        >
-          {t('worldWidgetToolbarWidgets')}
-        </button>
-        {widgetsMenuOpen ? (
-          <div
-            style={{
-              position: 'absolute',
-              top: '100%',
-              right: 0,
-              marginTop: 6,
-              minWidth: 220,
-              padding: spacing.md,
-              borderRadius: 8,
-              background: c.surface,
-              border: `1px solid ${c.border}`,
-              boxShadow: c.shadow,
-              zIndex: 60,
-            }}
-          >
-            {FLOATING_WIDGETS.map((wid) => (
-              <label
-                key={wid}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: spacing.sm,
-                  minHeight: 44,
-                  fontFamily: fonts.body,
-                  fontSize: '0.86rem',
-                  color: c.text,
-                  cursor: 'pointer',
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={visibleSet.has(wid)}
-                  onChange={(e) => setWidgetChecked(wid, e.target.checked)}
-                />
-                {t(WIDGET_TITLE_KEYS[wid])}
-              </label>
-            ))}
-          </div>
-        ) : null}
-      </div>
-      <button
-        type="button"
-        onClick={resetPanels}
-        style={{
-          minHeight: 44,
-          padding: `0 ${spacing.md}px`,
-          borderRadius: 8,
-          border: `1px solid ${c.border}`,
-          background: c.cardBg,
-          color: c.text,
-          fontFamily: fonts.mono,
-          fontSize: '0.68rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          boxShadow: c.shadow,
-        }}
-      >
-        {t('worldWidgetToolbarReset')}
-      </button>
-    </div>
-  ) : null
-
   if (narrow) {
     return (
       <div
@@ -1376,8 +1230,7 @@ export const WidgetDashboard = forwardRef<
       }}
     >
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>{mapSlot}</div>
-      {mapToolbar}
-      {visible.map((id) => {
+      {visibleOrdered.map((id) => {
         const base = PANEL_DEFAULT_STYLE[id]
         const off = offsets[id] ?? { dx: 0, dy: 0 }
         return (

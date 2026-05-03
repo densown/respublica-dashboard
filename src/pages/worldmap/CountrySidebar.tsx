@@ -16,13 +16,11 @@ import { interpolate } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
 import { findInd, fmtNumber, fmtPopulation, fmtUsd, latestValue, tailSeries, trendFromValues } from './worldConsoleHelpers'
 import type {
-  WorldCategoryApi,
   WorldCountryDetail,
   WorldMapRow,
   WorldRankingRow,
   WorldTradeResponse,
 } from './worldTypes'
-import MapControlsPanel from './MapControlsPanel'
 import './countrySidebar.css'
 
 const VDEM_CODES = [
@@ -89,19 +87,11 @@ export type CountrySidebarProps = {
   minimized: boolean
   /** Sichtbarkeit Bottom-Sheet / offen */
   isOpen?: boolean
-  categories: WorldCategoryApi[]
-  activeCategory: string
-  onCategoryChange: (cat: string) => void
-  activeIndicatorCode: string
-  onIndicatorCodeChange: (code: string) => void
-  year: number
-  onYearChange: (year: number) => void
-  yearMin: number
-  yearMax: number
+  dock: 'left' | 'right'
+  onDockChange: (d: 'left' | 'right') => void
 }
 
 type ConsoleTabId =
-  | 'karte'
   | 'uebersicht'
   | 'demokratie'
   | 'wirtschaft'
@@ -109,8 +99,7 @@ type ConsoleTabId =
   | 'vergleich'
   | 'kontext'
 
-const TAB_DEF_FULL: { id: ConsoleTabId; labelKey: I18nKey }[] = [
-  { id: 'karte', labelKey: 'worldConsoleTabKarte' },
+const TAB_DEF: { id: ConsoleTabId; labelKey: I18nKey }[] = [
   { id: 'uebersicht', labelKey: 'worldConsoleTabUebersicht' },
   { id: 'demokratie', labelKey: 'worldConsoleTabDemokratie' },
   { id: 'wirtschaft', labelKey: 'worldConsoleTabWirtschaft' },
@@ -118,8 +107,6 @@ const TAB_DEF_FULL: { id: ConsoleTabId; labelKey: I18nKey }[] = [
   { id: 'vergleich', labelKey: 'worldConsoleTabVergleich' },
   { id: 'kontext', labelKey: 'worldConsoleTabKontext' },
 ]
-
-const TAB_IDS_NO_COUNTRY: ConsoleTabId[] = ['karte', 'uebersicht', 'vergleich']
 
 function GlobalView({
   activeIndicatorLabel,
@@ -897,45 +884,24 @@ export function CountrySidebar({
   onMinimize,
   minimized = false,
   isOpen = true,
-  categories,
-  activeCategory,
-  onCategoryChange,
-  activeIndicatorCode,
-  onIndicatorCodeChange,
-  year,
-  onYearChange,
-  yearMin,
-  yearMax,
+  dock,
+  onDockChange,
 }: CountrySidebarProps) {
   const { c, t } = useTheme()
-  const [activeTab, setActiveTab] = useState<ConsoleTabId>(() => (iso3 ? 'uebersicht' : 'karte'))
-  const prevIsoRef = useRef<string | null>(iso3)
+  const [activeTab, setActiveTab] = useState<ConsoleTabId>('uebersicht')
+  const prevHasCountry = useRef(!!iso3)
 
   const hasCountry = !!iso3
   const lowerIsBetter = activeIndicator?.lowerIsBetter || false
 
-  const visibleTabs = useMemo(
-    () =>
-      hasCountry
-        ? TAB_DEF_FULL
-        : TAB_DEF_FULL.filter((tab) => TAB_IDS_NO_COUNTRY.includes(tab.id)),
-    [hasCountry],
-  )
-
-  const visibleTabIds = useMemo(() => visibleTabs.map((x) => x.id), [visibleTabs])
-
   useEffect(() => {
-    const prev = prevIsoRef.current
-    prevIsoRef.current = iso3
-    if (iso3 && !prev) setActiveTab('uebersicht')
-    if (!iso3 && prev) setActiveTab('karte')
-  }, [iso3])
-
-  useEffect(() => {
-    if (!visibleTabIds.includes(activeTab)) {
-      setActiveTab(iso3 ? 'uebersicht' : 'karte')
+    if (!hasCountry) {
+      setActiveTab('uebersicht')
+    } else if (!prevHasCountry.current) {
+      setActiveTab('uebersicht')
     }
-  }, [iso3, visibleTabIds, activeTab])
+    prevHasCountry.current = hasCountry
+  }, [hasCountry])
 
   useEffect(() => {
     if (activeTab === 'handel' && hasCountry && !tradeData && !tradeLoading && onLoadTrade && iso3) {
@@ -952,7 +918,8 @@ export function CountrySidebar({
             width: 32,
             flexShrink: 0,
             background: c.cardBg,
-            borderLeft: `1px solid ${c.border}`,
+            borderLeft: dock === 'right' ? `1px solid ${c.border}` : 'none',
+            borderRight: dock === 'left' ? `1px solid ${c.border}` : 'none',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -981,64 +948,42 @@ export function CountrySidebar({
     )
   }
 
-  const content = (() => {
-    if (activeTab === 'karte') {
-      return (
-        <MapControlsPanel
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={onCategoryChange}
-          activeIndicator={activeIndicatorCode}
-          onIndicatorChange={onIndicatorCodeChange}
-          year={year}
-          onYearChange={onYearChange}
-          yearMin={yearMin}
-          yearMax={yearMax}
-        />
-      )
-    }
-    if (!hasCountry) {
-      if (activeTab === 'uebersicht') {
-        return (
-          <GlobalView
-            activeIndicatorLabel={activeIndicator?.name}
-            ranking={ranking}
-            stats={globalStats}
-            totalCountries={globalStats?.total}
-          />
-        )
+  const content = !hasCountry ? (
+    <GlobalView
+      activeIndicatorLabel={activeIndicator?.name}
+      ranking={ranking}
+      stats={globalStats}
+      totalCountries={globalStats?.total}
+    />
+  ) : (
+    (() => {
+      switch (activeTab) {
+        case 'uebersicht':
+          return (
+            <TabUebersicht
+              countryDetail={countryDetail}
+              selectedRow={selectedRow}
+              activeIndicator={activeIndicator}
+              percentile={percentile}
+              lowerIsBetter={lowerIsBetter}
+              mapYear={mapYear}
+            />
+          )
+        case 'demokratie':
+          return <TabDemokratie countryDetail={countryDetail} />
+        case 'wirtschaft':
+          return <TabWirtschaft countryDetail={countryDetail} />
+        case 'handel':
+          return <TabHandel tradeData={tradeData} loading={tradeLoading} />
+        case 'vergleich':
+          return <TabVergleich countryDetail={countryDetail} />
+        case 'kontext':
+          return <TabKontext countryDetail={countryDetail} articles={articles} />
+        default:
+          return null
       }
-      if (activeTab === 'vergleich') {
-        return <TabVergleich countryDetail={countryDetail} />
-      }
-      return null
-    }
-    switch (activeTab) {
-      case 'uebersicht':
-        return (
-          <TabUebersicht
-            countryDetail={countryDetail}
-            selectedRow={selectedRow}
-            activeIndicator={activeIndicator}
-            percentile={percentile}
-            lowerIsBetter={lowerIsBetter}
-            mapYear={mapYear}
-          />
-        )
-      case 'demokratie':
-        return <TabDemokratie countryDetail={countryDetail} />
-      case 'wirtschaft':
-        return <TabWirtschaft countryDetail={countryDetail} />
-      case 'handel':
-        return <TabHandel tradeData={tradeData} loading={tradeLoading} />
-      case 'vergleich':
-        return <TabVergleich countryDetail={countryDetail} />
-      case 'kontext':
-        return <TabKontext countryDetail={countryDetail} articles={articles} />
-      default:
-        return null
-    }
-  })()
+    })()
+  )
 
   const asideStyle: CSSProperties = sheetLayout
     ? {
@@ -1061,7 +1006,8 @@ export function CountrySidebar({
         width: 320,
         flexShrink: 0,
         background: c.cardBg,
-        borderLeft: `1px solid ${c.border}`,
+        borderLeft: dock === 'right' ? `1px solid ${c.border}` : 'none',
+        borderRight: dock === 'left' ? `1px solid ${c.border}` : 'none',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
@@ -1129,6 +1075,30 @@ export function CountrySidebar({
             )}
           </div>
           <div style={{ display: 'flex', gap: spacing.xs, flexShrink: 0 }}>
+            {!sheetLayout && (
+              <button
+                type="button"
+                onClick={() => onDockChange(dock === 'right' ? 'left' : 'right')}
+                style={{
+                  width: 28,
+                  height: 28,
+                  border: `1px solid ${c.border}`,
+                  borderRadius: 4,
+                  background: 'transparent',
+                  color: c.muted,
+                  cursor: 'pointer',
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title={dock === 'right' ? t('worldConsoleDockLeft') : t('worldConsoleDockRight')}
+              >
+                {dock === 'right' ? '◧' : '◨'}
+              </button>
+            )}
             {!sheetLayout && onMinimize && (
               <button
                 type="button"
@@ -1180,43 +1150,45 @@ export function CountrySidebar({
           </div>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            overflowX: 'auto',
-            gap: 0,
-            borderTop: `1px solid ${c.border}`,
-            scrollbarWidth: 'none',
-          }}
-        >
-          {visibleTabs.map((tab) => {
-            const active = activeTab === tab.id
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  flexShrink: 0,
-                  padding: `${spacing.sm}px ${spacing.md}px`,
-                  border: 'none',
-                  borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
-                  background: 'transparent',
-                  color: active ? c.red : c.muted,
-                  fontFamily: fonts.mono,
-                  fontSize: 9,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'color 0.15s, border-color 0.15s',
-                }}
-              >
-                {t(tab.labelKey)}
-              </button>
-            )
-          })}
-        </div>
+        {hasCountry && (
+          <div
+            style={{
+              display: 'flex',
+              overflowX: 'auto',
+              gap: 0,
+              borderTop: `1px solid ${c.border}`,
+              scrollbarWidth: 'none',
+            }}
+          >
+            {TAB_DEF.map((tab) => {
+              const active = activeTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    flexShrink: 0,
+                    padding: `${spacing.sm}px ${spacing.md}px`,
+                    border: 'none',
+                    borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
+                    background: 'transparent',
+                    color: active ? c.red : c.muted,
+                    fontFamily: fonts.mono,
+                    fontSize: 9,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.15s, border-color 0.15s',
+                  }}
+                >
+                  {t(tab.labelKey)}
+                </button>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, scrollbarWidth: 'thin' }}>{content}</div>
