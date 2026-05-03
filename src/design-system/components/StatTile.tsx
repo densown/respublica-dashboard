@@ -6,42 +6,45 @@ import MonoLabel from './MonoLabel'
 export type StatTileProps = {
   label: ReactNode
   value: ReactNode
-  /** Tooltip / title auf dem Wert */
-  valueTitle?: string
+  sub?: ReactNode
+  icon?: ReactNode
   style?: CSSProperties
 }
 
-export default function StatTile({ label, value, valueTitle, style }: StatTileProps) {
+export default function StatTile({ label, value, sub, icon, style }: StatTileProps) {
   const { c } = useTheme()
   return (
     <div
       style={{
-        minWidth: 0,
-        background: c.cardBg,
-        border: `1px solid ${c.cardBorder}`,
+        background: c.bg,
+        border: `1px solid ${c.border}`,
         borderRadius: 6,
-        padding: spacing.md,
-        boxShadow: c.shadow,
+        padding: `${spacing.sm}px ${spacing.md}px`,
+        minWidth: 0,
         ...style,
       }}
     >
-      <MonoLabel muted>{label}</MonoLabel>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <MonoLabel>{label}</MonoLabel>
+        {icon && (
+          <span style={{ color: c.subtle, fontSize: 11, fontFamily: fonts.mono }}>{icon}</span>
+        )}
+      </div>
       <div
-        title={valueTitle}
         style={{
           fontFamily: fonts.display,
-          fontSize: '1.05rem',
-          fontWeight: 700,
-          color: c.text,
-          lineHeight: 1.15,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          minWidth: 0,
+          fontWeight: 900,
+          fontSize: 20,
+          color: c.ink,
+          lineHeight: 1.1,
+          marginTop: spacing.xs,
         }}
       >
         {value}
       </div>
+      {sub && (
+        <div style={{ fontFamily: fonts.body, fontSize: 11, color: c.muted, marginTop: 2 }}>{sub}</div>
+      )}
     </div>
   )
 }

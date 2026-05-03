@@ -14,7 +14,8 @@ import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { isRealCountry } from '../utils/worldFilters'
 import { useDebouncedValue } from './elections/useDebouncedValue'
-import { CountrySidebar } from './worldmap/CountrySidebar'
+import { countryPercentileFromMapRows } from './worldmap/worldConsoleHelpers'
+import { CountrySidebar, type WorldConsoleActiveIndicator } from './worldmap/CountrySidebar'
 import {
   WidgetDashboard,
   type WidgetDashboardHandle,
@@ -27,7 +28,9 @@ import type {
   WorldCountryDetail,
   WorldGeoJson,
   WorldMapRow,
+  WorldRankingRow,
   WorldStats,
+  WorldTradeResponse,
 } from './worldmap/worldTypes'
 import {
   formatWorldIndicatorValue,
@@ -89,6 +92,14 @@ function selectCss(c: {
   }
 }
 
+/** Indikatoren bei denen niedrigere Werte „besser“ sind (Perzentil / Trend) */
+const LOWER_IS_BETTER_INDICATORS = new Set<string>([
+  'SI.POV.GINI',
+  'FP.CPI.TOTL.ZG',
+  'SL.UEM.TOTL.ZS',
+  'v2x_corr',
+])
+
 export default function WorldMap() {
   const { c, t, lang, theme } = useTheme()
   const isDark = theme === 'dark'
@@ -103,6 +114,9 @@ export default function WorldMap() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarCompact, setSidebarCompact] = useState(false)
   const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
+  const [tradeData, setTradeData] = useState<WorldTradeResponse | null>(null)
+  const [tradeLoading, setTradeLoading] = useState(false)
+  const [consoleRanking, setConsoleRanking] = useState<WorldRankingRow[] | null>(null)
   const [mapContextMenu, setMapContextMenu] = useState<{
     iso3: string
     x: number
@@ -145,6 +159,10 @@ export default function WorldMap() {
     return () => {
       cancelled = true
     }
+  }, [selectedCountry])
+
+  useEffect(() => {
+    setTradeData(null)
   }, [selectedCountry])
 
   useEffect(() => {
@@ -277,22 +295,6 @@ export default function WorldMap() {
     }
   }, [fmtCtx])
 
-  const formatAnyIndicatorValue = useCallback(
-    (code: string, value: number) => {
-      const { category: cat, unit: u } = categoryAndUnitForIndicator(
-        categories ?? null,
-        code,
-      )
-      return formatWorldIndicatorValue(value, {
-        indicatorCode: code,
-        category: cat,
-        unit: u,
-        lang: lang as Lang,
-      })
-    },
-    [categories, lang],
-  )
-
   const unitShort = useMemo(
     () => shortenWorldUnit(unit, lang as Lang),
     [unit, lang],
@@ -336,15 +338,81 @@ export default function WorldMap() {
     return mapRowsCountries.find((r) => normIso(r.country_code) === u) ?? null
   }, [mapRowsCountries, selectedCountry])
 
-  const countryDisplayName = useMemo(() => {
-    if (!selectedCountry) return ''
-    const u = normIso(selectedCountry)
-    return (
-      nameByIso.get(u) ??
-      selectedRow?.country_name ??
-      u
+  useEffect(() => {
+    if (selectedCountry) {
+      setConsoleRanking(null)
+      return
+    }
+    if (!debInd) return
+    let cancelled = false
+    const url = worldApiUrl(
+      `/api/world/ranking?indicator=${encodeURIComponent(debInd)}&year=${String(mapQueryYear)}&limit=200&order=desc`,
     )
-  }, [nameByIso, selectedCountry, selectedRow])
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status))
+        return r.json() as Promise<WorldRankingRow[]>
+      })
+      .then((raw) => {
+        if (cancelled) return
+        const list = (raw ?? []).filter(isRealCountry)
+        setConsoleRanking(list.length ? list : null)
+      })
+      .catch(() => {
+        if (!cancelled) setConsoleRanking(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [selectedCountry, debInd, mapQueryYear])
+
+  const consoleGlobalStats = useMemo(() => {
+    const rows = consoleRanking
+    if (!rows?.length) return null
+    const vals = rows
+      .map((r) => r.value)
+      .filter((v) => v != null && !Number.isNaN(v as number)) as number[]
+    if (!vals.length) return null
+    vals.sort((a, b) => a - b)
+    const mean = vals.reduce((s, x) => s + x, 0) / vals.length
+    const mid = Math.floor(vals.length / 2)
+    const median =
+      vals.length % 2 === 1 ? vals[mid]! : (vals[mid - 1]! + vals[mid]!) / 2
+    return { median, mean, total: vals.length }
+  }, [consoleRanking])
+
+  const worldConsoleActiveIndicator: WorldConsoleActiveIndicator = useMemo(
+    () => ({
+      code: indicatorCode,
+      name: indicatorName,
+      category,
+      lowerIsBetter: LOWER_IS_BETTER_INDICATORS.has(indicatorCode),
+    }),
+    [indicatorCode, indicatorName, category],
+  )
+
+  const sidebarPercentile = useMemo(() => {
+    if (!selectedCountry) return null
+    return countryPercentileFromMapRows(selectedCountry, mapRowsCountries)
+  }, [selectedCountry, mapRowsCountries])
+
+  const loadTrade = useCallback(
+    (iso3: string) => {
+      setTradeLoading(true)
+      const url = worldApiUrl(
+        `/api/world/trade/${encodeURIComponent(iso3)}?year=${String(mapQueryYear)}`,
+      )
+      fetch(url)
+        .then((r) => {
+          if (!r.ok) throw new Error(String(r.status))
+          return r.json() as Promise<WorldTradeResponse>
+        })
+        .then((d) => setTradeData(d))
+        .catch(() => setTradeData(null))
+        .finally(() => setTradeLoading(false))
+    },
+    [mapQueryYear],
+  )
 
   const onSelectCountry = useCallback((iso3: string) => {
     setSelectedCountry(iso3.trim().toUpperCase())
@@ -919,45 +987,41 @@ export default function WorldMap() {
         >
           <CountrySidebar
             iso3={selectedCountry}
-            isOpen={sidebarOpen}
-            onClose={onCloseSidebar}
-            sheetLayout={false}
-            geojson={geojson}
-            countryName={countryDisplayName}
-            selectedRow={selectedRow}
-            activeIndicatorLabel={indicatorName}
-            activeIndicatorCode={indicatorCode}
-            activeIndicatorCategory={category}
-            mapDisplayYear={mapQueryYear}
-            activeIndicatorUnitShort={unitShort}
-            formatIndicatorValue={formatValue}
-            formatAnyIndicatorValue={formatAnyIndicatorValue}
             countryDetail={countryDetail}
-            mapData={mapRowsCountries}
-            dockCompact={sidebarCompact}
-            onDockCompactChange={setSidebarCompact}
+            selectedRow={selectedRow}
+            activeIndicator={worldConsoleActiveIndicator}
+            percentile={sidebarPercentile}
+            mapYear={mapQueryYear}
+            tradeData={tradeData}
+            tradeLoading={tradeLoading}
+            onLoadTrade={loadTrade}
+            ranking={consoleRanking}
+            globalStats={consoleGlobalStats}
+            sheetLayout={false}
+            onClose={onCloseSidebar}
+            onMinimize={setSidebarCompact}
+            minimized={sidebarCompact}
+            isOpen={sidebarOpen}
           />
         </div>
       ) : (
         <CountrySidebar
           iso3={selectedCountry}
-          isOpen={sidebarOpen}
-          onClose={onCloseSidebar}
-          sheetLayout
-          geojson={geojson}
-          countryName={countryDisplayName}
-          selectedRow={selectedRow}
-          activeIndicatorLabel={indicatorName}
-          activeIndicatorCode={indicatorCode}
-          activeIndicatorCategory={category}
-          mapDisplayYear={mapQueryYear}
-          activeIndicatorUnitShort={unitShort}
-          formatIndicatorValue={formatValue}
-          formatAnyIndicatorValue={formatAnyIndicatorValue}
           countryDetail={countryDetail}
-          mapData={mapRowsCountries}
-          dockCompact={false}
-          onDockCompactChange={() => {}}
+          selectedRow={selectedRow}
+          activeIndicator={worldConsoleActiveIndicator}
+          percentile={sidebarPercentile}
+          mapYear={mapQueryYear}
+          tradeData={tradeData}
+          tradeLoading={tradeLoading}
+          onLoadTrade={loadTrade}
+          ranking={consoleRanking}
+          globalStats={consoleGlobalStats}
+          sheetLayout
+          onClose={onCloseSidebar}
+          onMinimize={() => {}}
+          minimized={false}
+          isOpen={sidebarOpen}
         />
       )}
     </div>

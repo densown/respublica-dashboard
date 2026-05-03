@@ -1,100 +1,103 @@
-import { useMemo, type CSSProperties } from 'react'
-import { fonts, spacing } from '../tokens'
+import type { CSSProperties } from 'react'
+import { fonts } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
-export type RadarAxis = {
-  key: string
+export type RadarChartAxis = {
   label: string
-  /** 0–1 für Radius */
+  /** 0–1 entlang der Achse */
   value: number
 }
 
 export type RadarChartProps = {
-  axes: RadarAxis[]
-  size?: number
+  axes: RadarChartAxis[]
+  color?: string
   style?: CSSProperties
 }
 
-export default function RadarChart({ axes, size = 200, style }: RadarChartProps) {
+export default function RadarChart({ axes, color, style }: RadarChartProps) {
   const { c } = useTheme()
-  const cx = size / 2
-  const cy = size / 2
-  const R = size * 0.36
-
-  const { polygon, labelPts } = useMemo(() => {
-    const n = axes.length
-    if (n < 3) {
-      return { polygon: '', labelPts: [] as { x: number; y: number; label: string }[] }
-    }
-    const pts: string[] = []
-    const labels: { x: number; y: number; label: string }[] = []
-    for (let i = 0; i < n; i++) {
-      const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n
-      const v = Math.max(0, Math.min(1, axes[i]!.value))
-      const x = cx + R * v * Math.cos(ang)
-      const y = cy + R * v * Math.sin(ang)
-      pts.push(`${x.toFixed(1)},${y.toFixed(1)}`)
-      const lx = cx + (R + 14) * Math.cos(ang)
-      const ly = cy + (R + 14) * Math.sin(ang)
-      labels.push({ x: lx, y: ly, label: axes[i]!.label })
-    }
-    return { polygon: pts.join(' '), labelPts: labels }
-  }, [axes, cx, cy, R])
-
-  if (axes.length < 3 || !polygon) {
-    return (
-      <div
-        style={{
-          width: size,
-          height: size,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: c.muted,
-          fontSize: 12,
-          textAlign: 'center',
-          padding: spacing.md,
-          ...style,
-        }}
-      >
-        —
-      </div>
-    )
+  const col = color || c.red
+  const N = axes.length
+  const CX = 120,
+    CY = 100,
+    R = 72
+  const angle = (i: number) => (i / N) * 2 * Math.PI - Math.PI / 2
+  const pt = (radius: number, i: number) => {
+    const a = angle(i)
+    return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) }
   }
+  if (N < 3) return null
 
-  const n = axes.length
-  const gridPoly = Array.from({ length: n }, (_, i) => {
-    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n
-    const x = cx + R * Math.cos(ang)
-    const y = cy + R * Math.sin(ang)
-    return `${x.toFixed(1)},${y.toFixed(1)}`
-  }).join(' ')
+  const gridLevels = [0.25, 0.5, 0.75, 1]
+  const dataPoly = axes
+    .map((a, i) => {
+      const v = Math.max(0, Math.min(1, a.value))
+      const p = pt(R * v, i)
+      return `${p.x.toFixed(1)},${p.y.toFixed(1)}`
+    })
+    .join(' ')
 
   return (
-    <svg width={size} height={size} style={{ display: 'block', margin: '0 auto', ...style }}>
-      <polygon
-        points={gridPoly}
-        fill="none"
-        stroke={c.border}
-        strokeWidth={1}
-        opacity={0.9}
-      />
-      <polygon points={polygon} fill={`${c.red}33`} stroke={c.red} strokeWidth={1.8} />
-      {labelPts.map((lp) => (
-        <text
-          key={lp.label}
-          x={lp.x}
-          y={lp.y}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill={c.muted}
-          fontFamily={fonts.mono}
-          fontSize={7}
-          style={{ textTransform: 'uppercase' }}
-        >
-          {lp.label.length > 10 ? `${lp.label.slice(0, 9)}…` : lp.label}
-        </text>
+    <svg
+      viewBox="0 0 240 200"
+      width="100%"
+      height={200}
+      style={{ display: 'block', overflow: 'visible', ...style }}
+      aria-hidden
+    >
+      {gridLevels.map((g, gi) => (
+        <polygon
+          key={gi}
+          points={axes
+            .map((_, i) => {
+              const p = pt(R * g, i)
+              return `${p.x.toFixed(1)},${p.y.toFixed(1)}`
+            })
+            .join(' ')}
+          fill="none"
+          stroke={c.border}
+          strokeWidth={0.5}
+        />
       ))}
+      {axes.map((_, i) => {
+        const p0 = pt(0, i)
+        const p1 = pt(R, i)
+        return (
+          <line
+            key={`spoke${i}`}
+            x1={p0.x}
+            y1={p0.y}
+            x2={p1.x}
+            y2={p1.y}
+            stroke={c.border}
+            strokeWidth={0.5}
+          />
+        )
+      })}
+      <polygon points={dataPoly} fill="none" stroke={col} strokeWidth={1.5} />
+      {axes.map((a, i) => {
+        const v = Math.max(0, Math.min(1, a.value))
+        const p = pt(R * v, i)
+        return <circle key={`d${i}`} cx={p.x} cy={p.y} r={3} fill={col} />
+      })}
+      {axes.map((a, i) => {
+        const lp = pt(R + 18, i)
+        return (
+          <text
+            key={`lb${i}-${a.label}`}
+            x={lp.x}
+            y={lp.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontFamily={fonts.mono}
+            fontSize={8.5}
+            fill={c.muted}
+            letterSpacing="0.06em"
+          >
+            {a.label.toUpperCase()}
+          </text>
+        )
+      })}
     </svg>
   )
 }

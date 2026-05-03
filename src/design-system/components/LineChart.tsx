@@ -1,105 +1,101 @@
-import { useMemo, type CSSProperties } from 'react'
-import { fonts } from '../tokens'
+import type { CSSProperties, ReactNode } from 'react'
+import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import MonoLabel from './MonoLabel'
 
-const PAD = { l: 36, r: 8, t: 10, b: 22 }
+export type LineChartPoint = { y: number; v: number }
 
-export type LineChartPoint = { x: number; y: number }
+export type LineChartAnnotation = { year: number; label: string }
 
 export type LineChartProps = {
   data: LineChartPoint[]
-  width?: number
+  color?: string
+  yLabel?: ReactNode
   height?: number
-  /** Beschriftung X-Achse (z. B. erste und letzte Jahr) */
-  formatX?: (x: number) => string
+  showArea?: boolean
+  annotations?: LineChartAnnotation[]
   style?: CSSProperties
 }
 
 export default function LineChart({
   data,
-  width = 280,
-  height = 120,
-  formatX = (x) => String(Math.round(x)),
+  color,
+  yLabel,
+  height = 100,
+  showArea = true,
+  annotations = [],
   style,
 }: LineChartProps) {
   const { c } = useTheme()
-
-  const { path, x0, x1, ticks } = useMemo(() => {
-    const pts = data.filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
-    if (pts.length < 1) {
-      return { path: '', x0: 0, x1: 1, ticks: [] as number[] }
-    }
-    const xs = pts.map((p) => p.x)
-    const ys = pts.map((p) => p.y)
-    let minX = Math.min(...xs)
-    let maxX = Math.max(...xs)
-    let minY = Math.min(...ys)
-    let maxY = Math.max(...ys)
-    if (minX === maxX) {
-      minX -= 1
-      maxX += 1
-    }
-    if (minY === maxY) {
-      minY -= 1e-6
-      maxY += 1e-6
-    }
-    const innerW = width - PAD.l - PAD.r
-    const innerH = height - PAD.t - PAD.b
-    const sx = (x: number) => PAD.l + ((x - minX) / (maxX - minX)) * innerW
-    const sy = (y: number) => PAD.t + (1 - (y - minY) / (maxY - minY)) * innerH
-    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`).join(' ')
-    return { path: d, x0: minX, x1: maxX, ticks: [minX, maxX] }
-  }, [data, width, height])
-
-  if (data.length < 1 || !path) {
-    return (
-      <div
-        style={{
-          width,
-          height,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: c.muted,
-          fontSize: 12,
-          ...style,
-        }}
-      >
-        —
-      </div>
-    )
-  }
-
-  const spanX = x1 - x0 || 1
-  const innerW = width - PAD.l - PAD.r
-
+  const col = color || c.red
+  if (!data || data.length < 2) return null
+  const vals = data.map((d) => d.v)
+  const years = data.map((d) => d.y)
+  const min = Math.min(...vals),
+    max = Math.max(...vals),
+    range = max - min || 1
+  const W = 260,
+    H = height
+  const toX = (i: number) => (i / (data.length - 1)) * W
+  const toY = (v: number) => H - 4 - ((v - min) / range) * (H - 12)
+  const pts = data.map((d, i) => `${toX(i).toFixed(1)},${toY(d.v).toFixed(1)}`).join(' ')
+  const areaBottom = `${toX(data.length - 1)},${H} 0,${H}`
+  const firstY = years[0],
+    lastY = years[years.length - 1]
   return (
-    <svg width={width} height={height} style={{ display: 'block', maxWidth: '100%', ...style }}>
-      <line
-        x1={PAD.l}
-        y1={height - PAD.b}
-        x2={width - PAD.r}
-        y2={height - PAD.b}
-        stroke={c.border}
-        strokeWidth={1}
-      />
-      <path d={path} fill="none" stroke={c.red} strokeWidth={2} vectorEffect="non-scaling-stroke" />
-      {ticks.map((tx) => {
-        const px = PAD.l + ((tx - x0) / spanX) * innerW
-        return (
-          <text
-            key={tx}
-            x={px}
-            y={height - 4}
-            textAnchor="middle"
-            fill={c.muted}
-            fontFamily={fonts.mono}
-            fontSize={9}
-          >
-            {formatX(tx)}
-          </text>
-        )
-      })}
-    </svg>
+    <div style={style}>
+      {yLabel && <MonoLabel style={{ marginBottom: spacing.xs }}>{yLabel}</MonoLabel>}
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        width="100%"
+        height={H}
+        style={{ display: 'block', overflow: 'visible' }}
+        aria-hidden
+      >
+        {showArea && (
+          <polygon points={`0,${toY(data[0]!.v)} ${pts} ${areaBottom}`} fill={col} fillOpacity={0.07} />
+        )}
+        {[0.25, 0.5, 0.75, 1].map((f) => (
+          <line
+            key={f}
+            x1={0}
+            y1={toY(min + range * f)}
+            x2={W}
+            y2={toY(min + range * f)}
+            stroke={c.border}
+            strokeWidth={0.5}
+            strokeDasharray="3 3"
+          />
+        ))}
+        <polyline
+          points={pts}
+          fill="none"
+          stroke={col}
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx={toX(data.length - 1)} cy={toY(vals[vals.length - 1]!)} r={3} fill={col} />
+        {annotations.map((a, i) => {
+          const idx = data.findIndex((d) => d.y >= a.year)
+          if (idx < 0) return null
+          const x = toX(idx)
+          return (
+            <g key={i}>
+              <line x1={x} y1={0} x2={x} y2={H} stroke={c.subtle} strokeWidth={1} strokeDasharray="2 2" />
+              <text x={x + 3} y={10} fontFamily={fonts.mono} fontSize={8} fill={c.muted}>
+                {a.label}
+              </text>
+            </g>
+          )
+        })}
+        <text x={0} y={H + 12} fontFamily={fonts.mono} fontSize={8} fill={c.muted}>
+          {firstY}
+        </text>
+        <text x={W} y={H + 12} fontFamily={fonts.mono} fontSize={8} fill={c.muted} textAnchor="end">
+          {lastY}
+        </text>
+      </svg>
+    </div>
   )
 }

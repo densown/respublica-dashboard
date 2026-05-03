@@ -24,7 +24,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
 | `/koalition` — `Coalition.tsx` | Koalitionsdarstellung |
 | `/demokratie` — `DemocracyIndex.tsx` | Demokratie-Indikatoren |
-| `/weltkarte` — `WorldMap.tsx` | MapLibre-Vollfläche mit schwebenden Widget-Panels in `WidgetDashboard.tsx` (Positionen/Offsets in `localStorage` `rp-widget-layout-v1`), Steuerleiste, `CountrySidebar` („Country Console“: Tabs Übersicht/Demokratie/…, Global-Ansicht ohne Land, Dock-Minimize 32px), CARTO-Basemaps; Rechtsklick auf ein Land öffnet ein Kontextmenü (Widgets einblenden, Profil, Auswahl aufheben); UI-Bausteine unter `src/design-system/components/` (MonoLabel, Sparkline, RadarChart, …) |
+| `/weltkarte` — `WorldMap.tsx` | MapLibre-Vollfläche mit schwebenden Widget-Panels in `WidgetDashboard.tsx` (Positionen/Offsets in `localStorage` `rp-widget-layout-v1`), Steuerleiste, `CountrySidebar` („Country Console“ nach UI-Referenz: sechs Tabs, Global-Ansicht mit `/api/world/ranking` Median/Mittel/Top-Bottom, Handel lazy per `/api/world/trade/:iso3`, Dock-Minimize 32px), CARTO-Basemaps; Rechtsklick auf ein Land öffnet ein Kontextmenü (Widgets einblenden, Profil, Auswahl aufheben); Console-Primitives unter `src/design-system/components/` (MonoLabel, Sparkline, LineChart, RadarChart, …) |
 | `/eu-parlament` — `EuParliament.tsx` | EU-Parlament |
 | `/lobbyregister` — `LobbyRegister.tsx` | Lobbyregister mit Stats, Treemap nach Branche, geografischer Verteilung (Karte + Städte-Ranking), Registrierungen im Zeitverlauf (Monat + kumuliert), Suche, Sortierung, Detailansicht mit Tabs (Übersicht + Gesetzesprojekte) |
 | `/admin` — `Admin.tsx` | Admin-Ansicht |

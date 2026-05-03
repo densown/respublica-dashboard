@@ -1,23 +1,37 @@
-import type { CSSProperties } from 'react'
-import { spacing } from '../tokens'
+import type { CSSProperties, ReactNode } from 'react'
+import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type SectionDividerProps = {
+  label: ReactNode
   style?: CSSProperties
 }
 
-export default function SectionDivider({ style }: SectionDividerProps) {
+export default function SectionDivider({ label, style }: SectionDividerProps) {
   const { c } = useTheme()
   return (
     <div
-      role="separator"
       style={{
-        height: 1,
-        margin: `${spacing.md}px 0`,
-        background: c.border,
-        flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        margin: `${spacing.lg}px 0 ${spacing.md}px`,
         ...style,
       }}
-    />
+    >
+      <span
+        style={{
+          fontFamily: fonts.mono,
+          fontSize: 9,
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: c.muted,
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </span>
+      <div style={{ flex: 1, height: 1, background: c.border }} />
+    </div>
   )
 }

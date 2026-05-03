@@ -1,74 +1,98 @@
 import type { CSSProperties } from 'react'
 import { fonts, spacing } from '../tokens'
+import { interpolate } from '../i18n'
 import { useTheme } from '../ThemeContext'
 
 export type TradeBalanceProps = {
-  exportLabel: string
-  importLabel: string
-  exportValue: number
-  importValue: number
-  /** Einheit, z. B. „Mrd. $“ */
-  unit?: string
+  exports: number
+  imports: number
+  currency?: string
   style?: CSSProperties
 }
 
 export default function TradeBalance({
-  exportLabel,
-  importLabel,
-  exportValue,
-  importValue,
-  unit = '',
+  exports,
+  imports,
+  currency = 'Mrd. $',
   style,
 }: TradeBalanceProps) {
-  const { c } = useTheme()
-  const total = Math.max(exportValue + importValue, 1e-9)
-  const exFrac = exportValue / total
-  const imFrac = importValue / total
+  const { c, t } = useTheme()
+  const total = exports + imports
+  const safe = total > 0 && Number.isFinite(total)
+  const expPct = safe ? (exports / total) * 100 : 50
+  const impPct = safe ? (imports / total) * 100 : 50
+  const balance = exports - imports
   return (
-    <div style={{ minWidth: 0, ...style }}>
+    <div style={style}>
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
-          fontFamily: fonts.mono,
-          fontSize: 10,
-          color: c.muted,
+          height: 20,
+          borderRadius: 3,
+          overflow: 'hidden',
           marginBottom: spacing.sm,
         }}
       >
-        <span>{exportLabel}</span>
-        <span>{importLabel}</span>
+        <div
+          style={{
+            width: `${expPct}%`,
+            background: c.yes,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 9,
+              color: '#fff',
+              letterSpacing: '0.06em',
+            }}
+          >
+            EXP
+          </span>
+        </div>
+        <div
+          style={{
+            width: `${impPct}%`,
+            background: c.no,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 9,
+              color: '#fff',
+              letterSpacing: '0.06em',
+            }}
+          >
+            IMP
+          </span>
+        </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          height: 12,
-          borderRadius: 6,
-          overflow: 'hidden',
-          border: `1px solid ${c.border}`,
-        }}
-      >
-        <div style={{ width: `${exFrac * 100}%`, background: c.red }} />
-        <div style={{ width: `${imFrac * 100}%`, background: c.muted, opacity: 0.5 }} />
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: spacing.sm,
-          fontFamily: fonts.display,
-          fontSize: 14,
-          fontWeight: 700,
-          color: c.text,
-        }}
-      >
-        <span>
-          {exportValue}
-          {unit ? ` ${unit}` : ''}
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: fonts.mono, fontSize: 11 }}>
+        <span style={{ color: c.yes }}>
+          {interpolate(t('worldConsoleTradeExportsLine'), {
+            v: String(exports),
+            currency,
+          })}
         </span>
-        <span>
-          {importValue}
-          {unit ? ` ${unit}` : ''}
+        <span style={{ color: balance >= 0 ? c.yes : c.no }}>
+          {interpolate(t('worldConsoleTradeBalanceMid'), {
+            sign: balance >= 0 ? '+' : '',
+            v: String(balance),
+            currency,
+          })}
+        </span>
+        <span style={{ color: c.no }}>
+          {interpolate(t('worldConsoleTradeImportsLine'), {
+            v: String(imports),
+            currency,
+          })}
         </span>
       </div>
     </div>

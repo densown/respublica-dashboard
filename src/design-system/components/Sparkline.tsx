@@ -1,107 +1,80 @@
-import { useMemo, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
 
-export type SparklinePoint = { value: number; year?: number }
+export type SparklineDatum = number | { v: number }
 
 export type SparklineProps = {
-  points: SparklinePoint[]
+  data: SparklineDatum[]
+  color?: string
   height?: number
-  /** Peak- und Tiefpunkt als Kreise markieren */
-  showPeakTrough?: boolean
+  showMarkers?: boolean
+  width?: number
   style?: CSSProperties
 }
 
 export default function Sparkline({
-  points,
-  height = 44,
-  showPeakTrough = true,
+  data,
+  color,
+  height = 48,
+  showMarkers = false,
+  width = 260,
   style,
 }: SparklineProps) {
   const { c } = useTheme()
-  const w = 120
-  const pad = 4
-
-    const { pathD, markers } = useMemo(() => {
-    const valid = points.filter((p) => Number.isFinite(p.value))
-    if (valid.length < 1) {
-      return { pathD: '', markers: [] as { i: number; x: number; y: number; kind: 'peak' | 'trough' }[] }
-    }
-    const vals = valid.map((p) => p.value)
-    let peakI = 0
-    let troughI = 0
-    for (let i = 1; i < vals.length; i++) {
-      if (vals[i]! > vals[peakI]!) peakI = i
-      if (vals[i]! < vals[troughI]!) troughI = i
-    }
-    const vmin = Math.min(...vals)
-    const vmax = Math.max(...vals)
-    const span = vmax - vmin || 1
-    const n = valid.length
-    const coords = valid.map((p, i) => {
-      const x = n === 1 ? w / 2 : pad + (i / (n - 1)) * (w - 2 * pad)
-      const y = pad + (1 - (p.value - vmin) / span) * (height - 2 * pad)
-      return { x, y }
-    })
-    const d =
-      coords.length > 0
-        ? `M ${coords.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L ')}`
-        : ''
-    const markers: { i: number; x: number; y: number; kind: 'peak' | 'trough' }[] = []
-    if (showPeakTrough && n > 1) {
-      if (peakI === troughI) {
-        markers.push({ i: peakI, x: coords[peakI]!.x, y: coords[peakI]!.y, kind: 'peak' })
-      } else {
-        markers.push({ i: peakI, x: coords[peakI]!.x, y: coords[peakI]!.y, kind: 'peak' })
-        markers.push({ i: troughI, x: coords[troughI]!.x, y: coords[troughI]!.y, kind: 'trough' })
-      }
-    }
-    return { pathD: d, markers }
-  }, [points, height, showPeakTrough])
-
-  if (points.length < 1 || !pathD) {
-    return (
-      <div
-        style={{
-          height,
-          display: 'flex',
-          alignItems: 'center',
-          color: c.muted,
-          fontSize: 11,
-          ...style,
-        }}
-      >
-        —
-      </div>
-    )
-  }
-
+  const col = color || c.red
+  if (!data || data.length < 2) return null
+  const vals = data.map((d) => (typeof d === 'object' ? d.v : d))
+  const min = Math.min(...vals),
+    max = Math.max(...vals),
+    range = max - min || 1
+  const W = width,
+    H = height
+  const pts = vals.map((v, i) => {
+    const x = (i / (vals.length - 1)) * W
+    const y = H - ((v - min) / range) * (H - 4) - 2
+    return { x, y, v }
+  })
+  const polyline = pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+  const maxIdx = vals.indexOf(max),
+    minIdx = vals.indexOf(min)
   return (
     <svg
+      viewBox={`0 0 ${W} ${H}`}
       width="100%"
-      height={height}
-      viewBox={`0 0 ${w} ${height}`}
-      preserveAspectRatio="none"
-      style={{ display: 'block', maxWidth: '100%', ...style }}
+      height={H}
+      style={{ display: 'block', overflow: 'visible', ...style }}
       aria-hidden
     >
-      <path
-        d={pathD}
+      <line x1={0} y1={H - 1} x2={W} y2={H - 1} stroke={c.border} strokeWidth={1} />
+      <polyline
+        points={polyline}
         fill="none"
-        stroke={c.red}
-        strokeWidth={1.6}
-        vectorEffect="non-scaling-stroke"
+        stroke={col}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      {markers.map((m) => (
-        <circle
-          key={`${m.kind}-${m.i}`}
-          cx={m.x}
-          cy={m.y}
-          r={m.kind === 'peak' ? 3.5 : 3}
-          fill={m.kind === 'peak' ? c.red : c.muted}
-          stroke={c.cardBg}
-          strokeWidth={1}
-        />
-      ))}
+      <circle cx={pts[pts.length - 1]!.x} cy={pts[pts.length - 1]!.y} r={3} fill={col} />
+      {showMarkers && (
+        <>
+          <circle
+            cx={pts[maxIdx]!.x}
+            cy={pts[maxIdx]!.y}
+            r={3.5}
+            fill="none"
+            stroke={c.yes}
+            strokeWidth={1.5}
+          />
+          <circle
+            cx={pts[minIdx]!.x}
+            cy={pts[minIdx]!.y}
+            r={3.5}
+            fill="none"
+            stroke={c.no}
+            strokeWidth={1.5}
+          />
+        </>
+      )}
     </svg>
   )
 }

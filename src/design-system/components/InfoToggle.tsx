@@ -3,74 +3,54 @@ import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type InfoToggleProps = {
-  summary: ReactNode
-  children: ReactNode
-  /** Aria-Label für den Schalter */
-  toggleLabel: string
-  defaultOpen?: boolean
+  text: ReactNode
   style?: CSSProperties
 }
 
-export default function InfoToggle({
-  summary,
-  children,
-  toggleLabel,
-  defaultOpen = false,
-  style,
-}: InfoToggleProps) {
+export default function InfoToggle({ text, style }: InfoToggleProps) {
   const { c } = useTheme()
-  const [open, setOpen] = useState(defaultOpen)
+  const [open, setOpen] = useState(false)
   return (
-    <div style={{ minWidth: 0, ...style }}>
+    <span style={{ position: 'relative', display: 'inline-block', marginLeft: 4, ...style }}>
       <button
         type="button"
-        aria-expanded={open}
-        aria-label={toggleLabel}
         onClick={() => setOpen((v) => !v)}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: spacing.sm,
-          width: '100%',
-          minHeight: 44,
-          padding: `${spacing.xs}px 0`,
+          background: 'none',
           border: 'none',
-          background: 'transparent',
           cursor: 'pointer',
-          color: c.text,
-          fontFamily: fonts.body,
-          fontSize: '0.82rem',
-          textAlign: 'left',
+          fontFamily: fonts.mono,
+          fontSize: 11,
+          color: c.muted,
+          padding: 0,
+          lineHeight: 1,
         }}
       >
-        <span
-          aria-hidden
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: 12,
-            color: c.red,
-            width: 22,
-            flexShrink: 0,
-          }}
-        >
-          {open ? '▾' : '▸'}
-        </span>
-        <span style={{ flex: 1, minWidth: 0 }}>{summary}</span>
+        ⓘ
       </button>
-      {open ? (
+      {open && (
         <div
           style={{
-            marginTop: spacing.sm,
-            paddingLeft: 30,
+            position: 'absolute',
+            bottom: '120%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: c.cardBg,
+            border: `1px solid ${c.border}`,
+            borderRadius: 6,
+            padding: `${spacing.sm}px ${spacing.md}px`,
+            width: 220,
+            zIndex: 20,
             fontFamily: fonts.body,
-            fontSize: '0.8rem',
-            lineHeight: 1.45,
-            color: c.muted,
+            fontSize: 12,
+            color: c.inkSoft,
+            lineHeight: 1.5,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
           }}
         >
-          {children}
+          {text}
         </div>
-      ) : null}
-    </div>
+      )}
+    </span>
   )
 }
