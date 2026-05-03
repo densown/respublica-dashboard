@@ -140,6 +140,28 @@ export const de = {
   worldSidebarSourcesLine: 'Quellen: Weltbank, V-Dem · Res.Publica',
   worldYearStepPrev: 'Vorheriges Jahr',
   worldYearStepNext: 'Nächstes Jahr',
+  worldWidgetToolbarWidgets: 'Widgets',
+  worldWidgetToolbarReset: 'Layout zurücksetzen',
+  worldWidgetMap: 'Choropleth-Karte',
+  worldWidgetRanking: 'Ranking Top 10',
+  worldWidgetStatCard: 'Kennzahl & Trend',
+  worldWidgetBarChart: 'Balkendiagramm',
+  worldWidgetTradeFlow: 'Handelsströme',
+  worldWidgetSparkline: 'Zeitreihe',
+  worldWidgetClose: 'Ausblenden',
+  worldWidgetPlaceholderBody: 'Inhalt folgt.',
+  worldWidgetInfoMap:
+    'MapLibre-Weltkarte mit Choropleth-Färbung nach gewähltem Indikator und Jahr.',
+  worldWidgetInfoRanking:
+    'Die zehn Länder mit den höchsten Werten für den aktuell gewählten Indikator.',
+  worldWidgetInfoStatCard:
+    'Aktuelle Kennzahl für die Auswahl mit Trendpfeil gegenüber dem Vorjahr.',
+  worldWidgetInfoBarChart:
+    'Balkenvergleich der führenden Länder nach dem aktiven Indikator.',
+  worldWidgetInfoTradeFlow:
+    'Import- und Exportvolumina für das ausgewählte Land (Placeholder).',
+  worldWidgetInfoSparkline:
+    'Zeitreihe des Indikators für das ausgewählte Land über die verfügbaren Jahre.',
   lobby: 'Lobbyregister',
   lobbyPageTitle: 'Lobbyregister',
   lobbyPageSubtitle: 'Interessenvertretung in Deutschland auf einen Blick.',
@@ -752,6 +774,28 @@ export const en = {
   worldSidebarSourcesLine: 'Sources: World Bank, V-Dem · Res.Publica',
   worldYearStepPrev: 'Previous year',
   worldYearStepNext: 'Next year',
+  worldWidgetToolbarWidgets: 'Widgets',
+  worldWidgetToolbarReset: 'Reset layout',
+  worldWidgetMap: 'Choropleth map',
+  worldWidgetRanking: 'Top 10 ranking',
+  worldWidgetStatCard: 'Stat & trend',
+  worldWidgetBarChart: 'Bar chart',
+  worldWidgetTradeFlow: 'Trade flows',
+  worldWidgetSparkline: 'Sparkline',
+  worldWidgetClose: 'Hide',
+  worldWidgetPlaceholderBody: 'Content coming soon.',
+  worldWidgetInfoMap:
+    'MapLibre world map with choropleth shading for the selected indicator and year.',
+  worldWidgetInfoRanking:
+    'The ten countries with the highest values for the active indicator.',
+  worldWidgetInfoStatCard:
+    'Current figure for the selection with a year-on-year trend cue.',
+  worldWidgetInfoBarChart:
+    'Bar comparison of leading countries for the active indicator.',
+  worldWidgetInfoTradeFlow:
+    'Import and export volumes for the selected country (placeholder).',
+  worldWidgetInfoSparkline:
+    'Time series of the indicator for the selected country across available years.',
   lobby: 'Lobby register',
   lobbyPageTitle: 'Lobby register',
   lobbyPageSubtitle: 'Interest representation in Germany at a glance.',

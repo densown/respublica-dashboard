@@ -1,0 +1,13 @@
+/* react-grid-layout: Inhalte füllen die Zelle (Map fullViewport) */
+.world-widget-grid .react-grid-item > .react-grid-item-content {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.world-widget-grid .react-grid-item.react-grid-placeholder {
+  background: var(--rgl-placeholder-bg, rgba(200, 16, 46, 0.12));
+  border-radius: 8px;
+}
