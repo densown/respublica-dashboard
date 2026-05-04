@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { LngLat } from 'maplibre-gl'
-import { useTheme } from '../design-system'
+import { type MapProjectionMode, useTheme } from '../design-system'
 import type { Lang } from '../design-system/ThemeContext'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
@@ -60,6 +60,35 @@ function normIso(code: string): string {
 
 const LS_VIS_WIDGETS = 'rp-visible-widgets-v1'
 const LS_CONSOLE_DOCK = 'rp-console-dock'
+const LS_MAP_PROJECTION = 'rp-map-projection'
+
+function parseMapProjection(raw: string | null): MapProjectionMode {
+  return raw === 'globe' ? 'globe' : 'mercator'
+}
+
+function isLegacyIosSafari(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent
+  const isAppleMobile =
+    /iP(hone|ad|od)/.test(ua) ||
+    (/Macintosh/.test(ua) && typeof document !== 'undefined' && 'ontouchend' in document)
+  if (!isAppleMobile) return false
+  if (!/Safari\//.test(ua) || /CriOS|FxiOS|EdgiOS/.test(ua)) return false
+  const match = ua.match(/OS (\d+)_/)
+  const major = match ? Number(match[1]) : NaN
+  return Number.isFinite(major) && major < 15
+}
+
+function isGlobeProjectionSupported(): boolean {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return true
+  if (isLegacyIosSafari()) return false
+  try {
+    const canvas = document.createElement('canvas')
+    return !!canvas.getContext('webgl2')
+  } catch {
+    return false
+  }
+}
 
 function parseVisibleFloatingWidgets(): Set<FloatingWidgetType> {
   try {
@@ -173,6 +202,7 @@ export default function WorldMap() {
   } | null>(null)
   const widgetDashboardRef = useRef<WidgetDashboardHandle | null>(null)
   const mapContextMenuRef = useRef<HTMLDivElement | null>(null)
+  const tradeFetchAbortRef = useRef<AbortController | null>(null)
 
   const [dock, setDock] = useState<DockPosition>(() => {
     try {
@@ -187,6 +217,14 @@ export default function WorldMap() {
   const [visibleFloatingWidgets, setVisibleFloatingWidgets] = useState<
     Set<FloatingWidgetType>
   >(() => parseVisibleFloatingWidgets())
+  const [mapProjection, setMapProjection] = useState<MapProjectionMode>(() => {
+    try {
+      return parseMapProjection(localStorage.getItem(LS_MAP_PROJECTION))
+    } catch {
+      return 'mercator'
+    }
+  })
+  const [globeProjectionSupported, setGlobeProjectionSupported] = useState(true)
 
   useEffect(() => {
     try {
@@ -195,6 +233,24 @@ export default function WorldMap() {
       /* ignore */
     }
   }, [dock])
+
+  useEffect(() => {
+    setGlobeProjectionSupported(isGlobeProjectionSupported())
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LS_MAP_PROJECTION, mapProjection)
+    } catch {
+      /* ignore */
+    }
+  }, [mapProjection])
+
+  useEffect(() => {
+    if (!globeProjectionSupported && mapProjection === 'globe') {
+      setMapProjection('mercator')
+    }
+  }, [globeProjectionSupported, mapProjection])
 
   const onShowFloating = useCallback((id: FloatingWidgetType) => {
     setVisibleFloatingWidgets((prev) => {
@@ -534,19 +590,38 @@ export default function WorldMap() {
   }, [selectedCountry, mapRowsCountries])
 
   const loadTrade = useCallback(
-    (iso3: string) => {
+    (iso3: string, partner?: string | null) => {
+      tradeFetchAbortRef.current?.abort()
+      const ac = new AbortController()
+      tradeFetchAbortRef.current = ac
       setTradeLoading(true)
+      const partnerNorm =
+        partner == null
+          ? ''
+          : partner.trim().toUpperCase().slice(0, 3)
+      const partnerQuery =
+        partnerNorm.length === 3
+          ? `&partner=${encodeURIComponent(partnerNorm)}`
+          : ''
       const url = worldApiUrl(
-        `/api/world/trade/${encodeURIComponent(iso3)}?year=${String(mapQueryYear)}&breakdown=sections`,
+        `/api/world/trade/${encodeURIComponent(iso3)}?year=${String(mapQueryYear)}&breakdown=sections${partnerQuery}`,
       )
-      fetch(url)
+      fetch(url, { signal: ac.signal })
         .then((r) => {
           if (!r.ok) throw new Error(String(r.status))
           return r.json() as Promise<WorldTradeResponse>
         })
-        .then((d) => setTradeData(d))
-        .catch(() => setTradeData(null))
-        .finally(() => setTradeLoading(false))
+        .then((d) => {
+          if (!ac.signal.aborted) setTradeData(d)
+        })
+        .catch((e: unknown) => {
+          if (e instanceof DOMException && e.name === 'AbortError') return
+          if (ac.signal.aborted) return
+          setTradeData(null)
+        })
+        .finally(() => {
+          if (!ac.signal.aborted) setTradeLoading(false)
+        })
     },
     [mapQueryYear],
   )
@@ -630,6 +705,14 @@ export default function WorldMap() {
       if (first) setIndicatorCode(first)
     },
     [categories],
+  )
+
+  const handleProjectionChange = useCallback(
+    (next: MapProjectionMode) => {
+      if (next === 'globe' && !globeProjectionSupported) return
+      setMapProjection(next)
+    },
+    [globeProjectionSupported],
   )
 
   const topbarIndicators = useMemo(() => {
@@ -739,6 +822,7 @@ export default function WorldMap() {
             loading={mapLoading}
             narrow={narrow}
             layout="fullViewport"
+            projection={mapProjection}
           />
           {mapContextMenu ? (
             <div
@@ -934,6 +1018,7 @@ export default function WorldMap() {
       mapLoading,
       unitShort,
       isDark,
+      mapProjection,
     ],
   )
 
@@ -993,6 +1078,12 @@ export default function WorldMap() {
         onYearChange={handleYearChange}
         yearMin={yrRangeTopbar?.min ?? year}
         yearMax={yrRangeTopbar?.max ?? year}
+        projection={mapProjection}
+        onProjectionChange={handleProjectionChange}
+        projectionDisabled={!globeProjectionSupported}
+        projectionDisabledReason={
+          globeProjectionSupported ? undefined : t('worldProjectionUnsupportedHint')
+        }
         visibleWidgets={visibleFloatingWidgets}
         onToggleWidget={onToggleFloating}
       />

@@ -2,6 +2,7 @@ import { useMemo, useState, type CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
 import { HS_SECTION_LABELS_DE, HS_SECTION_LABELS_EN } from '../hsSections'
 import { fonts, spacing } from '../tokens'
+import PartnerPicker, { type TradePartnerOption } from './PartnerPicker'
 
 export type HSSectionRow = {
   hs_section: string
@@ -15,6 +16,9 @@ export type HSSectionBreakdownProps = {
   sectionsImport: HSSectionRow[]
   mode: HSSectionBreakdownMode
   sourceLabel: string
+  partners?: TradePartnerOption[]
+  selectedPartner?: string | null
+  onPartnerChange?: (iso3: string | null) => void
   style?: CSSProperties
 }
 
@@ -32,6 +36,9 @@ export default function HSSectionBreakdown({
   sectionsImport,
   mode,
   sourceLabel,
+  partners = [],
+  selectedPartner = null,
+  onPartnerChange,
   style,
 }: HSSectionBreakdownProps) {
   const { c, t, lang } = useTheme()
@@ -49,6 +56,13 @@ export default function HSSectionBreakdown({
   if (!rows.length) {
     return (
       <div style={{ ...style }}>
+        {onPartnerChange ? (
+          <PartnerPicker
+            partners={partners}
+            selected={selectedPartner}
+            onChange={onPartnerChange}
+          />
+        ) : null}
         <div style={{ color: c.muted, fontFamily: fonts.body, fontSize: 12, fontStyle: 'italic' }}>
           {t('worldConsoleTradeNoBreakdownData')}
         </div>
@@ -61,6 +75,13 @@ export default function HSSectionBreakdown({
 
   return (
     <div style={style}>
+      {onPartnerChange ? (
+        <PartnerPicker
+          partners={partners}
+          selected={selectedPartner}
+          onChange={onPartnerChange}
+        />
+      ) : null}
       {rows.map((r) => {
         const pct = Math.min(100, (r.value_usd / max) * 100)
         const isActive = r.hs_section === activeRow.hs_section

@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
-import { useTheme } from '../../design-system'
+import {
+  ProjectionToggle,
+  type MapProjectionMode,
+  useTheme,
+} from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
 import type { WorldCategoryApi } from './worldTypes'
@@ -38,6 +42,10 @@ export type MapTopbarProps = {
   onYearChange: (year: number) => void
   yearMin: number
   yearMax: number
+  projection: MapProjectionMode
+  onProjectionChange: (next: MapProjectionMode) => void
+  projectionDisabled?: boolean
+  projectionDisabledReason?: string
   visibleWidgets: Set<FloatingWidgetType>
   onToggleWidget: (type: FloatingWidgetType) => void
 }
@@ -61,6 +69,10 @@ export default function MapTopbar({
   onYearChange,
   yearMin,
   yearMax,
+  projection,
+  onProjectionChange,
+  projectionDisabled = false,
+  projectionDisabledReason,
   visibleWidgets,
   onToggleWidget,
 }: MapTopbarProps) {
@@ -243,6 +255,35 @@ export default function MapTopbar({
           >
             +
           </button>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: spacing.sm,
+            flexShrink: 0,
+          }}
+        >
+          <ProjectionToggle
+            value={projection}
+            onChange={onProjectionChange}
+            disabled={projectionDisabled}
+            disabledReason={projectionDisabledReason}
+          />
+          {projectionDisabled ? (
+            <span
+              style={{
+                fontFamily: fonts.body,
+                fontSize: 12,
+                color: c.muted,
+                lineHeight: 1.2,
+                maxWidth: 260,
+              }}
+            >
+              {projectionDisabledReason ?? t('worldProjectionUnsupportedHint')}
+            </span>
+          ) : null}
         </div>
 
         <div ref={menuWrapRef} style={{ position: 'relative', marginLeft: 'auto', flexShrink: 0 }}>

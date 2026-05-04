@@ -1099,9 +1099,12 @@ function TabHandel({
         selectedPartner={selectedPartner}
         onPartnerChange={(iso) => {
           if (!iso3 || !onLoadTrade) return
-          setSelectedPartner(iso)
+          const raw = iso?.trim()
+          const p: string | null = raw ? normIso3(raw).slice(0, 3) : null
+          if (p !== null && p.length !== 3) return
+          setSelectedPartner(p)
           setUserOverrodePartner(true)
-          onLoadTrade(iso3, iso)
+          onLoadTrade(iso3, p)
         }}
       />
     </>

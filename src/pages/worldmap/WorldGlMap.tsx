@@ -10,7 +10,7 @@ import maplibregl from 'maplibre-gl'
 import type { ExpressionSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './worldGlMap.css'
-import { useTheme } from '../../design-system'
+import { type MapProjectionMode, useTheme } from '../../design-system'
 import { fonts } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
@@ -20,6 +20,10 @@ const STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-sty
 
 const LAND_NODATA_LIGHT = '#e0e0e0'
 const LAND_NODATA_DARK = '#3a3a3a'
+const GLOBE_BOUNDS: maplibregl.LngLatBoundsLike = [
+  [-179.5, -80],
+  [179.5, 85],
+]
 
 function normIso(s: string): string {
   return s.trim().toUpperCase()
@@ -87,6 +91,7 @@ export type WorldGlMapProps = {
     clientX: number,
     clientY: number,
   ) => void
+  projection?: MapProjectionMode
 }
 
 type MapHandlers = {
@@ -147,6 +152,7 @@ export function WorldGlMap({
   mapHeightPx,
   layout = 'card',
   onCountryContextMenu,
+  projection = 'mercator',
 }: WorldGlMapProps) {
   const { c, t, theme } = useTheme()
   const isDark = theme === 'dark'
@@ -156,6 +162,7 @@ export function WorldGlMap({
   const popupRef = useRef<maplibregl.Popup | null>(null)
   const handlersRef = useRef<MapHandlers | undefined>(undefined)
   const prevThemeDarkRef = useRef<boolean | null>(null)
+  const prevProjectionRef = useRef<MapProjectionMode>(projection)
   const hoveredIsoRef = useRef<string | null>(null)
 
   const mapDataRef = useRef(mapData)
@@ -166,6 +173,8 @@ export function WorldGlMap({
   const tRef = useRef(t)
   const cRef = useRef(c)
   const onCountryContextMenuRef = useRef(onCountryContextMenu)
+  const projectionRef = useRef<MapProjectionMode>(projection)
+  projectionRef.current = projection
   mapDataRef.current = mapData
   geojsonRef.current = geojson
   onSelectRef.current = onSelectCountry
@@ -174,6 +183,57 @@ export function WorldGlMap({
   tRef.current = t
   cRef.current = c
   onCountryContextMenuRef.current = onCountryContextMenu
+
+  const applyProjection = useCallback(
+    (map: maplibregl.Map, nextProjection: MapProjectionMode, source: 'init' | 'change' | 'style') => {
+      const previousProjection = prevProjectionRef.current
+      const zoomBefore = map.getZoom()
+      const centerBefore = map.getCenter()
+
+      try {
+        map.setMinZoom(nextProjection === 'globe' ? 0 : 1)
+      } catch {
+        /* ignore */
+      }
+
+      try {
+        map.setProjection({ type: nextProjection })
+      } catch {
+        return
+      }
+
+      map.resize()
+
+      const shouldFitToWorld =
+        nextProjection === 'globe' &&
+        (source === 'init' ||
+          (source === 'change' && previousProjection !== 'globe' && zoomBefore <= 2))
+
+      if (shouldFitToWorld) {
+        map.fitBounds(GLOBE_BOUNDS, {
+          padding: 24,
+          duration: 700,
+          maxZoom: 1.15,
+        })
+      } else if (nextProjection === 'globe') {
+        // Keep user focus when already zoomed in before switching to globe.
+        map.easeTo({
+          center: centerBefore,
+          zoom: Math.max(0, zoomBefore),
+          duration: source === 'change' ? 450 : 0,
+        })
+      } else if (zoomBefore < 1) {
+        map.easeTo({
+          center: centerBefore,
+          zoom: 1,
+          duration: 300,
+        })
+      }
+
+      prevProjectionRef.current = nextProjection
+    },
+    [],
+  )
 
   const landNoData = isDark ? LAND_NODATA_DARK : LAND_NODATA_LIGHT
 
@@ -417,7 +477,7 @@ export function WorldGlMap({
       center: [10, 30],
       zoom: 1.5,
       maxZoom: 8,
-      minZoom: 1,
+      minZoom: projectionRef.current === 'globe' ? 0 : 1,
       attributionControl: false,
     })
 
@@ -438,6 +498,7 @@ export function WorldGlMap({
     const onLoad = () => {
       installChoropleth(map)
       hideBasemapLabels(map)
+      applyProjection(map, projectionRef.current, 'init')
     }
     map.on('load', onLoad)
 
@@ -450,8 +511,9 @@ export function WorldGlMap({
       map.remove()
       mapRef.current = null
       prevThemeDarkRef.current = null
+      prevProjectionRef.current = projectionRef.current
     }
-  }, [geojson])
+  }, [geojson, applyProjection])
 
   useEffect(() => {
     if (!isFullscreen) return
@@ -490,12 +552,20 @@ export function WorldGlMap({
     const onStyleReady = () => {
       installChoropleth(map)
       hideBasemapLabels(map)
+      applyProjection(map, projectionRef.current, 'style')
     }
     map.once('style.load', onStyleReady)
     return () => {
       map.off('style.load', onStyleReady)
     }
-  }, [isDark, geojson])
+  }, [isDark, geojson, applyProjection])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+    if (!map.isStyleLoaded()) return
+    applyProjection(map, projection, 'change')
+  }, [projection, applyProjection])
 
   useEffect(() => {
     const map = mapRef.current

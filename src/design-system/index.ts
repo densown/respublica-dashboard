@@ -5,6 +5,10 @@ export { default as InfoToggle } from './components/InfoToggle'
 export { default as LineChart } from './components/LineChart'
 export { default as MonoLabel } from './components/MonoLabel'
 export { default as PercentileBar } from './components/PercentileBar'
+export {
+  default as ProjectionToggle,
+  type MapProjectionMode,
+} from './components/ProjectionToggle'
 export { default as RadarChart } from './components/RadarChart'
 export { default as SectionDivider } from './components/SectionDivider'
 export { default as Sparkline } from './components/Sparkline'
