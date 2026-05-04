@@ -1,5 +1,6 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
+import { HS_SECTION_LABELS_DE, HS_SECTION_LABELS_EN } from '../hsSections'
 import { fonts, spacing } from '../tokens'
 
 export type HSSectionRow = {
@@ -17,9 +18,13 @@ export type HSSectionBreakdownProps = {
   style?: CSSProperties
 }
 
-function fmtUsd(v: number, locale: string) {
-  if (v >= 1e9) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e9)} B$`
-  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(v / 1e6)} M$`
+function fmtUsd(v: number, locale: string, lang: string) {
+  if (v >= 1e9) {
+    const n = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e9)
+    return lang === 'de' ? `${n} Mrd. $` : `${n} bn $`
+  }
+  const n = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(v / 1e6)
+  return lang === 'de' ? `${n} Mio. $` : `${n} m $`
 }
 
 export default function HSSectionBreakdown({
@@ -31,6 +36,7 @@ export default function HSSectionBreakdown({
 }: HSSectionBreakdownProps) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
+  const compact = typeof window !== 'undefined' && window.innerWidth <= 360
   const [active, setActive] = useState<string | null>(null)
 
   const rows = useMemo(() => {
@@ -58,6 +64,8 @@ export default function HSSectionBreakdown({
       {rows.map((r) => {
         const pct = Math.min(100, (r.value_usd / max) * 100)
         const isActive = r.hs_section === activeRow.hs_section
+        const labels = lang === 'de' ? HS_SECTION_LABELS_DE : HS_SECTION_LABELS_EN
+        const sectionLabel = labels[r.hs_section] || labels.OTHER
         return (
           <button
             key={r.hs_section}
@@ -83,9 +91,22 @@ export default function HSSectionBreakdown({
                 gap: spacing.sm,
               }}
             >
-              <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.ink }}>{r.hs_section}</span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'baseline',
+                  gap: 4,
+                  fontSize: 10,
+                  lineHeight: 1.35,
+                }}
+              >
+                {!compact ? <span style={{ fontFamily: fonts.mono, color: c.muted }}>{r.hs_section}</span> : null}
+                {!compact ? <span style={{ fontFamily: fonts.mono, color: c.muted }}>·</span> : null}
+                <span style={{ fontFamily: fonts.body, color: c.ink }}>{sectionLabel}</span>
+              </span>
               <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.muted }}>
-                {fmtUsd(r.value_usd, locale)}
+                {fmtUsd(r.value_usd, locale, lang)}
               </span>
             </div>
             <div style={{ height: 6, borderRadius: 3, background: c.bgHover, overflow: 'hidden' }}>
@@ -103,7 +124,9 @@ export default function HSSectionBreakdown({
         )
       })}
       <div style={{ marginTop: spacing.xs, fontFamily: fonts.mono, fontSize: 10, color: c.muted }}>
-        {activeRow.hs_section}: {fmtUsd(activeRow.value_usd, locale)}
+        {(lang === 'de' ? HS_SECTION_LABELS_DE[activeRow.hs_section] : HS_SECTION_LABELS_EN[activeRow.hs_section]) ||
+          activeRow.hs_section}
+        : {fmtUsd(activeRow.value_usd, locale, lang)}
       </div>
       <div style={{ marginTop: spacing.xs, fontFamily: fonts.body, fontSize: 11, color: c.muted }}>{sourceLabel}</div>
     </div>

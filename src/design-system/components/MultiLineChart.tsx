@@ -15,10 +15,11 @@ export type MultiLineChartProps = {
   style?: CSSProperties
 }
 
-function fmtUsdShort(v: number, locale: string) {
+function fmtUsdShort(v: number, locale: string, lang: string) {
   const abs = Math.abs(v)
   if (abs >= 1e12) return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e12)} T$`
-  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(v / 1e9)} B$`
+  const n = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e9)
+  return lang === 'de' ? `${n} Mrd. $` : `${n} bn $`
 }
 
 export default function MultiLineChart({ data, sourceLabel, height = 170, style }: MultiLineChartProps) {
@@ -104,10 +105,10 @@ export default function MultiLineChart({ data, sourceLabel, height = 170, style 
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: spacing.xs }}>
         <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.yes }}>
-          EXP {active.year}: {fmtUsdShort(active.total_export_usd, locale)}
+          EXP {active.year}: {fmtUsdShort(active.total_export_usd, locale, lang)}
         </span>
         <span style={{ fontFamily: fonts.mono, fontSize: 10, color: c.no }}>
-          IMP {active.year}: {fmtUsdShort(active.total_import_usd, locale)}
+          IMP {active.year}: {fmtUsdShort(active.total_import_usd, locale, lang)}
         </span>
       </div>
       <div style={{ marginTop: spacing.xs, fontFamily: fonts.body, fontSize: 11, color: c.muted }}>{sourceLabel}</div>

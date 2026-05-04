@@ -15,8 +15,9 @@ export type BalanceBarChartProps = {
   style?: CSSProperties
 }
 
-function fmtBn(v: number, locale: string) {
-  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e9)} B$`
+function fmtBn(v: number, locale: string, lang: string) {
+  const n = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v / 1e9)
+  return lang === 'de' ? `${n} Mrd. $` : `${n} bn $`
 }
 
 export default function BalanceBarChart({ data, sourceLabel, height = 170, style }: BalanceBarChartProps) {
@@ -90,7 +91,7 @@ export default function BalanceBarChart({ data, sourceLabel, height = 170, style
       </svg>
       <div style={{ marginTop: spacing.xs, fontFamily: fonts.mono, fontSize: 10, color: active.balance_usd >= 0 ? c.yes : c.no }}>
         {active.year}: {active.balance_usd >= 0 ? '+' : ''}
-        {fmtBn(active.balance_usd, locale)}
+        {fmtBn(active.balance_usd, locale, lang)}
       </div>
       <div style={{ marginTop: spacing.xs, fontFamily: fonts.body, fontSize: 11, color: c.muted }}>{sourceLabel}</div>
     </div>
