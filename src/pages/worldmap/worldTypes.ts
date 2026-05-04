@@ -93,6 +93,23 @@ export type WorldTradeFlowPartnerRow = {
   value_usd: number
 }
 
+export type WorldTradeSectionRow = {
+  flow?: 'export' | 'import'
+  hs_section: string
+  value_usd: number | string
+}
+
+export type WorldTradeTimeseriesPoint = {
+  year: number
+  total_export_usd: number | string
+  total_import_usd: number | string
+}
+
+export type WorldTradeTimeseriesResponse = {
+  iso3: string
+  years: WorldTradeTimeseriesPoint[]
+}
+
 export type WorldTradeResponse = {
   iso3: string
   year: number
@@ -100,4 +117,6 @@ export type WorldTradeResponse = {
   total_import_usd: number | null
   top_exports: WorldTradeFlowPartnerRow[]
   top_imports: WorldTradeFlowPartnerRow[]
+  sections_export?: WorldTradeSectionRow[]
+  sections_import?: WorldTradeSectionRow[]
 }

@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import HBar from '../../design-system/components/HBar'
+import HSSectionBreakdown from '../../design-system/components/HSSectionBreakdown'
 import InfoToggle from '../../design-system/components/InfoToggle'
 import LineChart from '../../design-system/components/LineChart'
+import MultiLineChart from '../../design-system/components/MultiLineChart'
 import MonoLabel from '../../design-system/components/MonoLabel'
 import PercentileBar from '../../design-system/components/PercentileBar'
 import RadarChart from '../../design-system/components/RadarChart'
 import SectionDivider from '../../design-system/components/SectionDivider'
 import Sparkline from '../../design-system/components/Sparkline'
 import StatTile from '../../design-system/components/StatTile'
+import StackedAreaChart from '../../design-system/components/StackedAreaChart'
 import TradeBalance from '../../design-system/components/TradeBalance'
 import TrendArrow from '../../design-system/components/TrendArrow'
+import ViewToggle, { type TradeTimeseriesView, type ViewToggleValue } from '../../design-system/components/ViewToggle'
+import BalanceBarChart from '../../design-system/components/BalanceBarChart'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import { interpolate } from '../../design-system/i18n'
@@ -23,6 +28,7 @@ import type {
   WorldMapRow,
   WorldRankingRow,
   WorldTradeResponse,
+  WorldTradeTimeseriesResponse,
 } from './worldTypes'
 import { iso3ToFlagIso2 } from './worldIso3ToIso2'
 import './countrySidebar.css'
@@ -82,6 +88,9 @@ export type CountrySidebarProps = {
   tradeData: WorldTradeResponse | null
   tradeLoading: boolean
   onLoadTrade: (iso3: string) => void
+  tradeTimeseries: WorldTradeTimeseriesResponse | null
+  tradeTimeseriesLoading: boolean
+  onLoadTradeTimeseries: (iso3: string) => void
   ranking: WorldRankingRow[] | null
   globalStats: { median: number; mean: number; total: number } | null
   articles?: WorldConsoleArticle[]
@@ -820,16 +829,38 @@ function TabWirtschaft({
 function TabHandel({
   tradeData,
   loading,
+  tradeTimeseries,
+  tradeTimeseriesLoading,
   layoutDirection,
 }: {
   tradeData: WorldTradeResponse | null
   loading: boolean
+  tradeTimeseries: WorldTradeTimeseriesResponse | null
+  tradeTimeseriesLoading: boolean
   layoutDirection: ConsoleTabLayoutDirection
 }) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
+  const [tsView, setTsView] = useState<TradeTimeseriesView>(() => {
+    try {
+      const saved = localStorage.getItem('rp-trade-timeseries-view')
+      if (saved === 'lines' || saved === 'bars' || saved === 'stacked') return saved
+    } catch {
+      /* ignore */
+    }
+    return 'lines'
+  })
+  const [breakdownMode, setBreakdownMode] = useState<'export' | 'import'>('export')
 
-  if (loading) {
+  useEffect(() => {
+    try {
+      localStorage.setItem('rp-trade-timeseries-view', tsView)
+    } catch {
+      /* ignore */
+    }
+  }, [tsView])
+
+  if (loading && tradeTimeseriesLoading && !tradeData && !tradeTimeseries) {
     return (
       <div style={{ padding: spacing.lg }}>
         <p style={{ fontFamily: fonts.body, fontSize: 13, color: c.muted, fontStyle: 'italic' }}>
@@ -839,32 +870,68 @@ function TabHandel({
     )
   }
 
-  if (!tradeData || (!tradeData.top_exports?.length && !tradeData.top_imports?.length)) {
-    return (
-      <div style={{ padding: spacing.lg }}>
-        <p style={{ fontFamily: fonts.body, fontSize: 13, color: c.muted, fontStyle: 'italic' }}>
-          {t('worldConsoleNoTrade')}
-        </p>
-      </div>
-    )
-  }
-
-  const exports = Number(tradeData.total_export_usd || 0)
-  const imports = Number(tradeData.total_import_usd || 0)
+  const exports = Number(tradeData?.total_export_usd || 0)
+  const imports = Number(tradeData?.total_import_usd || 0)
   const expBn = exports / 1e9
   const impBn = imports / 1e9
 
-  const topExp = tradeData.top_exports || []
-  const topImp = tradeData.top_imports || []
+  const topExp = tradeData?.top_exports || []
+  const topImp = tradeData?.top_imports || []
   const maxExp = topExp.length ? Math.max(...topExp.map((x) => Number(x.value_usd))) : 1
   const maxImp = topImp.length ? Math.max(...topImp.map((x) => Number(x.value_usd))) : 1
 
+  const tsData = (tradeTimeseries?.years || [])
+    .map((p) => ({
+      year: Number(p.year),
+      total_export_usd: Number(p.total_export_usd || 0),
+      total_import_usd: Number(p.total_import_usd || 0),
+    }))
+    .filter((p) => Number.isFinite(p.year) && Number.isFinite(p.total_export_usd) && Number.isFinite(p.total_import_usd))
+    .sort((a, b) => a.year - b.year)
+
+  const sectionExport = (tradeData?.sections_export || [])
+    .map((r) => ({ hs_section: r.hs_section, value_usd: Number(r.value_usd || 0) }))
+    .filter((r) => Number.isFinite(r.value_usd) && r.value_usd > 0)
+
+  const sectionImport = (tradeData?.sections_import || [])
+    .map((r) => ({ hs_section: r.hs_section, value_usd: Number(r.value_usd || 0) }))
+    .filter((r) => Number.isFinite(r.value_usd) && r.value_usd > 0)
+
   const exportLabel = (t('worldConsoleTradeExportsLine').split(':')[0] ?? 'Export').trim()
   const importLabel = (t('worldConsoleTradeImportsLine').split(':')[0] ?? 'Import').trim()
+  const sourceLabel = t('worldConsoleTradeSourceBaci')
+
+  const timeseriesChart =
+    tsView === 'bars' ? (
+      <BalanceBarChart data={tsData} sourceLabel={sourceLabel} />
+    ) : tsView === 'stacked' ? (
+      <StackedAreaChart data={tsData} sourceLabel={sourceLabel} />
+    ) : (
+      <MultiLineChart data={tsData} sourceLabel={sourceLabel} />
+    )
+
+  const timeseriesBlock = (
+    <>
+      <SectionDivider label={t('worldConsoleTradeTimeseriesTitle')} />
+      <ViewToggle
+        value={tsView}
+        onChange={(next) => {
+          if (next === 'lines' || next === 'bars' || next === 'stacked') setTsView(next)
+        }}
+        options={[
+          { value: 'lines', label: t('worldConsoleTradeViewLines') },
+          { value: 'bars', label: t('worldConsoleTradeViewBars') },
+          { value: 'stacked', label: t('worldConsoleTradeViewStacked') },
+        ]}
+        style={{ marginBottom: spacing.md }}
+      />
+      {timeseriesChart}
+    </>
+  )
 
   const balanceBlock = (
     <>
-      <SectionDivider label={interpolate(t('worldConsoleTradeBalanceYear'), { year: String(tradeData.year) })} />
+      <SectionDivider label={interpolate(t('worldConsoleTradeBalanceYear'), { year: String(tradeData?.year ?? '—') })} />
       <TradeBalance exports={Math.round(expBn)} imports={Math.round(impBn)} currency="Mrd. $" />
     </>
   )
@@ -882,13 +949,13 @@ function TabHandel({
       <StatTile
         label={exportLabel}
         value={fmtNumber(expBn, 1, locale)}
-        sub={`Mrd. $ · ${tradeData.year}`}
+        sub={`Mrd. $ · ${tradeData?.year ?? '—'}`}
         icon="▲"
       />
       <StatTile
         label={importLabel}
         value={fmtNumber(impBn, 1, locale)}
-        sub={`Mrd. $ · ${tradeData.year}`}
+        sub={`Mrd. $ · ${tradeData?.year ?? '—'}`}
         icon="▼"
       />
     </div>
@@ -928,12 +995,44 @@ function TabHandel({
       </>
     ) : null
 
+  const breakdownBlock = (
+    <>
+      <SectionDivider label={t('worldConsoleTradeBreakdownTitle')} />
+      <ViewToggle
+        value={breakdownMode}
+        onChange={(next: ViewToggleValue) => {
+          if (next === 'export' || next === 'import') setBreakdownMode(next)
+        }}
+        options={[
+          { value: 'export', label: t('worldConsoleTradeBreakdownExport') },
+          { value: 'import', label: t('worldConsoleTradeBreakdownImport') },
+        ]}
+        style={{ marginBottom: spacing.md }}
+      />
+      <HSSectionBreakdown
+        sectionsExport={sectionExport}
+        sectionsImport={sectionImport}
+        mode={breakdownMode}
+        sourceLabel={sourceLabel}
+      />
+    </>
+  )
+
+  const partnersBlock = (
+    <>
+      {balanceBlock}
+      {kpiTiles}
+      {exportsBlock}
+      {importsBlock}
+    </>
+  )
+
   if (layoutDirection === 'horizontal') {
     return (
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: '1fr 1fr 1fr',
           gap: spacing.xl,
           padding: spacing.lg,
           height: '100%',
@@ -942,20 +1041,19 @@ function TabHandel({
         }}
       >
         <div style={{ overflowY: 'auto', minWidth: 0 }}>
-          {balanceBlock}
-          {kpiTiles}
-          {exportsBlock}
+          {timeseriesBlock}
         </div>
-        <div style={{ overflowY: 'auto', minWidth: 0 }}>{importsBlock}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{partnersBlock}</div>
+        <div style={{ overflowY: 'auto', minWidth: 0 }}>{breakdownBlock}</div>
       </div>
     )
   }
 
   return (
     <div style={{ padding: `${spacing.lg}px ${spacing.lg}px ${spacing.xxl}px` }}>
-      {balanceBlock}
-      {exportsBlock}
-      {importsBlock}
+      {timeseriesBlock}
+      {partnersBlock}
+      {breakdownBlock}
     </div>
   )
 }
@@ -1408,6 +1506,9 @@ export function CountrySidebar({
   tradeData,
   tradeLoading,
   onLoadTrade,
+  tradeTimeseries,
+  tradeTimeseriesLoading,
+  onLoadTradeTimeseries,
   ranking,
   globalStats,
   articles,
@@ -1451,10 +1552,25 @@ export function CountrySidebar({
   }, [hasCountry])
 
   useEffect(() => {
-    if (activeTab === 'handel' && hasCountry && !tradeData && !tradeLoading && onLoadTrade && iso3) {
+    if (activeTab !== 'handel' || !hasCountry || !iso3) return
+    if (onLoadTrade && (!tradeData || tradeData.year !== mapYear) && !tradeLoading) {
       onLoadTrade(iso3)
     }
-  }, [activeTab, hasCountry, iso3, tradeData, tradeLoading, onLoadTrade])
+    if (onLoadTradeTimeseries && !tradeTimeseries && !tradeTimeseriesLoading) {
+      onLoadTradeTimeseries(iso3)
+    }
+  }, [
+    activeTab,
+    hasCountry,
+    iso3,
+    mapYear,
+    tradeData,
+    tradeLoading,
+    onLoadTrade,
+    tradeTimeseries,
+    tradeTimeseriesLoading,
+    onLoadTradeTimeseries,
+  ])
 
   if (!sheetLayout && minimized) {
     return (
@@ -1562,6 +1678,8 @@ export function CountrySidebar({
             <TabHandel
               tradeData={tradeData}
               loading={tradeLoading}
+              tradeTimeseries={tradeTimeseries}
+              tradeTimeseriesLoading={tradeTimeseriesLoading}
               layoutDirection={layoutDirection}
             />
           )

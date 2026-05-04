@@ -35,6 +35,7 @@ import type {
   WorldRankingRow,
   WorldStats,
   WorldTradeResponse,
+  WorldTradeTimeseriesResponse,
 } from './worldmap/worldTypes'
 import {
   formatWorldIndicatorValue,
@@ -162,6 +163,8 @@ export default function WorldMap() {
   const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
   const [tradeData, setTradeData] = useState<WorldTradeResponse | null>(null)
   const [tradeLoading, setTradeLoading] = useState(false)
+  const [tradeTimeseries, setTradeTimeseries] = useState<WorldTradeTimeseriesResponse | null>(null)
+  const [tradeTimeseriesLoading, setTradeTimeseriesLoading] = useState(false)
   const [consoleRanking, setConsoleRanking] = useState<WorldRankingRow[] | null>(null)
   const [mapContextMenu, setMapContextMenu] = useState<{
     iso3: string
@@ -296,6 +299,7 @@ export default function WorldMap() {
 
   useEffect(() => {
     setTradeData(null)
+    setTradeTimeseries(null)
   }, [selectedCountry])
 
   useEffect(() => {
@@ -533,7 +537,7 @@ export default function WorldMap() {
     (iso3: string) => {
       setTradeLoading(true)
       const url = worldApiUrl(
-        `/api/world/trade/${encodeURIComponent(iso3)}?year=${String(mapQueryYear)}`,
+        `/api/world/trade/${encodeURIComponent(iso3)}?year=${String(mapQueryYear)}&breakdown=sections`,
       )
       fetch(url)
         .then((r) => {
@@ -546,6 +550,21 @@ export default function WorldMap() {
     },
     [mapQueryYear],
   )
+
+  const loadTradeTimeseries = useCallback((iso3: string) => {
+    setTradeTimeseriesLoading(true)
+    const url = worldApiUrl(
+      `/api/world/trade/${encodeURIComponent(iso3)}/timeseries?yearMin=2017&yearMax=2024`,
+    )
+    fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status))
+        return r.json() as Promise<WorldTradeTimeseriesResponse>
+      })
+      .then((d) => setTradeTimeseries(d))
+      .catch(() => setTradeTimeseries(null))
+      .finally(() => setTradeTimeseriesLoading(false))
+  }, [])
 
   const onSelectCountry = useCallback(
     (iso3: string, modifiers: { meta: boolean; ctrl: boolean }) => {
@@ -930,6 +949,9 @@ export default function WorldMap() {
     tradeData,
     tradeLoading,
     onLoadTrade: loadTrade,
+    tradeTimeseries,
+    tradeTimeseriesLoading,
+    onLoadTradeTimeseries: loadTradeTimeseries,
     ranking: consoleRanking,
     globalStats: consoleGlobalStats,
     onClose: onCloseSidebar,
