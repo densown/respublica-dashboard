@@ -87,7 +87,7 @@ export type CountrySidebarProps = {
   mapYear: number
   tradeData: WorldTradeResponse | null
   tradeLoading: boolean
-  onLoadTrade: (iso3: string) => void
+  onLoadTrade: (iso3: string, partner?: string | null) => void
   tradeTimeseries: WorldTradeTimeseriesResponse | null
   tradeTimeseriesLoading: boolean
   onLoadTradeTimeseries: (iso3: string) => void
@@ -827,14 +827,18 @@ function TabWirtschaft({
 }
 
 function TabHandel({
+  iso3,
   tradeData,
   loading,
+  onLoadTrade,
   tradeTimeseries,
   tradeTimeseriesLoading,
   layoutDirection,
 }: {
+  iso3: string | null
   tradeData: WorldTradeResponse | null
   loading: boolean
+  onLoadTrade: ((iso3: string, partner?: string | null) => void) | undefined
   tradeTimeseries: WorldTradeTimeseriesResponse | null
   tradeTimeseriesLoading: boolean
   layoutDirection: ConsoleTabLayoutDirection
@@ -851,6 +855,8 @@ function TabHandel({
     return 'lines'
   })
   const [breakdownMode, setBreakdownMode] = useState<'export' | 'import'>('export')
+  const [selectedPartner, setSelectedPartner] = useState<string | null>(null)
+  const [userOverrodePartner, setUserOverrodePartner] = useState(false)
 
   useEffect(() => {
     try {
@@ -859,6 +865,73 @@ function TabHandel({
       /* ignore */
     }
   }, [tsView])
+
+  useEffect(() => {
+    setBreakdownMode('export')
+    setSelectedPartner(null)
+    setUserOverrodePartner(false)
+  }, [iso3])
+
+  const topExportsRaw = tradeData?.top_exports
+  const topImportsRaw = tradeData?.top_imports
+  const exportPartners = useMemo(
+    () =>
+      (topExportsRaw ?? []).map((p) => ({
+        iso3: p.partner_code,
+        name: p.partner_name,
+        value_usd: Number(p.value_usd || 0),
+      })),
+    [topExportsRaw],
+  )
+  const importPartners = useMemo(
+    () =>
+      (topImportsRaw ?? []).map((p) => ({
+        iso3: p.partner_code,
+        name: p.partner_name,
+        value_usd: Number(p.value_usd || 0),
+      })),
+    [topImportsRaw],
+  )
+  const breakdownPartners = breakdownMode === 'export' ? exportPartners : importPartners
+  const topPartnerForMode = breakdownPartners[0]?.iso3 ?? null
+
+  useEffect(() => {
+    if (!iso3 || !onLoadTrade) return
+
+    const selectedIsInModeList =
+      selectedPartner == null || breakdownPartners.some((p) => p.iso3 === selectedPartner)
+
+    let nextPartner = selectedPartner
+    let nextUserOverrode = userOverrodePartner
+
+    if (selectedPartner == null) {
+      if (!userOverrodePartner) {
+        nextPartner = topPartnerForMode
+      }
+    } else if (!userOverrodePartner) {
+      nextPartner = topPartnerForMode
+    } else if (!selectedIsInModeList) {
+      nextPartner = topPartnerForMode
+      nextUserOverrode = false
+    }
+
+    if (nextPartner !== selectedPartner) {
+      setSelectedPartner(nextPartner)
+    }
+    if (nextUserOverrode !== userOverrodePartner) {
+      setUserOverrodePartner(nextUserOverrode)
+    }
+    if (nextPartner !== selectedPartner) {
+      onLoadTrade(iso3, nextPartner)
+    }
+  }, [
+    iso3,
+    onLoadTrade,
+    breakdownPartners,
+    topPartnerForMode,
+    selectedPartner,
+    userOverrodePartner,
+  ])
 
   if (loading && tradeTimeseriesLoading && !tradeData && !tradeTimeseries) {
     return (
@@ -875,8 +948,8 @@ function TabHandel({
   const expBn = exports / 1e9
   const impBn = imports / 1e9
 
-  const topExp = tradeData?.top_exports || []
-  const topImp = tradeData?.top_imports || []
+  const topExp = topExportsRaw ?? []
+  const topImp = topImportsRaw ?? []
   const maxExp = topExp.length ? Math.max(...topExp.map((x) => Number(x.value_usd))) : 1
   const maxImp = topImp.length ? Math.max(...topImp.map((x) => Number(x.value_usd))) : 1
 
@@ -900,6 +973,14 @@ function TabHandel({
   const exportLabel = (t('worldConsoleTradeExportsLine').split(':')[0] ?? 'Export').trim()
   const importLabel = (t('worldConsoleTradeImportsLine').split(':')[0] ?? 'Import').trim()
   const sourceLabel = t('worldConsoleTradeSourceBaci')
+  const partnerName =
+    selectedPartner == null
+      ? null
+      : exportPartners.concat(importPartners).find((p) => p.iso3 === selectedPartner)?.name ??
+        selectedPartner
+  const breakdownTitle = partnerName
+    ? interpolate(t('worldConsoleTradeBreakdownTitleWithPartner'), { partner: partnerName })
+    : t('worldConsoleTradeBreakdownTitle')
 
   const timeseriesChart =
     tsView === 'bars' ? (
@@ -997,7 +1078,7 @@ function TabHandel({
 
   const breakdownBlock = (
     <>
-      <SectionDivider label={t('worldConsoleTradeBreakdownTitle')} />
+      <SectionDivider label={breakdownTitle} />
       <ViewToggle
         value={breakdownMode}
         onChange={(next: ViewToggleValue) => {
@@ -1014,6 +1095,14 @@ function TabHandel({
         sectionsImport={sectionImport}
         mode={breakdownMode}
         sourceLabel={sourceLabel}
+        partners={breakdownPartners}
+        selectedPartner={selectedPartner}
+        onPartnerChange={(iso) => {
+          if (!iso3 || !onLoadTrade) return
+          setSelectedPartner(iso)
+          setUserOverrodePartner(true)
+          onLoadTrade(iso3, iso)
+        }}
       />
     </>
   )
@@ -1676,8 +1765,10 @@ export function CountrySidebar({
         case 'handel':
           return (
             <TabHandel
+              iso3={iso3}
               tradeData={tradeData}
               loading={tradeLoading}
+              onLoadTrade={onLoadTrade}
               tradeTimeseries={tradeTimeseries}
               tradeTimeseriesLoading={tradeTimeseriesLoading}
               layoutDirection={layoutDirection}
