@@ -795,6 +795,13 @@ export const de = {
   sourcesLastUpdated:
     'Wahldaten in der Datenbank: Wahljahre {range} (Stand Metadaten /api/wahlen/stats).',
   sourcesLastUpdatedUnknown: 'Wahldaten: noch kein Statistik-Endpunkt oder leere Datenbank.',
+  sourcesWorldmapDesc: '{values} Werte · {indicators} Indikatoren',
+  sourcesWorldmapLoading: 'Weltkarten-Quellen werden geladen…',
+  sourcesWorldmapError: 'Weltkarten-Quellen konnten nicht geladen werden.',
+  sourcesWorldmapEmpty: 'Zur Zeit keine befüllten Weltkarten-Datenquellen in der Datenbank.',
+  sourcesWorldmapFetchedLine: 'Letzter Import: {when}',
+  sourcesWorldmapLastFetchedUnknown: 'unbekannt',
+  sourcesWorldmapLicenseMissing: '—',
 } as const
 
 export const en = {
@@ -1587,6 +1594,13 @@ export const en = {
   sourcesLastUpdated:
     'Election data in the database: years {range} (from /api/wahlen/stats metadata).',
   sourcesLastUpdatedUnknown: 'Election data: stats endpoint unavailable or database empty.',
+  sourcesWorldmapDesc: '{values} values · {indicators} indicators',
+  sourcesWorldmapLoading: 'Loading world map sources…',
+  sourcesWorldmapError: 'World map sources could not be loaded.',
+  sourcesWorldmapEmpty: 'No populated world map data sources in the database right now.',
+  sourcesWorldmapFetchedLine: 'Last import: {when}',
+  sourcesWorldmapLastFetchedUnknown: 'unknown',
+  sourcesWorldmapLicenseMissing: '—',
 } as const
 
 export type I18nKey = keyof typeof de

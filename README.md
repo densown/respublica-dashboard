@@ -18,7 +18,7 @@ Routen aus `src/App.tsx` und Komponenten unter `src/pages/`:
 |--------------|------------------|
 | `/` — `Overview.tsx` | Dashboard-Übersicht, KPIs und Einstieg |
 | `/wahlen` — `Elections.tsx` | Wahlen, regionale Auswertungen |
-| `/quellen` — `Sources.tsx` | Datenquellen und Credits |
+| `/quellen` — `Sources.tsx` | Datenquellen und Credits; Abschnitt Weltkarte lädt Metadaten und Nutzungszähler live von `GET /api/world/sources` (übrige Domains weiter statisch aus `sourcesCatalog.ts`) |
 | `/bundestag`, `/bundestag/:pollId` — `Bundestag.tsx` | Abstimmungen, namentliche Abstimmungen, Hemicycle-Tooltip und MdB-Modal mit persönlicher Abstimmungshistorie |
 | `/gesetze`, `/gesetze/:id` — `Legislation.tsx` | Gesetzgebung, Änderungsdetails |
 | `/eu-recht`, `/eu-recht/:id` — `EuLaw.tsx` | EU-Recht / Rechtsakte |
@@ -78,4 +78,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 4. Mai 2026 (Weltkarte Trade-Tab: PartnerPicker + partner-spezifischer HS-Section-Breakdown)
+**Zuletzt aktualisiert:** 4. Mai 2026 (Quellen-Seite: dynamische Weltkarten-Section über `/api/world/sources`)

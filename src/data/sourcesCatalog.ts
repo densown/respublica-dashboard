@@ -82,18 +82,6 @@ export const SOURCES_BY_PAGE: SourceCatalogPage[] = [
     ],
   },
   {
-    pageTitleKey: 'worldMap',
-    href: '/weltkarte',
-    sources: [
-      {
-        nameKey: 'sourcesNmWorldBank',
-        url: 'https://data.worldbank.org',
-        licenseKey: 'sourcesLicCcBy40',
-        descKey: 'sourcesDescWorldBank',
-      },
-    ],
-  },
-  {
     pageTitleKey: 'euLaw',
     href: '/eu-recht',
     sources: [
