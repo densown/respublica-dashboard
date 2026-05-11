@@ -95,6 +95,14 @@ function urteilReferencesGesetz(u: Urteil, kuerzel: string): boolean {
   )
 }
 
+function displayTitel(g: Gesetz): string {
+  const t = (g.titel ?? '').trim()
+  if (t) return t
+  const n = (g.name ?? '').trim()
+  if (n) return n
+  return (g.kuerzel ?? '').trim() || '—'
+}
+
 function sublineZusammenfassung(g: Gesetz): string {
   const z = (g.zusammenfassung ?? '').trim()
   if (!z) return ''
@@ -307,8 +315,15 @@ export default function Legislation() {
     if (q) {
       rows = rows.filter((g) => {
         const ku = (g.kuerzel ?? '').toLowerCase()
+        const ti = displayTitel(g).toLowerCase()
         const zu = (g.zusammenfassung ?? '').toLowerCase()
-        return ku.includes(q) || zu.includes(q)
+        const ab = (g.amtliche_abkuerzung ?? '').toLowerCase()
+        return (
+          ku.includes(q) ||
+          ti.includes(q) ||
+          zu.includes(q) ||
+          ab.includes(q)
+        )
       })
     }
     const sorted = [...rows]
@@ -322,7 +337,7 @@ export default function Legislation() {
       )
     } else {
       sorted.sort((a, b) =>
-        (a.kuerzel ?? '').localeCompare(b.kuerzel ?? '', 'de', {
+        displayTitel(a).localeCompare(displayTitel(b), 'de', {
           sensitivity: 'base',
         }),
       )
@@ -791,14 +806,44 @@ export default function Legislation() {
                       <div style={{ flex: '1 1 120px', minWidth: 0 }}>
                         <div
                           style={{
-                            fontFamily: fonts.mono,
-                            fontWeight: 700,
-                            fontSize: '0.98rem',
+                            fontFamily: fonts.body,
+                            fontWeight: 500,
+                            fontSize: '1rem',
                             color: c.ink,
+                            lineHeight: 1.35,
+                            wordBreak: 'break-word',
                           }}
                         >
-                          {g.kuerzel ?? '—'}
+                          {displayTitel(g)}
                         </div>
+                        {(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim() ||
+                        (g.ausfertigung_datum ?? '').trim() ? (
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: spacing.sm,
+                              marginTop: 4,
+                              fontFamily: fonts.mono,
+                              fontSize: '0.75rem',
+                              color: c.muted,
+                            }}
+                          >
+                            {(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim() ? (
+                              <span>
+                                {(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim()}
+                              </span>
+                            ) : null}
+                            {g.ausfertigung_datum ? (
+                              <time dateTime={g.ausfertigung_datum}>
+                                {formatDisplayDate(
+                                  g.ausfertigung_datum,
+                                  lang,
+                                )}
+                              </time>
+                            ) : null}
+                          </div>
+                        ) : null}
                         {sub ? (
                           <div
                             style={{
