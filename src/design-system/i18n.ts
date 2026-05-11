@@ -18,7 +18,7 @@ export const de = {
   tagEurope: 'Europa',
   tagWorld: 'Welt',
   featureElectionsTitle: 'Wahlen',
-  featureElectionsDesc: 'Bundestagswahlen 1945-2025 nach Kreis',
+  featureElectionsDesc: 'Bundestagswahlen 1990–2025 nach Kreis',
   featureBundestagTitle: 'Bundestag',
   featureBundestagDesc: 'Hemicycle mit 629 Abgeordneten',
   featureLegislationTitle: 'Gesetzgebung',
@@ -775,7 +775,8 @@ export const de = {
   sourcesNmWorldBank: 'World Bank Open Data',
   sourcesNmEurlex: 'EUR-Lex',
   sourcesNmLobbyregisterBt: 'Lobbyregister Deutscher Bundestag',
-  sourcesDescGerda: '49.857 Wahlkreisergebnisse 1945–2025',
+  sourcesDescGerda:
+    '49.857 Ergebniszeilen nach Kreis (1945–2025, mehrere Wahltypen). Bundestagswahl-Karte: 1990–2025.',
   sourcesDescAbwBundestag:
     'Abstimmungsdaten, Profile der Abgeordneten, Verweise auf Fotos',
   sourcesDescBundestagOpenData: 'Stammdaten der Abgeordneten',
@@ -824,7 +825,7 @@ export const en = {
   tagEurope: 'Europe',
   tagWorld: 'World',
   featureElectionsTitle: 'Elections',
-  featureElectionsDesc: 'Federal elections 1945–2025 by district',
+  featureElectionsDesc: 'Federal elections 1990–2025 by district',
   featureBundestagTitle: 'Bundestag',
   featureBundestagDesc: 'Hemicycle with 629 MPs',
   featureLegislationTitle: 'Legislation',
@@ -1574,7 +1575,8 @@ export const en = {
   sourcesNmWorldBank: 'World Bank Open Data',
   sourcesNmEurlex: 'EUR-Lex',
   sourcesNmLobbyregisterBt: 'Lobby register of the German Bundestag',
-  sourcesDescGerda: '49,857 constituency results 1945–2025',
+  sourcesDescGerda:
+    '49,857 constituency-level rows (1945–2025, several election types). Bundestag map: 1990–2025.',
   sourcesDescAbwBundestag:
     'Roll-call votes, MP profiles, references to photographs',
   sourcesDescBundestagOpenData: 'Core data on members of parliament',
