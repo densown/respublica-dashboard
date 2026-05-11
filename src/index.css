@@ -15,3 +15,17 @@ body,
 body {
   -webkit-font-smoothing: antialiased;
 }
+
+/* Dezente Lade-Platzhalter (Weltkarte, Lobby-Treemap) */
+@keyframes rp-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.52;
+  }
+}
+.rp-skeleton-bar {
+  animation: rp-skeleton-pulse 1.35s ease-in-out infinite;
+}

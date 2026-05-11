@@ -10,8 +10,8 @@ import maplibregl from 'maplibre-gl'
 import type { ExpressionSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './worldGlMap.css'
-import { type MapProjectionMode, useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { type MapProjectionMode, LoadingSpinner, useTheme } from '../../design-system'
+import { fonts, spacing } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
 
@@ -642,27 +642,64 @@ export function WorldGlMap({
   const fullscreenLabel = t('worldMapFullscreen') || 'Fullscreen'
 
   if (!geojson) {
+    const barWidthsPct = [88, 72, 94, 68, 82]
     return (
       <div
         style={{
           position: 'relative',
           width: '100%',
           height: isFullViewport ? '100%' : cardMapHeightPx,
-          minHeight: isFullViewport ? 0 : mapViewportMinHeight,
+          minHeight: isFullViewport ? '50vh' : mapViewportMinHeight,
           flex: isFullViewport ? 1 : undefined,
           borderRadius: isFullViewport ? 0 : 8,
           overflow: 'hidden',
           ...(isFullViewport ? {} : shellBase),
-          background: c.cardBg,
+          background: c.bgAlt,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          fontFamily: fonts.body,
-          color: c.muted,
-          fontSize: '0.95rem',
+          gap: 18,
+          padding: isFullViewport ? spacing.lg : 20,
+          boxSizing: 'border-box',
         }}
       >
-        {t('loading')}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            width: 'min(100%, 400px)',
+          }}
+          aria-hidden
+        >
+          {barWidthsPct.map((w, i) => (
+            <div
+              key={i}
+              className="rp-skeleton-bar"
+              style={{
+                width: `${w}%`,
+                height: 9,
+                borderRadius: 5,
+                background: c.subtle,
+                animationDelay: `${i * 0.09}s`,
+              }}
+            />
+          ))}
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            fontFamily: fonts.body,
+            color: c.muted,
+            fontSize: '0.9rem',
+          }}
+        >
+          <LoadingSpinner />
+          <span>{t('loading')}</span>
+        </div>
       </div>
     )
   }
