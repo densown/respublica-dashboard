@@ -756,7 +756,63 @@ export default function LobbyRegister() {
           </div>
 
           {byFieldLoading ? (
-            <LoadingSpinner />
+            <div
+              role="status"
+              aria-busy="true"
+              aria-label={t('loading')}
+              style={{
+                position: 'relative',
+                width: '100%',
+                minHeight: treemapHeight,
+                borderRadius: 10,
+                overflow: 'hidden',
+                background: c.bgAlt,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 16,
+                padding: '20px 12px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10,
+                  width: 'min(100%, 380px)',
+                }}
+                aria-hidden
+              >
+                {[85, 70, 92, 65, 78].map((w, i) => (
+                  <div
+                    key={i}
+                    className="rp-skeleton-bar"
+                    style={{
+                      width: `${w}%`,
+                      height: 10,
+                      borderRadius: 5,
+                      background: c.subtle,
+                      animationDelay: `${i * 0.09}s`,
+                    }}
+                  />
+                ))}
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  fontFamily: fonts.body,
+                  color: c.muted,
+                  fontSize: '0.88rem',
+                }}
+              >
+                <LoadingSpinner />
+                <span>{t('loading')}</span>
+              </div>
+            </div>
           ) : byFieldError ? (
             <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted }}>
               {t('dataLoadError')}
