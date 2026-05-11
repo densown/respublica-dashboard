@@ -366,6 +366,7 @@ export default function EuLaw() {
 
   const regCount = countByTyp(stats, 'REG')
   const dirCount = countByTyp(stats, 'DIR')
+  const decCount = countByTyp(stats, 'DEC')
   const totalActs = stats?.total ?? 0
 
   const eughCount = countByGericht(courtStats, 'EuGH')
@@ -510,6 +511,16 @@ export default function EuLaw() {
                   : statsError && !stats
                     ? '—'
                     : dirCount
+              }
+            />
+            <StatWidget
+              label={t('euLawStatDecLabel')}
+              value={
+                statsLoading && !stats
+                  ? '…'
+                  : statsError && !stats
+                    ? '—'
+                    : decCount
               }
             />
           </div>

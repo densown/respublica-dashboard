@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
+import { interpolate } from '../design-system/i18n'
 import { useApi } from '../hooks/useApi'
 
 type GesetzeStats = {
@@ -104,64 +105,76 @@ export default function Overview() {
   const recentGesetze = Array.isArray(gesetzeRows) ? gesetzeRows.slice(0, 3) : []
   const euItems = useMemo(() => euItemsFromResponse(euListRaw), [euListRaw])
 
-  const FEATURES = [
-    {
-      title: t('featureElectionsTitle'),
-      description: t('featureElectionsDesc'),
-      href: '/wahlen',
-      icon: '🗳️',
-      tag: t('tagGermany'),
-    },
-    {
-      title: t('featureBundestagTitle'),
-      description: t('featureBundestagDesc'),
-      href: '/bundestag',
-      icon: '🏛️',
-      tag: t('tagGermany'),
-    },
-    {
-      title: t('featureLegislationTitle'),
-      description: t('featureLegislationDesc'),
-      href: '/gesetzgebung',
-      icon: '§',
-      tag: t('tagGermany'),
-    },
-    {
-      title: t('featureCoalitionTitle'),
-      description: t('featureCoalitionDesc'),
-      href: '/koalitionsvertrag',
-      icon: '✓',
-      tag: t('tagGermany'),
-    },
-    {
-      title: t('featureLobbyTitle'),
-      description: t('featureLobbyDesc'),
-      href: '/lobbyregister',
-      icon: '🏢',
-      tag: t('tagGermany'),
-    },
-    {
-      title: t('featureWorldMapTitle'),
-      description: t('featureWorldMapDesc'),
-      href: '/weltkarte',
-      icon: '🌍',
-      tag: t('tagWorld'),
-    },
-    {
-      title: t('featureEuLawTitle'),
-      description: t('featureEuLawDesc'),
-      href: '/eu-recht',
-      icon: '⚖️',
-      tag: t('tagEurope'),
-    },
-    {
-      title: t('featureEuParliamentTitle'),
-      description: t('featureEuParliamentDesc'),
-      href: '/eu-parlament',
-      icon: '🇪🇺',
-      tag: t('tagEurope'),
-    },
-  ] as const
+  const euLawFeatureDescription = useMemo(() => {
+    if (euStError) return t('featureEuLawDescNoCount')
+    const n = euStats?.total
+    if (n != null && Number.isFinite(n) && n >= 0) {
+      return interpolate(t('featureEuLawDescWithCount'), { count: n })
+    }
+    return t('featureEuLawDescNoCount')
+  }, [euStError, euStats?.total, t])
+
+  const FEATURES = useMemo(
+    () => [
+      {
+        title: t('featureElectionsTitle'),
+        description: t('featureElectionsDesc'),
+        href: '/wahlen',
+        icon: '🗳️',
+        tag: t('tagGermany'),
+      },
+      {
+        title: t('featureBundestagTitle'),
+        description: t('featureBundestagDesc'),
+        href: '/bundestag',
+        icon: '🏛️',
+        tag: t('tagGermany'),
+      },
+      {
+        title: t('featureLegislationTitle'),
+        description: t('featureLegislationDesc'),
+        href: '/gesetzgebung',
+        icon: '§',
+        tag: t('tagGermany'),
+      },
+      {
+        title: t('featureCoalitionTitle'),
+        description: t('featureCoalitionDesc'),
+        href: '/koalitionsvertrag',
+        icon: '✓',
+        tag: t('tagGermany'),
+      },
+      {
+        title: t('featureLobbyTitle'),
+        description: t('featureLobbyDesc'),
+        href: '/lobbyregister',
+        icon: '🏢',
+        tag: t('tagGermany'),
+      },
+      {
+        title: t('featureWorldMapTitle'),
+        description: t('featureWorldMapDesc'),
+        href: '/weltkarte',
+        icon: '🌍',
+        tag: t('tagWorld'),
+      },
+      {
+        title: t('featureEuLawTitle'),
+        description: euLawFeatureDescription,
+        href: '/eu-recht',
+        icon: '⚖️',
+        tag: t('tagEurope'),
+      },
+      {
+        title: t('featureEuParliamentTitle'),
+        description: t('featureEuParliamentDesc'),
+        href: '/eu-parlament',
+        icon: '🇪🇺',
+        tag: t('tagEurope'),
+      },
+    ],
+    [t, euLawFeatureDescription],
+  )
 
   const tagVariant = (tag: string) => {
     if (tag === t('tagGermany')) return 'no' as const
