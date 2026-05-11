@@ -55,6 +55,8 @@ function activeModuleFromPath(pathname: string): string {
   return ROUTE_PREFIX[first] ?? 'overview'
 }
 
+const showAdminInNav = import.meta.env.VITE_SHOW_ADMIN_NAV === 'true'
+
 export default function DashboardLayout() {
   const { c, t } = useTheme()
   const location = useLocation()
@@ -65,8 +67,8 @@ export default function DashboardLayout() {
   const activeModule = activeModuleFromPath(location.pathname)
   const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
-  const navEntries = useMemo(
-    () => [
+  const navEntries = useMemo(() => {
+    const entries = [
       { kind: 'link' as const, id: 'overview', icon: '◉', label: t('overview') },
       { kind: 'link' as const, id: 'worldmap', icon: '⊕', label: t('worldMap') },
       { kind: 'section' as const, label: t('sectionGermany') },
@@ -81,10 +83,12 @@ export default function DashboardLayout() {
       { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') },
       { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
       { kind: 'link' as const, id: 'sources', icon: '◆', label: t('navSources') },
-      { kind: 'link' as const, id: 'admin', icon: '⚙', label: t('admin') },
-    ],
-    [t],
-  )
+    ]
+    if (showAdminInNav) {
+      entries.push({ kind: 'link' as const, id: 'admin', icon: '⚙', label: t('admin') })
+    }
+    return entries
+  }, [t])
 
   const handleModuleSelect = useCallback((moduleId: string) => {
     const path = MODULE_PATH[moduleId] ?? '/'
