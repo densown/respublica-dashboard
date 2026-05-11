@@ -1,5 +1,6 @@
 export type Gesetz = {
   id: number
+  gesetz_id?: number
   kuerzel: string
   name: string
   /** Anzeigetitel (GII / titel_offiziell), fallback wie name */
@@ -11,6 +12,8 @@ export type Gesetz = {
   letzter_stand?: string | null
   gii_slug?: string | null
   gesetz_status?: string | null
+  has_lobby?: boolean
+  titel_offiziell?: string | null
   datum: string
   zusammenfassung: string
   kontext: string | null

@@ -10,6 +10,41 @@ export type PaginationProps = {
 
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
+function getPaginationItems(
+  current: number,
+  total: number,
+): (number | 'ellipsis')[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+
+  const items: (number | 'ellipsis')[] = []
+
+  // Immer Seite 1
+  items.push(1)
+
+  // Linker Bereich
+  if (current <= 4) {
+    // current ist nahe Anfang: 1 2 3 4 5 ... last
+    items.push(2, 3, 4, 5)
+    items.push('ellipsis')
+  } else if (current >= total - 3) {
+    // current ist nahe Ende: 1 ... (last-4) (last-3) (last-2) (last-1)
+    items.push('ellipsis')
+    items.push(total - 4, total - 3, total - 2, total - 1)
+  } else {
+    // current in der Mitte: 1 ... (c-1) c (c+1) ... last
+    items.push('ellipsis')
+    items.push(current - 1, current, current + 1)
+    items.push('ellipsis')
+  }
+
+  // Immer letzte Seite
+  items.push(total)
+
+  return items
+}
+
 export function Pagination({ current, total, onChange }: PaginationProps) {
   const { c } = useTheme()
 
@@ -38,7 +73,7 @@ export function Pagination({ current, total, onChange }: PaginationProps) {
     [c],
   )
 
-  const pages = Array.from({ length: total }, (_, i) => i + 1)
+  const items = getPaginationItems(current, total)
 
   return (
     <nav
@@ -64,17 +99,35 @@ export function Pagination({ current, total, onChange }: PaginationProps) {
       >
         ‹
       </button>
-      {pages.map((p) => (
-        <button
-          key={p}
-          type="button"
-          onClick={() => go(p)}
-          style={btn(p === current)}
-          aria-current={p === current ? 'page' : undefined}
-        >
-          {p}
-        </button>
-      ))}
+      {items.map((item, idx) => {
+        if (item === 'ellipsis') {
+          return (
+            <span
+              key={`ellipsis-${idx}`}
+              style={{
+                padding: `0 ${spacing.xs ?? spacing.sm}px`,
+                color: c.inkSoft,
+                fontFamily: fonts.mono,
+                fontSize: '0.75rem',
+                userSelect: 'none',
+              }}
+            >
+              ...
+            </span>
+          )
+        }
+        return (
+          <button
+            key={item}
+            type="button"
+            onClick={() => go(item)}
+            style={btn(item === current)}
+            aria-current={item === current ? 'page' : undefined}
+          >
+            {item}
+          </button>
+        )
+      })}
       <button
         type="button"
         aria-label="Next page"

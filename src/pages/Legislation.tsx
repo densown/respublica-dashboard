@@ -226,6 +226,9 @@ export default function Legislation() {
   >('all')
   const [urteilSortNewest, setUrteilSortNewest] = useState(true)
   const [urteilPage, setUrteilPage] = useState(1)
+  const [lobbyFilter, setLobbyFilter] = useState<
+    'alle' | 'mit_lobby' | 'klartitel'
+  >('alle')
 
   const activeNumericId = useMemo(() => {
     if (idTrimmed === '') return NaN
@@ -311,6 +314,13 @@ export default function Legislation() {
         (g) => rechtGebietFromKuerzel(g.kuerzel) === domainFilter,
       )
     }
+    if (lobbyFilter === 'mit_lobby')
+      rows = rows.filter((g) => g.has_lobby === true)
+    if (lobbyFilter === 'klartitel')
+      rows = rows.filter(
+        (g) =>
+          g.titel_offiziell != null && g.titel_offiziell.trim() !== '',
+      )
     const q = gesetzSearch.trim().toLowerCase()
     if (q) {
       rows = rows.filter((g) => {
@@ -343,11 +353,11 @@ export default function Legislation() {
       )
     }
     return sorted
-  }, [list, domainFilter, gesetzSearch, gesetzSort])
+  }, [list, domainFilter, gesetzSearch, gesetzSort, lobbyFilter])
 
   useEffect(() => {
     setGesetzPage(1)
-  }, [domainFilter, gesetzSearch, gesetzSort])
+  }, [domainFilter, gesetzSearch, gesetzSort, lobbyFilter])
 
   const gesetzTotalPages = Math.max(
     1,
@@ -374,10 +384,10 @@ export default function Legislation() {
 
   const lobbyLawEndpoint = useMemo(() => {
     if (mainTab !== 'gesetze') return ''
-    const kuerzel = (gesetzMerged?.kuerzel ?? '').trim()
-    if (!kuerzel) return ''
-    return `/api/lobby-projects/by-law?q=${encodeURIComponent(kuerzel)}`
-  }, [mainTab, gesetzMerged?.kuerzel])
+    const gesetzId = gesetzMerged?.gesetz_id
+    if (!gesetzId || !Number.isFinite(gesetzId)) return ''
+    return `/api/lobby-projects/by-gesetz-id?gesetz_id=${gesetzId}`
+  }, [mainTab, gesetzMerged?.gesetz_id])
 
   const {
     data: lobbyLawData,
@@ -612,6 +622,45 @@ export default function Legislation() {
         }
       `}</style>
       <div style={{ padding: spacing.lg, flexShrink: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            marginBottom: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {[
+            { value: 'alle', label: 'Alle' },
+            { value: 'mit_lobby', label: 'Mit Lobby' },
+            { value: 'klartitel', label: 'Klartitel' },
+          ].map((chip) => (
+            <button
+              key={chip.value}
+              onClick={() =>
+                setLobbyFilter(chip.value as typeof lobbyFilter)
+              }
+              style={{
+                minHeight: '44px',
+                padding: '8px 16px',
+                border:
+                  lobbyFilter === chip.value
+                    ? '2px solid #C8102E'
+                    : '1px solid var(--border-color, #ccc)',
+                backgroundColor:
+                  lobbyFilter === chip.value ? '#C8102E' : 'transparent',
+                color: lobbyFilter === chip.value ? '#fff' : 'inherit',
+                borderRadius: '999px',
+                fontFamily: 'IBM Plex Mono, monospace',
+                fontSize: '13px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {chip.label}
+            </button>
+          ))}
+        </div>
         <div
           style={{
             display: 'flex',
