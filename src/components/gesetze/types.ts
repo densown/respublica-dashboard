@@ -2,6 +2,15 @@ export type Gesetz = {
   id: number
   kuerzel: string
   name: string
+  /** Anzeigetitel (GII / titel_offiziell), fallback wie name */
+  titel?: string | null
+  amtliche_abkuerzung?: string | null
+  ausfertigung_datum?: string | null
+  fundstelle_periodikum?: string | null
+  fundstelle_zitstelle?: string | null
+  letzter_stand?: string | null
+  gii_slug?: string | null
+  gesetz_status?: string | null
   datum: string
   zusammenfassung: string
   kontext: string | null
