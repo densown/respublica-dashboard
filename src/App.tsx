@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ThemeProvider } from './design-system'
 import DashboardLayout from './layouts/DashboardLayout'
 import Admin from './pages/Admin'
@@ -61,6 +61,7 @@ export default function App() {
             <Route path="eu-recht/:id" element={<EuLaw />} />
             <Route path="koalition" element={<Coalition />} />
             <Route path="koalitionsvertrag" element={<Coalition />} />
+            <Route path="demokratie-index" element={<Navigate to="/demokratie" replace />} />
             <Route path="demokratie" element={<DemocracyIndex />} />
             <Route path="weltkarte" element={<WorldMap />} />
             <Route path="eu-parlament" element={<EuParliament />} />
