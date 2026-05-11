@@ -134,6 +134,11 @@ export function GesetzDetail({
   }
 
   const ku = (gesetz.kuerzel ?? '').trim()
+  const titel =
+    (gesetz.titel ?? '').trim() ||
+    (gesetz.name ?? '').trim() ||
+    ku ||
+    '—'
   const summary = (gesetz.zusammenfassung ?? '').trim()
   const kontext = (gesetz.kontext ?? '').trim()
   const diffRaw = (gesetz.diff ?? '').trim()
@@ -184,16 +189,58 @@ export function GesetzDetail({
     >
       <h2
         style={{
-          fontFamily: fonts.mono,
-          fontWeight: 700,
-          fontSize: 'clamp(1.35rem, 2.8vw, 1.85rem)',
+          fontFamily: fonts.body,
+          fontWeight: 500,
+          fontSize: 'clamp(1.2rem, 2.5vw, 1.65rem)',
           color: c.ink,
-          lineHeight: 1.15,
-          marginBottom: spacing.md,
+          lineHeight: 1.2,
+          marginBottom: spacing.sm,
+          wordBreak: 'break-word',
         }}
       >
-        {ku || '—'}
+        {titel}
       </h2>
+      {(gesetz.amtliche_abkuerzung ?? '').trim() ||
+      ku ||
+      (gesetz.ausfertigung_datum ?? '').trim() ? (
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: spacing.sm,
+            fontFamily: fonts.mono,
+            fontSize: '0.78rem',
+            color: c.muted,
+            marginBottom: spacing.md,
+          }}
+        >
+          {(gesetz.amtliche_abkuerzung ?? '').trim() || ku ? (
+            <span>{(gesetz.amtliche_abkuerzung ?? '').trim() || ku}</span>
+          ) : null}
+          {gesetz.ausfertigung_datum ? (
+            <time dateTime={gesetz.ausfertigung_datum}>
+              {formatDisplayDate(gesetz.ausfertigung_datum, lang)}
+            </time>
+          ) : null}
+        </div>
+      ) : null}
+      {(gesetz.letzter_stand ?? '').trim() ? (
+        <p
+          style={{
+            fontFamily: fonts.body,
+            fontSize: '0.82rem',
+            lineHeight: 1.5,
+            color: c.muted,
+            marginBottom: spacing.md,
+          }}
+        >
+          <span style={{ fontFamily: fonts.mono, fontSize: '0.68rem' }}>
+            {t('gesetzeLetzterStand')}
+            {': '}
+          </span>
+          {(gesetz.letzter_stand ?? '').trim()}
+        </p>
+      ) : null}
 
       {hasSummary ? (
         <>
