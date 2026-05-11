@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import * as d3 from 'd3'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -74,6 +75,25 @@ type LobbyDetail = LobbyListItem & {
   activity_description: string | null
   first_publication: string | null
   last_update: string | null
+}
+
+type LobbyGesetzItem = {
+  gesetz_id: number
+  kuerzel: string | null
+  titel_offiziell: string | null
+  name: string | null
+  gii_slug: string | null
+  projekt_count: number
+  aenderung_id: number | null
+}
+
+type LobbyGesetzeResponse = {
+  items: LobbyGesetzItem[]
+  stats: {
+    projekte_gesamt: number
+    projekte_mit_mapping: number
+    unique_gesetze: number
+  }
 }
 
 type LobbyProjectItem = {
@@ -174,7 +194,22 @@ export default function LobbyRegister() {
   const [onlyActive, setOnlyActive] = useState(true)
   const [minExpense, setMinExpense] = useState(0)
   const [selectedCity, setSelectedCity] = useState('')
-  const [selectedRegisterNumber, setSelectedRegisterNumber] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const selectedRegisterNumber = searchParams.get('register')
+  const setSelectedRegisterNumber = (value: string | null) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev)
+        if (value) {
+          next.set('register', value)
+        } else {
+          next.delete('register')
+        }
+        return next
+      },
+      { replace: false },
+    )
+  }
   const [detailTab, setDetailTab] = useState<'overview' | 'projects'>('overview')
   const [expandedProject, setExpandedProject] = useState<string | null>(null)
   const [hoveredTile, setHoveredTile] = useState<{ code: string; x: number; y: number } | null>(null)
@@ -258,6 +293,16 @@ export default function LobbyRegister() {
   } = useApi<LobbyProjectsResponse>(
     selectedRegisterNumber
       ? `/api/lobbyregister/${encodeURIComponent(selectedRegisterNumber)}/projects`
+      : '',
+  )
+
+  const {
+    data: lobbyGesetze,
+    loading: gesetzeLoading,
+    error: gesetzeError,
+  } = useApi<LobbyGesetzeResponse>(
+    selectedRegisterNumber
+      ? `/api/lobbyregister/${encodeURIComponent(selectedRegisterNumber)}/gesetze`
       : '',
   )
   useEffect(() => {
@@ -1991,6 +2036,110 @@ export default function LobbyRegister() {
                       })}
                     </div>
                   )}
+                  {selectedRegisterNumber ? (
+                    <div style={{ marginTop: spacing.lg }}>
+                      <h4
+                        style={{
+                          fontFamily: fonts.display,
+                          fontWeight: 700,
+                          fontSize: '1rem',
+                          color: c.ink,
+                          margin: 0,
+                          marginBottom: spacing.xs,
+                        }}
+                      >
+                        {t('lobbyAffectedLawsTitle')}
+                      </h4>
+                      {gesetzeLoading ? (
+                        <LoadingSpinner />
+                      ) : gesetzeError ? (
+                        <p
+                          style={{
+                            fontFamily: fonts.body,
+                            color: c.no,
+                            fontSize: '0.84rem',
+                            margin: 0,
+                          }}
+                        >
+                          {t('dataLoadError')}
+                        </p>
+                      ) : lobbyGesetze && lobbyGesetze.items.length > 0 ? (
+                        <>
+                          <p
+                            style={{
+                              fontFamily: fonts.body,
+                              color: c.muted,
+                              fontSize: '0.82rem',
+                              marginTop: 0,
+                              marginBottom: spacing.md,
+                            }}
+                          >
+                            {t('lobbyAffectedLawsSubtitle')
+                              .replace('{mapped}', String(lobbyGesetze.stats.projekte_mit_mapping))
+                              .replace('{total}', String(lobbyGesetze.stats.projekte_gesamt))
+                              .replace('{unique}', String(lobbyGesetze.stats.unique_gesetze))}
+                          </p>
+                          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
+                            {lobbyGesetze.items.slice(0, 15).map((item) => (
+                              <li
+                                key={item.gesetz_id}
+                                style={{
+                                  borderBottom: `1px solid ${c.border}`,
+                                  paddingBottom: spacing.xs,
+                                }}
+                              >
+                                {item.aenderung_id ? (
+                                  <Link
+                                    to={`/gesetze/${item.aenderung_id}`}
+                                    onClick={() => setSelectedRegisterNumber(null)}
+                                    style={{
+                                      display: 'block',
+                                      color: c.red,
+                                      textDecoration: 'none',
+                                      fontFamily: fonts.body,
+                                      fontSize: '0.9rem',
+                                    }}
+                                  >
+                                    <span style={{ fontWeight: 700 }}>
+                                      {item.titel_offiziell || item.name || item.kuerzel || '—'}
+                                    </span>
+                                    {item.kuerzel ? (
+                                      <span style={{ color: c.muted, marginLeft: spacing.xs }}>
+                                        ({item.kuerzel})
+                                      </span>
+                                    ) : null}
+                                    <div style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.muted }}>
+                                      {item.projekt_count} {t('lobbyProjects')}
+                                    </div>
+                                  </Link>
+                                ) : (
+                                  <div style={{ fontFamily: fonts.body, fontSize: '0.9rem', color: c.ink }}>
+                                    {item.titel_offiziell || item.name || item.kuerzel || '—'}
+                                  </div>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                          {lobbyGesetze.items.length > 15 ? (
+                            <p style={{ fontFamily: fonts.body, color: c.muted, fontSize: '0.82rem', marginTop: spacing.sm }}>
+                              {t('lobbyAffectedLawsMore').replace('{count}', String(lobbyGesetze.items.length - 15))}
+                            </p>
+                          ) : null}
+                        </>
+                      ) : (
+                        <p
+                          style={{
+                            fontFamily: fonts.body,
+                            color: c.muted,
+                            fontSize: '0.84rem',
+                            margin: 0,
+                          }}
+                        >
+                          {t('lobbyAffectedLawsEmpty')}
+                        </p>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               )}
             </DataCard>

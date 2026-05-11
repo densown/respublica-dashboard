@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties } from 'react'
+import { Link } from 'react-router-dom'
 import { Badge, EmptyState, LoadingSpinner, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 import { courtBadgeVariant, formatDisplayDate } from './utils'
@@ -21,6 +22,7 @@ export type LobbyLawItem = {
   project_number: string | null
   project_url: string | null
   lobbyist_name: string | null
+  register_number: string | null
   financial_expenses_euro: number | null
 }
 
@@ -142,6 +144,11 @@ export function GesetzDetail({
   const summary = (gesetz.zusammenfassung ?? '').trim()
   const kontext = (gesetz.kontext ?? '').trim()
   const diffRaw = (gesetz.diff ?? '').trim()
+  const isInitialImport = diffRaw.length > 0 && diffRaw.includes('new file mode')
+  const hasAnyDiff = diffRaw.length > 0
+  const TRUNCATE_BYTES = 200000
+  const isTruncated = diffRaw.length > TRUNCATE_BYTES
+  const displayDiff = isTruncated ? diffRaw.slice(0, TRUNCATE_BYTES) : diffRaw
   const hasSummary = summary.length > 0
 
   const toggleBtnStyle: CSSProperties = {
@@ -302,33 +309,56 @@ export function GesetzDetail({
         </div>
       ) : null}
 
-      <div style={{ marginBottom: spacing.xl }}>
-        <button
-          type="button"
-          aria-expanded={synopseOpen}
-          onClick={() => setSynopseOpen((v) => !v)}
-          style={toggleBtnStyle}
-        >
-          {synopseOpen ? t('gesetzeSynopseHide') : t('gesetzeSynopseShow')}
-        </button>
-        {synopseOpen ? (
-          <div style={{ marginTop: spacing.md }}>
-            {!diffRaw ? (
+      {hasAnyDiff ? (
+        <div style={{ marginBottom: spacing.xl }}>
+          <button
+            type="button"
+            aria-expanded={synopseOpen}
+            onClick={() => setSynopseOpen((v) => !v)}
+            style={toggleBtnStyle}
+          >
+            {synopseOpen
+              ? isInitialImport
+                ? t('gesetzeVolltextHide')
+                : t('gesetzeDiffHide')
+              : isInitialImport
+                ? t('gesetzeVolltextShow')
+                : t('gesetzeDiffShow')}
+          </button>
+          {synopseOpen ? (
+            <div style={{ marginTop: spacing.md }}>
               <p
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.88rem',
+                  fontSize: '0.85rem',
                   color: c.muted,
+                  marginBottom: spacing.sm,
+                  fontStyle: 'italic',
                 }}
               >
-                {t('gesetzeNoSynopse')}
+                {isInitialImport
+                  ? t('gesetzeVolltextDescription')
+                  : t('gesetzeDiffDescription')}
               </p>
-            ) : (
-              <DiffSynopse diff={diffRaw} />
-            )}
-          </div>
-        ) : null}
-      </div>
+              {isTruncated ? (
+                <p
+                  style={{
+                    fontFamily: fonts.body,
+                    fontSize: '0.82rem',
+                    color: c.no,
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  {t('gesetzeDiffTruncated')
+                    .replace('{shown}', String(Math.round(TRUNCATE_BYTES / 1024)))
+                    .replace('{total}', String(Math.round(diffRaw.length / 1024)))}
+                </p>
+              ) : null}
+              <DiffSynopse diff={displayDiff} />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <section>
         <h3
@@ -420,9 +450,23 @@ export function GesetzDetail({
                         paddingBottom: spacing.sm,
                       }}
                     >
-                      <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
-                        {item.lobbyist_name || '—'}
-                      </div>
+                      {item.register_number && item.lobbyist_name ? (
+                        <Link
+                          to={`/lobbyregister?register=${encodeURIComponent(item.register_number)}`}
+                          style={{
+                            fontFamily: fonts.body,
+                            fontWeight: 700,
+                            color: c.red,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {item.lobbyist_name}
+                        </Link>
+                      ) : (
+                        <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
+                          {item.lobbyist_name || '—'}
+                        </div>
+                      )}
                       <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
                         {formatMoney(item.financial_expenses_euro)}
                       </div>
@@ -510,9 +554,23 @@ export function GesetzDetail({
                         paddingBottom: spacing.sm,
                       }}
                     >
-                      <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
-                        {item.lobbyist_name || '—'}
-                      </div>
+                      {item.register_number && item.lobbyist_name ? (
+                        <Link
+                          to={`/lobbyregister?register=${encodeURIComponent(item.register_number)}`}
+                          style={{
+                            fontFamily: fonts.body,
+                            fontWeight: 700,
+                            color: c.red,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {item.lobbyist_name}
+                        </Link>
+                      ) : (
+                        <div style={{ fontFamily: fonts.body, fontWeight: 700, color: c.ink }}>
+                          {item.lobbyist_name || '—'}
+                        </div>
+                      )}
                       <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
                         {formatMoney(item.financial_expenses_euro)}
                       </div>
