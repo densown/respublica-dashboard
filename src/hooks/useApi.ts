@@ -61,19 +61,22 @@ export function useApi<T>(endpoint: string): UseApiResult<T> {
         if (cancelled) return
         setData(json)
         setError(null)
+        setLoading(false)
       } catch (e) {
-        if (controller.signal.aborted) return
-        const msg = e instanceof Error ? e.message : 'Fetch failed'
-        setData(null)
-        setError(msg)
+        if (controller.signal.aborted || cancelled) return
         if (!isRetry && !didRetry) {
+          // Retry geplant: alten Datenstand + loading=true behalten,
+          // Fehler erst nach finalem Fehlschlag melden.
           didRetry = true
           retryTimer = window.setTimeout(() => {
             if (!cancelled) void load(true)
           }, 2000)
+          return
         }
-      } finally {
-        if (!cancelled) setLoading(false)
+        const msg = e instanceof Error ? e.message : 'Fetch failed'
+        setData(null)
+        setError(msg)
+        setLoading(false)
       }
     }
 
