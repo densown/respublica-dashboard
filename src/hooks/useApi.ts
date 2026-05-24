@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const DEFAULT_BASE = typeof window !== 'undefined' ? window.location.origin : ''
 
@@ -8,14 +8,9 @@ function getBaseUrl(): string {
   return base
 }
 
-function buildUrl(endpoint: string, params?: Record<string, string>): string {
+function buildUrl(endpoint: string): string {
   const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
   const url = new URL(path, `${getBaseUrl()}/`)
-  if (params) {
-    for (const [k, v] of Object.entries(params)) {
-      url.searchParams.set(k, v)
-    }
-  }
   return url.toString()
 }
 
@@ -26,21 +21,13 @@ export interface UseApiResult<T> {
   refetch: () => void
 }
 
-export function useApi<T>(
-  endpoint: string,
-  params?: Record<string, string>,
-): UseApiResult<T> {
+export function useApi<T>(endpoint: string): UseApiResult<T> {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(
     () => Boolean(endpoint && endpoint.trim()),
   )
   const [error, setError] = useState<string | null>(null)
   const [tick, setTick] = useState(0)
-
-  const paramsKey = useMemo(
-    () => (params ? JSON.stringify(params) : ''),
-    [params],
-  )
 
   const refetch = useCallback(() => {
     setTick((n) => n + 1)
@@ -65,7 +52,7 @@ export function useApi<T>(
         setError(null)
       }
       try {
-        const url = buildUrl(endpoint, params)
+        const url = buildUrl(endpoint)
         const res = await fetch(url, { signal: controller.signal })
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`)
@@ -97,7 +84,7 @@ export function useApi<T>(
       controller.abort()
       if (retryTimer !== null) window.clearTimeout(retryTimer)
     }
-  }, [endpoint, paramsKey, tick, params])
+  }, [endpoint, tick])
 
   return { data, loading, error, refetch }
 }
