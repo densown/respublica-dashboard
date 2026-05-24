@@ -305,12 +305,6 @@ export default function LobbyRegister() {
       ? `/api/lobbyregister/${encodeURIComponent(selectedRegisterNumber)}/gesetze`
       : '',
   )
-  useEffect(() => {
-    if (projectsData?.items) {
-      // Temporary debug output to verify API project shape in browser devtools.
-      console.log('Lobby projects response', projectsData.items)
-    }
-  }, [projectsData])
   const {
     data: byFieldData,
     loading: byFieldLoading,
