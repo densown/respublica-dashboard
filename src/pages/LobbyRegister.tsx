@@ -524,10 +524,7 @@ export default function LobbyRegister() {
   }
 
   function formatAverageMoney(value: number | null): string {
-    if (value == null) return '—'
-    const locale = lang === 'de' ? 'de-DE' : 'en-GB'
-    const normalized = value > 10_000_000 ? value / 1000 : value
-    return `${Math.round(normalized).toLocaleString(locale)} €`
+    return formatMoney(value)
   }
 
   const getMinistry = (lm: unknown): string => {
