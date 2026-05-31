@@ -78,3 +78,39 @@
 .world-gl-map button.world-gl-map__close-fs {
   appearance: none;
 }
+
+/* Hover-Tooltip: dunkler, halbtransparenter Hintergrund mit Border + Shadow,
+   damit er auf hell wie dunkel eingefärbten Ländern und über dem Meer in
+   beiden Themes klar als schwebendes Element lesbar bleibt. */
+.world-gl-popup .maplibregl-popup-content {
+  background: rgba(20, 22, 28, 0.92);
+  color: #f4f4f5;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 9px 12px 11px;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+/* Tip (Zeiger-Dreieck) auf die dunkle Fläche umfärben, je nach Anker-Richtung */
+.world-gl-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.world-gl-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.world-gl-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: rgba(20, 22, 28, 0.92);
+}
+
+.world-gl-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.world-gl-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.world-gl-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: rgba(20, 22, 28, 0.92);
+}
+
+.world-gl-popup.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(20, 22, 28, 0.92);
+}
+
+.world-gl-popup.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(20, 22, 28, 0.92);
+}

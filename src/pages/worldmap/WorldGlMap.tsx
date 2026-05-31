@@ -171,7 +171,6 @@ export function WorldGlMap({
   const formatValueRef = useRef(formatValue)
   const nameByIsoRef = useRef(nameByIso)
   const tRef = useRef(t)
-  const cRef = useRef(c)
   const onCountryContextMenuRef = useRef(onCountryContextMenu)
   const projectionRef = useRef<MapProjectionMode>(projection)
   projectionRef.current = projection
@@ -181,7 +180,6 @@ export function WorldGlMap({
   formatValueRef.current = formatValue
   nameByIsoRef.current = nameByIso
   tRef.current = t
-  cRef.current = c
   onCountryContextMenuRef.current = onCountryContextMenu
 
   const applyProjection = useCallback(
@@ -375,6 +373,7 @@ export function WorldGlMap({
         closeButton: false,
         closeOnClick: false,
         maxWidth: '280px',
+        className: 'world-gl-popup',
       })
     }
 
@@ -418,7 +417,6 @@ export function WorldGlMap({
       }
       const rows = mapDataRef.current
       const row = rows.find((r) => normIso(r.country_code) === iso)
-      const tc = cRef.current
       const name =
         nameByIsoRef.current.get(iso) ?? row?.country_name ?? iso
       const line1 =
@@ -426,10 +424,13 @@ export function WorldGlMap({
           ? formatValueRef.current(row.value)
           : tRef.current('worldNoValue')
       const hint = tRef.current('worldOpenAnalysis')
-      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:${escHtml(tc.text)};min-width:140px;">
-        <div style="font-weight:700;margin-bottom:4px;">${escHtml(name)}</div>
+      // Feste helle Textfarben: der Popup-Hintergrund ist in beiden Themes dunkel
+      // (siehe .world-gl-popup in worldGlMap.css), damit über hell wie dunkel
+      // eingefärbten Ländern genug Kontrast bleibt.
+      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:#f4f4f5;min-width:140px;">
+        <div style="font-weight:700;margin-bottom:4px;color:#ffffff;">${escHtml(name)}</div>
         <div style="font-family:${escHtml(fonts.mono)};font-size:12px;">${escHtml(line1)}</div>
-        <div style="margin-top:6px;color:${escHtml(tc.muted)};font-size:11px;">${escHtml(hint)}</div>
+        <div style="margin-top:6px;color:rgba(255,255,255,0.62);font-size:11px;">${escHtml(hint)}</div>
       </div>`
       popupRef.current!.setLngLat(e.lngLat).setHTML(html).addTo(map)
       map.getCanvas().style.cursor = 'pointer'

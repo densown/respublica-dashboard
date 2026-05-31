@@ -972,7 +972,9 @@ export default function WorldMap() {
             position: 'absolute',
             left: spacing.md,
             right: spacing.md,
-            bottom: spacing.md,
+            // Über dem Res.Publica-Wasserzeichen (bottom:10) ausrichten, damit
+            // sich Skala-Beschriftung und Wasserzeichen nicht mehr überlagern.
+            bottom: spacing.xxl,
             zIndex: 28,
             maxWidth: narrow ? 'none' : 420,
             pointerEvents: 'none',
