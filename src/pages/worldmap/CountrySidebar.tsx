@@ -2222,7 +2222,11 @@ export function CountrySidebar({
               className="country-sidebar__tab-strip"
               style={{
                 display: 'flex',
-                overflowX: layoutDirection === 'horizontal' ? 'visible' : 'auto',
+                // In jedem Layout horizontal scrollen statt umbrechen/abschneiden,
+                // wenn die Reiter (inkl. KLIMA) nicht in eine Zeile passen. Buttons
+                // sind flexShrink:0 + nowrap, daher kein Schrumpfen/Umbruch.
+                flexWrap: 'nowrap',
+                overflowX: 'auto',
                 gap: 0,
                 borderTop: `1px solid ${c.border}`,
                 minWidth: 0,
@@ -2299,7 +2303,12 @@ export function CountrySidebar({
           flex: 1,
           minHeight: 0,
           minWidth: 0,
-          overflow: layoutDirection === 'horizontal' ? 'hidden' : 'auto',
+          // Inhaltsbereich immer vertikal scrollbar, damit lange Tabs (z.B. Klima
+          // mit fünf Sektionen) im Bottom-Sheet/Bottom-Dock erreichbar bleiben.
+          // Horizontal nur in der Spalten-Anordnung (dock=bottom) unterbinden;
+          // die vertikalen Layouts behalten ihr bisheriges overflow:auto.
+          overflowX: layoutDirection === 'horizontal' ? 'hidden' : 'auto',
+          overflowY: 'auto',
           scrollbarWidth: 'thin',
         }}
       >
