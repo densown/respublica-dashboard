@@ -127,6 +127,7 @@ export type ClimateKoeppenDominant = {
   symbol: string
   name_de: string
   name_en: string
+  short_name: string
   color_rgb: string
   major_group: string
   share: number | null

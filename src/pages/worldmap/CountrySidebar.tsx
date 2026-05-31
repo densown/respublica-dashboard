@@ -1289,6 +1289,11 @@ function TabKlima({
               >
                 {dom?.symbol ?? '—'}
               </span>
+              {dom?.short_name ? (
+                <span style={{ fontFamily: fonts.body, fontSize: 11, lineHeight: 1.2 }}>
+                  {dom.short_name}
+                </span>
+              ) : null}
               {dom?.share != null && (
                 <span style={{ fontFamily: fonts.mono, fontSize: 10, opacity: 0.85 }}>
                   {fmtShare(dom.share)}
