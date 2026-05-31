@@ -26,6 +26,7 @@ import { WorldGlMap } from './worldmap/WorldGlMap'
 import { WorldMapLegend } from './worldmap/WorldMapLegend'
 import { worldApiUrl } from './worldmap/worldMapData'
 import type {
+  ClimateResponse,
   CountrySelection,
   DockPosition,
   WorldCategoryApi,
@@ -194,6 +195,10 @@ export default function WorldMap() {
   const [tradeLoading, setTradeLoading] = useState(false)
   const [tradeTimeseries, setTradeTimeseries] = useState<WorldTradeTimeseriesResponse | null>(null)
   const [tradeTimeseriesLoading, setTradeTimeseriesLoading] = useState(false)
+  const [climateData, setClimateData] = useState<Map<string, ClimateResponse>>(
+    () => new Map(),
+  )
+  const [climateLoading, setClimateLoading] = useState(false)
   const [consoleRanking, setConsoleRanking] = useState<WorldRankingRow[] | null>(null)
   const [mapContextMenu, setMapContextMenu] = useState<{
     iso3: string
@@ -641,6 +646,38 @@ export default function WorldMap() {
       .finally(() => setTradeTimeseriesLoading(false))
   }, [])
 
+  const loadClimate = useCallback(
+    (iso3: string) => {
+      const key = iso3.trim().toUpperCase().slice(0, 3)
+      setClimateLoading(true)
+      const url = worldApiUrl(
+        `/api/world/climate/${encodeURIComponent(key)}?lang=${lang}`,
+      )
+      fetch(url)
+        .then((r) => {
+          if (!r.ok) throw new Error(String(r.status))
+          return r.json() as Promise<ClimateResponse>
+        })
+        .then((d) => {
+          setClimateData((prev) => new Map(prev).set(key, d))
+        })
+        .catch(() => {
+          // z.B. 404 für geskippte Mikrostaaten: leeren Datensatz cachen, damit
+          // der Lazy-Load-Effekt nicht in eine Refetch-Schleife läuft. TabKlima
+          // zeigt dann worldClimateNoData.
+          setClimateData((prev) =>
+            new Map(prev).set(key, {
+              iso3: key,
+              country_name: key,
+              scenarios: [],
+            }),
+          )
+        })
+        .finally(() => setClimateLoading(false))
+    },
+    [lang],
+  )
+
   const onSelectCountry = useCallback(
     (iso3: string, modifiers: { meta: boolean; ctrl: boolean }) => {
       if (modifiers.meta || modifiers.ctrl) {
@@ -1039,6 +1076,9 @@ export default function WorldMap() {
     tradeTimeseries,
     tradeTimeseriesLoading,
     onLoadTradeTimeseries: loadTradeTimeseries,
+    climateData,
+    climateLoading,
+    onLoadClimate: loadClimate,
     ranking: consoleRanking,
     globalStats: consoleGlobalStats,
     onClose: onCloseSidebar,

@@ -120,3 +120,36 @@ export type WorldTradeResponse = {
   sections_export?: WorldTradeSectionRow[]
   sections_import?: WorldTradeSectionRow[]
 }
+
+/** Köppen-Geiger-Klima: Antwort von GET /api/world/climate/:iso3 */
+export type ClimateKoeppenDominant = {
+  class_code: number
+  symbol: string
+  name_de: string
+  name_en: string
+  color_rgb: string
+  major_group: string
+  share: number | null
+}
+
+export type ClimateKoeppenDistributionEntry = {
+  class_code: number
+  symbol: string
+  color_rgb: string
+  share: number | null
+  pixel_count: number | null
+}
+
+export type ClimateScenario = {
+  scenario: string
+  period: string
+  year: number
+  dominant: ClimateKoeppenDominant | null
+  distribution: ClimateKoeppenDistributionEntry[]
+}
+
+export type ClimateResponse = {
+  iso3: string
+  country_name: string
+  scenarios: ClimateScenario[]
+}
