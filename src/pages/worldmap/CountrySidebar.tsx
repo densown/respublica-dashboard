@@ -1637,7 +1637,6 @@ function TabVergleich({
 }
 
 function TabKontext({
-  countryDetail: _countryDetail,
   articles,
   layoutDirection,
 }: {
