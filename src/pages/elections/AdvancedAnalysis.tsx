@@ -173,17 +173,6 @@ export function AdvancedAnalysis({
     [changeData],
   )
 
-  useEffect(() => {
-    if (!import.meta.env.DEV || !changeData?.length) return
-    const sample = changeData.slice(0, 5).map((r) => ({
-      ags: r.ags,
-      change_raw: r.change,
-      value_from_raw: r.value_from,
-      value_to_raw: r.value_to,
-    }))
-    console.log('[wahlen] change API first 5 (raw)', sample)
-  }, [changeData])
-
   const changeByAgs = useMemo(() => {
     const m = new Map<string, ChangeRow>()
     if (!normalizedChangeData) return m

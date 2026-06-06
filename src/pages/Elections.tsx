@@ -72,7 +72,6 @@ export default function Elections() {
 
     fetch(geoUrl)
       .then((r) => {
-        console.log('[map] geojson status:', r.status, geoUrl)
         if (!r.ok) {
           throw new Error(`GeoJSON HTTP ${r.status} ${geoUrl}`)
         }
@@ -80,7 +79,6 @@ export default function Elections() {
       })
       .then((data) => {
         if (cancelled) return
-        console.log('[map] loaded features:', data.features?.length)
         geoRef.current = data
         setGeojson(data)
         setGeoErr(false)
