@@ -8,8 +8,9 @@ import {
   useState,
 } from 'react'
 import { EmptyState, PageHeader, useTheme } from '../design-system'
-import { breakpoints, fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useIsMobile } from '../hooks/useMediaQuery'
 import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
@@ -57,16 +58,7 @@ export default function Elections() {
 
   const [searchQuery, setSearchQuery] = useState('')
 
-  const [narrow, setNarrow] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
-  )
-
-  useEffect(() => {
-    const onR = () => setNarrow(window.innerWidth < breakpoints.mobile)
-    onR()
-    window.addEventListener('resize', onR)
-    return () => window.removeEventListener('resize', onR)
-  }, [])
+  const narrow = useIsMobile()
 
   useEffect(() => {
     if (geoRef.current) {

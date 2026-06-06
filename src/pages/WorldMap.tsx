@@ -11,6 +11,7 @@ import { type MapProjectionMode, useTheme } from '../design-system'
 import type { Lang } from '../design-system/ThemeContext'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useIsMobile } from '../hooks/useMediaQuery'
 import { isRealCountry } from '../utils/worldFilters'
 import { useDebouncedValue } from './elections/useDebouncedValue'
 import { countryPercentileFromMapRows } from './worldmap/worldConsoleHelpers'
@@ -287,16 +288,7 @@ export default function WorldMap() {
     })
   }, [])
 
-  const [narrow, setNarrow] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
-  )
-
-  useEffect(() => {
-    const onR = () => setNarrow(window.innerWidth < breakpoints.mobile)
-    onR()
-    window.addEventListener('resize', onR)
-    return () => window.removeEventListener('resize', onR)
-  }, [])
+  const narrow = useIsMobile()
 
   useEffect(() => {
     if (!selectedCountry) {

@@ -10,8 +10,9 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { breakpoints, fonts, spacing } from '../../design-system/tokens'
+import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuRechtDetail, EuRechtListItem } from './types'
 
@@ -19,21 +20,6 @@ const REG_COLOR = '#2563eb'
 const DIR_COLOR = '#16a34a'
 const DEC_COLOR = '#d97706'
 const PREVIEW_LEN = 200
-
-function useIsNarrow() {
-  const [narrow, setNarrow] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.innerWidth < breakpoints.mobile,
-  )
-  useEffect(() => {
-    const onResize = () =>
-      setNarrow(window.innerWidth < breakpoints.mobile)
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-  return narrow
-}
 
 function trunc(s: string, max: number): string {
   const t = s.trim()
@@ -93,7 +79,7 @@ export type EuLawCardProps = {
 export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
   const { c, t, lang } = useTheme()
   const navigate = useNavigate()
-  const narrow = useIsNarrow()
+  const narrow = useIsMobile()
   const [expanded, setExpanded] = useState(Boolean(startExpanded))
 
   useEffect(() => {

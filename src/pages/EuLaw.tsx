@@ -26,8 +26,9 @@ import type {
   EuUrteilListResponse,
   EuUrteilStats,
 } from '../components/eulaw/types'
-import { breakpoints, fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useIsMobile } from '../hooks/useMediaQuery'
 
 const PAGE_SIZE = 20
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
@@ -48,21 +49,6 @@ const LEGAL_AREA_KEYS: { value: string; key: I18nKey }[] = [
 
 type TypFilter = '' | 'REG' | 'DIR' | 'DEC'
 type GerichtFilter = '' | 'EuGH' | 'EuG'
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.innerWidth < breakpoints.mobile,
-  )
-  useEffect(() => {
-    const onResize = () =>
-      setIsMobile(window.innerWidth < breakpoints.mobile)
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-  return isMobile
-}
 
 function buildEuListUrl(opts: {
   typ: TypFilter

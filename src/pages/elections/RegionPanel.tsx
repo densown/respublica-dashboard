@@ -3,8 +3,9 @@ import {
   LoadingSpinner,
   useTheme,
 } from '../../design-system'
-import { breakpoints, fonts, spacing } from '../../design-system/tokens'
+import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 import { PartyBarChart, type PartyBarRow } from './PartyBarChart'
 import { TimeSeriesChart, TIMESERIES_PARTIES, type TsRow } from './TimeSeriesChart'
 import { MAIN_PARTIES } from './partyColors'
@@ -63,19 +64,6 @@ function rowToBarData(row: RegionElectionRow | undefined): PartyBarRow[] {
   return out
 }
 
-function useIsNarrow() {
-  const [n, setN] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
-  )
-  useEffect(() => {
-    const on = () => setN(window.innerWidth < breakpoints.mobile)
-    on()
-    window.addEventListener('resize', on)
-    return () => window.removeEventListener('resize', on)
-  }, [])
-  return n
-}
-
 export type RegionPanelProps = {
   ags: string | null
   /** Kreisnamen aus GeoJSON (AGS → Name), z. B. wenn API `ags_name` null liefert */
@@ -101,7 +89,7 @@ export function RegionPanel({
   onClearCompare,
 }: RegionPanelProps) {
   const { c, t, lang } = useTheme()
-  const narrow = useIsNarrow()
+  const narrow = useIsMobile()
   const [panelTyp, setPanelTyp] = useState<ElectionType>(mapTyp)
 
   useEffect(() => {

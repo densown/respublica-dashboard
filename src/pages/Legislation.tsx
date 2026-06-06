@@ -33,8 +33,9 @@ import {
   rechtGebietFromKuerzel,
   type RechtGebietFilter,
 } from '../components/gesetze/utils'
-import { breakpoints, fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useIsMobile } from '../hooks/useMediaQuery'
 
 const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 const PAGE_SIZE = 20
@@ -50,24 +51,6 @@ const COURT_VALUES = [
 ] as const
 
 type GesetzSort = 'new' | 'old' | 'az'
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.innerWidth < breakpoints.mobile,
-  )
-
-  useEffect(() => {
-    const onResize = () =>
-      setIsMobile(window.innerWidth < breakpoints.mobile)
-    onResize()
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  return isMobile
-}
 
 function normalizeGesetzeList(raw: unknown): Gesetz[] {
   if (Array.isArray(raw)) return raw as Gesetz[]

@@ -3,6 +3,7 @@ import { useTheme } from '../ThemeContext'
 import { HS_SECTION_LABELS_DE, HS_SECTION_LABELS_EN } from '../hsSections'
 import { fonts, spacing } from '../tokens'
 import PartnerPicker, { type TradePartnerOption } from './PartnerPicker'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 export type HSSectionRow = {
   hs_section: string
@@ -43,7 +44,7 @@ export default function HSSectionBreakdown({
 }: HSSectionBreakdownProps) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
-  const compact = typeof window !== 'undefined' && window.innerWidth <= 360
+  const compact = useMediaQuery('(max-width: 360px)')
   const [active, setActive] = useState<string | null>(null)
 
   const rows = useMemo(() => {

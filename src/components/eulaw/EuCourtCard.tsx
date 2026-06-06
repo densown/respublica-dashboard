@@ -9,29 +9,15 @@ import {
 } from 'react'
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { breakpoints, fonts, spacing } from '../../design-system/tokens'
+import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuUrteilDetail, EuUrteilListItem } from './types'
 
 const EUGH_COLOR = '#dc2626'
 const EUG_COLOR = '#2563eb'
 const PREVIEW_LEN = 220
-
-function useIsNarrow() {
-  const [narrow, setNarrow] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.innerWidth < breakpoints.mobile,
-  )
-  useEffect(() => {
-    const onResize = () =>
-      setNarrow(window.innerWidth < breakpoints.mobile)
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-  return narrow
-}
 
 function trunc(s: string, max: number): string {
   const t = s.trim()
@@ -64,7 +50,7 @@ export type EuCourtCardProps = {
 
 export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
   const { c, t, lang } = useTheme()
-  const narrow = useIsNarrow()
+  const narrow = useIsMobile()
   const [expanded, setExpanded] = useState(Boolean(startExpanded))
 
   useEffect(() => {

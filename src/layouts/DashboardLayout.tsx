@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const WORLD_MAP_PATH = '/weltkarte'
-import { breakpoints, fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing } from '../design-system/tokens'
 import { LegalFooter, MobileNav, Sidebar, useTheme } from '../design-system'
+import { useIsMobile } from '../hooks/useMediaQuery'
 
 const ROUTE_PREFIX: Record<string, string> = {
   bundestag: 'bundestag',
@@ -32,21 +33,6 @@ const MODULE_PATH: Record<string, string> = {
   elections: '/wahlen',
   sources: '/quellen',
   admin: '/admin',
-}
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
-  )
-
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < breakpoints.mobile)
-    onResize()
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
-
-  return isMobile
 }
 
 function activeModuleFromPath(pathname: string): string {

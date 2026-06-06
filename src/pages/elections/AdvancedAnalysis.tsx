@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DataCard, useTheme } from '../../design-system'
-import { breakpoints, fonts, spacing } from '../../design-system/tokens'
+import { fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 import {
   ChangeDeltaHistogram,
   ChangeGainsLossesBarCharts,
@@ -88,19 +89,6 @@ function normAgs(ags: string): string {
 
 const BUNDESLAND_PREFIXES = (Object.keys(STATE_NAMES) as string[]).sort()
 
-function useNarrow() {
-  const [narrow, setNarrow] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < breakpoints.mobile : false,
-  )
-  useEffect(() => {
-    const on = () => setNarrow(window.innerWidth < breakpoints.mobile)
-    on()
-    window.addEventListener('resize', on)
-    return () => window.removeEventListener('resize', on)
-  }, [])
-  return narrow
-}
-
 export function AdvancedAnalysis({
   electionType,
   year,
@@ -111,7 +99,7 @@ export function AdvancedAnalysis({
   onSelectRegion,
 }: AdvancedAnalysisProps) {
   const { c, t, lang } = useTheme()
-  const narrow = useNarrow()
+  const narrow = useIsMobile()
   const [tab, setTab] = useState<AnalysisTab>('scatter')
   const [scatterSeen, setScatterSeen] = useState(false)
   const [rankingSeen, setRankingSeen] = useState(false)
