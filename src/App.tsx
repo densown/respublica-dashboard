@@ -1,20 +1,21 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { ThemeProvider } from './design-system'
+import { LoadingSpinner, ThemeProvider } from './design-system'
 import DashboardLayout from './layouts/DashboardLayout'
 import Admin from './pages/Admin'
 import Bundestag from './pages/Bundestag'
 import Coalition from './pages/Coalition'
 import DemocracyIndex from './pages/DemocracyIndex'
 import Elections from './pages/Elections'
-import EuLaw from './pages/EuLaw'
 import EuParliament from './pages/EuParliament'
-import Legislation from './pages/Legislation'
-import LobbyRegister from './pages/LobbyRegister'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
 import Sources from './pages/Sources'
-import WorldMap from './pages/WorldMap'
+
+const WorldMap = lazy(() => import('./pages/WorldMap'))
+const LobbyRegister = lazy(() => import('./pages/LobbyRegister'))
+const Legislation = lazy(() => import('./pages/Legislation'))
+const EuLaw = lazy(() => import('./pages/EuLaw'))
 
 const GOOGLE_FONTS_HREF =
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap'
@@ -46,6 +47,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ThemeProvider>
+        <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
@@ -70,6 +72,7 @@ export default function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
+        </Suspense>
       </ThemeProvider>
     </BrowserRouter>
   )
