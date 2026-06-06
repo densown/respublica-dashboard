@@ -80,4 +80,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 11. Mai 2026 (UX-Audit Run 1: Wahlen-/GERDA-Copy, EU-Zahlen, Admin-Nav optional, Redirect `demokratie-index`; offene Punkte: `notes/BUG8-gesetz-titel-TODO.md`)
+**Zuletzt aktualisiert:** 2. Juni 2026 (Serverweite Navigation: WordPress Theme ergänzt globale Bottom-Bar und Sidebar-Quick-Actions für Dashboard/Newsletter/Kaffee)
