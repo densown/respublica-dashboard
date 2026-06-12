@@ -33,6 +33,13 @@ import {
 import { PercentileBar } from './PercentileBar'
 import { regionRowToSingleResultBars } from './regionBarRows'
 import {
+  ELECTION_TYPES,
+  normAgs,
+  sectionTitle,
+  selectCss,
+  typeLabelT,
+} from './electionUiUtils'
+import {
   MAIN_PARTIES,
   PARTY_LABELS,
   partyColorsForTheme,
@@ -50,14 +57,6 @@ import type {
   RegionResponse,
 } from './types'
 
-const ELECTION_TYPES: ElectionType[] = [
-  'federal',
-  'state',
-  'municipal',
-  'european',
-  'mayoral',
-]
-
 const TYPE_COMPARE_ORDER: {
   typ: ElectionType
   strokeDasharray?: string
@@ -68,42 +67,6 @@ const TYPE_COMPARE_ORDER: {
   { typ: 'municipal', strokeDasharray: '3 3', strokeWidth: 2 },
   { typ: 'european', strokeDasharray: '12 4 3 4', strokeWidth: 2 },
 ]
-
-function selectCss(
-  c: { cardBg: string; border: string; text: string },
-  narrow: boolean,
-): CSSProperties {
-  return {
-    minHeight: 44,
-    padding: '0 12px',
-    borderRadius: 8,
-    border: `1px solid ${c.border}`,
-    background: c.cardBg,
-    color: c.text,
-    fontFamily: fonts.body,
-    fontSize: '0.9rem',
-    width: '100%',
-    maxWidth: narrow ? '100%' : 280,
-    boxSizing: 'border-box',
-  }
-}
-
-function typeLabelT(t: (k: I18nKey) => string, typ: ElectionType) {
-  switch (typ) {
-    case 'federal':
-      return t('federal')
-    case 'state':
-      return t('state')
-    case 'municipal':
-      return t('municipal')
-    case 'european':
-      return t('european')
-    case 'mayoral':
-      return t('mayoral')
-    default:
-      return typ
-  }
-}
 
 type TypeCompareSeriesDef = (typeof TYPE_COMPARE_ORDER)[number]
 
@@ -167,10 +130,6 @@ function ElectionTypeCompareLineLegend({
   )
 }
 
-function normAgs(a: string) {
-  return a.replace(/\s/g, '')
-}
-
 function rawShare(row: RegionElectionRow, key: string): number {
   const n = Number(row[key])
   return Number.isFinite(n) ? n : 0
@@ -212,24 +171,6 @@ export type DistrictAnalysisProps = {
   setCompareRegions: Dispatch<SetStateAction<string[]>>
   onOpenCompare: () => void
   onStartCompare?: (ags: string) => void
-}
-
-function sectionTitle(text: string, c: { border: string; text: string }) {
-  return (
-    <h3
-      style={{
-        fontFamily: fonts.display,
-        fontSize: '1.05rem',
-        marginTop: spacing.xl,
-        marginBottom: spacing.md,
-        paddingBottom: spacing.sm,
-        borderBottom: `1px solid ${c.border}`,
-        color: c.text,
-      }}
-    >
-      {text}
-    </h3>
-  )
 }
 
 export function DistrictAnalysis({
