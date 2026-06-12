@@ -43,18 +43,7 @@ import {
   formatWorldIndicatorValue,
   shortenWorldUnit,
 } from './worldmap/worldValueFormat'
-
-function categoryAndUnitForIndicator(
-  categories: WorldCategoryApi[] | null,
-  code: string,
-): { category: string; unit: string | null; indicatorName: string } {
-  if (!categories) return { category: 'economy', unit: null, indicatorName: code }
-  for (const cat of categories) {
-    const hit = cat.indicators.find((i) => i.code === code)
-    if (hit) return { category: cat.id, unit: hit.unit, indicatorName: hit.name }
-  }
-  return { category: 'economy', unit: null, indicatorName: code }
-}
+import { categoryAndUnitForIndicator } from './worldmap/worldIndicatorUtils'
 
 function normIso(code: string): string {
   return code.trim().toUpperCase()

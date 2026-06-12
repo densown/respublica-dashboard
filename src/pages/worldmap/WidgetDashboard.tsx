@@ -19,6 +19,7 @@ import {
 } from '../../utils/worldFilters'
 import { iso3ToFlagIso2 } from './worldIso3ToIso2'
 import { worldApiUrl } from './worldMapData'
+import { categoryAndUnitForIndicator } from './worldIndicatorUtils'
 import type {
   WorldCategoryApi,
   WorldCountryDetail,
@@ -134,18 +135,6 @@ function normIso(code: string | null | undefined): string {
   return (code ?? '').trim().toUpperCase()
 }
 
-function categoryUnitForIndicator(
-  categories: WorldCategoryApi[] | null,
-  code: string,
-): { category: string; unit: string | null } {
-  if (!categories?.length) return { category: 'economy', unit: null }
-  for (const cat of categories) {
-    const hit = cat.indicators.find((i) => i.code === code)
-    if (hit) return { category: cat.id, unit: hit.unit }
-  }
-  return { category: 'economy', unit: null }
-}
-
 function formatTradeUsd(
   v: number | null | undefined,
   lang: Lang,
@@ -194,7 +183,7 @@ function RankingWidgetBody({
   const [error, setError] = useState<string | null>(null)
 
   const fmtCtx: WorldFormatContext = useMemo(() => {
-    const { category, unit } = categoryUnitForIndicator(categories, indicatorCode)
+    const { category, unit } = categoryAndUnitForIndicator(categories, indicatorCode)
     return {
       indicatorCode,
       category,
@@ -456,7 +445,7 @@ function StatCardWidgetBody({
   }, [selectedCountry])
 
   const fmtCtx: WorldFormatContext = useMemo(() => {
-    const { category, unit } = categoryUnitForIndicator(categories, indicatorCode)
+    const { category, unit } = categoryAndUnitForIndicator(categories, indicatorCode)
     return { indicatorCode, category, unit, lang: L }
   }, [categories, indicatorCode, L])
 
