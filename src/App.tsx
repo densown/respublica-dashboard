@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { LoadingSpinner, ThemeProvider } from './design-system'
 import DashboardLayout from './layouts/DashboardLayout'
@@ -17,33 +17,7 @@ const EuLaw = lazy(() => import('./pages/EuLaw'))
 const Elections = lazy(() => import('./pages/Elections'))
 const Bundestag = lazy(() => import('./pages/Bundestag'))
 
-const GOOGLE_FONTS_HREF =
-  'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap'
-
 export default function App() {
-  useEffect(() => {
-    const preconnectGoogle = document.createElement('link')
-    preconnectGoogle.rel = 'preconnect'
-    preconnectGoogle.href = 'https://fonts.googleapis.com'
-
-    const preconnectGstatic = document.createElement('link')
-    preconnectGstatic.rel = 'preconnect'
-    preconnectGstatic.href = 'https://fonts.gstatic.com'
-    preconnectGstatic.crossOrigin = ''
-
-    const stylesheet = document.createElement('link')
-    stylesheet.rel = 'stylesheet'
-    stylesheet.href = GOOGLE_FONTS_HREF
-
-    document.head.append(preconnectGoogle, preconnectGstatic, stylesheet)
-
-    return () => {
-      preconnectGoogle.remove()
-      preconnectGstatic.remove()
-      stylesheet.remove()
-    }
-  }, [])
-
   return (
     <BrowserRouter>
       <ThemeProvider>
