@@ -3,10 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { LoadingSpinner, ThemeProvider } from './design-system'
 import DashboardLayout from './layouts/DashboardLayout'
 import Admin from './pages/Admin'
-import Bundestag from './pages/Bundestag'
 import Coalition from './pages/Coalition'
 import DemocracyIndex from './pages/DemocracyIndex'
-import Elections from './pages/Elections'
 import EuParliament from './pages/EuParliament'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
@@ -16,6 +14,8 @@ const WorldMap = lazy(() => import('./pages/WorldMap'))
 const LobbyRegister = lazy(() => import('./pages/LobbyRegister'))
 const Legislation = lazy(() => import('./pages/Legislation'))
 const EuLaw = lazy(() => import('./pages/EuLaw'))
+const Elections = lazy(() => import('./pages/Elections'))
+const Bundestag = lazy(() => import('./pages/Bundestag'))
 
 const GOOGLE_FONTS_HREF =
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap'
