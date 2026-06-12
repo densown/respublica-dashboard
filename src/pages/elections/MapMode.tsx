@@ -1,5 +1,4 @@
 import {
-  useEffect,
   type CSSProperties,
   type Dispatch,
   type SetStateAction,
@@ -12,18 +11,15 @@ import {
 import { fonts, spacing } from '../../design-system/tokens'
 import { AdvancedAnalysis } from './AdvancedAnalysis'
 import { ElectionMap, ElectionMapLegend } from './ElectionMap'
-import { mapFillColor } from './mapColors'
 import { KreisAutocomplete, type KreisSearchHit } from './KreisAutocomplete'
 import {
   MAIN_PARTIES,
   PARTY_LABELS,
-  partyColorsForTheme,
 } from './partyColors'
 import type { KreiseMapBuild } from './mapGeometry'
 import type {
   ElectionType,
   MapRow,
-  MapRowFromApi,
 } from './types'
 import type { I18nKey } from '../../design-system/i18n'
 
@@ -130,8 +126,6 @@ export type MapModeProps = {
   geoErr: boolean
   mapError: string | null
   mapLoading: boolean
-  mapRows: MapRowFromApi[] | null
-  mapEp: string
   debouncedType: ElectionType
   debouncedYear: number
   debouncedMetric: string
@@ -170,8 +164,6 @@ export function MapMode({
   geoErr,
   mapError,
   mapLoading,
-  mapRows,
-  mapEp,
   debouncedType,
   debouncedYear,
   debouncedMetric,
@@ -187,46 +179,6 @@ export function MapMode({
   winnersByAgs,
 }: MapModeProps) {
   const { c, t, lang, theme } = useTheme()
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return
-    if (mapRows?.length) {
-      console.log('[wahlen] map API response (first 5 raw)', mapRows.slice(0, 5))
-    }
-    if (normalizedRows.length && mapEp) {
-      const sample = normalizedRows.slice(0, 5).map((r) => {
-        const fill = mapFillColor({
-          metric: debouncedMetric,
-          value: r.value,
-          turnout: r.turnout,
-          winningParty: r.winning_party,
-          turnoutMin: turnoutStats.minT,
-          turnoutMax: turnoutStats.maxT,
-          partyColors: partyColorsForTheme(theme === 'dark'),
-        })
-        return {
-          ags: r.ags,
-          ags_name: r.ags_name,
-          turnout: r.turnout,
-          value: r.value,
-          winning_party: r.winning_party,
-          fill,
-        }
-      })
-      console.log(
-        '[wahlen] first 5 kreise (normalized + computed map fill)',
-        sample,
-      )
-    }
-  }, [
-    mapRows,
-    normalizedRows,
-    mapEp,
-    debouncedMetric,
-    turnoutStats.minT,
-    turnoutStats.maxT,
-    theme,
-  ])
 
   const statCard = (title: string, body: string) => (
     <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: '0.8rem', color: c.muted }}>{title}</span>}>

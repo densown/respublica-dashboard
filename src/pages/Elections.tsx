@@ -285,8 +285,6 @@ export default function Elections() {
             geoErr={geoErr}
             mapError={mapError}
             mapLoading={mapLoading}
-            mapRows={mapRows}
-            mapEp={mapEp}
             debouncedType={debouncedType}
             debouncedYear={debouncedYear}
             debouncedMetric={debouncedMetric}
