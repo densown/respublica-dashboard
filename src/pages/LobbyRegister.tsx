@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import * as d3 from 'd3'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -28,6 +28,7 @@ import {
 } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useSearchParamsState } from '../hooks/useSearchParamsState'
 
 type LobbyListItem = {
   id: number
@@ -194,22 +195,8 @@ export default function LobbyRegister() {
   const [onlyActive, setOnlyActive] = useState(true)
   const [minExpense, setMinExpense] = useState(0)
   const [selectedCity, setSelectedCity] = useState('')
-  const [searchParams, setSearchParams] = useSearchParams()
-  const selectedRegisterNumber = searchParams.get('register')
-  const setSelectedRegisterNumber = (value: string | null) => {
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev)
-        if (value) {
-          next.set('register', value)
-        } else {
-          next.delete('register')
-        }
-        return next
-      },
-      { replace: false },
-    )
-  }
+  const [selectedRegisterNumber, setSelectedRegisterNumber] =
+    useSearchParamsState('register')
   const [detailTab, setDetailTab] = useState<'overview' | 'projects'>('overview')
   const [expandedProject, setExpandedProject] = useState<string | null>(null)
   const [hoveredTile, setHoveredTile] = useState<{ code: string; x: number; y: number } | null>(null)
