@@ -17,8 +17,8 @@ import {
   hasWorldBankRegionOnAnyRow,
   isRealCountry,
 } from '../../utils/worldFilters'
+import { useApi } from '../../hooks/useApi'
 import { iso3ToFlagIso2 } from './worldIso3ToIso2'
-import { worldApiUrl } from './worldMapData'
 import { categoryAndUnitForIndicator } from './worldIndicatorUtils'
 import type {
   WorldCategoryApi,
@@ -178,9 +178,15 @@ function RankingWidgetBody({
 }) {
   const { c, t, lang } = useTheme()
   const L = lang as Lang
-  const [rows, setRows] = useState<WorldRankingRow[] | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data: rawRows, loading, error } = useApi<WorldRankingRow[]>(
+    `/api/world/ranking?indicator=${encodeURIComponent(indicatorCode)}&year=${String(year)}&limit=10&order=desc`,
+  )
+  const rows = useMemo(() => {
+    if (!rawRows) return null
+    const regionAware = hasWorldBankRegionOnAnyRow(rawRows)
+    const list = regionAware ? rawRows.filter(isRealCountry) : rawRows
+    return list.map((r, i) => ({ ...r, rank: i + 1 }))
+  }, [rawRows])
 
   const fmtCtx: WorldFormatContext = useMemo(() => {
     const { category, unit } = categoryAndUnitForIndicator(categories, indicatorCode)
@@ -191,41 +197,6 @@ function RankingWidgetBody({
       lang: L,
     }
   }, [categories, indicatorCode, L])
-
-  useEffect(() => {
-    let cancelled = false
-    const ac = new AbortController()
-    setLoading(true)
-    setError(null)
-    setRows(null)
-    const url = worldApiUrl(
-      `/api/world/ranking?indicator=${encodeURIComponent(indicatorCode)}&year=${String(year)}&limit=10&order=desc`,
-    )
-    fetch(url, { signal: ac.signal })
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status))
-        return r.json() as Promise<WorldRankingRow[]>
-      })
-      .then((raw) => {
-        if (cancelled) return
-        const regionAware = hasWorldBankRegionOnAnyRow(raw ?? [])
-        const list = regionAware
-          ? (raw ?? []).filter(isRealCountry)
-          : (raw ?? [])
-        setRows(list.map((r, i) => ({ ...r, rank: i + 1 })))
-      })
-      .catch((e: unknown) => {
-        if (cancelled || ac.signal.aborted) return
-        setError(e instanceof Error ? e.message : 'err')
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-      ac.abort()
-    }
-  }, [indicatorCode, year])
 
   const sel = normIso(selectedCountry)
 
@@ -405,44 +376,11 @@ function StatCardWidgetBody({
 }) {
   const { c, t, lang } = useTheme()
   const L = lang as Lang
-  const [detail, setDetail] = useState<WorldCountryDetail | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!selectedCountry) {
-      setDetail(null)
-      setError(null)
-      setLoading(false)
-      return
-    }
-    let cancelled = false
-    const ac = new AbortController()
-    setLoading(true)
-    setError(null)
-    const url = worldApiUrl(
-      `/api/world/country/${encodeURIComponent(normIso(selectedCountry))}`,
-    )
-    fetch(url, { signal: ac.signal })
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status))
-        return r.json() as Promise<WorldCountryDetail>
-      })
-      .then((d) => {
-        if (!cancelled) setDetail(d)
-      })
-      .catch((e: unknown) => {
-        if (cancelled || ac.signal.aborted) return
-        setError(e instanceof Error ? e.message : 'err')
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-      ac.abort()
-    }
-  }, [selectedCountry])
+  const { data: detail, loading, error } = useApi<WorldCountryDetail>(
+    selectedCountry
+      ? `/api/world/country/${encodeURIComponent(normIso(selectedCountry))}`
+      : '',
+  )
 
   const fmtCtx: WorldFormatContext = useMemo(() => {
     const { category, unit } = categoryAndUnitForIndicator(categories, indicatorCode)
@@ -644,44 +582,11 @@ function TradeFlowWidgetBody({
 }) {
   const { c, t, lang } = useTheme()
   const L = lang as Lang
-  const [data, setData] = useState<WorldTradeResponse | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!selectedCountry) {
-      setData(null)
-      setError(null)
-      setLoading(false)
-      return
-    }
-    let cancelled = false
-    const ac = new AbortController()
-    setLoading(true)
-    setError(null)
-    const url = worldApiUrl(
-      `/api/world/trade/${encodeURIComponent(normIso(selectedCountry))}?year=${String(year)}`,
-    )
-    fetch(url, { signal: ac.signal })
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status))
-        return r.json() as Promise<WorldTradeResponse>
-      })
-      .then((d) => {
-        if (!cancelled) setData(d)
-      })
-      .catch((e: unknown) => {
-        if (cancelled || ac.signal.aborted) return
-        setError(e instanceof Error ? e.message : 'err')
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-      ac.abort()
-    }
-  }, [selectedCountry, year])
+  const { data, loading, error } = useApi<WorldTradeResponse>(
+    selectedCountry
+      ? `/api/world/trade/${encodeURIComponent(normIso(selectedCountry))}?year=${String(year)}`
+      : '',
+  )
 
   if (!selectedCountry) {
     return (

@@ -180,7 +180,6 @@ export default function WorldMap() {
     typeof window !== 'undefined' ? window.innerWidth >= breakpoints.mobile : true,
   )
   const [sidebarCompact, setSidebarCompact] = useState(false)
-  const [countryDetail, setCountryDetail] = useState<WorldCountryDetail | null>(null)
   const [tradeData, setTradeData] = useState<WorldTradeResponse | null>(null)
   const [tradeLoading, setTradeLoading] = useState(false)
   const [tradeTimeseries, setTradeTimeseries] = useState<WorldTradeTimeseriesResponse | null>(null)
@@ -189,7 +188,6 @@ export default function WorldMap() {
     () => new Map(),
   )
   const [climateLoading, setClimateLoading] = useState(false)
-  const [consoleRanking, setConsoleRanking] = useState<WorldRankingRow[] | null>(null)
   const [mapContextMenu, setMapContextMenu] = useState<{
     iso3: string
     x: number
@@ -279,30 +277,11 @@ export default function WorldMap() {
 
   const narrow = useIsMobile()
 
-  useEffect(() => {
-    if (!selectedCountry) {
-      setCountryDetail(null)
-      return
-    }
-    let cancelled = false
-    const url = worldApiUrl(
-      `/api/world/country/${encodeURIComponent(selectedCountry)}`,
-    )
-    fetch(url)
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status))
-        return r.json() as Promise<WorldCountryDetail>
-      })
-      .then((data) => {
-        if (!cancelled) setCountryDetail(data)
-      })
-      .catch(() => {
-        if (!cancelled) setCountryDetail(null)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [selectedCountry])
+  const { data: countryDetail } = useApi<WorldCountryDetail>(
+    selectedCountry
+      ? `/api/world/country/${encodeURIComponent(selectedCountry)}`
+      : '',
+  )
 
   useEffect(() => {
     const allIsos = [selection.primary, ...selection.compare]
@@ -517,33 +496,15 @@ export default function WorldMap() {
     return mapRowsCountries.find((r) => normIso(r.country_code) === u) ?? null
   }, [mapRowsCountries, selectedCountry])
 
-  useEffect(() => {
-    if (selectedCountry) {
-      setConsoleRanking(null)
-      return
-    }
-    if (!debInd) return
-    let cancelled = false
-    const url = worldApiUrl(
-      `/api/world/ranking?indicator=${encodeURIComponent(debInd)}&year=${String(mapQueryYear)}&limit=200&order=desc`,
-    )
-    fetch(url)
-      .then((r) => {
-        if (!r.ok) throw new Error(String(r.status))
-        return r.json() as Promise<WorldRankingRow[]>
-      })
-      .then((raw) => {
-        if (cancelled) return
-        const list = (raw ?? []).filter(isRealCountry)
-        setConsoleRanking(list.length ? list : null)
-      })
-      .catch(() => {
-        if (!cancelled) setConsoleRanking(null)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [selectedCountry, debInd, mapQueryYear])
+  const { data: consoleRankingRaw } = useApi<WorldRankingRow[]>(
+    !selectedCountry && debInd
+      ? `/api/world/ranking?indicator=${encodeURIComponent(debInd)}&year=${String(mapQueryYear)}&limit=200&order=desc`
+      : '',
+  )
+  const consoleRanking = useMemo(() => {
+    const list = (consoleRankingRaw ?? []).filter(isRealCountry)
+    return list.length ? list : null
+  }, [consoleRankingRaw])
 
   const consoleGlobalStats = useMemo(() => {
     const rows = consoleRanking
