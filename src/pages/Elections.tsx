@@ -14,7 +14,7 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
-import { useDebouncedValue } from './elections/useDebouncedValue'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import type {
   ElectionType,
   KreiseGeoJson,

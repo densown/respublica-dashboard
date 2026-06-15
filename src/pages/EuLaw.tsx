@@ -28,6 +28,7 @@ import type {
 } from '../components/eulaw/types'
 import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
 const PAGE_SIZE = 20
@@ -107,30 +108,16 @@ export default function EuLaw() {
   const [typ, setTyp] = useState<TypFilter>('')
   const [rechtsgebiet, setRechtsgebiet] = useState('')
   const [searchInput, setSearchInput] = useState('')
-  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const debouncedSearch = useDebouncedValue(searchInput.trim(), 350)
   const [sortNewest, setSortNewest] = useState(true)
   const [page, setPage] = useState(1)
 
   const [courtGericht, setCourtGericht] = useState<GerichtFilter>('')
   const [courtRg, setCourtRg] = useState('')
   const [courtSearchInput, setCourtSearchInput] = useState('')
-  const [courtDebouncedSearch, setCourtDebouncedSearch] = useState('')
+  const courtDebouncedSearch = useDebouncedValue(courtSearchInput.trim(), 350)
   const [courtSortNewest, setCourtSortNewest] = useState(true)
   const [courtPage, setCourtPage] = useState(1)
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setDebouncedSearch(searchInput.trim())
-    }, 350)
-    return () => window.clearTimeout(timer)
-  }, [searchInput])
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setCourtDebouncedSearch(courtSearchInput.trim())
-    }, 350)
-    return () => window.clearTimeout(timer)
-  }, [courtSearchInput])
 
   useEffect(() => {
     setPage(1)
