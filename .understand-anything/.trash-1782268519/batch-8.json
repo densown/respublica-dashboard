@@ -1,0 +1,323 @@
+{
+  "nodes": [
+    {
+      "id": "file:.cursorrules",
+      "type": "file",
+      "name": ".cursorrules",
+      "filePath": ".cursorrules",
+      "summary": "Cursor AI editor rules file defining project conventions and coding guidelines for AI-assisted development in the Res.Publica dashboard repository.",
+      "tags": ["configuration", "ai-tooling", "conventions", "documentation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.understand-anything/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": "Ignore-pattern file for the Understand-Anything analysis tool, excluding build artifacts, dependencies, and generated files from knowledge-graph scanning.",
+      "tags": ["configuration", "ignore-rules", "tooling", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.understand-anything/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".understand-anything/config.json",
+      "summary": "Minimal configuration for the Understand-Anything plugin, setting the output language for generated analysis content.",
+      "tags": ["configuration", "tooling", "json"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:eslint.config.js",
+      "type": "file",
+      "name": "eslint.config.js",
+      "filePath": "eslint.config.js",
+      "summary": "ESLint flat config wiring up TypeScript, React Hooks, and React Refresh rules for linting the dashboard source tree.",
+      "tags": ["configuration", "linting", "build-system", "typescript"],
+      "complexity": "simple",
+      "languageNotes": "Uses the modern ESLint flat config format (flat array of config objects) rather than the legacy .eslintrc."
+    },
+    {
+      "id": "document:notes/BUG8-gesetz-titel-TODO.md",
+      "type": "document",
+      "name": "BUG8-gesetz-titel-TODO.md",
+      "filePath": "notes/BUG8-gesetz-titel-TODO.md",
+      "summary": "Developer TODO note documenting a UX bug where the legislation list view shows raw file identifiers instead of human-readable display titles, with the open decision and implementation steps.",
+      "tags": ["documentation", "bug-report", "todo", "ux"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/data/world.geojson",
+      "type": "file",
+      "name": "world.geojson",
+      "filePath": "public/data/world.geojson",
+      "summary": "GeoJSON dataset of world country boundaries served as a static asset, used by the MapLibre world map to render political-data choropleths.",
+      "tags": ["data", "geojson", "map-data", "static-asset"],
+      "complexity": "moderate",
+      "languageNotes": "GeoJSON FeatureCollection consumed client-side by MapLibre rather than imported as a module."
+    },
+    {
+      "id": "file:src/hooks/useLocalStorage.ts",
+      "type": "file",
+      "name": "useLocalStorage.ts",
+      "filePath": "src/hooks/useLocalStorage.ts",
+      "summary": "Custom React hook that persists a state value to localStorage, hydrating from storage on mount and writing back on every update.",
+      "tags": ["hook", "utility", "serialization", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/hooks/useLocalStorage.ts:useLocalStorage",
+      "type": "function",
+      "name": "useLocalStorage",
+      "filePath": "src/hooks/useLocalStorage.ts",
+      "lineRange": [3, 30],
+      "summary": "Generic hook returning a stateful value and setter that transparently syncs with localStorage via JSON serialization, falling back to a default value when no entry exists.",
+      "tags": ["hook", "state-management", "serialization", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/hooks/useOffsetPagination.ts",
+      "type": "file",
+      "name": "useOffsetPagination.ts",
+      "filePath": "src/hooks/useOffsetPagination.ts",
+      "summary": "Custom React hook providing offset-based pagination state (page, limit, computed offset) with page-setting and reset helpers for paginated API list views.",
+      "tags": ["hook", "pagination", "utility", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/hooks/useOffsetPagination.ts:useOffsetPagination",
+      "type": "function",
+      "name": "useOffsetPagination",
+      "filePath": "src/hooks/useOffsetPagination.ts",
+      "lineRange": [11, 16],
+      "summary": "Returns an OffsetPagination object that derives the query offset from the current page and limit, exposing setPage and reset callbacks for list-driven data fetching.",
+      "tags": ["hook", "pagination", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/index.css",
+      "type": "file",
+      "name": "index.css",
+      "filePath": "src/index.css",
+      "summary": "Global base stylesheet imported by the application entry point, establishing root-level CSS resets and baseline styling for the SPA.",
+      "tags": ["styling", "css", "global-styles", "markup"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/vite-env.d.ts",
+      "type": "file",
+      "name": "vite-env.d.ts",
+      "filePath": "src/vite-env.d.ts",
+      "summary": "TypeScript ambient declaration file referencing Vite client types so that import.meta.env and asset imports are correctly typed across the project.",
+      "tags": ["type-definition", "build-system", "typescript"],
+      "complexity": "simple",
+      "languageNotes": "Triple-slash directive (/// <reference types=\"vite/client\" />) pulling in Vite's ambient module and env typings."
+    },
+    {
+      "id": "file:ui_kits/dashboard/ConsoleComponents.jsx",
+      "type": "file",
+      "name": "ConsoleComponents.jsx",
+      "filePath": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "summary": "Standalone UI-kit prototype defining reusable themed visualization primitives (sparklines, line/radar charts, KPI tiles, percentile and comparison bars) for the Country Console, exposed as globals on window.",
+      "tags": ["component", "data-visualization", "ui-kit", "charting"],
+      "complexity": "complex",
+      "languageNotes": "Non-module prototype: components are assigned to window.X = function rather than exported, relying on global React/useTheme/FONTS/SPACE bindings declared via /* global */ comments."
+    },
+    {
+      "id": "function:ui_kits/dashboard/ConsoleComponents.jsx:Sparkline",
+      "type": "function",
+      "name": "Sparkline",
+      "filePath": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "lineRange": [79, 106],
+      "summary": "SVG sparkline component that maps a numeric series to a polyline with an end dot and optional peak/trough markers, scaling data to the given width and height.",
+      "tags": ["component", "data-visualization", "charting", "svg"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ui_kits/dashboard/ConsoleComponents.jsx:LineChart",
+      "type": "function",
+      "name": "LineChart",
+      "filePath": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "lineRange": [184, 238],
+      "summary": "SVG single-series line chart with optional area fill, grid lines, year-axis labels, and vertical event annotations for time-series indicator data.",
+      "tags": ["component", "data-visualization", "charting", "svg"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ui_kits/dashboard/ConsoleComponents.jsx:CompareBar",
+      "type": "function",
+      "name": "CompareBar",
+      "filePath": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "lineRange": [266, 290],
+      "summary": "Grouped horizontal bar component comparing a country value against regional and world values, normalizing each bar against the group maximum.",
+      "tags": ["component", "data-visualization", "charting"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "type": "file",
+      "name": "CountryConsole.jsx",
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "summary": "Large standalone Country Console prototype assembling indicator formatting helpers and a global ranking view from country statistics, building on the ConsoleComponents UI primitives.",
+      "tags": ["component", "data-visualization", "ui-kit", "dashboard"],
+      "complexity": "complex",
+      "languageNotes": "Prototype JSX relying on globally-bound React/useTheme and helpers (de-DE Intl number formatting) rather than ES module imports."
+    },
+    {
+      "id": "function:ui_kits/dashboard/CountryConsole.jsx:trendFromValues",
+      "type": "function",
+      "name": "trendFromValues",
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "lineRange": [79, 85],
+      "summary": "Computes a relative trend ratio from the tail of an indicator's value series, returning null when there is insufficient data.",
+      "tags": ["utility", "data-transformation", "metrics"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ui_kits/dashboard/CountryConsole.jsx:fmtUsd",
+      "type": "function",
+      "name": "fmtUsd",
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "lineRange": [98, 103],
+      "summary": "Formats a USD numeric value into a compact human-readable string (billions/millions) using locale-aware number formatting.",
+      "tags": ["utility", "formatting", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ui_kits/dashboard/CountryConsole.jsx:fmtPopulation",
+      "type": "function",
+      "name": "fmtPopulation",
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "lineRange": [105, 111],
+      "summary": "Formats a population count into a compact scaled string (millions/thousands) using locale-aware de-DE number formatting.",
+      "tags": ["utility", "formatting", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ui_kits/dashboard/CountryConsole.jsx:GlobalView",
+      "type": "function",
+      "name": "GlobalView",
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "lineRange": [115, 172],
+      "summary": "Top-level global ranking view component that derives top-5 and bottom-5 country rankings from a ranking list and renders them with themed bars and formatted values.",
+      "tags": ["component", "data-visualization", "dashboard", "ranking"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:vite.config.ts",
+      "type": "file",
+      "name": "vite.config.ts",
+      "filePath": "vite.config.ts",
+      "summary": "Vite build configuration registering the React plugin and project-level build/dev-server options for the dashboard SPA.",
+      "tags": ["configuration", "build-system", "vite", "typescript"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/hooks/useLocalStorage.ts",
+      "target": "function:src/hooks/useLocalStorage.ts:useLocalStorage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/hooks/useLocalStorage.ts",
+      "target": "function:src/hooks/useLocalStorage.ts:useLocalStorage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/hooks/useOffsetPagination.ts",
+      "target": "function:src/hooks/useOffsetPagination.ts:useOffsetPagination",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/hooks/useOffsetPagination.ts",
+      "target": "function:src/hooks/useOffsetPagination.ts:useOffsetPagination",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ui_kits/dashboard/ConsoleComponents.jsx",
+      "target": "function:ui_kits/dashboard/ConsoleComponents.jsx:Sparkline",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/ConsoleComponents.jsx",
+      "target": "function:ui_kits/dashboard/ConsoleComponents.jsx:LineChart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/ConsoleComponents.jsx",
+      "target": "function:ui_kits/dashboard/ConsoleComponents.jsx:CompareBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "target": "function:ui_kits/dashboard/CountryConsole.jsx:trendFromValues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "target": "function:ui_kits/dashboard/CountryConsole.jsx:fmtUsd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "target": "function:ui_kits/dashboard/CountryConsole.jsx:fmtPopulation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "target": "function:ui_kits/dashboard/CountryConsole.jsx:GlobalView",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ui_kits/dashboard/CountryConsole.jsx",
+      "target": "file:ui_kits/dashboard/ConsoleComponents.jsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.understand-anything/config.json",
+      "target": "file:.understand-anything/.understandignore",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:eslint.config.js",
+      "target": "file:vite.config.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/index.css",
+      "target": "file:src/main.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

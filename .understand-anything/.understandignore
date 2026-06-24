@@ -1,0 +1,47 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+# Lines below are suggestions — uncomment to activate.
+# Use ! prefix to force-include something excluded by defaults.
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+
+# --- From .gitignore (uncomment to exclude) ---
+
+# .env
+# *.local
+# deploy.log
+
+# --- Activated by /understand: noise / generated / stray files ---
+
+# Lockfile — large, uninformative for architecture
+package-lock.json
+# Editor debug logs
+.cursor/
+# Stray empty placeholder file at repo root
+WorldMap
+# Empty geojson placeholders (0 bytes); world.geojson is kept
+public/data/world-centroids-old.geojson
+public/data/world-centroids.geojson
+public/data/kreise.geojson
+public/data/world-old.geojson
+
+# --- Test file patterns (uncomment to exclude) ---
+
+# JS / TS
+# *.test.*
+# *.spec.*
+# *.snap
+# C# / .NET
+# **/*Tests.cs
+# **/*Test.cs
+# **/*Fixture.cs
+# **/*.Tests.csproj
+# Java / Kotlin
+# **/src/test/**
+# **/*Test.java
+# **/*IT.java
+# **/*Spec.kt
+# Go
+# **/*_test.go

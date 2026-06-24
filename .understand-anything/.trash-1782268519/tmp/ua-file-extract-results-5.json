@@ -1,0 +1,1204 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 15,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/data/sourcesCatalog.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 145,
+      "nonEmptyLines": 140,
+      "functions": [
+        {
+          "name": "footerSourcesLineKey",
+          "startLine": 142,
+          "endLine": 145,
+          "params": [
+            "pathname"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SOURCES_BY_PAGE",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "footerSourcesLineKey",
+          "line": 142,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "footerSourcesLineKey",
+          "callee": "pathname.replace(/\\/$/, '').split('/').filter",
+          "lineNumber": 143
+        },
+        {
+          "caller": "footerSourcesLineKey",
+          "callee": "pathname.replace(/\\/$/, '').split",
+          "lineNumber": 143
+        },
+        {
+          "caller": "footerSourcesLineKey",
+          "callee": "pathname.replace",
+          "lineNumber": 143
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/CompareBar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 79,
+      "nonEmptyLines": 76,
+      "functions": [
+        {
+          "name": "CompareBar",
+          "startLine": 23,
+          "endLine": 79,
+          "params": [
+            "{\n  label,\n  countryVal,\n  regionVal,\n  worldVal,\n  fmt,\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "CompareBar",
+          "line": 23,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "CompareBar",
+          "callee": "useTheme",
+          "lineNumber": 31
+        },
+        {
+          "caller": "CompareBar",
+          "callee": "Math.max",
+          "lineNumber": 37
+        },
+        {
+          "caller": "CompareBar",
+          "callee": "items.map",
+          "lineNumber": 37
+        },
+        {
+          "caller": "CompareBar",
+          "callee": "items.map",
+          "lineNumber": 50
+        },
+        {
+          "caller": "CompareBar",
+          "callee": "t",
+          "lineNumber": 61
+        },
+        {
+          "caller": "CompareBar",
+          "callee": "fmt",
+          "lineNumber": 73
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/LineChart.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 192,
+      "nonEmptyLines": 183,
+      "functions": [
+        {
+          "name": "LineChart",
+          "startLine": 24,
+          "endLine": 192,
+          "params": [
+            "{\n  data,\n  color,\n  yLabel,\n  height = 100,\n  showArea = true,\n  annotations = [],\n  style,\n  valueDecimals = 2,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "LineChart",
+          "line": 24,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LineChart",
+          "callee": "useTheme",
+          "lineNumber": 34
+        },
+        {
+          "caller": "LineChart",
+          "callee": "useRef",
+          "lineNumber": 36
+        },
+        {
+          "caller": "LineChart",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "LineChart",
+          "callee": "data.map",
+          "lineNumber": 40
+        },
+        {
+          "caller": "LineChart",
+          "callee": "data.map",
+          "lineNumber": 41
+        },
+        {
+          "caller": "LineChart",
+          "callee": "Math.min",
+          "lineNumber": 42
+        },
+        {
+          "caller": "LineChart",
+          "callee": "Math.max",
+          "lineNumber": 43
+        },
+        {
+          "caller": "LineChart",
+          "callee": "data.map((d, i) => `${toX(i).toFixed(1)},${toY(d.v).toFixed(1)}`).join",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "data.map",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY(d.v).toFixed",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 50
+        },
+        {
+          "caller": "LineChart",
+          "callee": "useCallback",
+          "lineNumber": 56
+        },
+        {
+          "caller": "LineChart",
+          "callee": "wrap.getBoundingClientRect",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LineChart",
+          "callee": "Math.min",
+          "lineNumber": 62
+        },
+        {
+          "caller": "LineChart",
+          "callee": "Math.max",
+          "lineNumber": 62
+        },
+        {
+          "caller": "LineChart",
+          "callee": "Math.round",
+          "lineNumber": 63
+        },
+        {
+          "caller": "LineChart",
+          "callee": "setHover",
+          "lineNumber": 64
+        },
+        {
+          "caller": "LineChart",
+          "callee": "setHover",
+          "lineNumber": 77
+        },
+        {
+          "caller": "LineChart",
+          "callee": "updateHoverFromClientX",
+          "lineNumber": 85
+        },
+        {
+          "caller": "LineChart",
+          "callee": "updateHoverFromClientX",
+          "lineNumber": 88
+        },
+        {
+          "caller": "LineChart",
+          "callee": "updateHoverFromClientX",
+          "lineNumber": 92
+        },
+        {
+          "caller": "LineChart",
+          "callee": "setHover",
+          "lineNumber": 94
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 97
+        },
+        {
+          "caller": "LineChart",
+          "callee": "[0.25, 0.5, 0.75, 1].map",
+          "lineNumber": 99
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 103
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 105
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 119
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 119
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 123
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 125
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 132
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toY",
+          "lineNumber": 133
+        },
+        {
+          "caller": "LineChart",
+          "callee": "annotations.map",
+          "lineNumber": 141
+        },
+        {
+          "caller": "LineChart",
+          "callee": "data.findIndex",
+          "lineNumber": 142
+        },
+        {
+          "caller": "LineChart",
+          "callee": "toX",
+          "lineNumber": 144
+        },
+        {
+          "caller": "LineChart",
+          "callee": "interpolate",
+          "lineNumber": 183
+        },
+        {
+          "caller": "LineChart",
+          "callee": "t",
+          "lineNumber": 183
+        },
+        {
+          "caller": "LineChart",
+          "callee": "hoverPoint.v.toFixed",
+          "lineNumber": 185
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/MonoLabel.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 28,
+      "nonEmptyLines": 26,
+      "functions": [
+        {
+          "name": "MonoLabel",
+          "startLine": 10,
+          "endLine": 28,
+          "params": [
+            "{ children, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MonoLabel",
+          "line": 10,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MonoLabel",
+          "callee": "useTheme",
+          "lineNumber": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/PercentileBar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 61,
+      "nonEmptyLines": 59,
+      "functions": [
+        {
+          "name": "PercentileBar",
+          "startLine": 16,
+          "endLine": 61,
+          "params": [
+            "{\n  pct,\n  label,\n  inverted = false,\n  footer,\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PercentileBar",
+          "line": 16,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PercentileBar",
+          "callee": "useTheme",
+          "lineNumber": 23
+        },
+        {
+          "caller": "PercentileBar",
+          "callee": "Math.round",
+          "lineNumber": 31
+        },
+        {
+          "caller": "PercentileBar",
+          "callee": "interpolate",
+          "lineNumber": 55
+        },
+        {
+          "caller": "PercentileBar",
+          "callee": "t",
+          "lineNumber": 55
+        },
+        {
+          "caller": "PercentileBar",
+          "callee": "String",
+          "lineNumber": 56
+        },
+        {
+          "caller": "PercentileBar",
+          "callee": "Math.round",
+          "lineNumber": 56
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 43,
+      "functions": [
+        {
+          "name": "interpolate",
+          "startLine": 39,
+          "endLine": 48,
+          "params": [
+            "template",
+            "vars"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "de",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "messages",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "interpolate",
+          "line": 39,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "interpolate",
+          "callee": "Object.entries",
+          "lineNumber": 44
+        },
+        {
+          "caller": "interpolate",
+          "callee": "out.split(`{${k}}`).join",
+          "lineNumber": 45
+        },
+        {
+          "caller": "interpolate",
+          "callee": "out.split",
+          "lineNumber": 45
+        },
+        {
+          "caller": "interpolate",
+          "callee": "String",
+          "lineNumber": 45
+        }
+      ],
+      "metrics": {
+        "importCount": 8,
+        "exportCount": 4,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/common.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 371,
+      "nonEmptyLines": 369,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 188,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/elections.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 49,
+      "nonEmptyLines": 47,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 27,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/eu.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 149,
+      "nonEmptyLines": 147,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 77,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/gesetze.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 147,
+      "nonEmptyLines": 145,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 76,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/lobby.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 169,
+      "nonEmptyLines": 167,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 87,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/overview.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 55,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 31,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/sources.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 87,
+      "nonEmptyLines": 85,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 46,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/i18n/world.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 589,
+      "nonEmptyLines": 587,
+      "exports": [
+        {
+          "name": "de",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "en",
+          "line": 297,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Sources.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 358,
+      "nonEmptyLines": 336,
+      "functions": [
+        {
+          "name": "sectionHeading",
+          "startLine": 32,
+          "endLine": 71,
+          "params": [
+            "c",
+            "pageTitleKey",
+            "href",
+            "headingId",
+            "t"
+          ]
+        },
+        {
+          "name": "bodyStyle",
+          "startLine": 73,
+          "endLine": 81,
+          "params": [
+            "c"
+          ]
+        },
+        {
+          "name": "aiSectionTitle",
+          "startLine": 83,
+          "endLine": 99,
+          "params": [
+            "c",
+            "text"
+          ]
+        },
+        {
+          "name": "formatRelativePast",
+          "startLine": 101,
+          "endLine": 119,
+          "params": [
+            "iso",
+            "locale"
+          ]
+        },
+        {
+          "name": "renderStaticSourcesBlock",
+          "startLine": 121,
+          "endLine": 181,
+          "params": [
+            "block",
+            "c",
+            "t",
+            "badgeStyle"
+          ]
+        },
+        {
+          "name": "Sources",
+          "startLine": 183,
+          "endLine": 358,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Sources",
+          "line": 183,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "sectionHeading",
+          "callee": "t",
+          "lineNumber": 67
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Number.isNaN",
+          "lineNumber": 103
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "then.getTime",
+          "lineNumber": 103
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "then.getTime",
+          "lineNumber": 105
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Date.now",
+          "lineNumber": 105
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 106
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 106
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 106
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 108
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 108
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 108
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 110
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 110
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 110
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 112
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 112
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 112
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 114
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 114
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 114
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.abs",
+          "lineNumber": 116
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 116
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 116
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "rtf.format",
+          "lineNumber": 118
+        },
+        {
+          "caller": "formatRelativePast",
+          "callee": "Math.round",
+          "lineNumber": 118
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "block.href.replace",
+          "lineNumber": 127
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "sectionHeading",
+          "lineNumber": 130
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "block.sources.map",
+          "lineNumber": 132
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "t",
+          "lineNumber": 171
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "t",
+          "lineNumber": 173
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "bodyStyle",
+          "lineNumber": 175
+        },
+        {
+          "caller": "renderStaticSourcesBlock",
+          "callee": "t",
+          "lineNumber": 175
+        },
+        {
+          "caller": "Sources",
+          "callee": "useTheme",
+          "lineNumber": 184
+        },
+        {
+          "caller": "Sources",
+          "callee": "useApi",
+          "lineNumber": 185
+        },
+        {
+          "caller": "Sources",
+          "callee": "useApi",
+          "lineNumber": 186
+        },
+        {
+          "caller": "Sources",
+          "callee": "useMemo",
+          "lineNumber": 191
+        },
+        {
+          "caller": "Sources",
+          "callee": "list\n      .filter((s) => s.domain === 'worldmap' && s.value_count > 0)\n      .sort",
+          "lineNumber": 193
+        },
+        {
+          "caller": "Sources",
+          "callee": "list\n      .filter",
+          "lineNumber": 193
+        },
+        {
+          "caller": "Sources",
+          "callee": "useMemo",
+          "lineNumber": 198
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 202
+        },
+        {
+          "caller": "Sources",
+          "callee": "interpolate",
+          "lineNumber": 204
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 204
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "Sources",
+          "callee": "SOURCES_BY_PAGE.findIndex",
+          "lineNumber": 221
+        },
+        {
+          "caller": "Sources",
+          "callee": "SOURCES_BY_PAGE.slice",
+          "lineNumber": 223
+        },
+        {
+          "caller": "Sources",
+          "callee": "SOURCES_BY_PAGE.slice",
+          "lineNumber": 224
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Sources",
+          "callee": "headBlocks.map",
+          "lineNumber": 232
+        },
+        {
+          "caller": "Sources",
+          "callee": "renderStaticSourcesBlock",
+          "lineNumber": 232
+        },
+        {
+          "caller": "Sources",
+          "callee": "sectionHeading",
+          "lineNumber": 235
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 237
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 237
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 239
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 239
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 241
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 241
+        },
+        {
+          "caller": "Sources",
+          "callee": "worldRows.map",
+          "lineNumber": 244
+        },
+        {
+          "caller": "Sources",
+          "callee": "src.url.trim",
+          "lineNumber": 246
+        },
+        {
+          "caller": "Sources",
+          "callee": "formatRelativePast",
+          "lineNumber": 286
+        },
+        {
+          "caller": "Sources",
+          "callee": "interpolate",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 289
+        },
+        {
+          "caller": "Sources",
+          "callee": "src.license?.trim",
+          "lineNumber": 311
+        },
+        {
+          "caller": "Sources",
+          "callee": "src.license.trim",
+          "lineNumber": 312
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 313
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 316
+        },
+        {
+          "caller": "Sources",
+          "callee": "interpolate",
+          "lineNumber": 317
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 317
+        },
+        {
+          "caller": "Sources",
+          "callee": "nf.format",
+          "lineNumber": 318
+        },
+        {
+          "caller": "Sources",
+          "callee": "nf.format",
+          "lineNumber": 319
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 324
+        },
+        {
+          "caller": "Sources",
+          "callee": "tailBlocks.map",
+          "lineNumber": 340
+        },
+        {
+          "caller": "Sources",
+          "callee": "renderStaticSourcesBlock",
+          "lineNumber": 340
+        },
+        {
+          "caller": "Sources",
+          "callee": "aiSectionTitle",
+          "lineNumber": 342
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 342
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 343
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 343
+        },
+        {
+          "caller": "Sources",
+          "callee": "bodyStyle",
+          "lineNumber": 347
+        },
+        {
+          "caller": "Sources",
+          "callee": "t",
+          "lineNumber": 354
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 6,
+        "classCount": 0
+      }
+    }
+  ]
+}

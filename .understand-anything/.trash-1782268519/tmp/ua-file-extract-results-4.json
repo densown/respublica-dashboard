@@ -1,0 +1,6620 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 15,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/components/eulaw/EuCourtCard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 486,
+      "nonEmptyLines": 454,
+      "functions": [
+        {
+          "name": "trunc",
+          "startLine": 22,
+          "endLine": 26,
+          "params": [
+            "s",
+            "max"
+          ]
+        },
+        {
+          "name": "courtColors",
+          "startLine": 28,
+          "endLine": 31,
+          "params": [
+            "gericht"
+          ]
+        },
+        {
+          "name": "courtLabel",
+          "startLine": 33,
+          "endLine": 36,
+          "params": [
+            "gericht",
+            "t"
+          ]
+        },
+        {
+          "name": "keywordsToList",
+          "startLine": 38,
+          "endLine": 44,
+          "params": [
+            "kw"
+          ]
+        },
+        {
+          "name": "EuCourtCard",
+          "startLine": 51,
+          "endLine": 486,
+          "params": [
+            "{ item, startExpanded }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EuCourtCard",
+          "line": 51,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "trunc",
+          "callee": "s.trim",
+          "lineNumber": 23
+        },
+        {
+          "caller": "trunc",
+          "callee": "t.slice",
+          "lineNumber": 25
+        },
+        {
+          "caller": "trunc",
+          "callee": "Math.max",
+          "lineNumber": 25
+        },
+        {
+          "caller": "courtLabel",
+          "callee": "t",
+          "lineNumber": 34
+        },
+        {
+          "caller": "courtLabel",
+          "callee": "t",
+          "lineNumber": 35
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "kw?.trim",
+          "lineNumber": 39
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "kw.trim",
+          "lineNumber": 40
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.includes",
+          "lineNumber": 41
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split(',').map((x) => x.trim()).filter",
+          "lineNumber": 42
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split(',').map",
+          "lineNumber": 42
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split",
+          "lineNumber": 42
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "x.trim",
+          "lineNumber": 42
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split(/\\n+/).map((x) => x.trim()).filter",
+          "lineNumber": 43
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split(/\\n+/).map",
+          "lineNumber": 43
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "s.split",
+          "lineNumber": 43
+        },
+        {
+          "caller": "keywordsToList",
+          "callee": "x.trim",
+          "lineNumber": 43
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useTheme",
+          "lineNumber": 52
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useIsMobile",
+          "lineNumber": 53
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useState",
+          "lineNumber": 54
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "Boolean",
+          "lineNumber": 54
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useEffect",
+          "lineNumber": 56
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "setExpanded",
+          "lineNumber": 57
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "encodeURIComponent",
+          "lineNumber": 61
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "String",
+          "lineNumber": 61
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useApi",
+          "lineNumber": 64
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.betreff ?? '').trim",
+          "lineNumber": 67
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.parteien ?? '').trim",
+          "lineNumber": 68
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.zusammenfassung_de ?? '').trim",
+          "lineNumber": 73
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.zusammenfassung_en ?? '').trim",
+          "lineNumber": 74
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "trunc",
+          "lineNumber": 76
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.zusammenfassung_de ?? '').trim",
+          "lineNumber": 80
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.zusammenfassung_en ?? '').trim",
+          "lineNumber": 81
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.auswirkung_de ?? '').trim",
+          "lineNumber": 85
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "(item.auswirkung_en ?? '').trim",
+          "lineNumber": 86
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "courtColors",
+          "lineNumber": 88
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "courtLabel",
+          "lineNumber": 89
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useCallback",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "setExpanded",
+          "lineNumber": 92
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useCallback",
+          "lineNumber": 95
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "el.closest",
+          "lineNumber": 98
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "toggle",
+          "lineNumber": 99
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "item.ecli?.trim",
+          "lineNumber": 155
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "item.ecli.trim",
+          "lineNumber": 165
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "formatDisplayDate",
+          "lineNumber": 191
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "useMemo",
+          "lineNumber": 197
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "keywordsToList",
+          "lineNumber": 198
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 212
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "e.preventDefault",
+          "lineNumber": 224
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "toggle",
+          "lineNumber": 225
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "item.rechtsgebiet?.trim",
+          "lineNumber": 232
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "item.rechtsgebiet.trim",
+          "lineNumber": 234
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "e.stopPropagation",
+          "lineNumber": 258
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 274
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 303
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 332
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "detail?.leitsatz?.trim",
+          "lineNumber": 336
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 348
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "detail.leitsatz.trim",
+          "lineNumber": 359
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 376
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "kwStrings.map",
+          "lineNumber": 385
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 404
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "detail.linked_rechtsakte.map",
+          "lineNumber": 416
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 458
+        },
+        {
+          "caller": "EuCourtCard",
+          "callee": "t",
+          "lineNumber": 477
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/eulaw/EuLawCard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 402,
+      "nonEmptyLines": 379,
+      "functions": [
+        {
+          "name": "trunc",
+          "startLine": 24,
+          "endLine": 28,
+          "params": [
+            "s",
+            "max"
+          ]
+        },
+        {
+          "name": "typColors",
+          "startLine": 30,
+          "endLine": 35,
+          "params": [
+            "typ"
+          ]
+        },
+        {
+          "name": "typLabelI18n",
+          "startLine": 37,
+          "endLine": 45,
+          "params": [
+            "typ",
+            "t"
+          ]
+        },
+        {
+          "name": "eurovocToStrings",
+          "startLine": 47,
+          "endLine": 72,
+          "params": [
+            "tags"
+          ]
+        },
+        {
+          "name": "EuLawCard",
+          "startLine": 79,
+          "endLine": 402,
+          "params": [
+            "{ item, startExpanded }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EuLawCard",
+          "line": 79,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "trunc",
+          "callee": "s.trim",
+          "lineNumber": 25
+        },
+        {
+          "caller": "trunc",
+          "callee": "t.slice",
+          "lineNumber": 27
+        },
+        {
+          "caller": "trunc",
+          "callee": "Math.max",
+          "lineNumber": 27
+        },
+        {
+          "caller": "typLabelI18n",
+          "callee": "t",
+          "lineNumber": 41
+        },
+        {
+          "caller": "typLabelI18n",
+          "callee": "t",
+          "lineNumber": 42
+        },
+        {
+          "caller": "typLabelI18n",
+          "callee": "t",
+          "lineNumber": 43
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "Array.isArray",
+          "lineNumber": 49
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "tags\n      .map((x) => {\n        if (typeof x === 'string') return x.trim()\n        if (x && typeof x === 'object' && 'label' in x) {\n          const l = (x as { label?: unknown }).label\n          return typeof l === 'string' ? l.trim() : ''\n        }\n        return String(x)\n      })\n      .filter",
+          "lineNumber": 50
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "tags\n      .map",
+          "lineNumber": 50
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "x.trim",
+          "lineNumber": 52
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "l.trim",
+          "lineNumber": 55
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "String",
+          "lineNumber": 57
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "tags.trim",
+          "lineNumber": 62
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "JSON.parse",
+          "lineNumber": 65
+        },
+        {
+          "caller": "eurovocToStrings",
+          "callee": "eurovocToStrings",
+          "lineNumber": 66
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useTheme",
+          "lineNumber": 80
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useNavigate",
+          "lineNumber": 81
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useIsMobile",
+          "lineNumber": 82
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useState",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "Boolean",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useEffect",
+          "lineNumber": 85
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "setExpanded",
+          "lineNumber": 86
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "encodeURIComponent",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "String",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useApi",
+          "lineNumber": 93
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "(item.zusammenfassung_de ?? '').trim",
+          "lineNumber": 102
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "(item.zusammenfassung_en ?? '').trim",
+          "lineNumber": 103
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "trunc",
+          "lineNumber": 104
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "typColors",
+          "lineNumber": 106
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "String",
+          "lineNumber": 106
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "item.typ_label?.trim",
+          "lineNumber": 108
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "item.typ_label.trim",
+          "lineNumber": 109
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "typLabelI18n",
+          "lineNumber": 110
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "String",
+          "lineNumber": 110
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useCallback",
+          "lineNumber": 112
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "setExpanded",
+          "lineNumber": 113
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useCallback",
+          "lineNumber": 116
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "el.closest",
+          "lineNumber": 119
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "toggle",
+          "lineNumber": 120
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "formatDisplayDate",
+          "lineNumber": 189
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "useMemo",
+          "lineNumber": 195
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "eurovocToStrings",
+          "lineNumber": 196
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "e.preventDefault",
+          "lineNumber": 208
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "toggle",
+          "lineNumber": 209
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "item.rechtsgebiet?.trim",
+          "lineNumber": 216
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "item.rechtsgebiet.trim",
+          "lineNumber": 218
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 245
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "e.stopPropagation",
+          "lineNumber": 252
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 268
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 291
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 307
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "item.linked_gesetze.map",
+          "lineNumber": 316
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "navigate",
+          "lineNumber": 320
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 346
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 360
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "eurovocStrings.map",
+          "lineNumber": 369
+        },
+        {
+          "caller": "EuLawCard",
+          "callee": "t",
+          "lineNumber": 393
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/eulaw/types.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 88,
+      "nonEmptyLines": 78,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/gesetze/GesetzDetail.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 688,
+      "nonEmptyLines": 664,
+      "functions": [
+        {
+          "name": "DiffSynopse",
+          "startLine": 34,
+          "endLine": 86,
+          "params": [
+            "{ diff }"
+          ]
+        },
+        {
+          "name": "GesetzDetail",
+          "startLine": 88,
+          "endLine": 688,
+          "params": [
+            "{\n  gesetz,\n  loading,\n  error,\n  notFound = false,\n  linkedUrteile,\n  lobbyItems,\n  lobbyLoading,\n  lobbyError,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "GesetzDetail",
+          "line": 88,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "DiffSynopse",
+          "callee": "useTheme",
+          "lineNumber": 35
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "diff.split",
+          "lineNumber": 43
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "lines.map",
+          "lineNumber": 59
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.startsWith",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.startsWith",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.startsWith",
+          "lineNumber": 71
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.startsWith",
+          "lineNumber": 71
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.startsWith",
+          "lineNumber": 74
+        },
+        {
+          "caller": "DiffSynopse",
+          "callee": "line.slice",
+          "lineNumber": 79
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "useTheme",
+          "lineNumber": 98
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "useState",
+          "lineNumber": 99
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "useState",
+          "lineNumber": 100
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "useMemo",
+          "lineNumber": 102
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "[...linkedUrteile].sort",
+          "lineNumber": 104
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "Date.parse",
+          "lineNumber": 105
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "Date.parse",
+          "lineNumber": 106
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 117
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 135
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.kuerzel ?? '').trim",
+          "lineNumber": 138
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.titel ?? '').trim",
+          "lineNumber": 140
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.name ?? '').trim",
+          "lineNumber": 141
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.zusammenfassung ?? '').trim",
+          "lineNumber": 144
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.kontext ?? '').trim",
+          "lineNumber": 145
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.diff ?? '').trim",
+          "lineNumber": 146
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "diffRaw.includes",
+          "lineNumber": 147
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "diffRaw.slice",
+          "lineNumber": 151
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "(value / 1_000_000_000).toLocaleString",
+          "lineNumber": 172
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "(value / 1_000_000).toLocaleString",
+          "lineNumber": 178
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "value.toLocaleString",
+          "lineNumber": 183
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.amtliche_abkuerzung ?? '').trim",
+          "lineNumber": 210
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.ausfertigung_datum ?? '').trim",
+          "lineNumber": 212
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.amtliche_abkuerzung ?? '').trim",
+          "lineNumber": 224
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.amtliche_abkuerzung ?? '').trim",
+          "lineNumber": 225
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "formatDisplayDate",
+          "lineNumber": 229
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.letzter_stand ?? '').trim",
+          "lineNumber": 234
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 245
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(gesetz.letzter_stand ?? '').trim",
+          "lineNumber": 248
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 274
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "setKontextOpen",
+          "lineNumber": 284
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 287
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 287
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "String",
+          "lineNumber": 308
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "setSynopseOpen",
+          "lineNumber": 317
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 322
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 323
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 325
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 326
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 340
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 341
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t('gesetzeDiffTruncated')\n                    .replace('{shown}', String(Math.round(TRUNCATE_BYTES / 1024)))\n                    .replace",
+          "lineNumber": 352
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t('gesetzeDiffTruncated')\n                    .replace",
+          "lineNumber": 352
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 352
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "String",
+          "lineNumber": 353
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "Math.round",
+          "lineNumber": 353
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "String",
+          "lineNumber": 354
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "Math.round",
+          "lineNumber": 354
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 373
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 386
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 397
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 420
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 422
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 433
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "lobbyItems.exact.map",
+          "lineNumber": 445
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "encodeURIComponent",
+          "lineNumber": 455
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "formatMoney",
+          "lineNumber": 471
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 496
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 524
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 526
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 537
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "lobbyItems.related.map",
+          "lineNumber": 549
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "encodeURIComponent",
+          "lineNumber": 559
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "formatMoney",
+          "lineNumber": 575
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 600
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 622
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "t",
+          "lineNumber": 632
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "sortedLinked.map",
+          "lineNumber": 645
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "(u.gericht ?? '').trim",
+          "lineNumber": 658
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "courtBadgeVariant",
+          "lineNumber": 659
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "u.aktenzeichen?.trim",
+          "lineNumber": 668
+        },
+        {
+          "caller": "GesetzDetail",
+          "callee": "formatDisplayDate",
+          "lineNumber": 679
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/gesetze/UrteilCard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 272,
+      "nonEmptyLines": 256,
+      "functions": [
+        {
+          "name": "smallRgBadgeVariant",
+          "startLine": 22,
+          "endLine": 34,
+          "params": [
+            "rg"
+          ]
+        },
+        {
+          "name": "nlToBr",
+          "startLine": 36,
+          "endLine": 41,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "UrteilCard",
+          "startLine": 48,
+          "endLine": 272,
+          "params": [
+            "{ urteil, onGesetzBadgeClick }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "UrteilCard",
+          "line": 48,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "rg.toLowerCase",
+          "lineNumber": 23
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 24
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 25
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 26
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 27
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 28
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 29
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 30
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 31
+        },
+        {
+          "caller": "smallRgBadgeVariant",
+          "callee": "s.includes",
+          "lineNumber": 32
+        },
+        {
+          "caller": "nlToBr",
+          "callee": "text.split",
+          "lineNumber": 37
+        },
+        {
+          "caller": "nlToBr",
+          "callee": "lines.flatMap",
+          "lineNumber": 38
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useTheme",
+          "lineNumber": 49
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useState",
+          "lineNumber": 50
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useState",
+          "lineNumber": 51
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useState",
+          "lineNumber": 52
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "encodeURIComponent",
+          "lineNumber": 56
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "String",
+          "lineNumber": 56
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useApi",
+          "lineNumber": 58
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "useEffect",
+          "lineNumber": 64
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setTenorOpen",
+          "lineNumber": 65
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setImpactOpen",
+          "lineNumber": 66
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setLawsOpen",
+          "lineNumber": 67
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.zusammenfassung?.trim",
+          "lineNumber": 70
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.tenor?.trim",
+          "lineNumber": 71
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.auswirkung?.trim",
+          "lineNumber": 72
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.rechtsgebiet?.trim",
+          "lineNumber": 73
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.aktenzeichen?.trim",
+          "lineNumber": 74
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.gericht?.trim",
+          "lineNumber": 75
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "urteil.doc_id?.trim",
+          "lineNumber": 76
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "rechtsprechungFullTextUrl",
+          "lineNumber": 77
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "courtBadgeVariant",
+          "lineNumber": 108
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "formatDisplayDate",
+          "lineNumber": 122
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "smallRgBadgeVariant",
+          "lineNumber": 127
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 151
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setTenorOpen",
+          "lineNumber": 161
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 164
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 164
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "nlToBr",
+          "lineNumber": 166
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setImpactOpen",
+          "lineNumber": 175
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 179
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 180
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "nlToBr",
+          "lineNumber": 183
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "setLawsOpen",
+          "lineNumber": 192
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 195
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 195
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "gesetzeFromDetail.map",
+          "lineNumber": 217
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "String(code).trim",
+          "lineNumber": 218
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "String",
+          "lineNumber": 218
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "onGesetzBadgeClick",
+          "lineNumber": 224
+        },
+        {
+          "caller": "UrteilCard",
+          "callee": "t",
+          "lineNumber": 266
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/gesetze/types.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 46,
+      "nonEmptyLines": 44,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/gesetze/utils.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 132,
+      "nonEmptyLines": 116,
+      "functions": [
+        {
+          "name": "normalizeKuerzelCode",
+          "startLine": 12,
+          "endLine": 17,
+          "params": [
+            "k"
+          ]
+        },
+        {
+          "name": "rechtGebietFromKuerzel",
+          "startLine": 20,
+          "endLine": 39,
+          "params": [
+            "kuerzel"
+          ]
+        },
+        {
+          "name": "courtBadgeVariant",
+          "startLine": 41,
+          "endLine": 52,
+          "params": [
+            "gericht"
+          ]
+        },
+        {
+          "name": "parseIsoDate",
+          "startLine": 69,
+          "endLine": 78,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "formatDisplayDate",
+          "startLine": 80,
+          "endLine": 112,
+          "params": [
+            "raw",
+            "lang"
+          ]
+        },
+        {
+          "name": "buildUrteilListEndpoint",
+          "startLine": 114,
+          "endLine": 127,
+          "params": [
+            "gericht",
+            "rechtsgebiet"
+          ]
+        },
+        {
+          "name": "rechtsprechungFullTextUrl",
+          "startLine": 129,
+          "endLine": 132,
+          "params": [
+            "docId"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "normalizeKuerzelCode",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "rechtGebietFromKuerzel",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "courtBadgeVariant",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "URTEIL_RECHTSGEBIET_OPTIONS",
+          "line": 55,
+          "isDefault": false
+        },
+        {
+          "name": "parseIsoDate",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "formatDisplayDate",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "buildUrteilListEndpoint",
+          "line": 114,
+          "isDefault": false
+        },
+        {
+          "name": "rechtsprechungFullTextUrl",
+          "line": 129,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeKuerzelCode",
+          "callee": "String(k ?? '')\n    .trim()\n    .toUpperCase()\n    .replace",
+          "lineNumber": 13
+        },
+        {
+          "caller": "normalizeKuerzelCode",
+          "callee": "String(k ?? '')\n    .trim()\n    .toUpperCase",
+          "lineNumber": 13
+        },
+        {
+          "caller": "normalizeKuerzelCode",
+          "callee": "String(k ?? '')\n    .trim",
+          "lineNumber": 13
+        },
+        {
+          "caller": "normalizeKuerzelCode",
+          "callee": "String",
+          "lineNumber": 13
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "normalizeKuerzelCode",
+          "lineNumber": 21
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "zivil.has",
+          "lineNumber": 25
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "straf.has",
+          "lineNumber": 28
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "u.startsWith",
+          "lineNumber": 30
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "verf.has",
+          "lineNumber": 33
+        },
+        {
+          "caller": "rechtGebietFromKuerzel",
+          "callee": "steuerArbeit.has",
+          "lineNumber": 36
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "normalizeKuerzelCode",
+          "lineNumber": 42
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 44
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 45
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 46
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 47
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 48
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 49
+        },
+        {
+          "caller": "courtBadgeVariant",
+          "callee": "s.startsWith",
+          "lineNumber": 50
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "String(raw ?? '').trim",
+          "lineNumber": 70
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "String",
+          "lineNumber": 70
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "/^(\\d{4})-(\\d{2})-(\\d{2})/.exec",
+          "lineNumber": 71
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "Number.parseInt",
+          "lineNumber": 73
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "Number.parseInt",
+          "lineNumber": 74
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "Number.parseInt",
+          "lineNumber": 75
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "Number.isNaN",
+          "lineNumber": 77
+        },
+        {
+          "caller": "parseIsoDate",
+          "callee": "dt.getTime",
+          "lineNumber": 77
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "parseIsoDate",
+          "lineNumber": 84
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "String(raw ?? '').trim",
+          "lineNumber": 85
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "String",
+          "lineNumber": 85
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "dt.toLocaleDateString",
+          "lineNumber": 87
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "dt.getDate",
+          "lineNumber": 107
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "dt.getMonth",
+          "lineNumber": 108
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "dt.getFullYear",
+          "lineNumber": 109
+        },
+        {
+          "caller": "formatDisplayDate",
+          "callee": "String",
+          "lineNumber": 110
+        },
+        {
+          "caller": "buildUrteilListEndpoint",
+          "callee": "parts.push",
+          "lineNumber": 120
+        },
+        {
+          "caller": "buildUrteilListEndpoint",
+          "callee": "encodeURIComponent",
+          "lineNumber": 120
+        },
+        {
+          "caller": "buildUrteilListEndpoint",
+          "callee": "parts.push",
+          "lineNumber": 123
+        },
+        {
+          "caller": "buildUrteilListEndpoint",
+          "callee": "encodeURIComponent",
+          "lineNumber": 123
+        },
+        {
+          "caller": "buildUrteilListEndpoint",
+          "callee": "parts.join",
+          "lineNumber": 126
+        },
+        {
+          "caller": "rechtsprechungFullTextUrl",
+          "callee": "String(docId ?? '').trim",
+          "lineNumber": 130
+        },
+        {
+          "caller": "rechtsprechungFullTextUrl",
+          "callee": "String",
+          "lineNumber": 130
+        },
+        {
+          "caller": "rechtsprechungFullTextUrl",
+          "callee": "encodeURIComponent",
+          "lineNumber": 131
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 8,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useApi.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 93,
+      "nonEmptyLines": 81,
+      "functions": [
+        {
+          "name": "getBaseUrl",
+          "startLine": 5,
+          "endLine": 9,
+          "params": []
+        },
+        {
+          "name": "buildUrl",
+          "startLine": 11,
+          "endLine": 15,
+          "params": [
+            "endpoint"
+          ]
+        },
+        {
+          "name": "useApi",
+          "startLine": 24,
+          "endLine": 93,
+          "params": [
+            "endpoint"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useApi",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getBaseUrl",
+          "callee": "(raw?.trim() || DEFAULT_BASE).replace",
+          "lineNumber": 7
+        },
+        {
+          "caller": "getBaseUrl",
+          "callee": "raw?.trim",
+          "lineNumber": 7
+        },
+        {
+          "caller": "buildUrl",
+          "callee": "endpoint.startsWith",
+          "lineNumber": 12
+        },
+        {
+          "caller": "buildUrl",
+          "callee": "getBaseUrl",
+          "lineNumber": 13
+        },
+        {
+          "caller": "buildUrl",
+          "callee": "url.toString",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useApi",
+          "callee": "useState",
+          "lineNumber": 25
+        },
+        {
+          "caller": "useApi",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "useApi",
+          "callee": "Boolean",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useApi",
+          "callee": "endpoint.trim",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useApi",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useApi",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useApi",
+          "callee": "useCallback",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useApi",
+          "callee": "setTick",
+          "lineNumber": 33
+        },
+        {
+          "caller": "useApi",
+          "callee": "useEffect",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useApi",
+          "callee": "endpoint.trim",
+          "lineNumber": 37
+        },
+        {
+          "caller": "useApi",
+          "callee": "setData",
+          "lineNumber": 38
+        },
+        {
+          "caller": "useApi",
+          "callee": "setLoading",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useApi",
+          "callee": "setError",
+          "lineNumber": 40
+        },
+        {
+          "caller": "load",
+          "callee": "setLoading",
+          "lineNumber": 51
+        },
+        {
+          "caller": "load",
+          "callee": "setError",
+          "lineNumber": 52
+        },
+        {
+          "caller": "load",
+          "callee": "buildUrl",
+          "lineNumber": 55
+        },
+        {
+          "caller": "load",
+          "callee": "fetch",
+          "lineNumber": 56
+        },
+        {
+          "caller": "load",
+          "callee": "res.json",
+          "lineNumber": 60
+        },
+        {
+          "caller": "load",
+          "callee": "setData",
+          "lineNumber": 62
+        },
+        {
+          "caller": "load",
+          "callee": "setError",
+          "lineNumber": 63
+        },
+        {
+          "caller": "load",
+          "callee": "setLoading",
+          "lineNumber": 64
+        },
+        {
+          "caller": "load",
+          "callee": "window.setTimeout",
+          "lineNumber": 71
+        },
+        {
+          "caller": "load",
+          "callee": "load",
+          "lineNumber": 72
+        },
+        {
+          "caller": "load",
+          "callee": "setData",
+          "lineNumber": 77
+        },
+        {
+          "caller": "load",
+          "callee": "setError",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load",
+          "callee": "setLoading",
+          "lineNumber": 79
+        },
+        {
+          "caller": "useApi",
+          "callee": "load",
+          "lineNumber": 83
+        },
+        {
+          "caller": "useApi",
+          "callee": "controller.abort",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useApi",
+          "callee": "window.clearTimeout",
+          "lineNumber": 88
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useDebouncedValue.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 10,
+      "nonEmptyLines": 9,
+      "functions": [
+        {
+          "name": "useDebouncedValue",
+          "startLine": 3,
+          "endLine": 10,
+          "params": [
+            "value",
+            "ms"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useDebouncedValue",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useDebouncedValue",
+          "callee": "useState",
+          "lineNumber": 4
+        },
+        {
+          "caller": "useDebouncedValue",
+          "callee": "useEffect",
+          "lineNumber": 5
+        },
+        {
+          "caller": "useDebouncedValue",
+          "callee": "window.setTimeout",
+          "lineNumber": 6
+        },
+        {
+          "caller": "useDebouncedValue",
+          "callee": "setDebounced",
+          "lineNumber": 6
+        },
+        {
+          "caller": "useDebouncedValue",
+          "callee": "window.clearTimeout",
+          "lineNumber": 7
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useMediaQuery.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 19,
+      "functions": [
+        {
+          "name": "useMediaQuery",
+          "startLine": 4,
+          "endLine": 19,
+          "params": [
+            "query"
+          ]
+        },
+        {
+          "name": "useIsMobile",
+          "startLine": 21,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useMediaQuery",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "useIsMobile",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useMediaQuery",
+          "callee": "useState",
+          "lineNumber": 5
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "window.matchMedia",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "useEffect",
+          "lineNumber": 10
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "window.matchMedia",
+          "lineNumber": 11
+        },
+        {
+          "caller": "handler",
+          "callee": "setMatches",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "mql.addEventListener",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "setMatches",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useMediaQuery",
+          "callee": "mql.removeEventListener",
+          "lineNumber": 15
+        },
+        {
+          "caller": "useIsMobile",
+          "callee": "useMediaQuery",
+          "lineNumber": 22
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Elections.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 347,
+      "nonEmptyLines": 319,
+      "functions": [
+        {
+          "name": "Elections",
+          "startLine": 45,
+          "endLine": 347,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Elections",
+          "line": 45,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Elections",
+          "callee": "useTheme",
+          "lineNumber": 46
+        },
+        {
+          "caller": "Elections",
+          "callee": "useRef",
+          "lineNumber": 47
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 48
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 49
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 51
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 52
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 53
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 54
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 55
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 56
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 57
+        },
+        {
+          "caller": "Elections",
+          "callee": "useState",
+          "lineNumber": 59
+        },
+        {
+          "caller": "Elections",
+          "callee": "useIsMobile",
+          "lineNumber": 61
+        },
+        {
+          "caller": "Elections",
+          "callee": "useEffect",
+          "lineNumber": 63
+        },
+        {
+          "caller": "Elections",
+          "callee": "setGeojson",
+          "lineNumber": 65
+        },
+        {
+          "caller": "Elections",
+          "callee": "base.replace",
+          "lineNumber": 71
+        },
+        {
+          "caller": "Elections",
+          "callee": "fetch(geoUrl)\n      .then((r) => {\n        if (!r.ok) {\n          throw new Error(`GeoJSON HTTP ${r.status} ${geoUrl}`)\n        }\n        return r.json() as Promise<KreiseGeoJson>\n      })\n      .then((data) => {\n        if (cancelled) return\n        geoRef.current = data\n        setGeojson(data)\n        setGeoErr(false)\n      })\n      .catch",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Elections",
+          "callee": "fetch(geoUrl)\n      .then((r) => {\n        if (!r.ok) {\n          throw new Error(`GeoJSON HTTP ${r.status} ${geoUrl}`)\n        }\n        return r.json() as Promise<KreiseGeoJson>\n      })\n      .then",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Elections",
+          "callee": "fetch(geoUrl)\n      .then",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Elections",
+          "callee": "fetch",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Elections",
+          "callee": "r.json",
+          "lineNumber": 78
+        },
+        {
+          "caller": "Elections",
+          "callee": "setGeojson",
+          "lineNumber": 83
+        },
+        {
+          "caller": "Elections",
+          "callee": "setGeoErr",
+          "lineNumber": 84
+        },
+        {
+          "caller": "Elections",
+          "callee": "console.error",
+          "lineNumber": 87
+        },
+        {
+          "caller": "Elections",
+          "callee": "setGeoErr",
+          "lineNumber": 88
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 95
+        },
+        {
+          "caller": "Elections",
+          "callee": "buildKreiseMap",
+          "lineNumber": 96
+        },
+        {
+          "caller": "Elections",
+          "callee": "encodeURIComponent",
+          "lineNumber": 100
+        },
+        {
+          "caller": "Elections",
+          "callee": "useApi",
+          "lineNumber": 101
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 103
+        },
+        {
+          "caller": "Elections",
+          "callee": "[...yearsRaw].sort",
+          "lineNumber": 105
+        },
+        {
+          "caller": "Elections",
+          "callee": "useEffect",
+          "lineNumber": 108
+        },
+        {
+          "caller": "Elections",
+          "callee": "years.includes",
+          "lineNumber": 110
+        },
+        {
+          "caller": "Elections",
+          "callee": "setYear",
+          "lineNumber": 110
+        },
+        {
+          "caller": "Elections",
+          "callee": "useDebouncedValue",
+          "lineNumber": 113
+        },
+        {
+          "caller": "Elections",
+          "callee": "useDebouncedValue",
+          "lineNumber": 114
+        },
+        {
+          "caller": "Elections",
+          "callee": "useDebouncedValue",
+          "lineNumber": 115
+        },
+        {
+          "caller": "Elections",
+          "callee": "encodeURIComponent",
+          "lineNumber": 119
+        },
+        {
+          "caller": "Elections",
+          "callee": "encodeURIComponent",
+          "lineNumber": 119
+        },
+        {
+          "caller": "Elections",
+          "callee": "useApi",
+          "lineNumber": 122
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Elections",
+          "callee": "f.properties.ags?.replace",
+          "lineNumber": 128
+        },
+        {
+          "caller": "Elections",
+          "callee": "m.set",
+          "lineNumber": 129
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 134
+        },
+        {
+          "caller": "Elections",
+          "callee": "filterKreiseSearchHits",
+          "lineNumber": 135
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 139
+        },
+        {
+          "caller": "Elections",
+          "callee": "mapRows.map",
+          "lineNumber": 141
+        },
+        {
+          "caller": "Elections",
+          "callee": "normalizeMapRow",
+          "lineNumber": 141
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 144
+        },
+        {
+          "caller": "Elections",
+          "callee": "m.set",
+          "lineNumber": 147
+        },
+        {
+          "caller": "Elections",
+          "callee": "r.ags.replace",
+          "lineNumber": 147
+        },
+        {
+          "caller": "Elections",
+          "callee": "useMemo",
+          "lineNumber": 154
+        },
+        {
+          "caller": "Elections",
+          "callee": "Math.min",
+          "lineNumber": 174
+        },
+        {
+          "caller": "Elections",
+          "callee": "Math.max",
+          "lineNumber": 175
+        },
+        {
+          "caller": "Elections",
+          "callee": "useCallback",
+          "lineNumber": 187
+        },
+        {
+          "caller": "Elections",
+          "callee": "setSelectedAgs",
+          "lineNumber": 188
+        },
+        {
+          "caller": "Elections",
+          "callee": "ags.replace",
+          "lineNumber": 188
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 189
+        },
+        {
+          "caller": "Elections",
+          "callee": "(\n    ['map', 'analysis', 'compare'] as const\n  ).map",
+          "lineNumber": 192
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 194
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 198
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 198
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 209
+        },
+        {
+          "caller": "Elections",
+          "callee": "modeTabs.map",
+          "lineNumber": 217
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 225
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 313
+        },
+        {
+          "caller": "Elections",
+          "callee": "setSelectedAgs",
+          "lineNumber": 314
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 317
+        },
+        {
+          "caller": "Elections",
+          "callee": "setCompareRegions",
+          "lineNumber": 319
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 320
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 325
+        },
+        {
+          "caller": "Elections",
+          "callee": "t",
+          "lineNumber": 327
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 328
+        },
+        {
+          "caller": "Elections",
+          "callee": "setActiveMode",
+          "lineNumber": 341
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/EuLaw.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1034,
+      "nonEmptyLines": 966,
+      "functions": [
+        {
+          "name": "buildEuListUrl",
+          "startLine": 54,
+          "endLine": 68,
+          "params": [
+            "opts"
+          ]
+        },
+        {
+          "name": "buildEuUrteilListUrl",
+          "startLine": 70,
+          "endLine": 84,
+          "params": [
+            "opts"
+          ]
+        },
+        {
+          "name": "countByTyp",
+          "startLine": 86,
+          "endLine": 90,
+          "params": [
+            "stats",
+            "typ"
+          ]
+        },
+        {
+          "name": "countByGericht",
+          "startLine": 92,
+          "endLine": 96,
+          "params": [
+            "stats",
+            "g"
+          ]
+        },
+        {
+          "name": "EuLaw",
+          "startLine": 98,
+          "endLine": 1034,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "EuLaw",
+          "line": 98,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.set",
+          "lineNumber": 62
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "String",
+          "lineNumber": 62
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.set",
+          "lineNumber": 63
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "String",
+          "lineNumber": 63
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.set",
+          "lineNumber": 64
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "opts.rechtsgebiet.trim",
+          "lineNumber": 65
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.set",
+          "lineNumber": 65
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "opts.rechtsgebiet.trim",
+          "lineNumber": 65
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "opts.search.trim",
+          "lineNumber": 66
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.set",
+          "lineNumber": 66
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "opts.search.trim",
+          "lineNumber": 66
+        },
+        {
+          "caller": "buildEuListUrl",
+          "callee": "q.toString",
+          "lineNumber": 67
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.set",
+          "lineNumber": 78
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "String",
+          "lineNumber": 78
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.set",
+          "lineNumber": 79
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "String",
+          "lineNumber": 79
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.set",
+          "lineNumber": 80
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "opts.rechtsgebiet.trim",
+          "lineNumber": 81
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.set",
+          "lineNumber": 81
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "opts.rechtsgebiet.trim",
+          "lineNumber": 81
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "opts.search.trim",
+          "lineNumber": 82
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.set",
+          "lineNumber": 82
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "opts.search.trim",
+          "lineNumber": 82
+        },
+        {
+          "caller": "buildEuUrteilListUrl",
+          "callee": "q.toString",
+          "lineNumber": 83
+        },
+        {
+          "caller": "countByTyp",
+          "callee": "stats.by_typ.find",
+          "lineNumber": 88
+        },
+        {
+          "caller": "countByGericht",
+          "callee": "stats.by_gericht.find",
+          "lineNumber": 94
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useTheme",
+          "lineNumber": 99
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useNavigate",
+          "lineNumber": 100
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useSearchParams",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useParams",
+          "lineNumber": 102
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useIsMobile",
+          "lineNumber": 103
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "searchParams.get",
+          "lineNumber": 106
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 108
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 109
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 110
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useDebouncedValue",
+          "lineNumber": 111
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "searchInput.trim",
+          "lineNumber": 111
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 112
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 113
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 115
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 116
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 117
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useDebouncedValue",
+          "lineNumber": 118
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "courtSearchInput.trim",
+          "lineNumber": 118
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 119
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 120
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 122
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setPage",
+          "lineNumber": 123
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 126
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtPage",
+          "lineNumber": 127
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 132
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 140
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 142
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useState",
+          "lineNumber": 143
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 145
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setPagingTotal",
+          "lineNumber": 146
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 149
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtPagingTotal",
+          "lineNumber": 150
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 153
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.ceil",
+          "lineNumber": 153
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.min",
+          "lineNumber": 154
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 154
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 156
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.ceil",
+          "lineNumber": 158
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.min",
+          "lineNumber": 160
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 161
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 165
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 167
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 170
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Math.max",
+          "lineNumber": 172
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 175
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "buildEuListUrl",
+          "lineNumber": 177
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 187
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "buildEuUrteilListUrl",
+          "lineNumber": 189
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 204
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 212
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 214
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setPagingTotal",
+          "lineNumber": 216
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 220
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtPagingTotal",
+          "lineNumber": 222
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.parseInt",
+          "lineNumber": 226
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 228
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Boolean",
+          "lineNumber": 229
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "listData?.items?.some",
+          "lineNumber": 229
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 233
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 239
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "searchParams.get",
+          "lineNumber": 241
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.parseInt",
+          "lineNumber": 242
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 244
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Boolean",
+          "lineNumber": 245
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "courtListData?.items?.some",
+          "lineNumber": 245
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 249
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useApi",
+          "lineNumber": 255
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 257
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setPage",
+          "lineNumber": 258
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useEffect",
+          "lineNumber": 261
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtPage",
+          "lineNumber": 262
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 265
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "[...raw].reverse",
+          "lineNumber": 268
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 271
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "[...raw].reverse",
+          "lineNumber": 274
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 277
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "encodeURIComponent",
+          "lineNumber": 279
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useCallback",
+          "lineNumber": 282
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 301
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 315
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "countByTyp",
+          "lineNumber": 340
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "countByTyp",
+          "lineNumber": 341
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "countByTyp",
+          "lineNumber": 342
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "countByGericht",
+          "lineNumber": 345
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "countByGericht",
+          "lineNumber": 346
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useCallback",
+          "lineNumber": 362
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "navigate",
+          "lineNumber": 363
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "navigate",
+          "lineNumber": 364
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useCallback",
+          "lineNumber": 367
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "navigate",
+          "lineNumber": 368
+        },
+        {
+          "caller": "tabBtn",
+          "callee": "goActsTab",
+          "lineNumber": 379
+        },
+        {
+          "caller": "tabBtn",
+          "callee": "goCourtTab",
+          "lineNumber": 379
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "useMemo",
+          "lineNumber": 399
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "rows\n      .map((r) => r.rechtsgebiet)\n      .filter",
+          "lineNumber": 401
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "rows\n      .map",
+          "lineNumber": 401
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Boolean",
+          "lineNumber": 403
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "x?.trim",
+          "lineNumber": 403
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 423
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 426
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 427
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 433
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "tabBtn",
+          "lineNumber": 443
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 443
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "tabBtn",
+          "lineNumber": 444
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 444
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 459
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 467
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 470
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 480
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 490
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 511
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setSearchInput",
+          "lineNumber": 542
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 543
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 544
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 581
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "typChips.map",
+          "lineNumber": 589
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setTyp",
+          "lineNumber": 593
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "chipBase",
+          "lineNumber": 594
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 596
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 621
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setRechtsgebiet",
+          "lineNumber": 625
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 626
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 630
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "LEGAL_AREA_KEYS.map",
+          "lineNumber": 631
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 633
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 658
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setSortNewest",
+          "lineNumber": 662
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 663
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 667
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 668
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 682
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 695
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 702
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "items.map",
+          "lineNumber": 710
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 715
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "interpolate",
+          "lineNumber": 728
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 728
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 754
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 764
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 774
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 795
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtSearchInput",
+          "lineNumber": 826
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 827
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 828
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 865
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "courtGerichtChips.map",
+          "lineNumber": 873
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtGericht",
+          "lineNumber": 877
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "chipBase",
+          "lineNumber": 878
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 880
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 905
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtRg",
+          "lineNumber": 909
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 910
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 914
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "courtRgOptions.map",
+          "lineNumber": 915
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 942
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "setCourtSortNewest",
+          "lineNumber": 947
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 949
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 953
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 954
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 968
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 981
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 988
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "courtItems.map",
+          "lineNumber": 999
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "Number.isFinite",
+          "lineNumber": 1004
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "interpolate",
+          "lineNumber": 1017
+        },
+        {
+          "caller": "EuLaw",
+          "callee": "t",
+          "lineNumber": 1017
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 1,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Legislation.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1343,
+      "nonEmptyLines": 1285,
+      "functions": [
+        {
+          "name": "normalizeGesetzeList",
+          "startLine": 55,
+          "endLine": 64,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "normalizeUrteileList",
+          "startLine": 66,
+          "endLine": 69,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "urteilReferencesGesetz",
+          "startLine": 71,
+          "endLine": 79,
+          "params": [
+            "u",
+            "kuerzel"
+          ]
+        },
+        {
+          "name": "displayTitel",
+          "startLine": 81,
+          "endLine": 87,
+          "params": [
+            "g"
+          ]
+        },
+        {
+          "name": "sublineZusammenfassung",
+          "startLine": 89,
+          "endLine": 93,
+          "params": [
+            "g"
+          ]
+        },
+        {
+          "name": "parseDatumMs",
+          "startLine": 95,
+          "endLine": 99,
+          "params": [
+            "s"
+          ]
+        },
+        {
+          "name": "LegislationWelcome",
+          "startLine": 113,
+          "endLine": 180,
+          "params": [
+            "{\n  stats,\n  statsLoading,\n  statsError,\n}"
+          ]
+        },
+        {
+          "name": "Legislation",
+          "startLine": 182,
+          "endLine": 1343,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Legislation",
+          "line": 182,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeGesetzeList",
+          "callee": "Array.isArray",
+          "lineNumber": 56
+        },
+        {
+          "caller": "normalizeGesetzeList",
+          "callee": "Array.isArray",
+          "lineNumber": 59
+        },
+        {
+          "caller": "normalizeGesetzeList",
+          "callee": "Array.isArray",
+          "lineNumber": 60
+        },
+        {
+          "caller": "normalizeGesetzeList",
+          "callee": "Array.isArray",
+          "lineNumber": 61
+        },
+        {
+          "caller": "normalizeUrteileList",
+          "callee": "Array.isArray",
+          "lineNumber": 67
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "kuerzel.trim().toLowerCase",
+          "lineNumber": 72
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "kuerzel.trim",
+          "lineNumber": 72
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "Array.isArray",
+          "lineNumber": 75
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "refs.some",
+          "lineNumber": 76
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "x.trim().toLowerCase",
+          "lineNumber": 77
+        },
+        {
+          "caller": "urteilReferencesGesetz",
+          "callee": "x.trim",
+          "lineNumber": 77
+        },
+        {
+          "caller": "displayTitel",
+          "callee": "(g.titel ?? '').trim",
+          "lineNumber": 82
+        },
+        {
+          "caller": "displayTitel",
+          "callee": "(g.name ?? '').trim",
+          "lineNumber": 84
+        },
+        {
+          "caller": "displayTitel",
+          "callee": "(g.kuerzel ?? '').trim",
+          "lineNumber": 86
+        },
+        {
+          "caller": "sublineZusammenfassung",
+          "callee": "(g.zusammenfassung ?? '').trim",
+          "lineNumber": 90
+        },
+        {
+          "caller": "sublineZusammenfassung",
+          "callee": "z.slice(0, 80).trim",
+          "lineNumber": 92
+        },
+        {
+          "caller": "sublineZusammenfassung",
+          "callee": "z.slice",
+          "lineNumber": 92
+        },
+        {
+          "caller": "parseDatumMs",
+          "callee": "Date.parse",
+          "lineNumber": 97
+        },
+        {
+          "caller": "parseDatumMs",
+          "callee": "Number.isFinite",
+          "lineNumber": 98
+        },
+        {
+          "caller": "LegislationWelcome",
+          "callee": "useTheme",
+          "lineNumber": 122
+        },
+        {
+          "caller": "LegislationWelcome",
+          "callee": "t",
+          "lineNumber": 155
+        },
+        {
+          "caller": "LegislationWelcome",
+          "callee": "t",
+          "lineNumber": 166
+        },
+        {
+          "caller": "LegislationWelcome",
+          "callee": "t",
+          "lineNumber": 175
+        },
+        {
+          "caller": "LegislationWelcome",
+          "callee": "t",
+          "lineNumber": 176
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useParams",
+          "lineNumber": 183
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useNavigate",
+          "lineNumber": 184
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useSearchParams",
+          "lineNumber": 185
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useTheme",
+          "lineNumber": 186
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useIsMobile",
+          "lineNumber": 187
+        },
+        {
+          "caller": "Legislation",
+          "callee": "searchParams.get",
+          "lineNumber": 190
+        },
+        {
+          "caller": "Legislation",
+          "callee": "idParam?.trim",
+          "lineNumber": 192
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 195
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 196
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 197
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 200
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 201
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 202
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 204
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 205
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 206
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 207
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 210
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 211
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useState",
+          "lineNumber": 212
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Number.parseInt",
+          "lineNumber": 218
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Number.isFinite",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Number.isFinite",
+          "lineNumber": 221
+        },
+        {
+          "caller": "Legislation",
+          "callee": "encodeURIComponent",
+          "lineNumber": 225
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useApi",
+          "lineNumber": 229
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Legislation",
+          "callee": "normalizeGesetzeList",
+          "lineNumber": 231
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useApi",
+          "lineNumber": 239
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useApi",
+          "lineNumber": 242
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 244
+        },
+        {
+          "caller": "Legislation",
+          "callee": "buildUrteilListEndpoint",
+          "lineNumber": 247
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useApi",
+          "lineNumber": 256
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 258
+        },
+        {
+          "caller": "Legislation",
+          "callee": "normalizeUrteileList",
+          "lineNumber": 259
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useEffect",
+          "lineNumber": 263
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setMobileTab",
+          "lineNumber": 266
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setMobileTab",
+          "lineNumber": 268
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useCallback",
+          "lineNumber": 272
+        },
+        {
+          "caller": "Legislation",
+          "callee": "navigate",
+          "lineNumber": 273
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useCallback",
+          "lineNumber": 276
+        },
+        {
+          "caller": "Legislation",
+          "callee": "navigate",
+          "lineNumber": 278
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setMobileTab",
+          "lineNumber": 279
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useCallback",
+          "lineNumber": 284
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setGesetzSearch",
+          "lineNumber": 286
+        },
+        {
+          "caller": "Legislation",
+          "callee": "kuerzel.trim",
+          "lineNumber": 286
+        },
+        {
+          "caller": "Legislation",
+          "callee": "navigate",
+          "lineNumber": 287
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setGesetzPage",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 293
+        },
+        {
+          "caller": "Legislation",
+          "callee": "list.slice",
+          "lineNumber": 294
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 296
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rechtGebietFromKuerzel",
+          "lineNumber": 297
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 301
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Legislation",
+          "callee": "g.titel_offiziell.trim",
+          "lineNumber": 305
+        },
+        {
+          "caller": "Legislation",
+          "callee": "gesetzSearch.trim().toLowerCase",
+          "lineNumber": 307
+        },
+        {
+          "caller": "Legislation",
+          "callee": "gesetzSearch.trim",
+          "lineNumber": 307
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 309
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.kuerzel ?? '').toLowerCase",
+          "lineNumber": 310
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel(g).toLowerCase",
+          "lineNumber": 311
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel",
+          "lineNumber": 311
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.zusammenfassung ?? '').toLowerCase",
+          "lineNumber": 312
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.amtliche_abkuerzung ?? '').toLowerCase",
+          "lineNumber": 313
+        },
+        {
+          "caller": "Legislation",
+          "callee": "ku.includes",
+          "lineNumber": 315
+        },
+        {
+          "caller": "Legislation",
+          "callee": "ti.includes",
+          "lineNumber": 316
+        },
+        {
+          "caller": "Legislation",
+          "callee": "zu.includes",
+          "lineNumber": 317
+        },
+        {
+          "caller": "Legislation",
+          "callee": "ab.includes",
+          "lineNumber": 318
+        },
+        {
+          "caller": "Legislation",
+          "callee": "sorted.sort",
+          "lineNumber": 324
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 325
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 325
+        },
+        {
+          "caller": "Legislation",
+          "callee": "sorted.sort",
+          "lineNumber": 328
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 329
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 329
+        },
+        {
+          "caller": "Legislation",
+          "callee": "sorted.sort",
+          "lineNumber": 332
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel(a).localeCompare",
+          "lineNumber": 333
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel",
+          "lineNumber": 333
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel",
+          "lineNumber": 333
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useEffect",
+          "lineNumber": 341
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setGesetzPage",
+          "lineNumber": 342
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.max",
+          "lineNumber": 345
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.ceil",
+          "lineNumber": 347
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.min",
+          "lineNumber": 349
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 350
+        },
+        {
+          "caller": "Legislation",
+          "callee": "filteredGesetze.slice",
+          "lineNumber": 352
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 355
+        },
+        {
+          "caller": "Legislation",
+          "callee": "list.find",
+          "lineNumber": 357
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 360
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 368
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Number.isFinite",
+          "lineNumber": 371
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useApi",
+          "lineNumber": 379
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 381
+        },
+        {
+          "caller": "Legislation",
+          "callee": "gesetzMerged?.kuerzel?.trim",
+          "lineNumber": 382
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteileBase.filter",
+          "lineNumber": 384
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteilReferencesGesetz",
+          "lineNumber": 384
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Boolean",
+          "lineNumber": 392
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 401
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteileBase.slice",
+          "lineNumber": 402
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteilSearch.trim().toLowerCase",
+          "lineNumber": 403
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteilSearch.trim",
+          "lineNumber": 403
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 405
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(u.aktenzeichen ?? '').toLowerCase",
+          "lineNumber": 406
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(u.zusammenfassung ?? '').toLowerCase",
+          "lineNumber": 407
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(u.leitsatz ?? '').toLowerCase",
+          "lineNumber": 408
+        },
+        {
+          "caller": "Legislation",
+          "callee": "az.includes",
+          "lineNumber": 410
+        },
+        {
+          "caller": "Legislation",
+          "callee": "zu.includes",
+          "lineNumber": 410
+        },
+        {
+          "caller": "Legislation",
+          "callee": "ls.includes",
+          "lineNumber": 410
+        },
+        {
+          "caller": "Legislation",
+          "callee": "now.getFullYear",
+          "lineNumber": 417
+        },
+        {
+          "caller": "Legislation",
+          "callee": "now.getMonth",
+          "lineNumber": 418
+        },
+        {
+          "caller": "Legislation",
+          "callee": "now.getDate",
+          "lineNumber": 419
+        },
+        {
+          "caller": "Legislation",
+          "callee": "todayStart.getTime",
+          "lineNumber": 424
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.filter",
+          "lineNumber": 426
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseIsoDate",
+          "lineNumber": 427
+        },
+        {
+          "caller": "Legislation",
+          "callee": "dt.getFullYear",
+          "lineNumber": 430
+        },
+        {
+          "caller": "Legislation",
+          "callee": "dt.getMonth",
+          "lineNumber": 431
+        },
+        {
+          "caller": "Legislation",
+          "callee": "dt.getDate",
+          "lineNumber": 432
+        },
+        {
+          "caller": "Legislation",
+          "callee": "ds.getTime",
+          "lineNumber": 434
+        },
+        {
+          "caller": "Legislation",
+          "callee": "threshold.getTime",
+          "lineNumber": 434
+        },
+        {
+          "caller": "Legislation",
+          "callee": "rows.sort",
+          "lineNumber": 437
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 438
+        },
+        {
+          "caller": "Legislation",
+          "callee": "parseDatumMs",
+          "lineNumber": 439
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useEffect",
+          "lineNumber": 450
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilPage",
+          "lineNumber": 451
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.max",
+          "lineNumber": 461
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.ceil",
+          "lineNumber": 463
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Math.min",
+          "lineNumber": 465
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 466
+        },
+        {
+          "caller": "Legislation",
+          "callee": "filteredUrteile.slice",
+          "lineNumber": 468
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 471
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 489
+        },
+        {
+          "caller": "Legislation",
+          "callee": "encodeURIComponent",
+          "lineNumber": 491
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 494
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 519
+        },
+        {
+          "caller": "Legislation",
+          "callee": "useMemo",
+          "lineNumber": 533
+        },
+        {
+          "caller": "tabBtn",
+          "callee": "navigate",
+          "lineNumber": 560
+        },
+        {
+          "caller": "tabBtn",
+          "callee": "setTabUrteile",
+          "lineNumber": 560
+        },
+        {
+          "caller": "Legislation",
+          "callee": "[\n            { value: 'alle', label: 'Alle' },\n            { value: 'mit_lobby', label: 'Mit Lobby' },\n            { value: 'klartitel', label: 'Klartitel' },\n          ].map",
+          "lineNumber": 616
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setLobbyFilter",
+          "lineNumber": 624
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 674
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setGesetzSearch",
+          "lineNumber": 679
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 680
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 681
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 710
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setDomainFilter",
+          "lineNumber": 715
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 717
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 721
+        },
+        {
+          "caller": "Legislation",
+          "callee": "DOMAIN_OPTIONS.map",
+          "lineNumber": 722
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 724
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 746
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setGesetzSort",
+          "lineNumber": 751
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 756
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 757
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 758
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 772
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 778
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 805
+        },
+        {
+          "caller": "Legislation",
+          "callee": "gesetzSlice.map",
+          "lineNumber": 808
+        },
+        {
+          "caller": "Legislation",
+          "callee": "sublineZusammenfassung",
+          "lineNumber": 810
+        },
+        {
+          "caller": "Legislation",
+          "callee": "onPickGesetz",
+          "lineNumber": 817
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setHoveredListId",
+          "lineNumber": 818
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setHoveredListId",
+          "lineNumber": 819
+        },
+        {
+          "caller": "Legislation",
+          "callee": "displayTitel",
+          "lineNumber": 849
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim",
+          "lineNumber": 851
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.ausfertigung_datum ?? '').trim",
+          "lineNumber": 852
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim",
+          "lineNumber": 864
+        },
+        {
+          "caller": "Legislation",
+          "callee": "(g.amtliche_abkuerzung ?? g.kuerzel ?? '').trim",
+          "lineNumber": 866
+        },
+        {
+          "caller": "Legislation",
+          "callee": "formatDisplayDate",
+          "lineNumber": 871
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 910
+        },
+        {
+          "caller": "Legislation",
+          "callee": "formatDisplayDate",
+          "lineNumber": 922
+        },
+        {
+          "caller": "Legislation",
+          "callee": "Boolean",
+          "lineNumber": 976
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1027
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilSearch",
+          "lineNumber": 1032
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1033
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1034
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1063
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilCourt",
+          "lineNumber": 1067
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1068
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1072
+        },
+        {
+          "caller": "Legislation",
+          "callee": "COURT_VALUES.map",
+          "lineNumber": 1073
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1097
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilRg",
+          "lineNumber": 1101
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1102
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1106
+        },
+        {
+          "caller": "Legislation",
+          "callee": "URTEIL_RECHTSGEBIET_OPTIONS.map",
+          "lineNumber": 1107
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1131
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilTime",
+          "lineNumber": 1136
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1138
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1142
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1143
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1144
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1145
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1165
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilSortNewest",
+          "lineNumber": 1170
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1177
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setUrteilSortNewest",
+          "lineNumber": 1183
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1190
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1206
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1213
+        },
+        {
+          "caller": "Legislation",
+          "callee": "urteilSlice.map",
+          "lineNumber": 1216
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setMobileTab",
+          "lineNumber": 1245
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1260
+        },
+        {
+          "caller": "Legislation",
+          "callee": "setMobileTab",
+          "lineNumber": 1264
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1279
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1294
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1295
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1299
+        },
+        {
+          "caller": "Legislation",
+          "callee": "tabBtn",
+          "lineNumber": 1308
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1308
+        },
+        {
+          "caller": "Legislation",
+          "callee": "tabBtn",
+          "lineNumber": 1309
+        },
+        {
+          "caller": "Legislation",
+          "callee": "t",
+          "lineNumber": 1309
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 1,
+        "functionCount": 8,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/WorldMap.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1203,
+      "nonEmptyLines": 1126,
+      "functions": [
+        {
+          "name": "normIso",
+          "startLine": 48,
+          "endLine": 50,
+          "params": [
+            "code"
+          ]
+        },
+        {
+          "name": "parseMapProjection",
+          "startLine": 56,
+          "endLine": 58,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "isLegacyIosSafari",
+          "startLine": 60,
+          "endLine": 71,
+          "params": []
+        },
+        {
+          "name": "isGlobeProjectionSupported",
+          "startLine": 73,
+          "endLine": 82,
+          "params": []
+        },
+        {
+          "name": "parseVisibleFloatingWidgets",
+          "startLine": 84,
+          "endLine": 99,
+          "params": []
+        },
+        {
+          "name": "persistVisibleFloatingWidgets",
+          "startLine": 101,
+          "endLine": 107,
+          "params": [
+            "next"
+          ]
+        },
+        {
+          "name": "WorldMap",
+          "startLine": 117,
+          "endLine": 1203,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "WorldMap",
+          "line": 117,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normIso",
+          "callee": "code.trim().toUpperCase",
+          "lineNumber": 49
+        },
+        {
+          "caller": "normIso",
+          "callee": "code.trim",
+          "lineNumber": 49
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "/iP(hone|ad|od)/.test",
+          "lineNumber": 64
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "/Macintosh/.test",
+          "lineNumber": 65
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "/Safari\\//.test",
+          "lineNumber": 67
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "/CriOS|FxiOS|EdgiOS/.test",
+          "lineNumber": 67
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "ua.match",
+          "lineNumber": 68
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "Number",
+          "lineNumber": 69
+        },
+        {
+          "caller": "isLegacyIosSafari",
+          "callee": "Number.isFinite",
+          "lineNumber": 70
+        },
+        {
+          "caller": "isGlobeProjectionSupported",
+          "callee": "isLegacyIosSafari",
+          "lineNumber": 75
+        },
+        {
+          "caller": "isGlobeProjectionSupported",
+          "callee": "document.createElement",
+          "lineNumber": 77
+        },
+        {
+          "caller": "isGlobeProjectionSupported",
+          "callee": "canvas.getContext",
+          "lineNumber": 78
+        },
+        {
+          "caller": "parseVisibleFloatingWidgets",
+          "callee": "localStorage.getItem",
+          "lineNumber": 86
+        },
+        {
+          "caller": "parseVisibleFloatingWidgets",
+          "callee": "JSON.parse",
+          "lineNumber": 88
+        },
+        {
+          "caller": "parseVisibleFloatingWidgets",
+          "callee": "Array.isArray",
+          "lineNumber": 89
+        },
+        {
+          "caller": "parseVisibleFloatingWidgets",
+          "callee": "arr.filter",
+          "lineNumber": 91
+        },
+        {
+          "caller": "parseVisibleFloatingWidgets",
+          "callee": "FLOATING_WIDGETS.includes",
+          "lineNumber": 93
+        },
+        {
+          "caller": "persistVisibleFloatingWidgets",
+          "callee": "localStorage.setItem",
+          "lineNumber": 103
+        },
+        {
+          "caller": "persistVisibleFloatingWidgets",
+          "callee": "JSON.stringify",
+          "lineNumber": 103
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useTheme",
+          "lineNumber": 118
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useRef",
+          "lineNumber": 120
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 121
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 122
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 124
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 125
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 126
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 127
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 131
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 135
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 136
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSelection",
+          "lineNumber": 137
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 140
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 141
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSelection",
+          "lineNumber": 142
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.compare.includes",
+          "lineNumber": 144
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.compare.slice",
+          "lineNumber": 146
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 152
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 153
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSelection",
+          "lineNumber": 154
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.compare.filter",
+          "lineNumber": 156
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 160
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSelection",
+          "lineNumber": 161
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 164
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 165
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSelection",
+          "lineNumber": 166
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.compare.filter",
+          "lineNumber": 174
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 179
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 182
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 183
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 184
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 185
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 186
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 187
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 190
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 191
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useRef",
+          "lineNumber": 196
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useRef",
+          "lineNumber": 197
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useRef",
+          "lineNumber": 198
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 200
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "localStorage.getItem",
+          "lineNumber": 202
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 210
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "parseVisibleFloatingWidgets",
+          "lineNumber": 212
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 213
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "parseMapProjection",
+          "lineNumber": 215
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "localStorage.getItem",
+          "lineNumber": 215
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 220
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 222
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "localStorage.setItem",
+          "lineNumber": 224
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 230
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setGlobeProjectionSupported",
+          "lineNumber": 231
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "isGlobeProjectionSupported",
+          "lineNumber": 231
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 234
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "localStorage.setItem",
+          "lineNumber": 236
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 242
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapProjection",
+          "lineNumber": 244
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 248
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setVisibleFloatingWidgets",
+          "lineNumber": 249
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.has",
+          "lineNumber": 250
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.add",
+          "lineNumber": 252
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "persistVisibleFloatingWidgets",
+          "lineNumber": 253
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 258
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setVisibleFloatingWidgets",
+          "lineNumber": 259
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.has",
+          "lineNumber": 261
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.delete",
+          "lineNumber": 261
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.add",
+          "lineNumber": 262
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "persistVisibleFloatingWidgets",
+          "lineNumber": 263
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 268
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setVisibleFloatingWidgets",
+          "lineNumber": 269
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "prev.has",
+          "lineNumber": 270
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.delete",
+          "lineNumber": 272
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "persistVisibleFloatingWidgets",
+          "lineNumber": 273
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useIsMobile",
+          "lineNumber": 278
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useApi",
+          "lineNumber": 280
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 282
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 286
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "[selection.primary, ...selection.compare]\n      .filter((x): x is string => !!x)\n      .map",
+          "lineNumber": 287
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "[selection.primary, ...selection.compare]\n      .filter",
+          "lineNumber": 287
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "allIsos.filter",
+          "lineNumber": 292
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "allCountryDetails.has",
+          "lineNumber": 292
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Promise.all(\n      missing.map((iso) =>\n        fetch(worldApiUrl(`/api/world/country/${encodeURIComponent(iso)}`)).then(\n          (r) => {\n            if (!r.ok) throw new Error(String(r.status))\n            return r.json() as Promise<WorldCountryDetail>\n          },\n        ),\n      ),\n    )\n      .then((details) => {\n        if (cancelled) return\n        setAllCountryDetails((prev) => {\n          const next = new Map(prev)\n          details.forEach((d, i) => {\n            const iso = missing[i]!\n            next.set(iso, d)\n          })\n          return next\n        })\n      })\n      .catch",
+          "lineNumber": 294
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Promise.all(\n      missing.map((iso) =>\n        fetch(worldApiUrl(`/api/world/country/${encodeURIComponent(iso)}`)).then(\n          (r) => {\n            if (!r.ok) throw new Error(String(r.status))\n            return r.json() as Promise<WorldCountryDetail>\n          },\n        ),\n      ),\n    )\n      .then",
+          "lineNumber": 294
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Promise.all",
+          "lineNumber": 294
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "missing.map",
+          "lineNumber": 295
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(worldApiUrl(`/api/world/country/${encodeURIComponent(iso)}`)).then",
+          "lineNumber": 296
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch",
+          "lineNumber": 296
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "worldApiUrl",
+          "lineNumber": 296
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 296
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 298
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "r.json",
+          "lineNumber": 299
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setAllCountryDetails",
+          "lineNumber": 306
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "details.forEach",
+          "lineNumber": 308
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "next.set",
+          "lineNumber": 310
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 321
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeData",
+          "lineNumber": 322
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeTimeseries",
+          "lineNumber": 323
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 326
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setGeojson",
+          "lineNumber": 328
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "base.replace",
+          "lineNumber": 336
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(geoUrl)\n      .then((r) => {\n        if (!r.ok) throw new Error(`GeoJSON HTTP ${r.status}`)\n        return r.json() as Promise<WorldGeoJson>\n      })\n      .then((data) => {\n        if (cancelled) return\n        geoRef.current = data\n        setGeojson(data)\n        setGeoErr(false)\n      })\n      .catch",
+          "lineNumber": 338
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(geoUrl)\n      .then((r) => {\n        if (!r.ok) throw new Error(`GeoJSON HTTP ${r.status}`)\n        return r.json() as Promise<WorldGeoJson>\n      })\n      .then",
+          "lineNumber": 338
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(geoUrl)\n      .then",
+          "lineNumber": 338
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch",
+          "lineNumber": 338
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "r.json",
+          "lineNumber": 341
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setGeojson",
+          "lineNumber": 346
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setGeoErr",
+          "lineNumber": 347
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setGeoErr",
+          "lineNumber": 350
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useApi",
+          "lineNumber": 357
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useApi",
+          "lineNumber": 358
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 360
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "categories.some",
+          "lineNumber": 362
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setCategoryId",
+          "lineNumber": 363
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 367
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setYear",
+          "lineNumber": 370
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useDebouncedValue",
+          "lineNumber": 373
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useDebouncedValue",
+          "lineNumber": 374
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useState",
+          "lineNumber": 377
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 379
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapFallbackSteps",
+          "lineNumber": 380
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 383
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.max",
+          "lineNumber": 385
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 389
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 389
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useApi",
+          "lineNumber": 392
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 394
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "(mapRows ?? []).filter",
+          "lineNumber": 395
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 399
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "mapRowsCountries.some",
+          "lineNumber": 401
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Number.isNaN",
+          "lineNumber": 402
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 407
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.max",
+          "lineNumber": 414
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.max",
+          "lineNumber": 415
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapFallbackSteps",
+          "lineNumber": 417
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 434
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "categoryAndUnitForIndicator",
+          "lineNumber": 435
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 439
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 449
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Number.isNaN",
+          "lineNumber": 451
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "formatWorldIndicatorValue",
+          "lineNumber": 452
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 456
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "shortenWorldUnit",
+          "lineNumber": 457
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 461
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "f.properties.iso3?.toUpperCase",
+          "lineNumber": 465
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "m.set",
+          "lineNumber": 466
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 471
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "mapRowsCountries.filter",
+          "lineNumber": 472
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Number.isNaN",
+          "lineNumber": 473
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 493
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 495
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "mapRowsCountries.find",
+          "lineNumber": 496
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "normIso",
+          "lineNumber": 496
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useApi",
+          "lineNumber": 499
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 501
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 501
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 504
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "(consoleRankingRaw ?? []).filter",
+          "lineNumber": 505
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 509
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows\n      .map((r) => r.value)\n      .filter",
+          "lineNumber": 512
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows\n      .map",
+          "lineNumber": 512
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Number.isNaN",
+          "lineNumber": 514
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "vals.sort",
+          "lineNumber": 516
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "vals.reduce",
+          "lineNumber": 517
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.floor",
+          "lineNumber": 518
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 524
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "LOWER_IS_BETTER_INDICATORS.has",
+          "lineNumber": 529
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 534
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "countryPercentileFromMapRows",
+          "lineNumber": 536
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 539
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "tradeFetchAbortRef.current?.abort",
+          "lineNumber": 541
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeLoading",
+          "lineNumber": 544
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "partner.trim().toUpperCase().slice",
+          "lineNumber": 548
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "partner.trim().toUpperCase",
+          "lineNumber": 548
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "partner.trim",
+          "lineNumber": 548
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 551
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "worldApiUrl",
+          "lineNumber": 553
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 554
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 554
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url, { signal: ac.signal })\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<WorldTradeResponse>\n        })\n        .then((d) => {\n          if (!ac.signal.aborted) setTradeData(d)\n        })\n        .catch((e: unknown) => {\n          if (e instanceof DOMException && e.name === 'AbortError') return\n          if (ac.signal.aborted) return\n          setTradeData(null)\n        })\n        .finally",
+          "lineNumber": 556
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url, { signal: ac.signal })\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<WorldTradeResponse>\n        })\n        .then((d) => {\n          if (!ac.signal.aborted) setTradeData(d)\n        })\n        .catch",
+          "lineNumber": 556
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url, { signal: ac.signal })\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<WorldTradeResponse>\n        })\n        .then",
+          "lineNumber": 556
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url, { signal: ac.signal })\n        .then",
+          "lineNumber": 556
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch",
+          "lineNumber": 556
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 558
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "r.json",
+          "lineNumber": 559
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeData",
+          "lineNumber": 562
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeData",
+          "lineNumber": 567
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeLoading",
+          "lineNumber": 570
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 576
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeTimeseriesLoading",
+          "lineNumber": 577
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "worldApiUrl",
+          "lineNumber": 578
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 579
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n      .then((r) => {\n        if (!r.ok) throw new Error(String(r.status))\n        return r.json() as Promise<WorldTradeTimeseriesResponse>\n      })\n      .then((d) => setTradeTimeseries(d))\n      .catch(() => setTradeTimeseries(null))\n      .finally",
+          "lineNumber": 581
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n      .then((r) => {\n        if (!r.ok) throw new Error(String(r.status))\n        return r.json() as Promise<WorldTradeTimeseriesResponse>\n      })\n      .then((d) => setTradeTimeseries(d))\n      .catch",
+          "lineNumber": 581
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n      .then((r) => {\n        if (!r.ok) throw new Error(String(r.status))\n        return r.json() as Promise<WorldTradeTimeseriesResponse>\n      })\n      .then",
+          "lineNumber": 581
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n      .then",
+          "lineNumber": 581
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch",
+          "lineNumber": 581
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 583
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "r.json",
+          "lineNumber": 584
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeTimeseries",
+          "lineNumber": 586
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeTimeseries",
+          "lineNumber": 587
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setTradeTimeseriesLoading",
+          "lineNumber": 588
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 591
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "iso3.trim().toUpperCase().slice",
+          "lineNumber": 593
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "iso3.trim().toUpperCase",
+          "lineNumber": 593
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "iso3.trim",
+          "lineNumber": 593
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setClimateLoading",
+          "lineNumber": 594
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "worldApiUrl",
+          "lineNumber": 595
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "encodeURIComponent",
+          "lineNumber": 596
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<ClimateResponse>\n        })\n        .then((d) => {\n          setClimateData((prev) => new Map(prev).set(key, d))\n        })\n        .catch(() => {\n          // z.B. 404 für geskippte Mikrostaaten: leeren Datensatz cachen, damit\n          // der Lazy-Load-Effekt nicht in eine Refetch-Schleife läuft. TabKlima\n          // zeigt dann worldClimateNoData.\n          setClimateData((prev) =>\n            new Map(prev).set(key, {\n              iso3: key,\n              country_name: key,\n              scenarios: [],\n            }),\n          )\n        })\n        .finally",
+          "lineNumber": 598
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<ClimateResponse>\n        })\n        .then((d) => {\n          setClimateData((prev) => new Map(prev).set(key, d))\n        })\n        .catch",
+          "lineNumber": 598
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n        .then((r) => {\n          if (!r.ok) throw new Error(String(r.status))\n          return r.json() as Promise<ClimateResponse>\n        })\n        .then",
+          "lineNumber": 598
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch(url)\n        .then",
+          "lineNumber": 598
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "fetch",
+          "lineNumber": 598
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 600
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "r.json",
+          "lineNumber": 601
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setClimateData",
+          "lineNumber": 604
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "new Map(prev).set",
+          "lineNumber": 604
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setClimateData",
+          "lineNumber": 610
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "new Map(prev).set",
+          "lineNumber": 611
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setClimateLoading",
+          "lineNumber": 618
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 623
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "addCompareCountry",
+          "lineNumber": 626
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setPrimaryCountry",
+          "lineNumber": 628
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarOpen",
+          "lineNumber": 630
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 635
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 637
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "_iso3.trim().toUpperCase",
+          "lineNumber": 638
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "_iso3.trim",
+          "lineNumber": 638
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 646
+        },
+        {
+          "caller": "onDocMouseDown",
+          "callee": "mapContextMenuRef.current?.contains",
+          "lineNumber": 649
+        },
+        {
+          "caller": "onDocMouseDown",
+          "callee": "setMapContextMenu",
+          "lineNumber": 650
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "document.addEventListener",
+          "lineNumber": 652
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "document.removeEventListener",
+          "lineNumber": 653
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useEffect",
+          "lineNumber": 656
+        },
+        {
+          "caller": "onKey",
+          "callee": "setMapContextMenu",
+          "lineNumber": 659
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "window.addEventListener",
+          "lineNumber": 661
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "window.removeEventListener",
+          "lineNumber": 662
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 665
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarOpen",
+          "lineNumber": 666
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarCompact",
+          "lineNumber": 667
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 670
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setYear",
+          "lineNumber": 674
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.min",
+          "lineNumber": 674
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "Math.max",
+          "lineNumber": 674
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 679
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setCategoryId",
+          "lineNumber": 681
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "categories?.find",
+          "lineNumber": 682
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setIndicatorCode",
+          "lineNumber": 684
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useCallback",
+          "lineNumber": 689
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapProjection",
+          "lineNumber": 692
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 697
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "(categories ?? []).find",
+          "lineNumber": 698
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "useMemo",
+          "lineNumber": 704
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 735
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 753
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t('worldMapYearFallback')\n              .replace('{requested}', String(debYear))\n              .replace",
+          "lineNumber": 773
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t('worldMapYearFallback')\n              .replace",
+          "lineNumber": 773
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 773
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 774
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "String",
+          "lineNumber": 775
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 810
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "(() => {\n                const iso = mapContextMenu.iso3\n                const isPrimary = selection.primary === iso\n                const inCompare = selection.compare.includes(iso)\n                const menuBtn = (opts: {\n                  label: string\n                  onClick: () => void\n                  disabled?: boolean\n                  muted?: boolean\n                }) => (\n                  <button\n                    key={opts.label}\n                    type=\"button\"\n                    role=\"menuitem\"\n                    disabled={opts.disabled}\n                    style={{\n                      display: 'block',\n                      width: '100%',\n                      textAlign: 'left',\n                      minHeight: 44,\n                      padding: '8px 12px',\n                      border: 'none',\n                      background: 'transparent',\n                      cursor: opts.disabled ? 'not-allowed' : 'pointer',\n                      opacity: opts.disabled ? 0.45 : 1,\n                      fontFamily: fonts.mono,\n                      fontSize: 12,\n                      color: opts.muted ? c.muted : c.text,\n                      boxSizing: 'border-box',\n                    }}\n                    onClick={() => {\n                      if (opts.disabled) return\n                      opts.onClick()\n                    }}\n                  >\n                    {opts.label}\n                  </button>\n                )\n                const sep = (\n                  <div\n                    key=\"sep\"\n                    role=\"separator\"\n                    style={{\n                      height: 1,\n                      margin: '4px 0',\n                      background: c.border,\n                    }}\n                  />\n                )\n                const rows: ReactNode[] = []\n                rows.push(\n                  menuBtn({\n                    label: isPrimary\n                      ? t('worldContextMenuClose')\n                      : t('worldContextMenuOpen'),\n                    onClick: () => {\n                      setMapContextMenu(null)\n                      if (isPrimary) {\n                        clearSelection()\n                        setSidebarOpen(false)\n                      } else {\n                        setPrimaryCountry(iso)\n                        setSidebarOpen(true)\n                      }\n                    },\n                  }),\n                )\n                if (!isPrimary) {\n                  if (inCompare) {\n                    rows.push(\n                      menuBtn({\n                        label: t('worldContextMenuRemoveCompare'),\n                        onClick: () => {\n                          setMapContextMenu(null)\n                          removeCompareCountry(iso)\n                        },\n                      }),\n                    )\n                  } else {\n                    rows.push(\n                      menuBtn({\n                        label: t('worldContextMenuAddCompare'),\n                        disabled:\n                          selection.primary === iso ||\n                          selection.compare.includes(iso) ||\n                          selection.compare.length >= 3,\n                        onClick: () => {\n                          setMapContextMenu(null)\n                          addCompareCountry(iso)\n                          setSidebarOpen(true)\n                        },\n                      }),\n                    )\n                  }\n                }\n                rows.push(sep)\n                rows.push(\n                  menuBtn({\n                    label: t('worldContextMenuShowStat'),\n                    onClick: () => {\n                      setMapContextMenu(null)\n                      setPrimaryCountry(iso)\n                      widgetDashboardRef.current?.showWidget('stat-card')\n                    },\n                  }),\n                )\n                rows.push(\n                  menuBtn({\n                    label: t('worldContextMenuShowTrade'),\n                    onClick: () => {\n                      setMapContextMenu(null)\n                      setPrimaryCountry(iso)\n                      widgetDashboardRef.current?.showWidget('trade-flow')\n                    },\n                  }),\n                )\n                return rows\n              })",
+          "lineNumber": 827
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "selection.compare.includes",
+          "lineNumber": 830
+        },
+        {
+          "caller": "menuBtn",
+          "callee": "opts.onClick",
+          "lineNumber": 859
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 877
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "menuBtn",
+          "lineNumber": 878
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 880
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 881
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 883
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "clearSelection",
+          "lineNumber": 885
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarOpen",
+          "lineNumber": 886
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setPrimaryCountry",
+          "lineNumber": 888
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarOpen",
+          "lineNumber": 889
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 896
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "menuBtn",
+          "lineNumber": 897
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 898
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 900
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "removeCompareCountry",
+          "lineNumber": 901
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 906
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "menuBtn",
+          "lineNumber": 907
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 908
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "selection.compare.includes",
+          "lineNumber": 911
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 914
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "addCompareCountry",
+          "lineNumber": 915
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setSidebarOpen",
+          "lineNumber": 916
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 922
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 923
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "menuBtn",
+          "lineNumber": 924
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 925
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 927
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setPrimaryCountry",
+          "lineNumber": 928
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "widgetDashboardRef.current?.showWidget",
+          "lineNumber": 929
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "rows.push",
+          "lineNumber": 933
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "menuBtn",
+          "lineNumber": 934
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 935
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setMapContextMenu",
+          "lineNumber": 937
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "setPrimaryCountry",
+          "lineNumber": 938
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "widgetDashboardRef.current?.showWidget",
+          "lineNumber": 939
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "formatValue",
+          "lineNumber": 965
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "formatValue",
+          "lineNumber": 966
+        },
+        {
+          "caller": "WorldMap",
+          "callee": "t",
+          "lineNumber": 1069
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/utils/worldFilters.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 20,
+      "functions": [
+        {
+          "name": "isRealCountry",
+          "startLine": 5,
+          "endLine": 9,
+          "params": [
+            "entry"
+          ]
+        },
+        {
+          "name": "hasWorldBankRegionOnAnyRow",
+          "startLine": 15,
+          "endLine": 21,
+          "params": [
+            "rows"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "isRealCountry",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "hasWorldBankRegionOnAnyRow",
+          "line": 15,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "hasWorldBankRegionOnAnyRow",
+          "callee": "rows.some",
+          "lineNumber": 18
+        },
+        {
+          "caller": "hasWorldBankRegionOnAnyRow",
+          "callee": "String(r.region).trim",
+          "lineNumber": 19
+        },
+        {
+          "caller": "hasWorldBankRegionOnAnyRow",
+          "callee": "String",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/data/sourcesCatalog.ts",
+      "type": "file",
+      "name": "sourcesCatalog.ts",
+      "filePath": "src/data/sourcesCatalog.ts",
+      "summary": "Static catalog mapping each dashboard page to its curated list of data sources, plus a helper that derives the footer source-line i18n key from a route pathname.",
+      "tags": ["data-model", "configuration", "data-sources", "i18n"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/data/sourcesCatalog.ts:footerSourcesLineKey",
+      "type": "function",
+      "name": "footerSourcesLineKey",
+      "filePath": "src/data/sourcesCatalog.ts",
+      "lineRange": [142, 145],
+      "summary": "Resolves the i18n key for a page's footer source line by parsing the route pathname into its leading path segment.",
+      "tags": ["utility", "routing", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/components/CompareBar.tsx",
+      "type": "file",
+      "name": "CompareBar.tsx",
+      "filePath": "src/design-system/components/CompareBar.tsx",
+      "summary": "Design-system component rendering a labeled horizontal comparison bar for country vs. region vs. world values with a configurable value formatter.",
+      "tags": ["component", "design-system", "data-visualization", "comparison"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/CompareBar.tsx:CompareBar",
+      "type": "function",
+      "name": "CompareBar",
+      "filePath": "src/design-system/components/CompareBar.tsx",
+      "lineRange": [23, 79],
+      "summary": "React component that normalizes country/region/world values against their max and renders themed comparison bars with formatted labels.",
+      "tags": ["component", "data-visualization", "comparison"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/LineChart.tsx",
+      "type": "file",
+      "name": "LineChart.tsx",
+      "filePath": "src/design-system/components/LineChart.tsx",
+      "summary": "Interactive SVG line chart with optional area fill, gridlines, annotations, and a hover tooltip that tracks the cursor across data points.",
+      "tags": ["component", "design-system", "data-visualization", "chart", "svg"],
+      "complexity": "moderate",
+      "languageNotes": "Builds the polyline/area paths manually from data coordinates and uses useCallback-memoized pointer handlers for hover hit-testing."
+    },
+    {
+      "id": "function:src/design-system/components/LineChart.tsx:LineChart",
+      "type": "function",
+      "name": "LineChart",
+      "filePath": "src/design-system/components/LineChart.tsx",
+      "lineRange": [24, 192],
+      "summary": "React component that scales a data series into an SVG viewport, draws the line/area/annotations, and computes a hovered point from pointer position.",
+      "tags": ["component", "data-visualization", "chart", "event-handler"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/design-system/components/MonoLabel.tsx",
+      "type": "file",
+      "name": "MonoLabel.tsx",
+      "filePath": "src/design-system/components/MonoLabel.tsx",
+      "summary": "Small design-system primitive rendering uppercase monospaced label text styled from the active theme tokens.",
+      "tags": ["component", "design-system", "typography", "primitive"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/components/PercentileBar.tsx",
+      "type": "file",
+      "name": "PercentileBar.tsx",
+      "filePath": "src/design-system/components/PercentileBar.tsx",
+      "summary": "Design-system component visualizing a percentile value as a filled bar with optional inversion and a localized footer caption.",
+      "tags": ["component", "design-system", "data-visualization", "percentile"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/PercentileBar.tsx:PercentileBar",
+      "type": "function",
+      "name": "PercentileBar",
+      "filePath": "src/design-system/components/PercentileBar.tsx",
+      "lineRange": [16, 61],
+      "summary": "React component that renders a themed percentile bar, supporting inverted scales and an interpolated localized footer label.",
+      "tags": ["component", "data-visualization", "percentile"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/i18n.ts",
+      "type": "file",
+      "name": "i18n.ts",
+      "filePath": "src/design-system/i18n.ts",
+      "summary": "Aggregating i18n barrel that merges the per-feature DE/EN message modules into unified dictionaries and provides the placeholder interpolation helper.",
+      "tags": ["i18n", "barrel", "entry-point", "localization"],
+      "complexity": "simple",
+      "languageNotes": "Spreads disjoint feature message objects and derives the I18nKey union via keyof typeof de for type-safe translation keys."
+    },
+    {
+      "id": "function:src/design-system/i18n.ts:interpolate",
+      "type": "function",
+      "name": "interpolate",
+      "filePath": "src/design-system/i18n.ts",
+      "lineRange": [39, 48],
+      "summary": "Replaces {name} placeholders in a translated string with values from a vars record, coercing each value to a string.",
+      "tags": ["utility", "i18n", "string"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/i18n/common.ts",
+      "type": "file",
+      "name": "common.ts",
+      "filePath": "src/design-system/i18n/common.ts",
+      "summary": "Shared DE/EN translation dictionaries for cross-cutting UI labels (navigation, common actions, shared components) used across the dashboard.",
+      "tags": ["i18n", "localization", "data-model", "shared"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/design-system/i18n/elections.ts",
+      "type": "file",
+      "name": "elections.ts",
+      "filePath": "src/design-system/i18n/elections.ts",
+      "summary": "DE/EN translation dictionaries for the elections feature labels and copy.",
+      "tags": ["i18n", "localization", "elections"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/i18n/eu.ts",
+      "type": "file",
+      "name": "eu.ts",
+      "filePath": "src/design-system/i18n/eu.ts",
+      "summary": "DE/EN translation dictionaries for the EU law feature (legislation, court rulings, and related UI copy).",
+      "tags": ["i18n", "localization", "eu-law"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/i18n/gesetze.ts",
+      "type": "file",
+      "name": "gesetze.ts",
+      "filePath": "src/design-system/i18n/gesetze.ts",
+      "summary": "DE/EN translation dictionaries for the German legislation (Gesetze) feature labels and descriptions.",
+      "tags": ["i18n", "localization", "legislation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/i18n/lobby.ts",
+      "type": "file",
+      "name": "lobby.ts",
+      "filePath": "src/design-system/i18n/lobby.ts",
+      "summary": "DE/EN translation dictionaries for the lobby register feature labels and explanatory copy.",
+      "tags": ["i18n", "localization", "lobby-register"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/i18n/overview.ts",
+      "type": "file",
+      "name": "overview.ts",
+      "filePath": "src/design-system/i18n/overview.ts",
+      "summary": "DE/EN translation dictionaries for the dashboard overview/landing page labels.",
+      "tags": ["i18n", "localization", "overview"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/i18n/sources.ts",
+      "type": "file",
+      "name": "sources.ts",
+      "filePath": "src/design-system/i18n/sources.ts",
+      "summary": "DE/EN translation dictionaries for the data Sources page labels, captions, and footer source lines.",
+      "tags": ["i18n", "localization", "data-sources"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/i18n/world.ts",
+      "type": "file",
+      "name": "world.ts",
+      "filePath": "src/design-system/i18n/world.ts",
+      "summary": "Largest DE/EN translation dictionary covering the world map feature, including country indicators, metric labels, and map UI copy.",
+      "tags": ["i18n", "localization", "world-map"],
+      "complexity": "complex",
+      "languageNotes": "By far the largest i18n module (~589 lines), reflecting the breadth of country-level metrics surfaced on the MapLibre world map."
+    },
+    {
+      "id": "file:src/pages/Sources.tsx",
+      "type": "file",
+      "name": "Sources.tsx",
+      "filePath": "src/pages/Sources.tsx",
+      "summary": "Sources page that lists each dashboard feature's curated data sources, combining the static sources catalog with live API-reported worldmap sources and their freshness and value counts.",
+      "tags": ["component", "page", "data-sources", "api-handler", "i18n"],
+      "complexity": "complex",
+      "languageNotes": "Uses Intl.RelativeTimeFormat and Intl.NumberFormat for locale-aware freshness and value-count rendering, with useMemo to assemble worldmap source rows."
+    },
+    {
+      "id": "function:src/pages/Sources.tsx:sectionHeading",
+      "type": "function",
+      "name": "sectionHeading",
+      "filePath": "src/pages/Sources.tsx",
+      "lineRange": [32, 71],
+      "summary": "Renders a themed section heading with an anchor link and stable heading id for a sources block.",
+      "tags": ["utility", "ui", "rendering"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/Sources.tsx:formatRelativePast",
+      "type": "function",
+      "name": "formatRelativePast",
+      "filePath": "src/pages/Sources.tsx",
+      "lineRange": [101, 119],
+      "summary": "Formats an ISO timestamp as a locale-aware relative-past string (minutes/hours/days/months) using Intl.RelativeTimeFormat.",
+      "tags": ["utility", "date", "formatting", "i18n"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/Sources.tsx:renderStaticSourcesBlock",
+      "type": "function",
+      "name": "renderStaticSourcesBlock",
+      "filePath": "src/pages/Sources.tsx",
+      "lineRange": [121, 181],
+      "summary": "Renders a full static sources section from a catalog block, mapping each source entry into a titled, badged, and linked list item.",
+      "tags": ["utility", "ui", "rendering", "data-sources"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/Sources.tsx:Sources",
+      "type": "function",
+      "name": "Sources",
+      "filePath": "src/pages/Sources.tsx",
+      "lineRange": [183, 358],
+      "summary": "Top-level Sources page component that fetches live worldmap sources, merges them with the static catalog, and renders all per-feature source sections with freshness metadata.",
+      "tags": ["component", "page", "api-handler", "data-sources"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {"source": "file:src/data/sourcesCatalog.ts", "target": "function:src/data/sourcesCatalog.ts:footerSourcesLineKey", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/data/sourcesCatalog.ts", "target": "function:src/data/sourcesCatalog.ts:footerSourcesLineKey", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/data/sourcesCatalog.ts", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "function:src/design-system/components/CompareBar.tsx:CompareBar", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "function:src/design-system/components/CompareBar.tsx:CompareBar", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "file:src/design-system/components/MonoLabel.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "file:src/design-system/ThemeContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/CompareBar.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "function:src/design-system/components/CompareBar.tsx:CompareBar", "target": "function:src/design-system/ThemeContext.tsx:useTheme", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "function:src/design-system/components/LineChart.tsx:LineChart", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "function:src/design-system/components/LineChart.tsx:LineChart", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "file:src/design-system/components/MonoLabel.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "file:src/design-system/ThemeContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/LineChart.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "function:src/design-system/components/LineChart.tsx:LineChart", "target": "function:src/design-system/ThemeContext.tsx:useTheme", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:src/design-system/components/MonoLabel.tsx", "target": "function:src/design-system/components/MonoLabel.tsx:MonoLabel", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/design-system/components/MonoLabel.tsx", "target": "function:src/design-system/components/MonoLabel.tsx:MonoLabel", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/design-system/components/MonoLabel.tsx", "target": "file:src/design-system/ThemeContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/MonoLabel.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "function:src/design-system/components/MonoLabel.tsx:MonoLabel", "target": "function:src/design-system/ThemeContext.tsx:useTheme", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "function:src/design-system/components/PercentileBar.tsx:PercentileBar", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "function:src/design-system/components/PercentileBar.tsx:PercentileBar", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "file:src/design-system/components/MonoLabel.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "file:src/design-system/ThemeContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/components/PercentileBar.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "function:src/design-system/components/PercentileBar.tsx:PercentileBar", "target": "function:src/design-system/i18n.ts:interpolate", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/design-system/components/PercentileBar.tsx:PercentileBar", "target": "function:src/design-system/ThemeContext.tsx:useTheme", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:src/design-system/i18n.ts", "target": "function:src/design-system/i18n.ts:interpolate", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/design-system/i18n.ts", "target": "function:src/design-system/i18n.ts:interpolate", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/common.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/elections.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/eu.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/gesetze.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/lobby.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/overview.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/sources.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/design-system/i18n.ts", "target": "file:src/design-system/i18n/world.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/pages/Sources.tsx", "target": "function:src/pages/Sources.tsx:sectionHeading", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/pages/Sources.tsx", "target": "function:src/pages/Sources.tsx:formatRelativePast", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/pages/Sources.tsx", "target": "function:src/pages/Sources.tsx:renderStaticSourcesBlock", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/pages/Sources.tsx", "target": "function:src/pages/Sources.tsx:Sources", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/pages/Sources.tsx", "target": "function:src/pages/Sources.tsx:Sources", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/pages/Sources.tsx", "target": "file:src/data/sourcesCatalog.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/pages/Sources.tsx", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/pages/Sources.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/pages/Sources.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/pages/Sources.tsx", "target": "file:src/hooks/useApi.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "function:src/pages/Sources.tsx:Sources", "target": "function:src/hooks/useApi.ts:useApi", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/pages/Sources.tsx:Sources", "target": "function:src/design-system/i18n.ts:interpolate", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/pages/Sources.tsx:Sources", "target": "function:src/pages/Sources.tsx:renderStaticSourcesBlock", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/pages/Sources.tsx:Sources", "target": "function:src/pages/Sources.tsx:formatRelativePast", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/pages/Sources.tsx:Sources", "target": "function:src/design-system/ThemeContext.tsx:useTheme", "type": "calls", "direction": "forward", "weight": 0.8}
+  ]
+}

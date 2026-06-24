@@ -1,0 +1,5455 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 17,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/App.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 53,
+      "nonEmptyLines": 51,
+      "functions": [
+        {
+          "name": "App",
+          "startLine": 20,
+          "endLine": 53,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "line": 20,
+          "isDefault": true
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 281,
+      "nonEmptyLines": 262,
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "startLine": 30,
+          "endLine": 30,
+          "params": [
+            "f"
+          ]
+        },
+        {
+          "name": "shortFraktionName",
+          "startLine": 33,
+          "endLine": 48,
+          "params": [
+            "apiPartei"
+          ]
+        },
+        {
+          "name": "matchesOrderToken",
+          "startLine": 61,
+          "endLine": 72,
+          "params": [
+            "apiPartei",
+            "token"
+          ]
+        },
+        {
+          "name": "politicalSortIndex",
+          "startLine": 74,
+          "endLine": 79,
+          "params": [
+            "apiPartei"
+          ]
+        },
+        {
+          "name": "matchesSitzRow",
+          "startLine": 81,
+          "endLine": 92,
+          "params": [
+            "apiPartei",
+            "stamm"
+          ]
+        },
+        {
+          "name": "labelColorFromSitzverteilung",
+          "startLine": 95,
+          "endLine": 103,
+          "params": [
+            "apiPartei",
+            "rows"
+          ]
+        },
+        {
+          "name": "labelColorForLegendDot",
+          "startLine": 105,
+          "endLine": 116,
+          "params": [
+            "apiPartei",
+            "rows",
+            "theme"
+          ]
+        },
+        {
+          "name": "sortFraktionenByPoliticalOrder",
+          "startLine": 118,
+          "endLine": 124,
+          "params": [
+            "fraktionen"
+          ]
+        },
+        {
+          "name": "AbstimmungsDetail",
+          "startLine": 126,
+          "endLine": 281,
+          "params": [
+            "{\n  data,\n  sitzverteilung,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "shortFraktionName",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "PARTEI_ORDER",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "labelColorFromSitzverteilung",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "sortFraktionenByPoliticalOrder",
+          "line": 118,
+          "isDefault": false
+        },
+        {
+          "name": "AbstimmungsDetail",
+          "line": 126,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace(/\\u00AD/g, '').trim",
+          "lineNumber": 30
+        },
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace",
+          "lineNumber": 30
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "normalizeFraktion(apiPartei).replace(BUNDESTAG_WP_SUFFIX, '').trim",
+          "lineNumber": 34
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "normalizeFraktion(apiPartei).replace",
+          "lineNumber": 34
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "normalizeFraktion",
+          "lineNumber": 34
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "s.toLowerCase",
+          "lineNumber": 35
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 37
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 37
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 38
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 38
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 41
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 42
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 42
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "/\\bspd\\b/.test",
+          "lineNumber": 43
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "/\\bafd\\b/.test",
+          "lineNumber": 44
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 45
+        },
+        {
+          "caller": "shortFraktionName",
+          "callee": "l.includes",
+          "lineNumber": 46
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "normalizeFraktion(apiPartei).toLowerCase",
+          "lineNumber": 62
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "normalizeFraktion",
+          "lineNumber": 62
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "token.toLowerCase",
+          "lineNumber": 63
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 65
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 65
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 66
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "/\\bspd\\b/.test",
+          "lineNumber": 67
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 68
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 68
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "/\\bafd\\b/.test",
+          "lineNumber": 69
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 70
+        },
+        {
+          "caller": "matchesOrderToken",
+          "callee": "p.includes",
+          "lineNumber": 71
+        },
+        {
+          "caller": "politicalSortIndex",
+          "callee": "PARTEI_ORDER.map((token, i) =>\n    matchesOrderToken(apiPartei, token) ? i : -1,\n  ).filter",
+          "lineNumber": 75
+        },
+        {
+          "caller": "politicalSortIndex",
+          "callee": "PARTEI_ORDER.map",
+          "lineNumber": 75
+        },
+        {
+          "caller": "politicalSortIndex",
+          "callee": "matchesOrderToken",
+          "lineNumber": 76
+        },
+        {
+          "caller": "politicalSortIndex",
+          "callee": "Math.min",
+          "lineNumber": 78
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion(apiPartei).toLowerCase",
+          "lineNumber": 82
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion",
+          "lineNumber": 82
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion(stamm).toLowerCase",
+          "lineNumber": 83
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion",
+          "lineNumber": 83
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 84
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 84
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "s.includes",
+          "lineNumber": 85
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 86
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 86
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 87
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 88
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "/\\bafd\\b/.test",
+          "lineNumber": 89
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "/\\bspd\\b/.test",
+          "lineNumber": 90
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "p.includes",
+          "lineNumber": 91
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion(apiPartei).includes",
+          "lineNumber": 91
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion",
+          "lineNumber": 91
+        },
+        {
+          "caller": "matchesSitzRow",
+          "callee": "normalizeFraktion",
+          "lineNumber": 91
+        },
+        {
+          "caller": "labelColorFromSitzverteilung",
+          "callee": "rows.find",
+          "lineNumber": 99
+        },
+        {
+          "caller": "labelColorFromSitzverteilung",
+          "callee": "matchesSitzRow",
+          "lineNumber": 99
+        },
+        {
+          "caller": "labelColorForLegendDot",
+          "callee": "labelColorFromSitzverteilung",
+          "lineNumber": 110
+        },
+        {
+          "caller": "labelColorForLegendDot",
+          "callee": "base.replace('#', '').toLowerCase",
+          "lineNumber": 112
+        },
+        {
+          "caller": "labelColorForLegendDot",
+          "callee": "base.replace",
+          "lineNumber": 112
+        },
+        {
+          "caller": "sortFraktionenByPoliticalOrder",
+          "callee": "[...fraktionen].sort",
+          "lineNumber": 121
+        },
+        {
+          "caller": "sortFraktionenByPoliticalOrder",
+          "callee": "politicalSortIndex",
+          "lineNumber": 122
+        },
+        {
+          "caller": "sortFraktionenByPoliticalOrder",
+          "callee": "politicalSortIndex",
+          "lineNumber": 122
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "useTheme",
+          "lineNumber": 130
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "useMemo",
+          "lineNumber": 138
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "sortFraktionenByPoliticalOrder",
+          "lineNumber": 139
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 183
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 183
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 197
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 200
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 210
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 210
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "fraktionenSorted.map",
+          "lineNumber": 222
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "labelColorForLegendDot",
+          "lineNumber": 245
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "shortFraktionName",
+          "lineNumber": 257
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 270
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 271
+        },
+        {
+          "caller": "AbstimmungsDetail",
+          "callee": "t",
+          "lineNumber": 272
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 5,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/bundestag/AbstimmungsListe.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 159,
+      "nonEmptyLines": 151,
+      "functions": [
+        {
+          "name": "AbstimmungsListe",
+          "startLine": 13,
+          "endLine": 159,
+          "params": [
+            "{\n  abstimmungen,\n  activePollId,\n  onSelect,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AbstimmungsListe",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "useTheme",
+          "lineNumber": 18
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "useState",
+          "lineNumber": 20
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "useMemo",
+          "lineNumber": 22
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "query.trim().toLowerCase",
+          "lineNumber": 23
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "query.trim",
+          "lineNumber": 23
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "abstimmungen.filter",
+          "lineNumber": 25
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "a.poll_titel.toLowerCase().includes",
+          "lineNumber": 26
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "a.poll_titel.toLowerCase",
+          "lineNumber": 26
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "filtered.slice",
+          "lineNumber": 30
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "t",
+          "lineNumber": 54
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "t",
+          "lineNumber": 58
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "setQuery",
+          "lineNumber": 60
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "visible.map",
+          "lineNumber": 91
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "onSelect",
+          "lineNumber": 97
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "setShowAll",
+          "lineNumber": 140
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "t",
+          "lineNumber": 154
+        },
+        {
+          "caller": "AbstimmungsListe",
+          "callee": "t",
+          "lineNumber": 154
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/bundestag/Hemicycle.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 640,
+      "nonEmptyLines": 606,
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "startLine": 63,
+          "endLine": 63,
+          "params": [
+            "f"
+          ]
+        },
+        {
+          "name": "getEffektiveFraktion",
+          "startLine": 67,
+          "endLine": 70,
+          "params": [
+            "abgeordneter"
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "startLine": 72,
+          "endLine": 82,
+          "params": [
+            "fraktion"
+          ]
+        },
+        {
+          "name": "sortedSitz",
+          "startLine": 84,
+          "endLine": 86,
+          "params": [
+            "sitz"
+          ]
+        },
+        {
+          "name": "mergePartiesForLegend",
+          "startLine": 88,
+          "endLine": 135,
+          "params": [
+            "rows",
+            "cduFill"
+          ]
+        },
+        {
+          "name": "orderedLegend",
+          "startLine": 148,
+          "endLine": 169,
+          "params": [
+            "legendByKey",
+            "cduFill"
+          ]
+        },
+        {
+          "name": "matchApiRowForSeat",
+          "startLine": 171,
+          "endLine": 185,
+          "params": [
+            "seatLabel",
+            "rows"
+          ]
+        },
+        {
+          "name": "partyFillForSeat",
+          "startLine": 187,
+          "endLine": 198,
+          "params": [
+            "seatLabel",
+            "rawFarbe",
+            "rows",
+            "cduFill"
+          ]
+        },
+        {
+          "name": "displayParteiForSeat",
+          "startLine": 200,
+          "endLine": 205,
+          "params": [
+            "seatLabel",
+            "rows"
+          ]
+        },
+        {
+          "name": "matchFraktionVote",
+          "startLine": 207,
+          "endLine": 228,
+          "params": [
+            "seatLabel",
+            "fraktionen"
+          ]
+        },
+        {
+          "name": "voteColorForSeatInPartei",
+          "startLine": 230,
+          "endLine": 243,
+          "params": [
+            "localIndex",
+            "f",
+            "yes",
+            "no",
+            "abstain",
+            "absent"
+          ]
+        },
+        {
+          "name": "buildSeatDerived",
+          "startLine": 245,
+          "endLine": 262,
+          "params": []
+        },
+        {
+          "name": "Hemicycle",
+          "startLine": 264,
+          "endLine": 640,
+          "params": [
+            "{\n  sitzverteilung,\n  abstimmung,\n  individuelleVotes,\n  abgeordnete,\n  animating,\n  onSeatSelect,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Hemicycle",
+          "line": 264,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace(/\\u00AD/g, '').trim",
+          "lineNumber": 63
+        },
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace",
+          "lineNumber": 63
+        },
+        {
+          "caller": "getEffektiveFraktion",
+          "callee": "normalizeFraktion",
+          "lineNumber": 68
+        },
+        {
+          "caller": "getEffektiveFraktion",
+          "callee": "normalizeFraktion",
+          "lineNumber": 69
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "normalizeFraktion(fraktion).toLowerCase",
+          "lineNumber": 73
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "normalizeFraktion",
+          "lineNumber": 73
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 74
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 74
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 75
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 76
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 77
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 77
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 78
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 79
+        },
+        {
+          "caller": "sortedSitz",
+          "callee": "[...sitz].sort",
+          "lineNumber": 85
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "sortedSitz",
+          "lineNumber": 92
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "canonicalKey",
+          "lineNumber": 96
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.get",
+          "lineNumber": 98
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.set",
+          "lineNumber": 100
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "Math.min",
+          "lineNumber": 105
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.set",
+          "lineNumber": 108
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.get",
+          "lineNumber": 118
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.has",
+          "lineNumber": 119
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.set",
+          "lineNumber": 121
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "map.set",
+          "lineNumber": 128
+        },
+        {
+          "caller": "mergePartiesForLegend",
+          "callee": "Math.max",
+          "lineNumber": 130
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "legendByKey.get",
+          "lineNumber": 155
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "used.add",
+          "lineNumber": 157
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "ordered.push",
+          "lineNumber": 158
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "[...legendByKey.values()]\n    .filter((p) => !used.has(p.key) && p.sitze > 0)\n    .sort",
+          "lineNumber": 165
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "[...legendByKey.values()]\n    .filter",
+          "lineNumber": 165
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "legendByKey.values",
+          "lineNumber": 165
+        },
+        {
+          "caller": "orderedLegend",
+          "callee": "used.has",
+          "lineNumber": 166
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "sortedSitz",
+          "lineNumber": 175
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "canonicalKey",
+          "lineNumber": 176
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "sorted.find",
+          "lineNumber": 177
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "canonicalKey",
+          "lineNumber": 177
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "seatLabel.toLowerCase",
+          "lineNumber": 179
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "normalizeFraktion",
+          "lineNumber": 180
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "sorted.find",
+          "lineNumber": 181
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "normalizeFraktion(r.partei).toLowerCase",
+          "lineNumber": 182
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "normalizeFraktion",
+          "lineNumber": 182
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "rl.includes",
+          "lineNumber": 183
+        },
+        {
+          "caller": "matchApiRowForSeat",
+          "callee": "slNorm.includes",
+          "lineNumber": 183
+        },
+        {
+          "caller": "partyFillForSeat",
+          "callee": "matchApiRowForSeat",
+          "lineNumber": 193
+        },
+        {
+          "caller": "partyFillForSeat",
+          "callee": "canonicalKey",
+          "lineNumber": 195
+        },
+        {
+          "caller": "partyFillForSeat",
+          "callee": "canonicalKey",
+          "lineNumber": 197
+        },
+        {
+          "caller": "displayParteiForSeat",
+          "callee": "matchApiRowForSeat",
+          "lineNumber": 204
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "canonicalKey",
+          "lineNumber": 211
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "normalizeFraktion(seatLabel).toLowerCase",
+          "lineNumber": 212
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "normalizeFraktion",
+          "lineNumber": 212
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fraktionen.find",
+          "lineNumber": 213
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "normalizeFraktion(f.partei).toLowerCase",
+          "lineNumber": 214
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "normalizeFraktion",
+          "lineNumber": 214
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "canonicalKey",
+          "lineNumber": 215
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 217
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "s.includes",
+          "lineNumber": 217
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 218
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 219
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 220
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 220
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "/\\bafd\\b/i.test",
+          "lineNumber": 222
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "/\\bspd\\b/i.test",
+          "lineNumber": 223
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 224
+        },
+        {
+          "caller": "matchFraktionVote",
+          "callee": "fl.includes",
+          "lineNumber": 225
+        },
+        {
+          "caller": "buildSeatDerived",
+          "callee": "RAW_SEATS.map",
+          "lineNumber": 247
+        },
+        {
+          "caller": "buildSeatDerived",
+          "callee": "counters.get",
+          "lineNumber": 249
+        },
+        {
+          "caller": "buildSeatDerived",
+          "callee": "counters.set",
+          "lineNumber": 250
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useTheme",
+          "lineNumber": 272
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useState",
+          "lineNumber": 273
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useState",
+          "lineNumber": 274
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useMemo",
+          "lineNumber": 278
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "mergePartiesForLegend",
+          "lineNumber": 279
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useMemo",
+          "lineNumber": 283
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "orderedLegend",
+          "lineNumber": 284
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useMemo",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "buildSeatDerived",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useMemo",
+          "lineNumber": 290
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "seatDerived.map",
+          "lineNumber": 291
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "partyFillForSeat",
+          "lineNumber": 292
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "displayParteiForSeat",
+          "lineNumber": 298
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "matchFraktionVote",
+          "lineNumber": 301
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "abgeordnete?.get",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "individuelleVotes?.get",
+          "lineNumber": 305
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 311
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 314
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 317
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 320
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "voteColorForSeatInPartei",
+          "lineNumber": 322
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 332
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 334
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 336
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 337
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "useEffect",
+          "lineNumber": 362
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "setVoteReveal",
+          "lineNumber": 364
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "setVoteReveal",
+          "lineNumber": 367
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "window.requestAnimationFrame",
+          "lineNumber": 368
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "setVoteReveal",
+          "lineNumber": 368
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "window.cancelAnimationFrame",
+          "lineNumber": 369
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "Boolean",
+          "lineNumber": 372
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "abgeordnete?.get",
+          "lineNumber": 374
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "seatRender.map",
+          "lineNumber": 420
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "abgeordnete?.get",
+          "lineNumber": 423
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "getEffektiveFraktion",
+          "lineNumber": 426
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "setHoveredSeatId",
+          "lineNumber": 441
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "setHoveredSeatId",
+          "lineNumber": 442
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "abgeordnete?.has",
+          "lineNumber": 444
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "onSeatSelect",
+          "lineNumber": 444
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "abgeordnete?.has",
+          "lineNumber": 449
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "getEffektiveFraktion",
+          "lineNumber": 493
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "legendOrdered.map",
+          "lineNumber": 523
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 544
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 566
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 583
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 600
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 617
+        },
+        {
+          "caller": "Hemicycle",
+          "callee": "t",
+          "lineNumber": 634
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 13,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/data/bundestag-seats.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 638,
+      "nonEmptyLines": 635,
+      "exports": [
+        {
+          "name": "RAW_SEATS",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "RAW_SEAT_COUNT",
+          "line": 638,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 44,
+      "nonEmptyLines": 44,
+      "exports": [
+        {
+          "name": "ThemeProvider",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "useTheme",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CompareBar",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "HBar",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "InfoToggle",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "LineChart",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "MonoLabel",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "PercentileBar",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectionToggle",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "MapProjectionMode",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "RadarChart",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "SectionDivider",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "Sparkline",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "StatTile",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "TradeBalance",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "TrendArrow",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "trendDirectionFromValues",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "Badge",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "BadgeProps",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "BadgeVariant",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "DataCard",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "DataCardProps",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "EmptyState",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "EmptyStateProps",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "FilterToolbar",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "FilterDef",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "FilterOption",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "FilterToolbarProps",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "LegalFooter",
+          "line": 27,
+          "isDefault": false
+        },
+        {
+          "name": "LoadingSpinner",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "MobileNav",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "MobileNavProps",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "PageHeader",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "PageHeaderProps",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "Pagination",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "PaginationProps",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "ProgressBar",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ProgressBarProps",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ProgressSegment",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ShareCompact",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "ShareCompactProps",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "ShareToolbar",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "ShareToolbarProps",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "Sidebar",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "SidebarModule",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "SidebarNavEntry",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "SidebarNavLink",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "SidebarNavSection",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "SidebarProps",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "StatWidget",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "StatWidgetProps",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "VoteBar",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "VoteBarProps",
+          "line": 44,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 53,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useSearchParamsState.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 25,
+      "nonEmptyLines": 24,
+      "functions": [
+        {
+          "name": "useSearchParamsState",
+          "startLine": 4,
+          "endLine": 25,
+          "params": [
+            "key",
+            "defaultValue"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useSearchParamsState",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useSearchParamsState",
+          "callee": "useSearchParams",
+          "lineNumber": 8
+        },
+        {
+          "caller": "useSearchParamsState",
+          "callee": "searchParams.get",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useSearchParamsState",
+          "callee": "useCallback",
+          "lineNumber": 10
+        },
+        {
+          "caller": "useSearchParamsState",
+          "callee": "setSearchParams",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useSearchParamsState",
+          "callee": "next.delete",
+          "lineNumber": 15
+        },
+        {
+          "caller": "useSearchParamsState",
+          "callee": "next.set",
+          "lineNumber": 16
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/layouts/DashboardLayout.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 166,
+      "nonEmptyLines": 153,
+      "functions": [
+        {
+          "name": "activeModuleFromPath",
+          "startLine": 38,
+          "endLine": 42,
+          "params": [
+            "pathname"
+          ]
+        },
+        {
+          "name": "DashboardLayout",
+          "startLine": 46,
+          "endLine": 166,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "DashboardLayout",
+          "line": 46,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "activeModuleFromPath",
+          "callee": "pathname.split('/').filter",
+          "lineNumber": 40
+        },
+        {
+          "caller": "activeModuleFromPath",
+          "callee": "pathname.split",
+          "lineNumber": 40
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useTheme",
+          "lineNumber": 47
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useLocation",
+          "lineNumber": 48
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useNavigate",
+          "lineNumber": 49
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useIsMobile",
+          "lineNumber": 50
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useState",
+          "lineNumber": 51
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "activeModuleFromPath",
+          "lineNumber": 53
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useMemo",
+          "lineNumber": 56
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 58
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 59
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 60
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 61
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 62
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 63
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 64
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 65
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 67
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 69
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 70
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 71
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "entries.push",
+          "lineNumber": 74
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "t",
+          "lineNumber": 74
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useCallback",
+          "lineNumber": 79
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "navigate",
+          "lineNumber": 81
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "useCallback",
+          "lineNumber": 84
+        },
+        {
+          "caller": "DashboardLayout",
+          "callee": "setCollapsed",
+          "lineNumber": 84
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/main.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 10,
+      "nonEmptyLines": 9,
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Admin.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "Admin",
+          "startLine": 4,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Admin",
+          "line": 4,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Admin",
+          "callee": "useTheme",
+          "lineNumber": 5
+        },
+        {
+          "caller": "Admin",
+          "callee": "t",
+          "lineNumber": 9
+        },
+        {
+          "caller": "Admin",
+          "callee": "t",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Bundestag.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 674,
+      "nonEmptyLines": 634,
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "startLine": 70,
+          "endLine": 70,
+          "params": [
+            "f"
+          ]
+        },
+        {
+          "name": "getEffektiveFraktion",
+          "startLine": 73,
+          "endLine": 76,
+          "params": [
+            "abgeordneter"
+          ]
+        },
+        {
+          "name": "canonicalKey",
+          "startLine": 78,
+          "endLine": 88,
+          "params": [
+            "fraktion"
+          ]
+        },
+        {
+          "name": "normalizeForMatch",
+          "startLine": 90,
+          "endLine": 97,
+          "params": [
+            "s"
+          ]
+        },
+        {
+          "name": "apiFraktionToRawKategorie",
+          "startLine": 99,
+          "endLine": 110,
+          "params": [
+            "apiFraktion"
+          ]
+        },
+        {
+          "name": "getNachname",
+          "startLine": 112,
+          "endLine": 117,
+          "params": [
+            "row"
+          ]
+        },
+        {
+          "name": "Bundestag",
+          "startLine": 119,
+          "endLine": 674,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Bundestag",
+          "line": 119,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace(/\\u00AD/g, '').trim",
+          "lineNumber": 70
+        },
+        {
+          "caller": "normalizeFraktion",
+          "callee": "f.replace",
+          "lineNumber": 70
+        },
+        {
+          "caller": "getEffektiveFraktion",
+          "callee": "normalizeFraktion",
+          "lineNumber": 74
+        },
+        {
+          "caller": "getEffektiveFraktion",
+          "callee": "normalizeFraktion",
+          "lineNumber": 75
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "normalizeFraktion(fraktion).toLowerCase",
+          "lineNumber": 79
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "normalizeFraktion",
+          "lineNumber": 79
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 80
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 80
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 81
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 82
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 83
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 83
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 84
+        },
+        {
+          "caller": "canonicalKey",
+          "callee": "f.includes",
+          "lineNumber": 85
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion(s)\n    .toLowerCase()\n    .replace(/ß/g, 'ss')\n    .replace(/ä/g, 'ae')\n    .replace(/ö/g, 'oe')\n    .replace",
+          "lineNumber": 91
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion(s)\n    .toLowerCase()\n    .replace(/ß/g, 'ss')\n    .replace(/ä/g, 'ae')\n    .replace",
+          "lineNumber": 91
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion(s)\n    .toLowerCase()\n    .replace(/ß/g, 'ss')\n    .replace",
+          "lineNumber": 91
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion(s)\n    .toLowerCase()\n    .replace",
+          "lineNumber": 91
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion(s)\n    .toLowerCase",
+          "lineNumber": 91
+        },
+        {
+          "caller": "normalizeForMatch",
+          "callee": "normalizeFraktion",
+          "lineNumber": 91
+        },
+        {
+          "caller": "apiFraktionToRawKategorie",
+          "callee": "canonicalKey",
+          "lineNumber": 100
+        },
+        {
+          "caller": "apiFraktionToRawKategorie",
+          "callee": "normalizeForMatch",
+          "lineNumber": 107
+        },
+        {
+          "caller": "apiFraktionToRawKategorie",
+          "callee": "n.includes",
+          "lineNumber": 108
+        },
+        {
+          "caller": "getNachname",
+          "callee": "(row.nachname ?? row.name).trim",
+          "lineNumber": 113
+        },
+        {
+          "caller": "getNachname",
+          "callee": "n.replace(/\\s+/g, ' ').split",
+          "lineNumber": 115
+        },
+        {
+          "caller": "getNachname",
+          "callee": "n.replace",
+          "lineNumber": 115
+        },
+        {
+          "caller": "getNachname",
+          "callee": "(parts[parts.length - 1] ?? n).trim",
+          "lineNumber": 116
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useParams",
+          "lineNumber": 120
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useNavigate",
+          "lineNumber": 121
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useTheme",
+          "lineNumber": 122
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useState",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useState",
+          "lineNumber": 125
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useState",
+          "lineNumber": 126
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 129
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 130
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 134
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 144
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 147
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useEffect",
+          "lineNumber": 148
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "Number.parseInt",
+          "lineNumber": 150
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "Number.isFinite",
+          "lineNumber": 151
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setSelectedPollId",
+          "lineNumber": 152
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setSelectedPollId",
+          "lineNumber": 156
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useEffect",
+          "lineNumber": 159
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setAnimating",
+          "lineNumber": 161
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "window.setTimeout",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setAnimating",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "window.clearTimeout",
+          "lineNumber": 163
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useCallback",
+          "lineNumber": 166
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "navigate",
+          "lineNumber": 168
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useMemo",
+          "lineNumber": 179
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "normalizeFraktion",
+          "lineNumber": 194
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "apiFraktionToRawKategorie",
+          "lineNumber": 195
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "canonicalKey",
+          "lineNumber": 195
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "seatsByKategorie[k].push",
+          "lineNumber": 197
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "canonicalKey",
+          "lineNumber": 213
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "getEffektiveFraktion",
+          "lineNumber": 214
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "abgByFraktion.get",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "list.push",
+          "lineNumber": 217
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "abgByFraktion.set",
+          "lineNumber": 218
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "abgByFraktion.entries",
+          "lineNumber": 223
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "apiFraktionToRawKategorie",
+          "lineNumber": 224
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "[...abgListRaw].sort",
+          "lineNumber": 229
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "getNachname(a).localeCompare",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "getNachname",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "getNachname",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "Math.min",
+          "lineNumber": 236
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "map.set",
+          "lineNumber": 240
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "shortFraktionName",
+          "lineNumber": 244
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useMemo",
+          "lineNumber": 256
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "abgeordneteBySeatId.get",
+          "lineNumber": 259
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useApi",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useMemo",
+          "lineNumber": 273
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "row.vote.trim().toLowerCase",
+          "lineNumber": 276
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "row.vote.trim",
+          "lineNumber": 276
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "map.set",
+          "lineNumber": 277
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "map.set",
+          "lineNumber": 278
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "map.set",
+          "lineNumber": 280
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "map.set",
+          "lineNumber": 282
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useCallback",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "voteRaw.trim().toLowerCase",
+          "lineNumber": 289
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "voteRaw.trim",
+          "lineNumber": 289
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 290
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 291
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 293
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 296
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "useMemo",
+          "lineNumber": 301
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "selectedAbgeordneter.name\n      .split(' ')\n      .filter(Boolean)\n      .slice(0, 2)\n      .map((p) => p[0]?.toUpperCase() ?? '')\n      .join",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "selectedAbgeordneter.name\n      .split(' ')\n      .filter(Boolean)\n      .slice(0, 2)\n      .map",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "selectedAbgeordneter.name\n      .split(' ')\n      .filter(Boolean)\n      .slice",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "selectedAbgeordneter.name\n      .split(' ')\n      .filter",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "selectedAbgeordneter.name\n      .split",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "p[0]?.toUpperCase",
+          "lineNumber": 307
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 313
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 329
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 369
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 378
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setSelectedPollId",
+          "lineNumber": 385
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "navigate",
+          "lineNumber": 386
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 401
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 435
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 454
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "sitz.map",
+          "lineNumber": 463
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 474
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 479
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setSelectedSeatId",
+          "lineNumber": 489
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "e.stopPropagation",
+          "lineNumber": 502
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "setSelectedSeatId",
+          "lineNumber": 517
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 617
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 621
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 636
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 639
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "t",
+          "lineNumber": 642
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "(memberVotes ?? []).map",
+          "lineNumber": 647
+        },
+        {
+          "caller": "Bundestag",
+          "callee": "voteVariant",
+          "lineNumber": 648
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Coalition.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "Coalition",
+          "startLine": 4,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Coalition",
+          "line": 4,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Coalition",
+          "callee": "useTheme",
+          "lineNumber": 5
+        },
+        {
+          "caller": "Coalition",
+          "callee": "t",
+          "lineNumber": 9
+        },
+        {
+          "caller": "Coalition",
+          "callee": "t",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/DemocracyIndex.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "DemocracyIndex",
+          "startLine": 4,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "DemocracyIndex",
+          "line": 4,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "DemocracyIndex",
+          "callee": "useTheme",
+          "lineNumber": 5
+        },
+        {
+          "caller": "DemocracyIndex",
+          "callee": "t",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/EuParliament.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 21,
+      "functions": [
+        {
+          "name": "EuParliament",
+          "startLine": 4,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "EuParliament",
+          "line": 4,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EuParliament",
+          "callee": "useTheme",
+          "lineNumber": 5
+        },
+        {
+          "caller": "EuParliament",
+          "callee": "t",
+          "lineNumber": 9
+        },
+        {
+          "caller": "EuParliament",
+          "callee": "t",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/LobbyRegister.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 2129,
+      "nonEmptyLines": 2057,
+      "functions": [
+        {
+          "name": "LobbyRegister",
+          "startLine": 184,
+          "endLine": 2129,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "LobbyRegister",
+          "line": 184,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LobbyRegister",
+          "callee": "useTheme",
+          "lineNumber": 185
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 186
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 189
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 190
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 191
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 192
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 193
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 194
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 195
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 196
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 197
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useSearchParamsState",
+          "lineNumber": 199
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 200
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 201
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 202
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useState",
+          "lineNumber": 203
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useRef",
+          "lineNumber": 204
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useRef",
+          "lineNumber": 205
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useRef",
+          "lineNumber": 206
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useRef",
+          "lineNumber": 207
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 212
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 223
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 224
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 225
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 226
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 227
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "search.trim",
+          "lineNumber": 233
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useEffect",
+          "lineNumber": 239
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 240
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useEffect",
+          "lineNumber": 243
+        },
+        {
+          "caller": "onResize",
+          "callee": "setViewportWidth",
+          "lineNumber": 245
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "window.addEventListener",
+          "lineNumber": 246
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "window.removeEventListener",
+          "lineNumber": 247
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useEffect",
+          "lineNumber": 250
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setDetailTab",
+          "lineNumber": 252
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setExpandedProject",
+          "lineNumber": 253
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 261
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 266
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 271
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 273
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 280
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 282
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 290
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "encodeURIComponent",
+          "lineNumber": 292
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 299
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 304
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useApi",
+          "lineNumber": 309
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 311
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(byFieldData?.items ?? []).filter",
+          "lineNumber": 312
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 315
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(byCityData?.items ?? []).filter",
+          "lineNumber": 317
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Boolean",
+          "lineNumber": 319
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "item.city?.trim",
+          "lineNumber": 319
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 323
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 325
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityItems.map",
+          "lineNumber": 326
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "item.count.toLocaleString",
+          "lineNumber": 328
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 333
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityItems.slice",
+          "lineNumber": 333
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 334
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityItems\n        .map((item) => {\n          const coords = CITY_COORDS[item.city]\n          if (!coords) return null\n          return { ...item, coords }\n        })\n        .filter",
+          "lineNumber": 336
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityItems\n        .map",
+          "lineNumber": 336
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 345
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 346
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.max",
+          "lineNumber": 346
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useEffect",
+          "lineNumber": 350
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(byFieldData?.items ?? []).map",
+          "lineNumber": 351
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setFoiOptions",
+          "lineNumber": 358
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 364
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n      .hierarchy<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>({\n        children: byFieldItems,\n      } as { children: LobbyByFieldItem[] } & LobbyByFieldItem)\n      .sum((d) => d.total_expenses ?? 0)\n      .sort",
+          "lineNumber": 366
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n      .hierarchy<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>({\n        children: byFieldItems,\n      } as { children: LobbyByFieldItem[] } & LobbyByFieldItem)\n      .sum",
+          "lineNumber": 366
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n      .hierarchy",
+          "lineNumber": 366
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>()\n      .size([Math.max(320, viewportWidth - 64), treemapHeight])\n      .paddingInner(2)\n      .paddingOuter(2)\n      .round(true)",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>()\n      .size([Math.max(320, viewportWidth - 64), treemapHeight])\n      .paddingInner(2)\n      .paddingOuter(2)\n      .round",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>()\n      .size([Math.max(320, viewportWidth - 64), treemapHeight])\n      .paddingInner(2)\n      .paddingOuter",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>()\n      .size([Math.max(320, viewportWidth - 64), treemapHeight])\n      .paddingInner",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap<{ children: LobbyByFieldItem[] } & LobbyByFieldItem>()\n      .size",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.treemap",
+          "lineNumber": 373
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 374
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.sum",
+          "lineNumber": 379
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "root.leaves().map",
+          "lineNumber": 381
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "root.leaves",
+          "lineNumber": 381
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 388
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 389
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 397
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.ceil",
+          "lineNumber": 399
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 399
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "(value / 1_000_000_000).toLocaleString",
+          "lineNumber": 406
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "(value / 1_000_000).toLocaleString",
+          "lineNumber": 412
+        },
+        {
+          "caller": "formatMoney",
+          "callee": "value.toLocaleString",
+          "lineNumber": 417
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 420
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "byFieldTiles.find",
+          "lineNumber": 421
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 424
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.min",
+          "lineNumber": 429
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.min",
+          "lineNumber": 432
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 434
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "byFieldItems.reduce",
+          "lineNumber": 435
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "foiOptions.find",
+          "lineNumber": 446
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "minExpenseOptions.find",
+          "lineNumber": 448
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 448
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 455
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 456
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "JSON.parse",
+          "lineNumber": 460
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 462
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 463
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "JSON.parse",
+          "lineNumber": 466
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "val.replace",
+          "lineNumber": 466
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 468
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 469
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "val.match",
+          "lineNumber": 471
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "val.match",
+          "lineNumber": 472
+        },
+        {
+          "caller": "parseMaybeJson",
+          "callee": "String",
+          "lineNumber": 480
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "JSON.parse",
+          "lineNumber": 487
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "JSON.parse",
+          "lineNumber": 490
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "raw.replace",
+          "lineNumber": 490
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "Array.isArray",
+          "lineNumber": 496
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "parsed\n      .map((field) => parseMaybeJson(field, lang))\n      .filter",
+          "lineNumber": 497
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "parsed\n      .map",
+          "lineNumber": 497
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "parseMaybeJson",
+          "lineNumber": 498
+        },
+        {
+          "caller": "fieldArray",
+          "callee": "x.trim",
+          "lineNumber": 499
+        },
+        {
+          "caller": "getLegalFormLabel",
+          "callee": "parseMaybeJson(raw, lang).trim",
+          "lineNumber": 503
+        },
+        {
+          "caller": "getLegalFormLabel",
+          "callee": "parseMaybeJson",
+          "lineNumber": 503
+        },
+        {
+          "caller": "formatAverageMoney",
+          "callee": "formatMoney",
+          "lineNumber": 508
+        },
+        {
+          "caller": "getMinistry",
+          "callee": "JSON.parse",
+          "lineNumber": 516
+        },
+        {
+          "caller": "getMinistry",
+          "callee": "Array.isArray",
+          "lineNumber": 521
+        },
+        {
+          "caller": "getMinistry",
+          "callee": "String",
+          "lineNumber": 523
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "JSON.parse",
+          "lineNumber": 533
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "Array.isArray",
+          "lineNumber": 538
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "parsed\n      .map((law) => {\n        if (law && typeof law === 'object') {\n          const entry = law as { shortTitle?: unknown; short_title?: unknown; title?: unknown }\n          return String(entry.shortTitle ?? entry.short_title ?? entry.title ?? '').trim()\n        }\n        return String(law ?? '').trim()\n      })\n      .filter",
+          "lineNumber": 539
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "parsed\n      .map",
+          "lineNumber": 539
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "String(entry.shortTitle ?? entry.short_title ?? entry.title ?? '').trim",
+          "lineNumber": 543
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "String",
+          "lineNumber": 543
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "String(law ?? '').trim",
+          "lineNumber": 545
+        },
+        {
+          "caller": "getAffectedLaws",
+          "callee": "String",
+          "lineNumber": 545
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 550
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.min",
+          "lineNumber": 550
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 553
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 554
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 555
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleLinear()\n        .domain([\n          0,\n          d3.max(cityRankingItems, (item) => (item.total_expenses ?? 0) / 1_000_000) ?? 1,\n        ])\n        .nice()\n        .range",
+          "lineNumber": 557
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleLinear()\n        .domain([\n          0,\n          d3.max(cityRankingItems, (item) => (item.total_expenses ?? 0) / 1_000_000) ?? 1,\n        ])\n        .nice",
+          "lineNumber": 557
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleLinear()\n        .domain",
+          "lineNumber": 557
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleLinear",
+          "lineNumber": 557
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3.max",
+          "lineNumber": 561
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 567
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleBand<string>()\n        .domain(cityRankingItems.map((item) => item.city))\n        .range([0, chartInnerHeight])\n        .padding",
+          "lineNumber": 569
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleBand<string>()\n        .domain(cityRankingItems.map((item) => item.city))\n        .range",
+          "lineNumber": 569
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleBand<string>()\n        .domain",
+          "lineNumber": 569
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "d3\n        .scaleBand",
+          "lineNumber": 569
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityRankingItems.map",
+          "lineNumber": 571
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 576
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "xScale.ticks",
+          "lineNumber": 576
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useMemo",
+          "lineNumber": 577
+        },
+        {
+          "caller": "formatTimelineTick",
+          "callee": "val.split",
+          "lineNumber": 581
+        },
+        {
+          "caller": "formatTimelineTick",
+          "callee": "Number",
+          "lineNumber": 583
+        },
+        {
+          "caller": "formatTimelineTick",
+          "callee": "year.slice",
+          "lineNumber": 585
+        },
+        {
+          "caller": "formatTooltipNumber",
+          "callee": "value.toLocaleString",
+          "lineNumber": 588
+        },
+        {
+          "caller": "formatTooltipNumber",
+          "callee": "Number",
+          "lineNumber": 589
+        },
+        {
+          "caller": "formatTooltipNumber",
+          "callee": "Number.isFinite",
+          "lineNumber": 590
+        },
+        {
+          "caller": "formatTooltipNumber",
+          "callee": "asNumber.toLocaleString",
+          "lineNumber": 590
+        },
+        {
+          "caller": "formatTooltipNumber",
+          "callee": "String",
+          "lineNumber": 590
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "useEffect",
+          "lineNumber": 593
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.addControl",
+          "lineNumber": 606
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.on",
+          "lineNumber": 614
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityMapItems.map",
+          "lineNumber": 615
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.addSource",
+          "lineNumber": 630
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.addLayer",
+          "lineNumber": 638
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.on",
+          "lineNumber": 659
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.getCanvas",
+          "lineNumber": 660
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String(props.city ?? '').trim",
+          "lineNumber": 670
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 670
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String(props.country ?? '').trim",
+          "lineNumber": 671
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 671
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "parseMaybeJson(countryRaw, lang).trim",
+          "lineNumber": 672
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "parseMaybeJson",
+          "lineNumber": 672
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Number",
+          "lineNumber": 678
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Number",
+          "lineNumber": 679
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Number",
+          "lineNumber": 680
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 683
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "count.toLocaleString",
+          "lineNumber": 683
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 684
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 684
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 685
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 685
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "geoMapPopupRef.current?.setLngLat(e.lngLat).setHTML(html).addTo",
+          "lineNumber": 687
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "geoMapPopupRef.current?.setLngLat(e.lngLat).setHTML",
+          "lineNumber": 687
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "geoMapPopupRef.current?.setLngLat",
+          "lineNumber": 687
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.on",
+          "lineNumber": 690
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String(props.city ?? '').trim",
+          "lineNumber": 694
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 694
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedCity",
+          "lineNumber": 696
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 697
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document\n          .getElementById('lobby-filter-section')\n          ?.scrollIntoView",
+          "lineNumber": 698
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document\n          .getElementById",
+          "lineNumber": 698
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.on",
+          "lineNumber": 703
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.getCanvas",
+          "lineNumber": 704
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "geoMapPopupRef.current?.remove",
+          "lineNumber": 705
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "geoMapPopupRef.current?.remove",
+          "lineNumber": 710
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "map.remove",
+          "lineNumber": 712
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 719
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 719
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 730
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 738
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 742
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 750
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 754
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatAverageMoney",
+          "lineNumber": 760
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 762
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 771
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 774
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 774
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 777
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 785
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "[85, 70, 92, 65, 78].map",
+          "lineNumber": 811
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 836
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 841
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 844
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 851
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 853
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "byFieldTiles.map",
+          "lineNumber": 856
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getFoiLabel",
+          "lineNumber": 858
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "tile.pct.toFixed",
+          "lineNumber": 859
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "treemapRef.current?.getBoundingClientRect",
+          "lineNumber": 867
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 869
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "treemapRef.current?.getBoundingClientRect",
+          "lineNumber": 876
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 878
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 884
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 885
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 886
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "treemapRef.current?.getBoundingClientRect",
+          "lineNumber": 888
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 891
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "treemapRef.current?.getBoundingClientRect",
+          "lineNumber": 898
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setHoveredTile",
+          "lineNumber": 901
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedFoi",
+          "lineNumber": 908
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 909
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setTimeout",
+          "lineNumber": 910
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document.getElementById('lobby-filter-section')?.scrollIntoView",
+          "lineNumber": 911
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document.getElementById",
+          "lineNumber": 911
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 965
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 966
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getFoiLabel",
+          "lineNumber": 985
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 988
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 988
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 991
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "selectedFieldTile.item.count.toLocaleString",
+          "lineNumber": 992
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 995
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 995
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1007
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1012
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "([\n              { key: 'map', label: t('lobbyGeoTabMap') },\n              { key: 'ranking', label: t('lobbyGeoTabRanking') },\n            ] as const).map",
+          "lineNumber": 1021
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1022
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1023
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setGeoTab",
+          "lineNumber": 1032
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1057
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1060
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1065
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1075
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1082
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "xTicks.map",
+          "lineNumber": 1086
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "xScale",
+          "lineNumber": 1087
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "tick.toLocaleString",
+          "lineNumber": 1094
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityRankingItems.map",
+          "lineNumber": 1099
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "yScale",
+          "lineNumber": 1100
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "xScale",
+          "lineNumber": 1101
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 1108
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "yScale.bandwidth",
+          "lineNumber": 1109
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedCity",
+          "lineNumber": 1115
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1116
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document\n                              .getElementById('lobby-filter-section')\n                              ?.scrollIntoView",
+          "lineNumber": 1117
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "document\n                              .getElementById",
+          "lineNumber": 1117
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "item.count.toLocaleString",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 1123
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "yScale.bandwidth",
+          "lineNumber": 1128
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1144
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1156
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1159
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1166
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1169
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1174
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatTooltipNumber",
+          "lineNumber": 1191
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1212
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "val.toLocaleString",
+          "lineNumber": 1227
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatTooltipNumber",
+          "lineNumber": 1232
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1280
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearchInput",
+          "lineNumber": 1285
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearch",
+          "lineNumber": 1288
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "searchInput.trim",
+          "lineNumber": 1288
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1289
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1292
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedFoi",
+          "lineNumber": 1327
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "foiOptions.map",
+          "lineNumber": 1339
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setOnlyActive",
+          "lineNumber": 1381
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 1410
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setMinExpense",
+          "lineNumber": 1411
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Number",
+          "lineNumber": 1411
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "minExpenseOptions.map",
+          "lineNumber": 1423
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1442
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedCity",
+          "lineNumber": 1447
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "cityOptions.map",
+          "lineNumber": 1459
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearch",
+          "lineNumber": 1470
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "searchInput.trim",
+          "lineNumber": 1470
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1471
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1484
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearchInput",
+          "lineNumber": 1490
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearch",
+          "lineNumber": 1491
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedFoi",
+          "lineNumber": 1492
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setOnlyActive",
+          "lineNumber": 1493
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setMinExpense",
+          "lineNumber": 1494
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedCity",
+          "lineNumber": 1495
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1496
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1509
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1525
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSort",
+          "lineNumber": 1531
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1532
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1545
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1546
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1547
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1548
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "search.trim",
+          "lineNumber": 1565
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearchInput",
+          "lineNumber": 1569
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSearch",
+          "lineNumber": 1570
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1571
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1585
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedFoi",
+          "lineNumber": 1592
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1593
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1607
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedCity",
+          "lineNumber": 1614
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1615
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1629
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setMinExpense",
+          "lineNumber": 1636
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1637
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1651
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setOnlyActive",
+          "lineNumber": 1658
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setPage",
+          "lineNumber": 1659
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1673
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1682
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1685
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1685
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "listData.items.map",
+          "lineNumber": 1688
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "fieldArray",
+          "lineNumber": 1689
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "fields.slice",
+          "lineNumber": 1690
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "Math.max",
+          "lineNumber": 1691
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getLegalFormLabel",
+          "lineNumber": 1692
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setDetailTab",
+          "lineNumber": 1697
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedRegisterNumber",
+          "lineNumber": 1698
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1721
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1721
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "[legalForm, item.city].filter(Boolean).join",
+          "lineNumber": 1729
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "[legalForm, item.city].filter",
+          "lineNumber": 1729
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "visible.map",
+          "lineNumber": 1732
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1746
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "formatMoney",
+          "lineNumber": 1749
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1754
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "item.employee_fte.toLocaleString",
+          "lineNumber": 1757
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "e.stopPropagation",
+          "lineNumber": 1765
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "e.stopPropagation",
+          "lineNumber": 1766
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1774
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(listData?.total ?? 0).toLocaleString",
+          "lineNumber": 1786
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(listData?.total ?? 0).toLocaleString",
+          "lineNumber": 1787
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedRegisterNumber",
+          "lineNumber": 1797
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "e.stopPropagation",
+          "lineNumber": 1810
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1827
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedRegisterNumber",
+          "lineNumber": 1832
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1849
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "[\n                      getLegalFormLabel(detailData.legal_form),\n                      detailData.city,\n                    ].filter(Boolean).join",
+          "lineNumber": 1855
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "[\n                      getLegalFormLabel(detailData.legal_form),\n                      detailData.city,\n                    ].filter",
+          "lineNumber": 1855
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getLegalFormLabel",
+          "lineNumber": 1856
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1862
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "([\n                      { key: 'overview', label: t('lobbyDetailTabOverview') },\n                      { key: 'projects', label: t('lobbyDetailTabProjects') },\n                    ] as const).map",
+          "lineNumber": 1871
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1872
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1873
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setDetailTab",
+          "lineNumber": 1882
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "fieldArray(detailData.fields_of_interest).slice(0, 6).map",
+          "lineNumber": 1906
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "fieldArray(detailData.fields_of_interest).slice",
+          "lineNumber": 1906
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "fieldArray",
+          "lineNumber": 1906
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1911
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1917
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1919
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "projectsData.items.map",
+          "lineNumber": 1922
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getAffectedLaws(project.affected_laws).slice",
+          "lineNumber": 1923
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getAffectedLaws",
+          "lineNumber": 1923
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "getMinistry",
+          "lineNumber": 1924
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 1925
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "(project.description || '').trim",
+          "lineNumber": 1927
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "description.slice",
+          "lineNumber": 1930
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1946
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "lawTags.map",
+          "lineNumber": 1950
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setExpandedProject",
+          "lineNumber": 1969
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1984
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1984
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1988
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 1998
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2008
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2029
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2042
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t('lobbyAffectedLawsSubtitle')\n                              .replace('{mapped}', String(lobbyGesetze.stats.projekte_mit_mapping))\n                              .replace('{total}', String(lobbyGesetze.stats.projekte_gesamt))\n                              .replace",
+          "lineNumber": 2055
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t('lobbyAffectedLawsSubtitle')\n                              .replace('{mapped}', String(lobbyGesetze.stats.projekte_mit_mapping))\n                              .replace",
+          "lineNumber": 2055
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t('lobbyAffectedLawsSubtitle')\n                              .replace",
+          "lineNumber": 2055
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2055
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 2056
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 2057
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 2058
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "lobbyGesetze.items.slice(0, 15).map",
+          "lineNumber": 2061
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "lobbyGesetze.items.slice",
+          "lineNumber": 2061
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "setSelectedRegisterNumber",
+          "lineNumber": 2072
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2090
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t('lobbyAffectedLawsMore').replace",
+          "lineNumber": 2103
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2103
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "String",
+          "lineNumber": 2103
+        },
+        {
+          "caller": "LobbyRegister",
+          "callee": "t",
+          "lineNumber": 2116
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/NotFound.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 36,
+      "nonEmptyLines": 34,
+      "functions": [
+        {
+          "name": "NotFound",
+          "startLine": 5,
+          "endLine": 36,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "NotFound",
+          "line": 5,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "NotFound",
+          "callee": "useTheme",
+          "lineNumber": 6
+        },
+        {
+          "caller": "NotFound",
+          "callee": "t",
+          "lineNumber": 10
+        },
+        {
+          "caller": "NotFound",
+          "callee": "t",
+          "lineNumber": 21
+        },
+        {
+          "caller": "NotFound",
+          "callee": "t",
+          "lineNumber": 32
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/pages/Overview.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 536,
+      "nonEmptyLines": 509,
+      "functions": [
+        {
+          "name": "euItemsFromResponse",
+          "startLine": 53,
+          "endLine": 61,
+          "params": [
+            "data"
+          ]
+        },
+        {
+          "name": "fmtDate",
+          "startLine": 63,
+          "endLine": 71,
+          "params": [
+            "iso",
+            "lang"
+          ]
+        },
+        {
+          "name": "statValue",
+          "startLine": 73,
+          "endLine": 78,
+          "params": [
+            "loading",
+            "error",
+            "n"
+          ]
+        },
+        {
+          "name": "trunc",
+          "startLine": 80,
+          "endLine": 83,
+          "params": [
+            "s",
+            "max"
+          ]
+        },
+        {
+          "name": "Overview",
+          "startLine": 85,
+          "endLine": 536,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Overview",
+          "line": 85,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "euItemsFromResponse",
+          "callee": "Array.isArray",
+          "lineNumber": 55
+        },
+        {
+          "caller": "euItemsFromResponse",
+          "callee": "Array.isArray",
+          "lineNumber": 58
+        },
+        {
+          "caller": "fmtDate",
+          "callee": "Number.isNaN",
+          "lineNumber": 65
+        },
+        {
+          "caller": "fmtDate",
+          "callee": "d.getTime",
+          "lineNumber": 65
+        },
+        {
+          "caller": "fmtDate",
+          "callee": "d.toLocaleDateString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "trunc",
+          "callee": "s.slice",
+          "lineNumber": 82
+        },
+        {
+          "caller": "trunc",
+          "callee": "Math.max",
+          "lineNumber": 82
+        },
+        {
+          "caller": "Overview",
+          "callee": "useTheme",
+          "lineNumber": 86
+        },
+        {
+          "caller": "Overview",
+          "callee": "useNavigate",
+          "lineNumber": 87
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 90
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 91
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 95
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 97
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 99
+        },
+        {
+          "caller": "Overview",
+          "callee": "useApi",
+          "lineNumber": 101
+        },
+        {
+          "caller": "Overview",
+          "callee": "Array.isArray",
+          "lineNumber": 103
+        },
+        {
+          "caller": "Overview",
+          "callee": "Array.isArray",
+          "lineNumber": 104
+        },
+        {
+          "caller": "Overview",
+          "callee": "latestPolls.slice",
+          "lineNumber": 104
+        },
+        {
+          "caller": "Overview",
+          "callee": "Array.isArray",
+          "lineNumber": 105
+        },
+        {
+          "caller": "Overview",
+          "callee": "gesetzeRows.slice",
+          "lineNumber": 105
+        },
+        {
+          "caller": "Overview",
+          "callee": "useMemo",
+          "lineNumber": 106
+        },
+        {
+          "caller": "Overview",
+          "callee": "euItemsFromResponse",
+          "lineNumber": 106
+        },
+        {
+          "caller": "Overview",
+          "callee": "useMemo",
+          "lineNumber": 108
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 109
+        },
+        {
+          "caller": "Overview",
+          "callee": "Number.isFinite",
+          "lineNumber": 111
+        },
+        {
+          "caller": "Overview",
+          "callee": "interpolate",
+          "lineNumber": 112
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 112
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 114
+        },
+        {
+          "caller": "Overview",
+          "callee": "useMemo",
+          "lineNumber": 117
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 120
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 121
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 127
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 128
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 131
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 134
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 135
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 138
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 141
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 142
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 148
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 149
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 152
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 155
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 156
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 159
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 166
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 169
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 170
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 173
+        },
+        {
+          "caller": "tagVariant",
+          "callee": "t",
+          "lineNumber": 180
+        },
+        {
+          "caller": "tagVariant",
+          "callee": "t",
+          "lineNumber": 181
+        },
+        {
+          "caller": "viewAllLink",
+          "callee": "navigate",
+          "lineNumber": 188
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 221
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 232
+        },
+        {
+          "caller": "Overview",
+          "callee": "statValue",
+          "lineNumber": 233
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 244
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 250
+        },
+        {
+          "caller": "Overview",
+          "callee": "statValue",
+          "lineNumber": 251
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 252
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 256
+        },
+        {
+          "caller": "Overview",
+          "callee": "statValue",
+          "lineNumber": 257
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 258
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 262
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 264
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 281
+        },
+        {
+          "caller": "Overview",
+          "callee": "FEATURES.map",
+          "lineNumber": 291
+        },
+        {
+          "caller": "Overview",
+          "callee": "navigate",
+          "lineNumber": 307
+        },
+        {
+          "caller": "Overview",
+          "callee": "tagVariant",
+          "lineNumber": 310
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 368
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 383
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 392
+        },
+        {
+          "caller": "Overview",
+          "callee": "recentPolls.map",
+          "lineNumber": 396
+        },
+        {
+          "caller": "Overview",
+          "callee": "navigate",
+          "lineNumber": 400
+        },
+        {
+          "caller": "Overview",
+          "callee": "fmtDate",
+          "lineNumber": 420
+        },
+        {
+          "caller": "Overview",
+          "callee": "viewAllLink",
+          "lineNumber": 424
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 424
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 433
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 442
+        },
+        {
+          "caller": "Overview",
+          "callee": "recentGesetze.map",
+          "lineNumber": 446
+        },
+        {
+          "caller": "Overview",
+          "callee": "navigate",
+          "lineNumber": 450
+        },
+        {
+          "caller": "Overview",
+          "callee": "trunc",
+          "lineNumber": 467
+        },
+        {
+          "caller": "Overview",
+          "callee": "fmtDate",
+          "lineNumber": 470
+        },
+        {
+          "caller": "Overview",
+          "callee": "viewAllLink",
+          "lineNumber": 474
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 474
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 483
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 492
+        },
+        {
+          "caller": "Overview",
+          "callee": "euItems.map",
+          "lineNumber": 496
+        },
+        {
+          "caller": "Overview",
+          "callee": "navigate",
+          "lineNumber": 503
+        },
+        {
+          "caller": "Overview",
+          "callee": "fmtDate",
+          "lineNumber": 523
+        },
+        {
+          "caller": "Overview",
+          "callee": "viewAllLink",
+          "lineNumber": 528
+        },
+        {
+          "caller": "Overview",
+          "callee": "t",
+          "lineNumber": 528
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "nodes": [
+    {
+      "id": "pipeline:.github/workflows/ci.yml",
+      "type": "pipeline",
+      "name": "ci.yml",
+      "filePath": ".github/workflows/ci.yml",
+      "summary": "GitHub Actions CI workflow triggered on push to main and on every pull request, running TypeScript typecheck, production build, and lint as quality gates.",
+      "tags": ["ci-cd", "infrastructure", "build-system", "deployment", "automation"],
+      "complexity": "simple",
+      "languageNotes": "Single-job workflow. The build job uses npm run build as a hard gate (tsc -b && vite build) while npm run lint runs with continue-on-error so it never blocks CI."
+    },
+    {
+      "id": "step:.github/workflows/ci.yml:build",
+      "type": "pipeline",
+      "name": "build",
+      "filePath": ".github/workflows/ci.yml",
+      "summary": "The 'Typecheck, build, lint' job on ubuntu-latest: checks out the repo, sets up Node 20, installs dependencies with npm ci, runs the production build, then runs lint informationally.",
+      "tags": ["ci-cd", "build-system", "typecheck", "lint", "automation"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "pipeline:.github/workflows/ci.yml",
+      "target": "step:.github/workflows/ci.yml:build",
+      "type": "triggers",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

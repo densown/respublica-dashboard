@@ -1,0 +1,92 @@
+[
+  {
+    "order": 1,
+    "title": "Project Overview",
+    "description": "Start with the README, the project's German-language guide to the Res.Publica Dashboard. It explains that this is a React 18 + Vite 5 + TypeScript single-page app that visualizes German and EU political data (Bundestag votes, elections, legislation, EU law, a lobby register, and a world map), and it walks through the tech stack, the SPA routes, the design system, and the API conventions. Read this first to get the mental map the rest of the tour fills in with real code.",
+    "nodeIds": ["document:README.md"]
+  },
+  {
+    "order": 2,
+    "title": "Boot and Mount",
+    "description": "Two small files turn a static HTML page into a running React app. index.html provides the #root mount point and the module script tag, and main.tsx is the bootstrap that mounts the App component into that root inside React StrictMode and pulls in the global base stylesheet. Together they are the literal first lines of code the browser runs.",
+    "nodeIds": ["file:index.html", "file:src/main.tsx", "file:src/index.css"],
+    "languageLesson": "Vite uses native ES modules: index.html loads /src/main.tsx as a <script type=\"module\">, and the bundler resolves the import graph from there. React 18's createRoot(...).render(<StrictMode><App/></StrictMode>) double-invokes effects in development to surface side-effect bugs early."
+  },
+  {
+    "order": 3,
+    "title": "Routing Root",
+    "description": "App.tsx is the heart of the application shell and the top of the dependency graph. It wires up React Router, wraps everything in the theme provider, and declares every route, eagerly loading the light pages while lazy-loading the heavy modules (Bundestag, World Map, Lobby Register). Building on the boot step, this is where you see the full menu of features the dashboard offers.",
+    "nodeIds": ["file:src/App.tsx"],
+    "languageLesson": "React.lazy(() => import('./pages/Bundestag')) defers a module's JavaScript until its route is visited, code-splitting the heavy visualization pages into separate chunks. A <Suspense> boundary supplies the fallback UI shown while that chunk downloads."
+  },
+  {
+    "order": 4,
+    "title": "The Layout Shell",
+    "description": "DashboardLayout is the frame every page renders inside. It chooses between the desktop Sidebar and the mobile navigation drawer, derives the active module from the current URL path, and hosts the routed page content through React Router's Outlet. This is the persistent chrome (navigation, theme and language switches) that surrounds the feature pages from App.tsx.",
+    "nodeIds": ["file:src/layouts/DashboardLayout.tsx", "file:src/design-system/components/Sidebar.tsx", "file:src/design-system/components/MobileNav.tsx"]
+  },
+  {
+    "order": 5,
+    "title": "Design Tokens and Theming",
+    "description": "These three files are the most depended-upon in the entire codebase: tokens.ts (73 importers) defines the light and dark color palettes plus spacing and font scales, while ThemeContext.tsx (44 importers) is the React context that manages light/dark theme and DE/EN language state, persists both to localStorage, and exposes the palette and a translation function. The design-system index.ts barrel re-exports the whole library so feature code can import everything from one place. Understand these and you understand the visual and behavioral vocabulary shared by every component.",
+    "nodeIds": ["file:src/design-system/tokens.ts", "file:src/design-system/ThemeContext.tsx", "file:src/design-system/index.ts"],
+    "languageLesson": "React Context lets a provider broadcast theme and language state to any descendant via a useTheme() hook, avoiding prop-drilling. Barrel files (index.ts re-exporting with 'export * from') create a single clean import surface for the whole module."
+  },
+  {
+    "order": 6,
+    "title": "Internationalization",
+    "description": "The dashboard is fully bilingual (German/English), and the i18n system shows how that scales. The i18n.ts barrel merges eight per-feature message modules into unified DE/EN dictionaries and provides the placeholder-interpolation helper that ThemeContext's translation function calls. Splitting messages by feature (common, elections, eu, gesetze, lobby, overview, sources, world) keeps each module focused and was the subject of a recent refactor noted in the git history.",
+    "nodeIds": ["file:src/design-system/i18n.ts", "file:src/design-system/i18n/common.ts", "file:src/design-system/i18n/world.ts"]
+  },
+  {
+    "order": 7,
+    "title": "Data Access via the API Hook",
+    "description": "Almost every page gets its data through useApi.ts (16 importers), the core data-fetching hook. It builds request URLs from a configurable API base, fetches JSON with abort and retry handling, and returns data/loading/error/refetch state for components to render against. The supporting hooks here (debounce for search inputs, media-query for responsive layout, offset pagination for long lists) round out the shared stateful logic that feature pages lean on.",
+    "nodeIds": ["file:src/hooks/useApi.ts", "file:src/hooks/useDebouncedValue.ts", "file:src/hooks/useOffsetPagination.ts"],
+    "languageLesson": "A custom hook is a function whose name starts with 'use' and that calls other hooks. useApi encapsulates a useEffect that creates an AbortController, fires the fetch, and cancels the request on unmount or dependency change, preventing state updates on stale responses."
+  },
+  {
+    "order": 8,
+    "title": "Feature Spotlight: Bundestag Hemicycle",
+    "description": "The Bundestag module is the project's signature visualization. The Bundestag page fetches votes, seat distribution, and deputy data via useApi and composes three pieces: AbstimmungsListe (a searchable, paginated vote browser), AbstimmungsDetail (per-faction yes/no/abstain/absent tallies), and Hemicycle, the SVG seating chart that colors each seat by party and animates the per-seat vote result. The seat geometry comes from the static bundestag-seats dataset. This is a textbook example of the page-orchestrates-components pattern used throughout the app.",
+    "nodeIds": ["file:src/pages/Bundestag.tsx", "file:src/components/bundestag/Hemicycle.tsx", "file:src/components/bundestag/AbstimmungsDetail.tsx", "file:src/data/bundestag-seats.ts"]
+  },
+  {
+    "order": 9,
+    "title": "Feature Spotlight: Elections Map",
+    "description": "The elections module is the largest feature by file count and shows how a complex page is decomposed. The Elections page renders an interactive choropleth of Germany's districts (Kreise) with autocomplete search and party overlays. Its shared building blocks recur across the module: partyColors.ts (18 importers) is the canonical party and federal-state palette, types.ts (16 importers) distinguishes raw API rows from normalized display rows, and normalizeWahlen.ts (14 importers) converts raw values into display percentages. Studying these reveals how the team factors out cross-cutting data shapes and color logic.",
+    "nodeIds": ["file:src/pages/Elections.tsx", "file:src/pages/elections/ElectionMap.tsx", "file:src/pages/elections/partyColors.ts", "file:src/pages/elections/normalizeWahlen.ts"]
+  },
+  {
+    "order": 10,
+    "title": "Feature Spotlight: World Map and Lobby Register",
+    "description": "Two data-rich features round out the picture. WorldMap renders country-level indicators on a MapLibre map with projection switching, floating widget panels, and Safari/globe capability detection, backed by the static world.geojson boundary dataset and worldFilters helpers. LobbyRegister lists registered lobbying organizations with search and pagination and visualizes aggregate statistics with D3, MapLibre, and Recharts. Both are lazy-loaded (per App.tsx) precisely because they pull in heavy mapping and charting libraries.",
+    "nodeIds": ["file:src/pages/WorldMap.tsx", "file:src/pages/LobbyRegister.tsx", "file:src/utils/worldFilters.ts", "file:public/data/world.geojson"]
+  },
+  {
+    "order": 11,
+    "title": "Feature Spotlight: Legislation and EU Law",
+    "description": "These two modules cover the legal side of the dashboard and share a master-detail pattern. The Legislation page lists German laws and court rulings and opens GesetzDetail (a law's metadata, summary, diff synopsis, linked lobby actors, and related rulings). The EuLaw page lists EU legal acts and Court of Justice cases through expandable cards that lazy-load full detail on demand. The Overview page ties the modules together, fetching headline stats and latest items across laws, EU law, and Bundestag votes for the landing screen.",
+    "nodeIds": ["file:src/pages/Legislation.tsx", "file:src/components/gesetze/GesetzDetail.tsx", "file:src/pages/EuLaw.tsx", "file:src/pages/Overview.tsx"]
+  },
+  {
+    "order": 12,
+    "title": "Static Data and Source Attribution",
+    "description": "Beyond fetched data, the dashboard relies on curated static catalogs. sourcesCatalog.ts maps each page to its list of data sources and derives the footer attribution key from the route, feeding both the LegalFooter on every page and the dedicated Sources page (which augments the static catalog with live API-reported world-map sources and freshness counts). This is where the project's commitment to data provenance lives in code.",
+    "nodeIds": ["file:src/data/sourcesCatalog.ts", "file:src/pages/Sources.tsx", "file:src/design-system/components/LegalFooter.tsx"]
+  },
+  {
+    "order": 13,
+    "title": "Build Configuration",
+    "description": "With the application understood, look at how it is built. package.json pins the runtime stack (React, react-router-dom, d3, recharts, maplibre-gl) and defines the dev/build/lint/preview scripts; vite.config.ts registers the React plugin and build options; and the TypeScript project references (root tsconfig.json delegating to the strict app and node configs) govern type-checking. These files define the toolchain every other step depends on.",
+    "nodeIds": ["config:package.json", "file:vite.config.ts", "config:tsconfig.json", "config:tsconfig.app.json"],
+    "languageLesson": "tsconfig.json uses solution-style project references: it holds no files itself and points at tsconfig.app.json (the src/ application, ES2020 + DOM) and tsconfig.node.json (the Vite tooling, ES2022). This lets the editor and CLI type-check browser code and build scripts under different settings in one repo."
+  },
+  {
+    "order": 14,
+    "title": "CI and Deployment",
+    "description": "The tour ends where every change does: the pipeline that ships it. The GitHub Actions workflow runs on every push to main and every pull request, setting up Node 20 and running typecheck, production build, and lint as quality gates. The companion deploy.sh script pulls the latest main, installs with npm ci, and runs the Vite production build into the Nginx-served dist directory described in the README. Together they close the loop from the code you just toured to the live app at app.respublica.media.",
+    "nodeIds": ["pipeline:.github/workflows/ci.yml", "file:deploy.sh"],
+    "languageLesson": "GitHub Actions workflows use 'on' triggers (push, pull_request) and 'jobs' made of sequential 'steps'. Running build and typecheck as required gates before merge catches type errors and broken builds in CI rather than in production."
+  }
+]

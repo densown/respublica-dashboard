@@ -1,0 +1,185 @@
+{
+  "nodes": [
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Primary project documentation (in German) covering the tech stack, all SPA routes/pages, the design system, API conventions, and the local development and deploy workflow for the Res.Publica Dashboard.",
+      "tags": ["documentation", "entry-point", "overview", "deployment"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:deploy.sh",
+      "type": "file",
+      "name": "deploy.sh",
+      "filePath": "deploy.sh",
+      "summary": "Bash deploy script that pulls the latest main branch, installs dependencies with npm ci, and runs the production Vite build into the Nginx-served dist directory.",
+      "tags": ["deployment", "script", "ci-cd", "build-system"],
+      "complexity": "simple",
+      "languageNotes": "Uses 'set -e' to abort on first error and appends timestamped progress lines to deploy.log."
+    },
+    {
+      "id": "file:index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "index.html",
+      "summary": "Vite HTML entry document providing the #root mount point, Google Fonts preconnect/stylesheet links, favicon, and the module script tag that bootstraps the React app from src/main.tsx.",
+      "tags": ["entry-point", "markup", "spa", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "NPM manifest defining the dev/build/lint/preview scripts and pinning runtime dependencies (React, react-router-dom, d3, recharts, maplibre-gl) and the TypeScript/Vite/ESLint dev toolchain.",
+      "tags": ["configuration", "build-system", "dependencies", "npm"],
+      "complexity": "simple",
+      "languageNotes": "ES module package ('type': 'module'); build script chains 'tsc -b' project references with 'vite build'."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "Root TypeScript solution-style config that holds no files of its own and delegates to the tsconfig.app.json and tsconfig.node.json project references.",
+      "tags": ["configuration", "typescript", "build-system"],
+      "complexity": "simple",
+      "languageNotes": "Solution-style config using TypeScript project references rather than direct file inclusion."
+    },
+    {
+      "id": "config:tsconfig.app.json",
+      "type": "config",
+      "name": "tsconfig.app.json",
+      "filePath": "tsconfig.app.json",
+      "summary": "TypeScript compiler configuration for the application source under src/, enabling strict mode, bundler module resolution, react-jsx, and ES2020 target with DOM libs.",
+      "tags": ["configuration", "typescript", "build-system", "strict-mode"],
+      "complexity": "simple",
+      "languageNotes": "Bundler mode with allowImportingTsExtensions and noEmit, delegating actual emit to Vite."
+    },
+    {
+      "id": "config:tsconfig.node.json",
+      "type": "config",
+      "name": "tsconfig.node.json",
+      "filePath": "tsconfig.node.json",
+      "summary": "TypeScript compiler configuration scoped to the Node-side build tooling (vite.config.ts), targeting ES2022 with strict linting and bundler module resolution.",
+      "tags": ["configuration", "typescript", "build-system", "tooling"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:README.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:deploy.sh",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/hooks/useApi.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:src/data/sourcesCatalog.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:index.html",
+      "target": "file:src/main.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:deploy.sh",
+      "target": "config:package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:deploy.sh",
+      "target": "file:index.html",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:src/main.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "config:vite.config.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "config:tsconfig.app.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "config:tsconfig.node.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.app.json",
+      "target": "file:src/main.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.app.json",
+      "target": "file:src/App.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.node.json",
+      "target": "config:vite.config.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

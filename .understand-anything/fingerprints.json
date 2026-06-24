@@ -1,0 +1,7065 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "76a99606651e14913c84d84fd1d1c937aec98369",
+  "generatedAt": "2026-06-24T02:34:59.959Z",
+  "files": {
+    ".cursorrules": {
+      "filePath": ".cursorrules",
+      "contentHash": "91fc2e8cf02afd754e989e199e6fef10465ff042a27c74d031540e324e54671e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "725c0d64387029fc2d321cbec91080073bf364da99dbc22805c28e3317244ae9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "7d1c8596955ac12fd4148ea2a67d447f61b3c6f7eed63fde239ac3da56b30fca",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 48,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/config.json": {
+      "filePath": ".understand-anything/config.json",
+      "contentHash": "08d37f20ea0af2233ae24f094723759f952381ecb6dd7f2aaa05ef96e95eae6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "deploy.sh": {
+      "filePath": "deploy.sh",
+      "contentHash": "4af6ab870adedd3e787b855e82e4517e0d1ad6e2b790497d73bc6236db9f91f4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "eslint.config.js": {
+      "filePath": "eslint.config.js",
+      "contentHash": "dc00c7db700d03834d04a172ea709593ae5ef1bc750eb55dfc521a60d9e1baa0",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@eslint/js",
+          "specifiers": [
+            "js"
+          ]
+        },
+        {
+          "source": "globals",
+          "specifiers": [
+            "globals"
+          ]
+        },
+        {
+          "source": "eslint-plugin-react-hooks",
+          "specifiers": [
+            "reactHooks"
+          ]
+        },
+        {
+          "source": "eslint-plugin-react-refresh",
+          "specifiers": [
+            "reactRefresh"
+          ]
+        },
+        {
+          "source": "typescript-eslint",
+          "specifiers": [
+            "tseslint"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "index.html": {
+      "filePath": "index.html",
+      "contentHash": "a8724ab43a2596c027c72076bc9ecc8bda6b8c7c2029e3e639dc6d2ba59b1e82",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "notes/BUG8-gesetz-titel-TODO.md": {
+      "filePath": "notes/BUG8-gesetz-titel-TODO.md",
+      "contentHash": "6ed222df7529a880270b460a3837e6f2f2259b68595723e1d4c6171dc7d759a3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "a4452af0980c327c0118cf8c36654d02d22eebae5642dba9ea5bfa8b6457e22e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": true
+    },
+    "public/data/world.geojson": {
+      "filePath": "public/data/world.geojson",
+      "contentHash": "09a8dab5ee609781692ee7a8ec1c14cfbe5798e29e07085ca805b14adda66f9e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 241,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "171fbe897bd69acd1643bda34c6ed887bc9e267deafab84b61db97ade3506906",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 84,
+      "hasStructuralAnalysis": true
+    },
+    "src/App.tsx": {
+      "filePath": "src/App.tsx",
+      "contentHash": "62b4c50c4c8918d331390f5e2acbde1e6071062a0372912162f9313a8b9b569b",
+      "functions": [
+        {
+          "name": "App",
+          "params": [],
+          "exported": true,
+          "lineCount": 34
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "lazy",
+            "Suspense"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "BrowserRouter",
+            "Navigate",
+            "Route",
+            "Routes"
+          ]
+        },
+        {
+          "source": "./design-system",
+          "specifiers": [
+            "LoadingSpinner",
+            "ThemeProvider"
+          ]
+        },
+        {
+          "source": "./layouts/DashboardLayout",
+          "specifiers": [
+            "DashboardLayout"
+          ]
+        },
+        {
+          "source": "./pages/Admin",
+          "specifiers": [
+            "Admin"
+          ]
+        },
+        {
+          "source": "./pages/Coalition",
+          "specifiers": [
+            "Coalition"
+          ]
+        },
+        {
+          "source": "./pages/DemocracyIndex",
+          "specifiers": [
+            "DemocracyIndex"
+          ]
+        },
+        {
+          "source": "./pages/EuParliament",
+          "specifiers": [
+            "EuParliament"
+          ]
+        },
+        {
+          "source": "./pages/NotFound",
+          "specifiers": [
+            "NotFound"
+          ]
+        },
+        {
+          "source": "./pages/Overview",
+          "specifiers": [
+            "Overview"
+          ]
+        },
+        {
+          "source": "./pages/Sources",
+          "specifiers": [
+            "Sources"
+          ]
+        }
+      ],
+      "exports": [
+        "App"
+      ],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/bundestag/AbstimmungsDetail.tsx": {
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "contentHash": "aed3c8de46c60dbd393307a29a56c9e9de8cced609bc911e4ebc3e151549034e",
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "params": [
+            "f"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "shortFraktionName",
+          "params": [
+            "apiPartei"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "matchesOrderToken",
+          "params": [
+            "apiPartei",
+            "token"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "politicalSortIndex",
+          "params": [
+            "apiPartei"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "matchesSitzRow",
+          "params": [
+            "apiPartei",
+            "stamm"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "labelColorFromSitzverteilung",
+          "params": [
+            "apiPartei",
+            "rows"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "labelColorForLegendDot",
+          "params": [
+            "apiPartei",
+            "rows",
+            "theme"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "sortFraktionenByPoliticalOrder",
+          "params": [
+            "fraktionen"
+          ],
+          "returnType": "T[]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "AbstimmungsDetail",
+          "params": [
+            "{\n  data,\n  sitzverteilung,\n}"
+          ],
+          "exported": true,
+          "lineCount": 156
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "Badge",
+            "ShareToolbar",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "shortFraktionName",
+        "PARTEI_ORDER",
+        "labelColorFromSitzverteilung",
+        "sortFraktionenByPoliticalOrder",
+        "AbstimmungsDetail"
+      ],
+      "totalLines": 282,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/bundestag/AbstimmungsListe.tsx": {
+      "filePath": "src/components/bundestag/AbstimmungsListe.tsx",
+      "contentHash": "b9256e724ef518b47078f24000eea8c2a1ea73e88100fb4b3f84891100a179ee",
+      "functions": [
+        {
+          "name": "AbstimmungsListe",
+          "params": [
+            "{\n  abstimmungen,\n  activePollId,\n  onSelect,\n}"
+          ],
+          "exported": true,
+          "lineCount": 147
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "DataCard",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "AbstimmungsListe"
+      ],
+      "totalLines": 160,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/bundestag/Hemicycle.tsx": {
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "contentHash": "6eacc297168de77e7aa0e3733ae83134f840ef9d0565b359d382a8849610c95b",
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "params": [
+            "f"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "getEffektiveFraktion",
+          "params": [
+            "abgeordneter"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "canonicalKey",
+          "params": [
+            "fraktion"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "sortedSitz",
+          "params": [
+            "sitz"
+          ],
+          "returnType": "SitzverteilungRow[]",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "mergePartiesForLegend",
+          "params": [
+            "rows",
+            "cduFill"
+          ],
+          "returnType": "{ legendByKey: Map<string, MergedParty> }",
+          "exported": false,
+          "lineCount": 48
+        },
+        {
+          "name": "orderedLegend",
+          "params": [
+            "legendByKey",
+            "cduFill"
+          ],
+          "returnType": "MergedParty[]",
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "matchApiRowForSeat",
+          "params": [
+            "seatLabel",
+            "rows"
+          ],
+          "returnType": "SitzverteilungRow | undefined",
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "partyFillForSeat",
+          "params": [
+            "seatLabel",
+            "rawFarbe",
+            "rows",
+            "cduFill"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "displayParteiForSeat",
+          "params": [
+            "seatLabel",
+            "rows"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "matchFraktionVote",
+          "params": [
+            "seatLabel",
+            "fraktionen"
+          ],
+          "returnType": "FraktionVote | undefined",
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "voteColorForSeatInPartei",
+          "params": [
+            "localIndex",
+            "f",
+            "yes",
+            "no",
+            "abstain",
+            "absent"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "buildSeatDerived",
+          "params": [],
+          "returnType": "SeatDerived[]",
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "Hemicycle",
+          "params": [
+            "{\n  sitzverteilung,\n  abstimmung,\n  individuelleVotes,\n  abgeordnete,\n  animating,\n  onSeatSelect,\n}"
+          ],
+          "exported": true,
+          "lineCount": 377
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../data/bundestag-seats",
+          "specifiers": [
+            "RAW_SEATS"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "Hemicycle"
+      ],
+      "totalLines": 641,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/eulaw/EuCourtCard.tsx": {
+      "filePath": "src/components/eulaw/EuCourtCard.tsx",
+      "contentHash": "2241a583ce1868fef9c7893d7528a27be357147216c95bc2249b11658da06319",
+      "functions": [
+        {
+          "name": "trunc",
+          "params": [
+            "s",
+            "max"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "courtColors",
+          "params": [
+            "gericht"
+          ],
+          "returnType": "{ bg: string; fg: string }",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "courtLabel",
+          "params": [
+            "gericht",
+            "t"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "keywordsToList",
+          "params": [
+            "kw"
+          ],
+          "returnType": "string[]",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "EuCourtCard",
+          "params": [
+            "{ item, startExpanded }"
+          ],
+          "exported": true,
+          "lineCount": 436
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "MouseEvent",
+            "ReactNode",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "Badge",
+            "DataCard",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "../gesetze/utils",
+          "specifiers": [
+            "formatDisplayDate"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "EuUrteilDetail",
+            "EuUrteilListItem"
+          ]
+        }
+      ],
+      "exports": [
+        "EuCourtCard"
+      ],
+      "totalLines": 487,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/eulaw/EuLawCard.tsx": {
+      "filePath": "src/components/eulaw/EuLawCard.tsx",
+      "contentHash": "06019921e5f01cd5096b5cc74559c3592e9bf3447deb2f0e37015ebda7a544da",
+      "functions": [
+        {
+          "name": "trunc",
+          "params": [
+            "s",
+            "max"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "typColors",
+          "params": [
+            "typ"
+          ],
+          "returnType": "{ bg: string; fg: string }",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "typLabelI18n",
+          "params": [
+            "typ",
+            "t"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "eurovocToStrings",
+          "params": [
+            "tags"
+          ],
+          "returnType": "string[]",
+          "exported": false,
+          "lineCount": 26
+        },
+        {
+          "name": "EuLawCard",
+          "params": [
+            "{ item, startExpanded }"
+          ],
+          "exported": true,
+          "lineCount": 324
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "MouseEvent",
+            "ReactNode",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useNavigate"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "Badge",
+            "DataCard",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "../gesetze/utils",
+          "specifiers": [
+            "formatDisplayDate"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "EuRechtDetail",
+            "EuRechtListItem"
+          ]
+        }
+      ],
+      "exports": [
+        "EuLawCard"
+      ],
+      "totalLines": 403,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/eulaw/types.ts": {
+      "filePath": "src/components/eulaw/types.ts",
+      "contentHash": "192b61ec209016633bb24d50620d5df41f42a10ba70f256ce69e21185120c3f6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/gesetze/GesetzDetail.tsx": {
+      "filePath": "src/components/gesetze/GesetzDetail.tsx",
+      "contentHash": "a46b005db9eade4f1efa82d856fb97ebc6e0d6b3af9e65cb0d40007e4b862272",
+      "functions": [
+        {
+          "name": "DiffSynopse",
+          "params": [
+            "{ diff }"
+          ],
+          "exported": false,
+          "lineCount": 53
+        },
+        {
+          "name": "GesetzDetail",
+          "params": [
+            "{\n  gesetz,\n  loading,\n  error,\n  notFound = false,\n  linkedUrteile,\n  lobbyItems,\n  lobbyLoading,\n  lobbyError,\n}"
+          ],
+          "exported": true,
+          "lineCount": 601
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "Badge",
+            "EmptyState",
+            "LoadingSpinner",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "./utils",
+          "specifiers": [
+            "courtBadgeVariant",
+            "formatDisplayDate"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "Gesetz",
+            "Urteil"
+          ]
+        }
+      ],
+      "exports": [
+        "GesetzDetail"
+      ],
+      "totalLines": 689,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/gesetze/types.ts": {
+      "filePath": "src/components/gesetze/types.ts",
+      "contentHash": "031c712a63ad7a2849c93235b419c165f0eae2ec52d97af4c21d2dad68d75d27",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 47,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/gesetze/UrteilCard.tsx": {
+      "filePath": "src/components/gesetze/UrteilCard.tsx",
+      "contentHash": "add789f7c617667d618b89ba9ed59fe5c6695da3c6e7623bbccf5f85840e69cf",
+      "functions": [
+        {
+          "name": "smallRgBadgeVariant",
+          "params": [
+            "rg"
+          ],
+          "returnType": "BadgeVariant",
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "nlToBr",
+          "params": [
+            "text"
+          ],
+          "returnType": "ReactNode[]",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "UrteilCard",
+          "params": [
+            "{ urteil, onGesetzBadgeClick }"
+          ],
+          "exported": true,
+          "lineCount": 225
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode",
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "Badge",
+            "DataCard",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "BadgeVariant"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "./utils",
+          "specifiers": [
+            "courtBadgeVariant",
+            "formatDisplayDate",
+            "rechtsprechungFullTextUrl"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "Urteil"
+          ]
+        }
+      ],
+      "exports": [
+        "UrteilCard"
+      ],
+      "totalLines": 273,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/gesetze/utils.ts": {
+      "filePath": "src/components/gesetze/utils.ts",
+      "contentHash": "6af8e4e12690cef9776343cfed108233d4bcbb94cfb22bfed649e9884c424b9a",
+      "functions": [
+        {
+          "name": "normalizeKuerzelCode",
+          "params": [
+            "k"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "rechtGebietFromKuerzel",
+          "params": [
+            "kuerzel"
+          ],
+          "returnType": "RechtGebietFilter",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "courtBadgeVariant",
+          "params": [
+            "gericht"
+          ],
+          "returnType": "BadgeVariant",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "parseIsoDate",
+          "params": [
+            "raw"
+          ],
+          "returnType": "Date | null",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "formatDisplayDate",
+          "params": [
+            "raw",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "buildUrteilListEndpoint",
+          "params": [
+            "gericht",
+            "rechtsgebiet"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "rechtsprechungFullTextUrl",
+          "params": [
+            "docId"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "BadgeVariant"
+          ]
+        }
+      ],
+      "exports": [
+        "normalizeKuerzelCode",
+        "rechtGebietFromKuerzel",
+        "courtBadgeVariant",
+        "URTEIL_RECHTSGEBIET_OPTIONS",
+        "parseIsoDate",
+        "formatDisplayDate",
+        "buildUrteilListEndpoint",
+        "rechtsprechungFullTextUrl"
+      ],
+      "totalLines": 133,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/bundestag-seats.ts": {
+      "filePath": "src/data/bundestag-seats.ts",
+      "contentHash": "b3ea3084b96cf229670bb019d41ceeb92666cbc5e4ade63633903b0144eca372",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "RAW_SEATS",
+        "RAW_SEAT_COUNT"
+      ],
+      "totalLines": 639,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/sourcesCatalog.ts": {
+      "filePath": "src/data/sourcesCatalog.ts",
+      "contentHash": "b65366b40ee403a80a0a7fc54ee21a8776b9a99d95ee0c34bba06f9dae347f1a",
+      "functions": [
+        {
+          "name": "footerSourcesLineKey",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "I18nKey",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        }
+      ],
+      "exports": [
+        "SOURCES_BY_PAGE",
+        "footerSourcesLineKey"
+      ],
+      "totalLines": 146,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/Badge.tsx": {
+      "filePath": "src/design-system/components/Badge.tsx",
+      "contentHash": "70e6fd9cc5714a98fe3f052cc9d63687d272c6f2dc486256ed14d88564840445",
+      "functions": [
+        {
+          "name": "Badge",
+          "params": [
+            "{ text, variant = 'default' }"
+          ],
+          "exported": true,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "Badge"
+      ],
+      "totalLines": 85,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/BalanceBarChart.tsx": {
+      "filePath": "src/design-system/components/BalanceBarChart.tsx",
+      "contentHash": "685653fcf8c431eab654e10c8965d0597216b14fffe11c3261887463f9ebac4c",
+      "functions": [
+        {
+          "name": "fmtBn",
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "BalanceBarChart",
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ],
+          "exported": true,
+          "lineCount": 77
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "BalanceBarChart"
+      ],
+      "totalLines": 100,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/CompareBar.tsx": {
+      "filePath": "src/design-system/components/CompareBar.tsx",
+      "contentHash": "b70547f9598dc0206808d5bd7aea1137a66cfb3b97067b5b045d0c73b08851d2",
+      "functions": [
+        {
+          "name": "CompareBar",
+          "params": [
+            "{\n  label,\n  countryVal,\n  regionVal,\n  worldVal,\n  fmt,\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 57
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "./MonoLabel",
+          "specifiers": [
+            "MonoLabel"
+          ]
+        }
+      ],
+      "exports": [
+        "CompareBar"
+      ],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/DataCard.tsx": {
+      "filePath": "src/design-system/components/DataCard.tsx",
+      "contentHash": "a55e47b6df65489b566cf2e18162ffd7e22333a81460f983a04735553e663d7b",
+      "functions": [
+        {
+          "name": "DataCard",
+          "params": [
+            "{\n  header,\n  children,\n  footer,\n  onClick,\n  active,\n}"
+          ],
+          "exported": true,
+          "lineCount": 77
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "DataCard"
+      ],
+      "totalLines": 92,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/EmptyState.tsx": {
+      "filePath": "src/design-system/components/EmptyState.tsx",
+      "contentHash": "6d54101a7987ddd0a9362b50b28bcf7d5729c8b0683c0b054069db8b80f20d84",
+      "functions": [
+        {
+          "name": "EmptyState",
+          "params": [
+            "{ text, action }"
+          ],
+          "exported": true,
+          "lineCount": 57
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "EmptyState"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/FilterToolbar.tsx": {
+      "filePath": "src/design-system/components/FilterToolbar.tsx",
+      "contentHash": "fb5f692ba1a359f341d68f26722036e40865682b5a4c1cadad8862d8d0223144",
+      "functions": [
+        {
+          "name": "FilterToolbar",
+          "params": [
+            "{ placeholder, filters }"
+          ],
+          "exported": true,
+          "lineCount": 92
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "FilterToolbar"
+      ],
+      "totalLines": 114,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/HBar.tsx": {
+      "filePath": "src/design-system/components/HBar.tsx",
+      "contentHash": "ed70636c98878459859d01b7f232099935d22b4b1dbcc652402961d87981ea33",
+      "functions": [
+        {
+          "name": "HBar",
+          "params": [
+            "{ label, value, max, formatted, color, icon, style }"
+          ],
+          "exported": true,
+          "lineCount": 54
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "HBar"
+      ],
+      "totalLines": 69,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/HSSectionBreakdown.tsx": {
+      "filePath": "src/design-system/components/HSSectionBreakdown.tsx",
+      "contentHash": "bfd35dfb3c219ea514aa0c7b2e0ed070668464cf002155e6fb099997d1fc1c47",
+      "functions": [
+        {
+          "name": "fmtUsd",
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "HSSectionBreakdown",
+          "params": [
+            "{\n  sectionsExport,\n  sectionsImport,\n  mode,\n  sourceLabel,\n  partners = [],\n  selectedPartner = null,\n  onPartnerChange,\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 122
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../hsSections",
+          "specifiers": [
+            "HS_SECTION_LABELS_DE",
+            "HS_SECTION_LABELS_EN"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "./PartnerPicker",
+          "specifiers": [
+            "PartnerPicker",
+            "TradePartnerOption"
+          ]
+        },
+        {
+          "source": "../../hooks/useMediaQuery",
+          "specifiers": [
+            "useMediaQuery"
+          ]
+        }
+      ],
+      "exports": [
+        "HSSectionBreakdown"
+      ],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/InfoToggle.tsx": {
+      "filePath": "src/design-system/components/InfoToggle.tsx",
+      "contentHash": "2e3b176c3eb014c11aa4165fb6fc67af595a4f9dc038b4f8c215cd75bf8bfb13",
+      "functions": [
+        {
+          "name": "InfoToggle",
+          "params": [
+            "{ text, style }"
+          ],
+          "exported": true,
+          "lineCount": 47
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState",
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "InfoToggle"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/LegalFooter.tsx": {
+      "filePath": "src/design-system/components/LegalFooter.tsx",
+      "contentHash": "5dc21968fef3ba01e4032eff8722aea44a448f79c14da2d7d58e1f8df2d9ac77",
+      "functions": [
+        {
+          "name": "LegalFooter",
+          "params": [],
+          "exported": true,
+          "lineCount": 86
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useLocation"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../data/sourcesCatalog",
+          "specifiers": [
+            "footerSourcesLineKey"
+          ]
+        }
+      ],
+      "exports": [
+        "LegalFooter"
+      ],
+      "totalLines": 92,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/LineChart.tsx": {
+      "filePath": "src/design-system/components/LineChart.tsx",
+      "contentHash": "61bf64e047ae6f07de651a6fb1da2a9b4d6bcdfc7df7a9fd353fb66eb8db3d49",
+      "functions": [
+        {
+          "name": "LineChart",
+          "params": [
+            "{\n  data,\n  color,\n  yLabel,\n  height = 100,\n  showArea = true,\n  annotations = [],\n  style,\n  valueDecimals = 2,\n}"
+          ],
+          "exported": true,
+          "lineCount": 169
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "../i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "./MonoLabel",
+          "specifiers": [
+            "MonoLabel"
+          ]
+        }
+      ],
+      "exports": [
+        "LineChart"
+      ],
+      "totalLines": 193,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/LoadingSpinner.tsx": {
+      "filePath": "src/design-system/components/LoadingSpinner.tsx",
+      "contentHash": "047df3d5dba866fb6d909e9eb1f2060f5bfe49d3051692efe410e8fbc6629172",
+      "functions": [
+        {
+          "name": "LoadingSpinner",
+          "params": [],
+          "exported": true,
+          "lineCount": 32
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "LoadingSpinner"
+      ],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/MobileNav.tsx": {
+      "filePath": "src/design-system/components/MobileNav.tsx",
+      "contentHash": "620ab395ebcb36aabe0e481d3b7d51ac5c368448bcd49656fd079fac36bb76cf",
+      "functions": [
+        {
+          "name": "MobileNav",
+          "params": [
+            "{\n  entries,\n  active,\n  onSelect,\n  shareTitle,\n  shareUrl,\n}"
+          ],
+          "exported": true,
+          "lineCount": 264
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "./Sidebar",
+          "specifiers": [
+            "SidebarNavEntry"
+          ]
+        },
+        {
+          "source": "./ShareCompact",
+          "specifiers": [
+            "ShareCompact"
+          ]
+        }
+      ],
+      "exports": [
+        "MobileNav"
+      ],
+      "totalLines": 281,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/MonoLabel.tsx": {
+      "filePath": "src/design-system/components/MonoLabel.tsx",
+      "contentHash": "6b0231f9dcb51ee1fa6fc0fd70f819e079a5074143f0e216cfb860801afdfd6f",
+      "functions": [
+        {
+          "name": "MonoLabel",
+          "params": [
+            "{ children, style }"
+          ],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "MonoLabel"
+      ],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/MultiLineChart.tsx": {
+      "filePath": "src/design-system/components/MultiLineChart.tsx",
+      "contentHash": "c3632eaa141153dcd62015e6d1aae916a0b122d0ceb2440c8d9dd1261678ddbd",
+      "functions": [
+        {
+          "name": "fmtUsdShort",
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "MultiLineChart",
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ],
+          "exported": true,
+          "lineCount": 93
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "MultiLineChart"
+      ],
+      "totalLines": 118,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/PageHeader.tsx": {
+      "filePath": "src/design-system/components/PageHeader.tsx",
+      "contentHash": "eaf8c2d3ac5e33124ee0ed332fd12a5414be2e07c0cfa5d050cc4104c49333f9",
+      "functions": [
+        {
+          "name": "PageHeader",
+          "params": [
+            "{ title, subtitle }"
+          ],
+          "exported": true,
+          "lineCount": 34
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "PageHeader"
+      ],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/Pagination.tsx": {
+      "filePath": "src/design-system/components/Pagination.tsx",
+      "contentHash": "3160a1558bcb9385933408c9dc1f07d036dc1f9075654f5fdfc43f1330d5445f",
+      "functions": [
+        {
+          "name": "getPaginationItems",
+          "params": [
+            "current",
+            "total"
+          ],
+          "returnType": "(number | 'ellipsis')[]",
+          "exported": false,
+          "lineCount": 34
+        },
+        {
+          "name": "Pagination",
+          "params": [
+            "{ current, total, onChange }"
+          ],
+          "exported": true,
+          "lineCount": 99
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "Pagination"
+      ],
+      "totalLines": 147,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/PartnerPicker.tsx": {
+      "filePath": "src/design-system/components/PartnerPicker.tsx",
+      "contentHash": "ae43b3d1c128b8031a1a97faaca6ec2fe0d429d5a46f6cde0f5aa550c372302e",
+      "functions": [
+        {
+          "name": "fmtUsd",
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "PartnerPicker",
+          "params": [
+            "{\n  partners,\n  selected,\n  onChange,\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 55
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "PartnerPicker"
+      ],
+      "totalLines": 82,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/PercentileBar.tsx": {
+      "filePath": "src/design-system/components/PercentileBar.tsx",
+      "contentHash": "ebf1b5b8c27ec7bf404ca70ee6e3909a8802da3cdaa3554beb252c0ba7ec14d3",
+      "functions": [
+        {
+          "name": "PercentileBar",
+          "params": [
+            "{\n  pct,\n  label,\n  inverted = false,\n  footer,\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "./MonoLabel",
+          "specifiers": [
+            "MonoLabel"
+          ]
+        }
+      ],
+      "exports": [
+        "PercentileBar"
+      ],
+      "totalLines": 62,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/ProgressBar.tsx": {
+      "filePath": "src/design-system/components/ProgressBar.tsx",
+      "contentHash": "81bddb04ff36cc13857173deb85fd460ad37ceeda1117bfebad85b7006c6fe14",
+      "functions": [
+        {
+          "name": "ProgressBar",
+          "params": [
+            "{ segments }"
+          ],
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "ProgressBar"
+      ],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/ProjectionToggle.tsx": {
+      "filePath": "src/design-system/components/ProjectionToggle.tsx",
+      "contentHash": "c86bea0c7a524835c4a0707c160767b2791cb3c05aa1a3f0aca02795330e3089",
+      "functions": [
+        {
+          "name": "ProjectionToggle",
+          "params": [
+            "{\n  value,\n  onChange,\n  disabled = false,\n  disabledReason,\n}"
+          ],
+          "exported": true,
+          "lineCount": 59
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "ProjectionToggle"
+      ],
+      "totalLines": 72,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/RadarChart.tsx": {
+      "filePath": "src/design-system/components/RadarChart.tsx",
+      "contentHash": "f36997525ac5f3ef096132acb4f4037e82df45fbe99cfb19f241b8c00ff94527",
+      "functions": [
+        {
+          "name": "RadarChart",
+          "params": [
+            "{ axes, color, style }"
+          ],
+          "exported": true,
+          "lineCount": 87
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "RadarChart"
+      ],
+      "totalLines": 104,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/SectionDivider.tsx": {
+      "filePath": "src/design-system/components/SectionDivider.tsx",
+      "contentHash": "6a4fe7633e8190b29463a9928a744cfd06670fdafe95feff154a5ed457dfcc77",
+      "functions": [
+        {
+          "name": "SectionDivider",
+          "params": [
+            "{ label, style }"
+          ],
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "SectionDivider"
+      ],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/ShareCompact.tsx": {
+      "filePath": "src/design-system/components/ShareCompact.tsx",
+      "contentHash": "ea0176a9602f779f60a90fdb3a3e4fea3020e8dc7cc6dbd9ce412869b5a7ba46",
+      "functions": [
+        {
+          "name": "ShareCompact",
+          "params": [
+            "{\n  title,\n  url,\n  compact,\n  variant = 'sidebar',\n}"
+          ],
+          "exported": true,
+          "lineCount": 131
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "ShareCompact"
+      ],
+      "totalLines": 150,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/ShareToolbar.tsx": {
+      "filePath": "src/design-system/components/ShareToolbar.tsx",
+      "contentHash": "3fbd5f5a07debc65c47f51143b562f9802996d2e1577e7b7d7a9c421c7283c13",
+      "functions": [
+        {
+          "name": "ShareToolbar",
+          "params": [
+            "{ title, url }"
+          ],
+          "exported": true,
+          "lineCount": 196
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "ShareToolbar"
+      ],
+      "totalLines": 213,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/Sidebar.tsx": {
+      "filePath": "src/design-system/components/Sidebar.tsx",
+      "contentHash": "603961639381d046831499c0cefc759c647c5829c996dba058ce73d9e3154676",
+      "functions": [
+        {
+          "name": "Sidebar",
+          "params": [
+            "{\n  entries,\n  active,\n  onSelect,\n  collapsed,\n  onToggle,\n  shareTitle,\n  shareUrl,\n}"
+          ],
+          "exported": true,
+          "lineCount": 244
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "./ShareCompact",
+          "specifiers": [
+            "ShareCompact"
+          ]
+        }
+      ],
+      "exports": [
+        "Sidebar"
+      ],
+      "totalLines": 281,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/Sparkline.tsx": {
+      "filePath": "src/design-system/components/Sparkline.tsx",
+      "contentHash": "9653f9716da378b56b4807dbd093b28f7509ecc8ed81ac732750513af4e67b94",
+      "functions": [
+        {
+          "name": "Sparkline",
+          "params": [
+            "{\n  data,\n  color,\n  height = 48,\n  showMarkers = false,\n  width = 260,\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 66
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "Sparkline"
+      ],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/StackedAreaChart.tsx": {
+      "filePath": "src/design-system/components/StackedAreaChart.tsx",
+      "contentHash": "6a51a9aadfc1b5b10dc64788b8026e4dfe81fb1ec8a8552c805daf9e81b08483",
+      "functions": [
+        {
+          "name": "fmtUsdShort",
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "StackedAreaChart",
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ],
+          "exported": true,
+          "lineCount": 101
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "StackedAreaChart"
+      ],
+      "totalLines": 126,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/StatTile.tsx": {
+      "filePath": "src/design-system/components/StatTile.tsx",
+      "contentHash": "0a8d57f3f238dc8e1db3065f7c8ecab05d4acb288517b92284c42de16ec8e0b7",
+      "functions": [
+        {
+          "name": "StatTile",
+          "params": [
+            "{ label, value, sub, icon, style }"
+          ],
+          "exported": true,
+          "lineCount": 37
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "./MonoLabel",
+          "specifiers": [
+            "MonoLabel"
+          ]
+        }
+      ],
+      "exports": [
+        "StatTile"
+      ],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/StatWidget.tsx": {
+      "filePath": "src/design-system/components/StatWidget.tsx",
+      "contentHash": "99810f302d2a709a16b793e3b7c8f0755e1eff55525c78687e99ea1d3114b5d3",
+      "functions": [
+        {
+          "name": "StatWidget",
+          "params": [
+            "{ label, value, sub, icon, fluid }"
+          ],
+          "exported": true,
+          "lineCount": 65
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "StatWidget"
+      ],
+      "totalLines": 79,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/TradeBalance.tsx": {
+      "filePath": "src/design-system/components/TradeBalance.tsx",
+      "contentHash": "139ee15f2d9def4b3c1adf2a723c80cfeabaa4c263d674379de1db9cd29bb729",
+      "functions": [
+        {
+          "name": "TradeBalance",
+          "params": [
+            "{\n  exports,\n  imports,\n  currency = 'Mrd. $',\n  style,\n}"
+          ],
+          "exported": true,
+          "lineCount": 88
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "TradeBalance"
+      ],
+      "totalLines": 101,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/TrendArrow.tsx": {
+      "filePath": "src/design-system/components/TrendArrow.tsx",
+      "contentHash": "a39ee81c198fd0080d883a9cda9386d243d362a0596849101e552ddb62df1872",
+      "functions": [
+        {
+          "name": "TrendArrow",
+          "params": [
+            "{ value, inverted = false, style }"
+          ],
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "trendDirectionFromValues",
+          "params": [
+            "older",
+            "newer"
+          ],
+          "returnType": "'up' | 'down' | 'flat'",
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "TrendArrow",
+        "trendDirectionFromValues"
+      ],
+      "totalLines": 48,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/ViewToggle.tsx": {
+      "filePath": "src/design-system/components/ViewToggle.tsx",
+      "contentHash": "7883c49d528998c8868185f872395961ff4aadea12d391c6236527d7971cf006",
+      "functions": [
+        {
+          "name": "ViewToggle",
+          "params": [
+            "{ value, onChange, options, style }"
+          ],
+          "exported": true,
+          "lineCount": 50
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "ViewToggle"
+      ],
+      "totalLines": 76,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/components/VoteBar.tsx": {
+      "filePath": "src/design-system/components/VoteBar.tsx",
+      "contentHash": "02b6266def86ee1da7791dce3bef21e9a5fe37f10c36cc0b2d10cde6a6653d82",
+      "functions": [
+        {
+          "name": "VoteBar",
+          "params": [
+            "{\n  label,\n  labelColor,\n  ja,\n  nein,\n  enthalten,\n  abwesend,\n  trackVariant = 'default',\n  segmentColors,\n  expandedDetails = 'all',\n}"
+          ],
+          "exported": true,
+          "lineCount": 168
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../ThemeContext",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "VoteBar"
+      ],
+      "totalLines": 199,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/hsSections.ts": {
+      "filePath": "src/design-system/hsSections.ts",
+      "contentHash": "c29e96e11590093d021439f71858a0fa38ddcb2ad8a01738be2589a36f6d7e00",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "HS_SECTION_LABELS_DE",
+        "HS_SECTION_LABELS_EN"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n.ts": {
+      "filePath": "src/design-system/i18n.ts",
+      "contentHash": "572bd4feb33882f6614e59d19ea47936890c19bec943fffb2984c87b0ad34d4a",
+      "functions": [
+        {
+          "name": "interpolate",
+          "params": [
+            "template",
+            "vars"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./i18n/common",
+          "specifiers": [
+            "commonDe",
+            "commonEn"
+          ]
+        },
+        {
+          "source": "./i18n/overview",
+          "specifiers": [
+            "overviewDe",
+            "overviewEn"
+          ]
+        },
+        {
+          "source": "./i18n/world",
+          "specifiers": [
+            "worldDe",
+            "worldEn"
+          ]
+        },
+        {
+          "source": "./i18n/eu",
+          "specifiers": [
+            "euDe",
+            "euEn"
+          ]
+        },
+        {
+          "source": "./i18n/gesetze",
+          "specifiers": [
+            "gesetzeDe",
+            "gesetzeEn"
+          ]
+        },
+        {
+          "source": "./i18n/lobby",
+          "specifiers": [
+            "lobbyDe",
+            "lobbyEn"
+          ]
+        },
+        {
+          "source": "./i18n/elections",
+          "specifiers": [
+            "electionsDe",
+            "electionsEn"
+          ]
+        },
+        {
+          "source": "./i18n/sources",
+          "specifiers": [
+            "sourcesDe",
+            "sourcesEn"
+          ]
+        }
+      ],
+      "exports": [
+        "de",
+        "en",
+        "messages",
+        "interpolate"
+      ],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/common.ts": {
+      "filePath": "src/design-system/i18n/common.ts",
+      "contentHash": "182b8ab54e6be8bf0ade58000f4af5ebe8050a399a1926f266388fc6d4c0588f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 372,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/elections.ts": {
+      "filePath": "src/design-system/i18n/elections.ts",
+      "contentHash": "2667fde1e46b09961d1d6bdd95bf538d072b0655d17133d73ae24f112da00639",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 50,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/eu.ts": {
+      "filePath": "src/design-system/i18n/eu.ts",
+      "contentHash": "38d832a4eddd531c81779d2ce551168e8c57abb136baf8aabc59cb33dd61fb18",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 150,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/gesetze.ts": {
+      "filePath": "src/design-system/i18n/gesetze.ts",
+      "contentHash": "721935e3f255f995509200f9d8a314b79fc3e841b19b9a19e895484292004cc3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 148,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/lobby.ts": {
+      "filePath": "src/design-system/i18n/lobby.ts",
+      "contentHash": "cd0e3c3eb6f1ca74f1c2dbe3f2ba7c7ffbdefe56cb6f45fdfdc8c34cff91af7e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 170,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/overview.ts": {
+      "filePath": "src/design-system/i18n/overview.ts",
+      "contentHash": "eb60a23c6c97d6e32175c38b1d4160a280b0e487e92691206b9c2e9ad466232f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/sources.ts": {
+      "filePath": "src/design-system/i18n/sources.ts",
+      "contentHash": "76b52e6636e10490a85e3669ac29ccdb1078483cf2bdb6ff31996b4b73d0e5d5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/i18n/world.ts": {
+      "filePath": "src/design-system/i18n/world.ts",
+      "contentHash": "a9c90bc500c8cf0dd59dd040c2856321fa65de09097bbd9511c2bf24a7406772",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "de",
+        "en"
+      ],
+      "totalLines": 590,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/index.ts": {
+      "filePath": "src/design-system/index.ts",
+      "contentHash": "fb80e9866441bae6314fd4c6b496ff786b8a44278e4cebfa6ea229f476a0ef76",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "ThemeProvider",
+        "useTheme",
+        "CompareBar",
+        "HBar",
+        "InfoToggle",
+        "LineChart",
+        "MonoLabel",
+        "PercentileBar",
+        "ProjectionToggle",
+        "MapProjectionMode",
+        "RadarChart",
+        "SectionDivider",
+        "Sparkline",
+        "StatTile",
+        "TradeBalance",
+        "TrendArrow",
+        "trendDirectionFromValues",
+        "Badge",
+        "BadgeProps",
+        "BadgeVariant",
+        "DataCard",
+        "DataCardProps",
+        "EmptyState",
+        "EmptyStateProps",
+        "FilterToolbar",
+        "FilterDef",
+        "FilterOption",
+        "FilterToolbarProps",
+        "LegalFooter",
+        "LoadingSpinner",
+        "MobileNav",
+        "MobileNavProps",
+        "PageHeader",
+        "PageHeaderProps",
+        "Pagination",
+        "PaginationProps",
+        "ProgressBar",
+        "ProgressBarProps",
+        "ProgressSegment",
+        "ShareCompact",
+        "ShareCompactProps",
+        "ShareToolbar",
+        "ShareToolbarProps",
+        "Sidebar",
+        "SidebarModule",
+        "SidebarNavEntry",
+        "SidebarNavLink",
+        "SidebarNavSection",
+        "SidebarProps",
+        "StatWidget",
+        "StatWidgetProps",
+        "VoteBar",
+        "VoteBarProps"
+      ],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/ThemeContext.tsx": {
+      "filePath": "src/design-system/ThemeContext.tsx",
+      "contentHash": "c512fcddc877f0da4c35dbe66dc436f37c36ff02151d71839ad62ff3eeada162",
+      "functions": [
+        {
+          "name": "readStoredTheme",
+          "params": [],
+          "returnType": "ThemeMode",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "readStoredLang",
+          "params": [],
+          "returnType": "Lang",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "ThemeProvider",
+          "params": [
+            "{ children }"
+          ],
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "useTheme",
+          "params": [],
+          "returnType": "ThemeContextValue",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "createContext",
+            "useCallback",
+            "useContext",
+            "useEffect",
+            "useMemo",
+            "useState",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "./tokens",
+          "specifiers": [
+            "dark",
+            "light",
+            "ThemeColors"
+          ]
+        },
+        {
+          "source": "./i18n",
+          "specifiers": [
+            "messages",
+            "I18nKey"
+          ]
+        }
+      ],
+      "exports": [
+        "ThemeProvider",
+        "useTheme"
+      ],
+      "totalLines": 110,
+      "hasStructuralAnalysis": true
+    },
+    "src/design-system/tokens.ts": {
+      "filePath": "src/design-system/tokens.ts",
+      "contentHash": "154b3aad50858a3fe7a493d8a9624969a90762ebee355a2a8a0de32308e0d35b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "light",
+        "dark",
+        "spacing",
+        "fonts",
+        "breakpoints"
+      ],
+      "totalLines": 98,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useApi.ts": {
+      "filePath": "src/hooks/useApi.ts",
+      "contentHash": "08137a8111b4f4352ced328b0ee1c9c2d9ac6dca511520060d73b4cabda250e0",
+      "functions": [
+        {
+          "name": "getBaseUrl",
+          "params": [],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "buildUrl",
+          "params": [
+            "endpoint"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "useApi",
+          "params": [
+            "endpoint"
+          ],
+          "returnType": "UseApiResult<T>",
+          "exported": true,
+          "lineCount": 70
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "exports": [
+        "useApi"
+      ],
+      "totalLines": 94,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useDebouncedValue.ts": {
+      "filePath": "src/hooks/useDebouncedValue.ts",
+      "contentHash": "57ce2279a79b93d4817c5a0796910c675c295624aa9fd1c88e13af63ed123175",
+      "functions": [
+        {
+          "name": "useDebouncedValue",
+          "params": [
+            "value",
+            "ms"
+          ],
+          "returnType": "T",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "exports": [
+        "useDebouncedValue"
+      ],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useLocalStorage.ts": {
+      "filePath": "src/hooks/useLocalStorage.ts",
+      "contentHash": "a00b99dd730c98c8a6de192501619e815edf31ef88ecf616c345bb181f739101",
+      "functions": [
+        {
+          "name": "useLocalStorage",
+          "params": [
+            "key",
+            "defaultValue"
+          ],
+          "returnType": "[T, (value: T) => void]",
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useState"
+          ]
+        }
+      ],
+      "exports": [
+        "useLocalStorage"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useMediaQuery.ts": {
+      "filePath": "src/hooks/useMediaQuery.ts",
+      "contentHash": "c0ff80fe4033f2335630287436f2df5d3119f141b708d7feb87c2c664c128ef5",
+      "functions": [
+        {
+          "name": "useMediaQuery",
+          "params": [
+            "query"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "useIsMobile",
+          "params": [],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "breakpoints"
+          ]
+        }
+      ],
+      "exports": [
+        "useMediaQuery",
+        "useIsMobile"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useOffsetPagination.ts": {
+      "filePath": "src/hooks/useOffsetPagination.ts",
+      "contentHash": "0d43fb819df4c25c5f111096dfd4c3137228c668dd57e816e2dee5b33cd007f1",
+      "functions": [
+        {
+          "name": "useOffsetPagination",
+          "params": [
+            "limit",
+            "initialPage"
+          ],
+          "returnType": "OffsetPagination",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState",
+            "useMemo",
+            "useCallback"
+          ]
+        }
+      ],
+      "exports": [
+        "useOffsetPagination"
+      ],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/useSearchParamsState.ts": {
+      "filePath": "src/hooks/useSearchParamsState.ts",
+      "contentHash": "0849fac796d76a1754edeca656d718152c5e1034ea439d368939ac8cbb718bdc",
+      "functions": [
+        {
+          "name": "useSearchParamsState",
+          "params": [
+            "key",
+            "defaultValue"
+          ],
+          "returnType": "[string | null, (value: string | null) => void]",
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useSearchParams"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback"
+          ]
+        }
+      ],
+      "exports": [
+        "useSearchParamsState"
+      ],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "src/index.css": {
+      "filePath": "src/index.css",
+      "contentHash": "092437e4d71bc547cb9fbb4a0eba140375a9b352911cff043670a95bac45db51",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "src/layouts/DashboardLayout.tsx": {
+      "filePath": "src/layouts/DashboardLayout.tsx",
+      "contentHash": "9b8ecdd169fb767927d08957f8a36167596bbbb17f3d61ff345d874adaf9d4bf",
+      "functions": [
+        {
+          "name": "activeModuleFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "DashboardLayout",
+          "params": [],
+          "exported": true,
+          "lineCount": 121
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Outlet",
+            "useLocation",
+            "useNavigate"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "LegalFooter",
+            "MobileNav",
+            "Sidebar",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        }
+      ],
+      "exports": [
+        "DashboardLayout"
+      ],
+      "totalLines": 167,
+      "hasStructuralAnalysis": true
+    },
+    "src/main.tsx": {
+      "filePath": "src/main.tsx",
+      "contentHash": "5f49dce6e6cc4b5d678cf529ef892af0ab7dfa6afb300b11ad559224019b8b05",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "React"
+          ]
+        },
+        {
+          "source": "react-dom/client",
+          "specifiers": [
+            "ReactDOM"
+          ]
+        },
+        {
+          "source": "./App",
+          "specifiers": [
+            "App"
+          ]
+        },
+        {
+          "source": "./index.css",
+          "specifiers": []
+        }
+      ],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Admin.tsx": {
+      "filePath": "src/pages/Admin.tsx",
+      "contentHash": "818bf36fb9d0870cec1c1693ebc5844cd7259550f498e0f92ce69edea9f36a91",
+      "functions": [
+        {
+          "name": "Admin",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "Admin"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Bundestag.tsx": {
+      "filePath": "src/pages/Bundestag.tsx",
+      "contentHash": "85ac3a502c0288da774c999bc4d17ef1a7cab5fc885bfedd870d712a1cae8448",
+      "functions": [
+        {
+          "name": "normalizeFraktion",
+          "params": [
+            "f"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "getEffektiveFraktion",
+          "params": [
+            "abgeordneter"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "canonicalKey",
+          "params": [
+            "fraktion"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "normalizeForMatch",
+          "params": [
+            "s"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "apiFraktionToRawKategorie",
+          "params": [
+            "apiFraktion"
+          ],
+          "returnType": "RawKategorie",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "getNachname",
+          "params": [
+            "row"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "Bundestag",
+          "params": [],
+          "exported": true,
+          "lineCount": 556
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useNavigate",
+            "useParams"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "Badge",
+            "LoadingSpinner",
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../components/bundestag/AbstimmungsDetail",
+          "specifiers": [
+            "AbstimmungsDetail",
+            "shortFraktionName"
+          ]
+        },
+        {
+          "source": "../components/bundestag/AbstimmungsListe",
+          "specifiers": [
+            "AbstimmungsListe"
+          ]
+        },
+        {
+          "source": "../components/bundestag/Hemicycle",
+          "specifiers": [
+            "Hemicycle",
+            "SitzverteilungRow"
+          ]
+        },
+        {
+          "source": "../data/bundestag-seats",
+          "specifiers": [
+            "RAW_SEAT_COUNT",
+            "RAW_SEATS"
+          ]
+        },
+        {
+          "source": "../components/bundestag/AbstimmungsDetail",
+          "specifiers": [
+            "AbstimmungsDetailData"
+          ]
+        }
+      ],
+      "exports": [
+        "Bundestag"
+      ],
+      "totalLines": 675,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Coalition.tsx": {
+      "filePath": "src/pages/Coalition.tsx",
+      "contentHash": "b3289662938042b0e1dcdb3c8a02b6e640ed832cdfec455c42c1581cff494673",
+      "functions": [
+        {
+          "name": "Coalition",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "Coalition"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/DemocracyIndex.tsx": {
+      "filePath": "src/pages/DemocracyIndex.tsx",
+      "contentHash": "ac4285f88ebf9f9f2a0bff6de6dfa3750352ab0c79aa3d024fedfc9aae15bf35",
+      "functions": [
+        {
+          "name": "DemocracyIndex",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "DemocracyIndex"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Elections.tsx": {
+      "filePath": "src/pages/Elections.tsx",
+      "contentHash": "7fa0045f1885e76158a1e0f96ccdf5d84f016dd72c2cab1bf7b2aefcfb4e7c26",
+      "functions": [
+        {
+          "name": "Elections",
+          "params": [],
+          "exported": true,
+          "lineCount": 303
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "lazy",
+            "Suspense",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "EmptyState",
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "./elections/mapGeometry",
+          "specifiers": [
+            "buildKreiseMap"
+          ]
+        },
+        {
+          "source": "./elections/KreisAutocomplete",
+          "specifiers": [
+            "filterKreiseSearchHits"
+          ]
+        },
+        {
+          "source": "./elections/normalizeWahlen",
+          "specifiers": [
+            "normalizeMapRow"
+          ]
+        },
+        {
+          "source": "../hooks/useDebouncedValue",
+          "specifiers": [
+            "useDebouncedValue"
+          ]
+        },
+        {
+          "source": "./elections/types",
+          "specifiers": [
+            "ElectionType",
+            "KreiseGeoJson",
+            "MapRow",
+            "MapRowFromApi"
+          ]
+        }
+      ],
+      "exports": [
+        "Elections"
+      ],
+      "totalLines": 348,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/AdvancedAnalysis.tsx": {
+      "filePath": "src/pages/elections/AdvancedAnalysis.tsx",
+      "contentHash": "a89fc54dcd4c4abb94ae13052653e6eed590662c4ba5387c08d4250255b1190b",
+      "functions": [
+        {
+          "name": "normalizeChangeRow",
+          "params": [
+            "r"
+          ],
+          "returnType": "ChangeRow",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "formatGainPp",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "formatLossPp",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "selectStyle",
+          "params": [
+            "c"
+          ],
+          "returnType": "React.CSSProperties",
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "normAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "AdvancedAnalysis",
+          "params": [
+            "{\n  electionType,\n  year,\n  years,\n  mapBuild,\n  winnersByAgs,\n  kreisNameByAgs,\n  onSelectRegion,\n}"
+          ],
+          "exported": true,
+          "lineCount": 704
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "DataCard",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "./ChangeAnalysisCharts",
+          "specifiers": [
+            "ChangeDeltaHistogram",
+            "ChangeGainsLossesBarCharts",
+            "ChangeStateAverageBars"
+          ]
+        },
+        {
+          "source": "./ChangeMap",
+          "specifiers": [
+            "ChangeMap"
+          ]
+        },
+        {
+          "source": "./mapGeometry",
+          "specifiers": [
+            "KreiseMapBuild"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS",
+            "STATE_NAMES"
+          ]
+        },
+        {
+          "source": "./RankingTable",
+          "specifiers": [
+            "RankingTable"
+          ]
+        },
+        {
+          "source": "./ScatterPlot",
+          "specifiers": [
+            "SCATTER_AXIS_OPTIONS",
+            "ScatterPlot",
+            "scatterAxisLabel",
+            "ScatterAxisKey"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "changeToDisplayPp",
+            "resolveKreisDisplayName",
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ChangeRow",
+            "ElectionType",
+            "MapRow",
+            "RankingRow",
+            "ScatterRow"
+          ]
+        }
+      ],
+      "exports": [
+        "AdvancedAnalysis"
+      ],
+      "totalLines": 796,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/ChangeAnalysisCharts.tsx": {
+      "filePath": "src/pages/elections/ChangeAnalysisCharts.tsx",
+      "contentHash": "11655140420dfec84ecd8e950d8bcab578a05ef97ae5572b69d38cd3faf92c60",
+      "functions": [
+        {
+          "name": "normAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "truncLabel",
+          "params": [
+            "s",
+            "max"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "formatPp",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "formatNum",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "ChangeGainsLossesBarCharts",
+          "params": [
+            "{\n  gains,\n  losses,\n  kreisLabel,\n  onSelectAgs,\n  narrow,\n}"
+          ],
+          "exported": true,
+          "lineCount": 130
+        },
+        {
+          "name": "ChangeDeltaHistogram",
+          "params": [
+            "{ rows, narrow }"
+          ],
+          "exported": true,
+          "lineCount": 135
+        },
+        {
+          "name": "ChangeStateAverageBars",
+          "params": [
+            "{ rows, narrow }"
+          ],
+          "exported": true,
+          "lineCount": 101
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Bar",
+            "BarChart",
+            "CartesianGrid",
+            "Cell",
+            "LabelList",
+            "ReferenceLine",
+            "ResponsiveContainer",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "statePrefixFromAgs"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ChangeRow"
+          ]
+        }
+      ],
+      "exports": [
+        "ChangeGainsLossesBarCharts",
+        "ChangeDeltaHistogram",
+        "ChangeStateAverageBars"
+      ],
+      "totalLines": 458,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/ChangeMap.tsx": {
+      "filePath": "src/pages/elections/ChangeMap.tsx",
+      "contentHash": "1c4206417ec54addbe8ccd36e9f57b4771f45807b0a3a4ad9364a9aa1ab215af",
+      "functions": [
+        {
+          "name": "normAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "agsDataAttr",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "formatDeltaPp",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "ChangeMap",
+          "params": [
+            "{\n  mapBuild,\n  changeByAgs,\n  maxAbs,\n  kreisNameByAgs,\n  onSelectAgs,\n  selectedAgs,\n  filterStatePrefix,\n}"
+          ],
+          "exported": true,
+          "lineCount": 241
+        },
+        {
+          "name": "formatDisplayPct",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useLayoutEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./mapColors",
+          "specifiers": [
+            "changeColor"
+          ]
+        },
+        {
+          "source": "./mapGeometry",
+          "specifiers": [
+            "KreiseMapBuild"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "resolveKreisDisplayName"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ChangeRow"
+          ]
+        }
+      ],
+      "exports": [
+        "ChangeMap"
+      ],
+      "totalLines": 296,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/CompareMode.tsx": {
+      "filePath": "src/pages/elections/CompareMode.tsx",
+      "contentHash": "4eba221fa491953851a57007acf944d8afc36bbb65ff3206ce3fe9190c45e4c5",
+      "functions": [
+        {
+          "name": "findRow",
+          "params": [
+            "elections",
+            "typ",
+            "year"
+          ],
+          "returnType": "RegionElectionRow | undefined",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "CompareMode",
+          "params": [
+            "{\n  compareRegions,\n  setCompareRegions,\n  kreisNameByAgs,\n  geojson,\n  narrow,\n  initialElectionType,\n  onBackToMap,\n}"
+          ],
+          "exported": true,
+          "lineCount": 604
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Legend",
+            "Line",
+            "LineChart",
+            "ResponsiveContainer",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "LoadingSpinner",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "./DifferenceTable",
+          "specifiers": [
+            "DifferenceTable"
+          ]
+        },
+        {
+          "source": "./KreisAutocomplete",
+          "specifiers": [
+            "filterKreiseSearchHits",
+            "KreisAutocomplete"
+          ]
+        },
+        {
+          "source": "./PartyBarChart",
+          "specifiers": [
+            "PartyBarChart"
+          ]
+        },
+        {
+          "source": "./PartyToggles",
+          "specifiers": [
+            "DISTRICT_CHART_PARTIES"
+          ]
+        },
+        {
+          "source": "./RadarCompare",
+          "specifiers": [
+            "RADAR_COMPARE_KEYS",
+            "RadarCompare",
+            "radarSubjectLabel"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS"
+          ]
+        },
+        {
+          "source": "./electionUiUtils",
+          "specifiers": [
+            "ELECTION_TYPES",
+            "normAgs",
+            "sectionTitle",
+            "selectCss",
+            "typeLabelT"
+          ]
+        },
+        {
+          "source": "./regionBarRows",
+          "specifiers": [
+            "regionRowToSingleResultBars"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "resolveKreisDisplayName",
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType",
+            "KreiseGeoJson",
+            "RegionElectionRow",
+            "RegionResponse"
+          ]
+        }
+      ],
+      "exports": [
+        "CompareMode"
+      ],
+      "totalLines": 688,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/DifferenceTable.tsx": {
+      "filePath": "src/pages/elections/DifferenceTable.tsx",
+      "contentHash": "fb7e221dccf2668e6b5cfaf5ea1cff870cefa3188eaea088dc7e21a0ba0bd9de",
+      "functions": [
+        {
+          "name": "shortHeaderName",
+          "params": [
+            "name"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "spanColor",
+          "params": [
+            "span",
+            "c"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "DifferenceTable",
+          "params": [
+            "{\n  lang,\n  t,\n  partyKeys,\n  regionLabels,\n  matrix,\n}"
+          ],
+          "exported": true,
+          "lineCount": 331
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useMemo"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "PARTY_LABELS"
+          ]
+        }
+      ],
+      "exports": [
+        "DifferenceTable"
+      ],
+      "totalLines": 371,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/DistrictAnalysis.tsx": {
+      "filePath": "src/pages/elections/DistrictAnalysis.tsx",
+      "contentHash": "0f121afde6bea4ae3001a2d81efe544bb33737c3905d632c640e226be4cd08c1",
+      "functions": [
+        {
+          "name": "ElectionTypeCompareLineLegend",
+          "params": [
+            "{\n  entries,\n  t,\n  c,\n}"
+          ],
+          "exported": false,
+          "lineCount": 58
+        },
+        {
+          "name": "rawShare",
+          "params": [
+            "row",
+            "key"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "winnerPartyKey",
+          "params": [
+            "row"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "defaultTopParties",
+          "params": [
+            "latest"
+          ],
+          "returnType": "string[]",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "DistrictAnalysis",
+          "params": [
+            "{\n  ags,\n  kreisNameByAgs,\n  geojson,\n  mapElectionType,\n  mapYear,\n  narrow,\n  onBackToMap,\n  onSelectKreis,\n  compareRegions,\n  setCompareRegions,\n  onOpenCompare,\n  onStartCompare,\n}"
+          ],
+          "exported": true,
+          "lineCount": 984
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState",
+            "CSSProperties",
+            "Dispatch",
+            "SetStateAction"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Legend",
+            "Line",
+            "LineChart",
+            "ResponsiveContainer",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "LoadingSpinner",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing",
+            "ThemeColors"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "interpolate",
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "./KreisAutocomplete",
+          "specifiers": [
+            "filterKreiseSearchHits",
+            "KreisAutocomplete"
+          ]
+        },
+        {
+          "source": "./HistoricalTable",
+          "specifiers": [
+            "HistoricalTable"
+          ]
+        },
+        {
+          "source": "./PartyBarChart",
+          "specifiers": [
+            "PartyBarChart"
+          ]
+        },
+        {
+          "source": "./PartyToggles",
+          "specifiers": [
+            "DISTRICT_CHART_PARTIES",
+            "PartyToggles"
+          ]
+        },
+        {
+          "source": "./PercentileBar",
+          "specifiers": [
+            "PercentileBar"
+          ]
+        },
+        {
+          "source": "./regionBarRows",
+          "specifiers": [
+            "regionRowToSingleResultBars"
+          ]
+        },
+        {
+          "source": "./electionUiUtils",
+          "specifiers": [
+            "ELECTION_TYPES",
+            "normAgs",
+            "sectionTitle",
+            "selectCss",
+            "typeLabelT"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS",
+            "partyColorsForTheme"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "resolveKreisDisplayName",
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "MapRowFromApi"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType",
+            "KreiseGeoJson",
+            "RankingRow",
+            "RegionElectionRow",
+            "RegionResponse"
+          ]
+        }
+      ],
+      "exports": [
+        "DistrictAnalysis"
+      ],
+      "totalLines": 1160,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/ElectionMap.tsx": {
+      "filePath": "src/pages/elections/ElectionMap.tsx",
+      "contentHash": "3bf00fb1ab0c3aa108f2a5384308b7ce96cf87522863bee3b4edebf627f71d86",
+      "functions": [
+        {
+          "name": "normAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "formatPct",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "ElectionMap",
+          "params": [
+            "{\n  mapBuild,\n  dataByAgs,\n  kreisNameByAgs,\n  metric,\n  turnoutMin,\n  turnoutMax,\n  lang,\n  onSelectAgs,\n  selectedAgs,\n  comparePickMode,\n  loading,\n}"
+          ],
+          "exported": true,
+          "lineCount": 200
+        },
+        {
+          "name": "ElectionMapLegend",
+          "params": [
+            "{\n  metric,\n  lang,\n  turnoutMin,\n  turnoutMax,\n  partyForScale,\n}"
+          ],
+          "exported": true,
+          "lineCount": 130
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./mapColors",
+          "specifiers": [
+            "mapFillColor"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS",
+            "TURNOUT_SCALE",
+            "partyColorsForTheme"
+          ]
+        },
+        {
+          "source": "./mapGeometry",
+          "specifiers": [
+            "MAP_VIEW_H",
+            "MAP_VIEW_W",
+            "KreiseMapBuild"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "resolveKreisDisplayName",
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "MapRow"
+          ]
+        }
+      ],
+      "exports": [
+        "ElectionMap",
+        "ElectionMapLegend"
+      ],
+      "totalLines": 381,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/electionUiUtils.tsx": {
+      "filePath": "src/pages/elections/electionUiUtils.tsx",
+      "contentHash": "0bc873e1cc5b50f597c8b38110b6f498309302fa18b46bb0069259dd6dcb35c3",
+      "functions": [
+        {
+          "name": "selectCss",
+          "params": [
+            "c",
+            "narrow"
+          ],
+          "returnType": "CSSProperties",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "typeLabelT",
+          "params": [
+            "t",
+            "typ"
+          ],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "normAgs",
+          "params": [
+            "a"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "sectionTitle",
+          "params": [
+            "text",
+            "c"
+          ],
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType"
+          ]
+        }
+      ],
+      "exports": [
+        "ELECTION_TYPES",
+        "selectCss",
+        "typeLabelT",
+        "normAgs",
+        "sectionTitle"
+      ],
+      "totalLines": 71,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/HistoricalTable.tsx": {
+      "filePath": "src/pages/elections/HistoricalTable.tsx",
+      "contentHash": "441c988a0490c65fddc63fec196f448c0b717ac0f2cca5de481c03ab4d950f79",
+      "functions": [
+        {
+          "name": "rawShare",
+          "params": [
+            "row",
+            "key"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "winnerKey",
+          "params": [
+            "row"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "cellPct",
+          "params": [
+            "row",
+            "key",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "HistoricalTable",
+          "params": [
+            "{\n  lang,\n  t,\n  rows,\n  typeLabel,\n}"
+          ],
+          "exported": true,
+          "lineCount": 277
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType",
+            "RegionElectionRow"
+          ]
+        }
+      ],
+      "exports": [
+        "HistoricalTable"
+      ],
+      "totalLines": 334,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/KreisAutocomplete.tsx": {
+      "filePath": "src/pages/elections/KreisAutocomplete.tsx",
+      "contentHash": "5c1bea56970781060bd84a5996bb2a2f8a922934e7808c7a39681f45b2c7742f",
+      "functions": [
+        {
+          "name": "filterKreiseSearchHits",
+          "params": [
+            "geojson",
+            "query",
+            "maxResults"
+          ],
+          "returnType": "KreisSearchHit[]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "selectInputStyle",
+          "params": [
+            "c"
+          ],
+          "returnType": "CSSProperties",
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "KreisAutocomplete",
+          "params": [
+            "{\n  label,\n  placeholder,\n  ariaLabel,\n  narrow,\n  query,\n  onQueryChange,\n  results,\n  onPick,\n}"
+          ],
+          "exported": true,
+          "lineCount": 143
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useRef",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "KreiseGeoJson"
+          ]
+        }
+      ],
+      "exports": [
+        "filterKreiseSearchHits",
+        "KreisAutocomplete"
+      ],
+      "totalLines": 206,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/mapColors.ts": {
+      "filePath": "src/pages/elections/mapColors.ts",
+      "contentHash": "dd769d7d84fe60adf52735475ffbb78704186012bb102b53e93a9c27e6b03bdd",
+      "functions": [
+        {
+          "name": "partyShareColor",
+          "params": [
+            "party",
+            "pct",
+            "partyColors"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "turnoutColor",
+          "params": [
+            "turnout",
+            "minT",
+            "maxT"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "changeColor",
+          "params": [
+            "delta",
+            "maxAbs",
+            "themeNeutral"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "mapFillColor",
+          "params": [
+            "args"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 31
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "d3-interpolate",
+          "specifiers": [
+            "interpolateRgb"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "CHANGE_SCALE_NEG",
+            "CHANGE_SCALE_POS",
+            "MAIN_PARTIES",
+            "PARTY_COLORS_LIGHT",
+            "TURNOUT_SCALE"
+          ]
+        }
+      ],
+      "exports": [
+        "partyShareColor",
+        "turnoutColor",
+        "changeColor",
+        "mapFillColor"
+      ],
+      "totalLines": 90,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/mapGeometry.ts": {
+      "filePath": "src/pages/elections/mapGeometry.ts",
+      "contentHash": "f2e25dadb7a85b2aa0f5d677706fb52752db7cc5f49a18522121cfe4249b225d",
+      "functions": [
+        {
+          "name": "projectCoords",
+          "params": [
+            "coords",
+            "lonMin",
+            "lonMax",
+            "latMin",
+            "latMax",
+            "width",
+            "height",
+            "padding"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "featureToPath",
+          "params": [
+            "feature",
+            "lonMin",
+            "lonMax",
+            "latMin",
+            "latMax",
+            "w",
+            "h",
+            "pad"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 52
+        },
+        {
+          "name": "buildKreiseMap",
+          "params": [
+            "geojson"
+          ],
+          "returnType": "KreiseMapBuild",
+          "exported": true,
+          "lineCount": 29
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "statePrefixFromAgs"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "GeoJsonFeature",
+            "KreiseGeoJson",
+            "PreparedPath"
+          ]
+        }
+      ],
+      "exports": [
+        "MAP_VIEW_W",
+        "MAP_VIEW_H",
+        "projectCoords",
+        "featureToPath",
+        "buildKreiseMap"
+      ],
+      "totalLines": 134,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/MapMode.tsx": {
+      "filePath": "src/pages/elections/MapMode.tsx",
+      "contentHash": "c23dc69828fbfbe889711b0bb625cb45a6d01eba33127f51359d05e2b48a45c9",
+      "functions": [
+        {
+          "name": "selectCss",
+          "params": [
+            "c"
+          ],
+          "returnType": "CSSProperties",
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "typeLabel",
+          "params": [
+            "t",
+            "typ"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "metricLabel",
+          "params": [
+            "t",
+            "lang",
+            "m"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "sparseKreisBannerText",
+          "params": [
+            "lang",
+            "typ",
+            "typeName",
+            "year",
+            "count"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 30
+        },
+        {
+          "name": "MapMode",
+          "params": [
+            "{\n  narrow,\n  searchQuery,\n  setSearchQuery,\n  searchResults,\n  electionType,\n  setElectionType,\n  year,\n  setYear,\n  metric,\n  setMetric,\n  years,\n  yearsLoading,\n  geoErr,\n  mapError,\n  mapLoading,\n  debouncedType,\n  debouncedYear,\n  debouncedMetric,\n  normalizedRows,\n  mapBuild,\n  dataByAgs,\n  kreisNameByAgs,\n  turnoutStats,\n  selectedAgs,\n  onActivateKreis,\n  showAdvanced,\n  setShowAdvanced,\n  winnersByAgs,\n}"
+          ],
+          "exported": true,
+          "lineCount": 287
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "CSSProperties",
+            "Dispatch",
+            "SetStateAction"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "DataCard",
+            "EmptyState",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "./AdvancedAnalysis",
+          "specifiers": [
+            "AdvancedAnalysis"
+          ]
+        },
+        {
+          "source": "./ElectionMap",
+          "specifiers": [
+            "ElectionMap",
+            "ElectionMapLegend"
+          ]
+        },
+        {
+          "source": "./KreisAutocomplete",
+          "specifiers": [
+            "KreisAutocomplete",
+            "KreisSearchHit"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS"
+          ]
+        },
+        {
+          "source": "./mapGeometry",
+          "specifiers": [
+            "KreiseMapBuild"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType",
+            "MapRow"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        }
+      ],
+      "exports": [
+        "MapMode"
+      ],
+      "totalLines": 438,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/normalizeWahlen.ts": {
+      "filePath": "src/pages/elections/normalizeWahlen.ts",
+      "contentHash": "8d1b17b59b56ec7d4d7d620dad1586ca890c46f5589756dad6a30dd588daa849",
+      "functions": [
+        {
+          "name": "toDisplayPercent",
+          "params": [
+            "raw"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "changeToDisplayPp",
+          "params": [
+            "raw"
+          ],
+          "returnType": "number",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "resolveKreisDisplayName",
+          "params": [
+            "ags",
+            "kreisNameByAgs",
+            "apiName"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "normalizeMapRow",
+          "params": [
+            "r",
+            "kreisNameByAgs"
+          ],
+          "returnType": "MapRow",
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "toDisplayPercent",
+        "changeToDisplayPp",
+        "resolveKreisDisplayName",
+        "normalizeMapRow"
+      ],
+      "totalLines": 87,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/PartyBarChart.tsx": {
+      "filePath": "src/pages/elections/PartyBarChart.tsx",
+      "contentHash": "c37699f38265391ac9b83752b8c41a6c58e0c266d8b720ab6f164e47c87b7333",
+      "functions": [
+        {
+          "name": "PartyBarChart",
+          "params": [
+            "{\n  data,\n  year,\n  lang,\n  valueMax,\n  regionCaption,\n}"
+          ],
+          "exported": true,
+          "lineCount": 87
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Bar",
+            "BarChart",
+            "Cell",
+            "LabelList",
+            "ResponsiveContainer",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "PARTY_LABELS",
+            "partyColorsForTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "PartyBarChart"
+      ],
+      "totalLines": 116,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/partyColors.ts": {
+      "filePath": "src/pages/elections/partyColors.ts",
+      "contentHash": "e767417cd453f83df74e03ba0081f4244179af1056c1ae5b46c49c87c672237a",
+      "functions": [
+        {
+          "name": "partyColorsForTheme",
+          "params": [
+            "isDark"
+          ],
+          "returnType": "Record<string, string>",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "statePrefixFromAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "colorForStatePrefix",
+          "params": [
+            "prefix"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "PARTY_COLORS_LIGHT",
+        "PARTY_COLORS_DARK",
+        "PARTY_COLORS",
+        "partyColorsForTheme",
+        "PARTY_LABELS",
+        "TURNOUT_SCALE",
+        "CHANGE_SCALE_NEG",
+        "CHANGE_SCALE_POS",
+        "MAIN_PARTIES",
+        "STATE_PREFIX_COLORS",
+        "STATE_COLORS",
+        "STATE_NAMES",
+        "statePrefixFromAgs",
+        "colorForStatePrefix"
+      ],
+      "totalLines": 139,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/PartyToggles.tsx": {
+      "filePath": "src/pages/elections/PartyToggles.tsx",
+      "contentHash": "d54abf40b63c1b989deef4cfa0c89cc5f51d9c85b94a06d7a0e677f860c622d1",
+      "functions": [
+        {
+          "name": "textOnPartyColor",
+          "params": [
+            "hex"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "PartyToggles",
+          "params": [
+            "{ lang, activeKeys, onChange }"
+          ],
+          "exported": true,
+          "lineCount": 60
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "PARTY_LABELS",
+            "partyColorsForTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "DISTRICT_CHART_PARTIES",
+        "PartyToggles"
+      ],
+      "totalLines": 95,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/PercentileBar.tsx": {
+      "filePath": "src/pages/elections/PercentileBar.tsx",
+      "contentHash": "2102fe870688e83be3325bc6608524acf0b8b3a37c4bd1b549c1d8461646db50",
+      "functions": [
+        {
+          "name": "PercentileBar",
+          "params": [
+            "{\n  lang,\n  t,\n  min,\n  max,\n  value,\n  rank,\n  total,\n  accentColor,\n}"
+          ],
+          "exported": true,
+          "lineCount": 78
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "interpolate",
+            "I18nKey"
+          ]
+        }
+      ],
+      "exports": [
+        "PercentileBar"
+      ],
+      "totalLines": 96,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/RadarCompare.tsx": {
+      "filePath": "src/pages/elections/RadarCompare.tsx",
+      "contentHash": "338da6ff14b82f481571bfd47dd291707f880a2fd4d905b5ecb5de10ae7d7240",
+      "functions": [
+        {
+          "name": "RadarCompare",
+          "params": [
+            "{\n  lang,\n  chartData,\n  series,\n  domainMax,\n  narrow,\n}"
+          ],
+          "exported": true,
+          "lineCount": 75
+        },
+        {
+          "name": "radarSubjectLabel",
+          "params": [
+            "lang",
+            "key"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Legend",
+            "PolarAngleAxis",
+            "PolarGrid",
+            "PolarRadiusAxis",
+            "Radar",
+            "RadarChart",
+            "ResponsiveContainer",
+            "Tooltip"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "PARTY_LABELS"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        }
+      ],
+      "exports": [
+        "RADAR_COMPARE_KEYS",
+        "RadarCompare",
+        "radarSubjectLabel"
+      ],
+      "totalLines": 123,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/RankingTable.tsx": {
+      "filePath": "src/pages/elections/RankingTable.tsx",
+      "contentHash": "8ab965fc18c28112cb614b9dc8e9ba4be5b01b6db6d88ad49a51ac00bc62d2cf",
+      "functions": [
+        {
+          "name": "bundeslandFromAgs",
+          "params": [
+            "ags"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "RankingTable",
+          "params": [
+            "{ rows, kreisNameByAgs, onRowClick }"
+          ],
+          "exported": true,
+          "lineCount": 164
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useMemo",
+            "useState",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "STATE_NAMES",
+            "statePrefixFromAgs"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "resolveKreisDisplayName",
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "RankingRow"
+          ]
+        }
+      ],
+      "exports": [
+        "RankingTable"
+      ],
+      "totalLines": 185,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/regionBarRows.ts": {
+      "filePath": "src/pages/elections/regionBarRows.ts",
+      "contentHash": "f4a1125713f9755dee45580bb45476fd59cdb7842239c62309c4ae36bd592c8a",
+      "functions": [
+        {
+          "name": "rawShare",
+          "params": [
+            "row",
+            "key"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "regionRowToSingleResultBars",
+          "params": [
+            "row"
+          ],
+          "returnType": "PartyBarRow[]",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "./PartyBarChart",
+          "specifiers": [
+            "PartyBarRow"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "RegionElectionRow"
+          ]
+        }
+      ],
+      "exports": [
+        "regionRowToSingleResultBars"
+      ],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/RegionPanel.tsx": {
+      "filePath": "src/pages/elections/RegionPanel.tsx",
+      "contentHash": "40a5d11c3c782ef510258cb0fe617f6d06dbca806966160f833ba60988a64240",
+      "functions": [
+        {
+          "name": "rawShare",
+          "params": [
+            "row",
+            "key"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "rowToBarData",
+          "params": [
+            "row"
+          ],
+          "returnType": "PartyBarRow[]",
+          "exported": false,
+          "lineCount": 25
+        },
+        {
+          "name": "RegionPanel",
+          "params": [
+            "{\n  ags,\n  agsNameMap,\n  mapYear,\n  mapTyp,\n  compareAgs,\n  comparePicking,\n  onClose,\n  onStartCompare,\n  onClearCompare,\n}"
+          ],
+          "exported": true,
+          "lineCount": 308
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "LoadingSpinner",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "./PartyBarChart",
+          "specifiers": [
+            "PartyBarChart",
+            "PartyBarRow"
+          ]
+        },
+        {
+          "source": "./TimeSeriesChart",
+          "specifiers": [
+            "TimeSeriesChart",
+            "TIMESERIES_PARTIES",
+            "TsRow"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ElectionType",
+            "RegionElectionRow",
+            "RegionResponse"
+          ]
+        }
+      ],
+      "exports": [
+        "RegionPanel"
+      ],
+      "totalLines": 388,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/ScatterPlot.tsx": {
+      "filePath": "src/pages/elections/ScatterPlot.tsx",
+      "contentHash": "eadf120517f2cc79c92390b03e90d1a9dedb90a431dfb757b750b70431b0a550",
+      "functions": [
+        {
+          "name": "formatScatterPercent",
+          "params": [
+            "n",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "scatterAxisLabel",
+          "params": [
+            "key",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "ScatterPlot",
+          "params": [
+            "{\n  rows,\n  xKey,\n  yKey,\n  colorMode,\n  winnersByAgs,\n  lang,\n  onPointClick,\n  stateLegendEmphasisPrefix = null,\n}"
+          ],
+          "exported": true,
+          "lineCount": 228
+        },
+        {
+          "name": "ScatterColorLegend",
+          "params": [
+            "{\n  colorMode,\n  partyColors,\n  lang,\n  c,\n  stateEmphasisPrefix,\n  hiddenKeys,\n  onToggleKey,\n  onResetHidden,\n  t,\n}"
+          ],
+          "exported": false,
+          "lineCount": 150
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "CartesianGrid",
+            "ResponsiveContainer",
+            "Scatter",
+            "ScatterChart",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS",
+            "STATE_COLORS",
+            "STATE_NAMES",
+            "partyColorsForTheme",
+            "statePrefixFromAgs"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "MapRow"
+          ]
+        },
+        {
+          "source": "./types",
+          "specifiers": [
+            "ScatterRow"
+          ]
+        }
+      ],
+      "exports": [
+        "scatterAxisLabel",
+        "ScatterPlot",
+        "SCATTER_AXIS_OPTIONS"
+      ],
+      "totalLines": 448,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/TimeSeriesChart.tsx": {
+      "filePath": "src/pages/elections/TimeSeriesChart.tsx",
+      "contentHash": "d16e14d3bf08ccabaa43f514d14a961e47ac23518d93c8fd426ebac78e06d4a5",
+      "functions": [
+        {
+          "name": "TimeSeriesChart",
+          "params": [
+            "{\n  data,\n  parties,\n  lang,\n  compareLabel,\n}"
+          ],
+          "exported": true,
+          "lineCount": 145
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "useState"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Legend",
+            "Line",
+            "LineChart",
+            "ResponsiveContainer",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../../design-system",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../../design-system/tokens",
+          "specifiers": [
+            "fonts"
+          ]
+        },
+        {
+          "source": "../../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "./normalizeWahlen",
+          "specifiers": [
+            "toDisplayPercent"
+          ]
+        },
+        {
+          "source": "./partyColors",
+          "specifiers": [
+            "MAIN_PARTIES",
+            "PARTY_LABELS",
+            "partyColorsForTheme"
+          ]
+        }
+      ],
+      "exports": [
+        "TimeSeriesChart",
+        "TIMESERIES_PARTIES"
+      ],
+      "totalLines": 173,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/elections/types.ts": {
+      "filePath": "src/pages/elections/types.ts",
+      "contentHash": "41e7e6e4f85b8a4ff9184eb3df630c11295661f14b4e8ed7a2692c092f555f74",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "MapRow",
+        "MapRowFromApi"
+      ],
+      "totalLines": 112,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/EuLaw.tsx": {
+      "filePath": "src/pages/EuLaw.tsx",
+      "contentHash": "43580b0f915c8c810d34847a5195bafe347a550b063951179bab94b14999a7ce",
+      "functions": [
+        {
+          "name": "buildEuListUrl",
+          "params": [
+            "opts"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "buildEuUrteilListUrl",
+          "params": [
+            "opts"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "countByTyp",
+          "params": [
+            "stats",
+            "typ"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "countByGericht",
+          "params": [
+            "stats",
+            "g"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "EuLaw",
+          "params": [],
+          "exported": true,
+          "lineCount": 937
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState",
+            "FocusEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useNavigate",
+            "useParams",
+            "useSearchParams"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "EmptyState",
+            "LoadingSpinner",
+            "PageHeader",
+            "Pagination",
+            "StatWidget",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../components/eulaw/EuCourtCard",
+          "specifiers": [
+            "EuCourtCard"
+          ]
+        },
+        {
+          "source": "../components/eulaw/EuLawCard",
+          "specifiers": [
+            "EuLawCard"
+          ]
+        },
+        {
+          "source": "../components/eulaw/types",
+          "specifiers": [
+            "EuRechtDetail",
+            "EuRechtListResponse",
+            "EuRechtStats",
+            "EuUrteilDetail",
+            "EuUrteilListResponse",
+            "EuUrteilStats"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../hooks/useDebouncedValue",
+          "specifiers": [
+            "useDebouncedValue"
+          ]
+        },
+        {
+          "source": "../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        }
+      ],
+      "exports": [
+        "EuLaw"
+      ],
+      "totalLines": 1035,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/EuParliament.tsx": {
+      "filePath": "src/pages/EuParliament.tsx",
+      "contentHash": "dcd8d7e7766079e5cbbd8dbf16259fc7c2cf30bace4bc471a80cb06a788ae330",
+      "functions": [
+        {
+          "name": "EuParliament",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "EuParliament"
+      ],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Legislation.tsx": {
+      "filePath": "src/pages/Legislation.tsx",
+      "contentHash": "5a6d6ffdf06853f83a630ed6ebe54fe175c018b8eabec1321fb3bb8143a2233a",
+      "functions": [
+        {
+          "name": "normalizeGesetzeList",
+          "params": [
+            "raw"
+          ],
+          "returnType": "Gesetz[]",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "normalizeUrteileList",
+          "params": [
+            "raw"
+          ],
+          "returnType": "Urteil[]",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "urteilReferencesGesetz",
+          "params": [
+            "u",
+            "kuerzel"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "displayTitel",
+          "params": [
+            "g"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "sublineZusammenfassung",
+          "params": [
+            "g"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "parseDatumMs",
+          "params": [
+            "s"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "LegislationWelcome",
+          "params": [
+            "{\n  stats,\n  statsLoading,\n  statsError,\n}"
+          ],
+          "exported": false,
+          "lineCount": 68
+        },
+        {
+          "name": "Legislation",
+          "params": [],
+          "exported": true,
+          "lineCount": 1162
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState",
+            "FocusEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useNavigate",
+            "useParams",
+            "useSearchParams"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "EmptyState",
+            "LoadingSpinner",
+            "PageHeader",
+            "Pagination",
+            "StatWidget",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        },
+        {
+          "source": "../components/gesetze/GesetzDetail",
+          "specifiers": [
+            "GesetzDetail"
+          ]
+        },
+        {
+          "source": "../components/gesetze/GesetzDetail",
+          "specifiers": [
+            "LobbyLawResponse"
+          ]
+        },
+        {
+          "source": "../components/gesetze/UrteilCard",
+          "specifiers": [
+            "UrteilCard"
+          ]
+        },
+        {
+          "source": "../components/gesetze/types",
+          "specifiers": [
+            "Gesetz",
+            "GesetzeStats",
+            "Urteil"
+          ]
+        },
+        {
+          "source": "../components/gesetze/utils",
+          "specifiers": [
+            "URTEIL_RECHTSGEBIET_OPTIONS",
+            "buildUrteilListEndpoint",
+            "formatDisplayDate",
+            "parseIsoDate",
+            "rechtGebietFromKuerzel",
+            "RechtGebietFilter"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        }
+      ],
+      "exports": [
+        "Legislation"
+      ],
+      "totalLines": 1344,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/LobbyRegister.tsx": {
+      "filePath": "src/pages/LobbyRegister.tsx",
+      "contentHash": "6fec2c337d19353335b9055f52e52aac6e36cdc1908a8e044c257fc0dee8bec1",
+      "functions": [
+        {
+          "name": "LobbyRegister",
+          "params": [],
+          "exported": true,
+          "lineCount": 1946
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "d3",
+          "specifiers": [
+            "* as d3"
+          ]
+        },
+        {
+          "source": "maplibre-gl",
+          "specifiers": [
+            "maplibregl"
+          ]
+        },
+        {
+          "source": "maplibre-gl/dist/maplibre-gl.css",
+          "specifiers": []
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "Area",
+            "AreaChart",
+            "Bar",
+            "BarChart",
+            "CartesianGrid",
+            "Label",
+            "ReferenceLine",
+            "ResponsiveContainer",
+            "Tooltip",
+            "XAxis",
+            "YAxis"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "Badge",
+            "DataCard",
+            "EmptyState",
+            "LoadingSpinner",
+            "PageHeader",
+            "Pagination",
+            "StatWidget",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../hooks/useSearchParamsState",
+          "specifiers": [
+            "useSearchParamsState"
+          ]
+        }
+      ],
+      "exports": [
+        "LobbyRegister"
+      ],
+      "totalLines": 2130,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/NotFound.tsx": {
+      "filePath": "src/pages/NotFound.tsx",
+      "contentHash": "192b13793066a4e8058c59cf17f68ec8c25c97642b16719e5f8b82cfac3088ce",
+      "functions": [
+        {
+          "name": "NotFound",
+          "params": [],
+          "exported": true,
+          "lineCount": 32
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        }
+      ],
+      "exports": [
+        "NotFound"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Overview.tsx": {
+      "filePath": "src/pages/Overview.tsx",
+      "contentHash": "e33b5419551cf05a3f0a397cb7ece5304659a54c4b0bf76b1ba67f2d867a5c22",
+      "functions": [
+        {
+          "name": "euItemsFromResponse",
+          "params": [
+            "data"
+          ],
+          "returnType": "EuRechtRow[]",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "fmtDate",
+          "params": [
+            "iso",
+            "lang"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "statValue",
+          "params": [
+            "loading",
+            "error",
+            "n"
+          ],
+          "returnType": "string | number",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "trunc",
+          "params": [
+            "s",
+            "max"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "Overview",
+          "params": [],
+          "exported": true,
+          "lineCount": 452
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useNavigate"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "Badge",
+            "DataCard",
+            "LoadingSpinner",
+            "PageHeader",
+            "StatWidget",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        }
+      ],
+      "exports": [
+        "Overview"
+      ],
+      "totalLines": 537,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Sources.tsx": {
+      "filePath": "src/pages/Sources.tsx",
+      "contentHash": "63d09234c73547ddbe3be7f316fa5e2f8594ae3863b245ba3917c17b0d566083",
+      "functions": [
+        {
+          "name": "sectionHeading",
+          "params": [
+            "c",
+            "pageTitleKey",
+            "href",
+            "headingId",
+            "t"
+          ],
+          "exported": false,
+          "lineCount": 40
+        },
+        {
+          "name": "bodyStyle",
+          "params": [
+            "c"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "aiSectionTitle",
+          "params": [
+            "c",
+            "text"
+          ],
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "formatRelativePast",
+          "params": [
+            "iso",
+            "locale"
+          ],
+          "returnType": "string | null",
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "renderStaticSourcesBlock",
+          "params": [
+            "block",
+            "c",
+            "t",
+            "badgeStyle"
+          ],
+          "exported": false,
+          "lineCount": 61
+        },
+        {
+          "name": "Sources",
+          "params": [],
+          "exported": true,
+          "lineCount": 176
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "CSSProperties"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "PageHeader",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "interpolate"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../data/sourcesCatalog",
+          "specifiers": [
+            "SOURCES_BY_PAGE",
+            "SourceCatalogPage"
+          ]
+        },
+        {
+          "source": "../design-system/i18n",
+          "specifiers": [
+            "I18nKey"
+          ]
+        }
+      ],
+      "exports": [
+        "Sources"
+      ],
+      "totalLines": 359,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/WorldMap.tsx": {
+      "filePath": "src/pages/WorldMap.tsx",
+      "contentHash": "479fae4077c9daceafdab7a2a7fae7469481168f1f2eae893ee7cea6edacbd39",
+      "functions": [
+        {
+          "name": "normIso",
+          "params": [
+            "code"
+          ],
+          "returnType": "string",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "parseMapProjection",
+          "params": [
+            "raw"
+          ],
+          "returnType": "MapProjectionMode",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "isLegacyIosSafari",
+          "params": [],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "isGlobeProjectionSupported",
+          "params": [],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "parseVisibleFloatingWidgets",
+          "params": [],
+          "returnType": "Set<FloatingWidgetType>",
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "persistVisibleFloatingWidgets",
+          "params": [
+            "next"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "WorldMap",
+          "params": [],
+          "exported": true,
+          "lineCount": 1087
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "maplibre-gl",
+          "specifiers": [
+            "LngLat"
+          ]
+        },
+        {
+          "source": "../design-system",
+          "specifiers": [
+            "MapProjectionMode",
+            "useTheme"
+          ]
+        },
+        {
+          "source": "../design-system/ThemeContext",
+          "specifiers": [
+            "Lang"
+          ]
+        },
+        {
+          "source": "../design-system/tokens",
+          "specifiers": [
+            "breakpoints",
+            "fonts",
+            "spacing"
+          ]
+        },
+        {
+          "source": "../hooks/useApi",
+          "specifiers": [
+            "useApi"
+          ]
+        },
+        {
+          "source": "../hooks/useMediaQuery",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "../utils/worldFilters",
+          "specifiers": [
+            "isRealCountry"
+          ]
+        },
+        {
+          "source": "../hooks/useDebouncedValue",
+          "specifiers": [
+            "useDebouncedValue"
+          ]
+        },
+        {
+          "source": "./worldmap/worldConsoleHelpers",
+          "specifiers": [
+            "countryPercentileFromMapRows"
+          ]
+        },
+        {
+          "source": "./worldmap/CountrySidebar",
+          "specifiers": [
+            "CountrySidebar",
+            "WorldConsoleActiveIndicator"
+          ]
+        },
+        {
+          "source": "./worldmap/MapTopbar",
+          "specifiers": [
+            "MapTopbar"
+          ]
+        },
+        {
+          "source": "./worldmap/WidgetDashboard",
+          "specifiers": [
+            "FLOATING_WIDGETS",
+            "WidgetDashboard",
+            "FloatingWidgetType",
+            "WidgetDashboardHandle"
+          ]
+        },
+        {
+          "source": "./worldmap/WorldGlMap",
+          "specifiers": [
+            "WorldGlMap"
+          ]
+        },
+        {
+          "source": "./worldmap/WorldMapLegend",
+          "specifiers": [
+            "WorldMapLegend"
+          ]
+        },
+        {
+          "source": "./worldmap/worldMapData",
+          "specifiers": [
+            "worldApiUrl"
+          ]
+        },
+        {
+          "source": "./worldmap/worldTypes",
+          "specifiers": [
+            "ClimateResponse",
+            "CountrySelection",
+            "DockPosition",
+            "WorldCategoryApi",
+            "WorldCountryDetail",
+            "WorldGeoJson",
+            "WorldMapRow",
+            "WorldRankingRow",
+            "WorldStats",
+            "WorldTradeResponse",
+            "WorldTradeTimeseriesResponse"
+          ]
+        },
+        {
+          "source": "./worldmap/worldValueFormat",
+          "specifiers": [
+            "formatWorldIndicatorValue",
+            "shortenWorldUnit"
+          ]
+        },
+        {
+          "source": "./worldmap/worldIndicatorUtils",
+          "specifiers": [
+            "categoryAndUnitForIndicator"
+          ]
+        }
+      ],
+      "exports": [
+        "WorldMap"
+      ],
+      "totalLines": 1204,
+      "hasStructuralAnalysis": true
+    },
+    "src/utils/worldFilters.ts": {
+      "filePath": "src/utils/worldFilters.ts",
+      "contentHash": "4a745170604fc2e9658ab21673dffd2beb03ce08487c4e472de5fe1c0d0571e4",
+      "functions": [
+        {
+          "name": "isRealCountry",
+          "params": [
+            "entry"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "hasWorldBankRegionOnAnyRow",
+          "params": [
+            "rows"
+          ],
+          "returnType": "boolean",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "isRealCountry",
+        "hasWorldBankRegionOnAnyRow"
+      ],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "src/vite-env.d.ts": {
+      "filePath": "src/vite-env.d.ts",
+      "contentHash": "ff955adc1edb7155bf86557f596180e9c302fb1600c89400ed192f8c05634fac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.app.json": {
+      "filePath": "tsconfig.app.json",
+      "contentHash": "15de47f71c24b7dfa95c382c8c01561481cd5365ef8c97ab27016461af2af77a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.json": {
+      "filePath": "tsconfig.json",
+      "contentHash": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.node.json": {
+      "filePath": "tsconfig.node.json",
+      "contentHash": "cdf03296db009821b4da76adbc99712072f85fa48731d5c0b4e7f8d28a82f453",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "ui_kits/dashboard/ConsoleComponents.jsx": {
+      "filePath": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "contentHash": "f4bcbd4fc117e805360ee9158d944723c4fb60fa0ab2d0a0038e0f8d5e7ba807",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 319,
+      "hasStructuralAnalysis": true
+    },
+    "ui_kits/dashboard/CountryConsole.jsx": {
+      "filePath": "ui_kits/dashboard/CountryConsole.jsx",
+      "contentHash": "a98ca940f5d17b3475ecc312ec1c9e1ec44e146b947697007eff4a3ce79cc1d1",
+      "functions": [
+        {
+          "name": "latestValue",
+          "params": [
+            "indicator"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "tailSeries",
+          "params": [
+            "indicator"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "trendFromValues",
+          "params": [
+            "indicator"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "findInd",
+          "params": [
+            "detail",
+            "code"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "fmtNumber",
+          "params": [
+            "v"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "fmtUsd",
+          "params": [
+            "v"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "fmtPopulation",
+          "params": [
+            "v"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "GlobalView",
+          "params": [],
+          "exported": false,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 758,
+      "hasStructuralAnalysis": true
+    },
+    "vite.config.ts": {
+      "filePath": "vite.config.ts",
+      "contentHash": "bea250f30da31f05adf81af5850fb352691a0f8a9fd8bfa151a5a624c41dc364",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "vite",
+          "specifiers": [
+            "defineConfig"
+          ]
+        },
+        {
+          "source": "@vitejs/plugin-react",
+          "specifiers": [
+            "react"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

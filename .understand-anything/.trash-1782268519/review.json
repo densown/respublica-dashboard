@@ -1,0 +1,34 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'file:.cursorrules' has no edges (orphan)",
+    "Node 'document:notes/BUG8-gesetz-titel-TODO.md' has no edges (orphan)",
+    "Node 'file:public/data/world.geojson' has no edges (orphan)",
+    "Node 'file:src/vite-env.d.ts' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 276,
+    "totalEdges": 689,
+    "totalLayers": 8,
+    "tourSteps": 14,
+    "nodeTypes": {
+      "file": 118,
+      "function": 149,
+      "pipeline": 2,
+      "document": 2,
+      "config": 5
+    },
+    "edgeTypes": {
+      "imports": 336,
+      "contains": 146,
+      "exports": 106,
+      "calls": 76,
+      "depends_on": 8,
+      "related": 3,
+      "triggers": 1,
+      "documents": 6,
+      "deploys": 1,
+      "configures": 6
+    }
+  }
+}

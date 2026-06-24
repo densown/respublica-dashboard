@@ -1,0 +1,582 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/App.tsx",
+      "type": "file",
+      "name": "App.tsx",
+      "filePath": "src/App.tsx",
+      "summary": "Root application component that wires up React Router with the dashboard layout shell, theme provider, and lazy-loaded routes for every module (elections, Bundestag, legislation, EU law, world map, lobby register, etc.).",
+      "tags": ["entry-point", "routing", "component", "lazy-loading"],
+      "complexity": "simple",
+      "languageNotes": "Uses React.lazy + Suspense for code-splitting heavy route pages while keeping lightweight stub pages eagerly imported."
+    },
+    {
+      "id": "function:src/App.tsx:App",
+      "type": "function",
+      "name": "App",
+      "filePath": "src/App.tsx",
+      "lineRange": [20, 53],
+      "summary": "Default-exported root component defining the BrowserRouter route table that maps German URL slugs to the dashboard's page components under a shared DashboardLayout.",
+      "tags": ["entry-point", "routing", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/bundestag/AbstimmungsDetail.tsx",
+      "type": "file",
+      "name": "AbstimmungsDetail.tsx",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "summary": "Renders the detailed breakdown of a single Bundestag vote (Abstimmung), showing each parliamentary group's yes/no/abstain/absent tallies sorted in political left-to-right order with party-derived colors.",
+      "tags": ["component", "data-model", "bundestag", "visualization"],
+      "complexity": "complex",
+      "languageNotes": "Contains a family of fuzzy fraction-name matching helpers (normalizeFraktion, matchesOrderToken, matchesSitzRow) to reconcile inconsistent German party labels coming from the API."
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:shortFraktionName",
+      "type": "function",
+      "name": "shortFraktionName",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [33, 48],
+      "summary": "Maps a raw API party/fraction label to a canonical short display name (CDU/CSU, SPD, AfD, Grüne, etc.) via case-insensitive substring and regex matching.",
+      "tags": ["utility", "normalization", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:matchesOrderToken",
+      "type": "function",
+      "name": "matchesOrderToken",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [61, 72],
+      "summary": "Tests whether an API party label matches a given political-order token using normalized substring and word-boundary checks.",
+      "tags": ["utility", "matching", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:matchesSitzRow",
+      "type": "function",
+      "name": "matchesSitzRow",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [81, 92],
+      "summary": "Determines whether an API party label corresponds to a given seat-distribution row, reconciling differing CDU/CSU and party-name spellings.",
+      "tags": ["utility", "matching", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:labelColorFromSitzverteilung",
+      "type": "function",
+      "name": "labelColorFromSitzverteilung",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [95, 103],
+      "summary": "Resolves the brand color for a party label by locating its matching row in the official seat-distribution data.",
+      "tags": ["utility", "theming", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:labelColorForLegendDot",
+      "type": "function",
+      "name": "labelColorForLegendDot",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [105, 116],
+      "summary": "Produces the legend-dot color for a party, adjusting near-white CDU fills for visibility against the active theme background.",
+      "tags": ["utility", "theming", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:sortFraktionenByPoliticalOrder",
+      "type": "function",
+      "name": "sortFraktionenByPoliticalOrder",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [118, 124],
+      "summary": "Returns a copy of the fraction-vote list sorted by canonical political left-to-right index.",
+      "tags": ["utility", "sorting", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsDetail.tsx:AbstimmungsDetail",
+      "type": "function",
+      "name": "AbstimmungsDetail",
+      "filePath": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "lineRange": [126, 281],
+      "summary": "Main component rendering the per-fraction vote table for one Bundestag poll, including legend dots, tallies, and localized headers.",
+      "tags": ["component", "bundestag", "visualization"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/components/bundestag/AbstimmungsListe.tsx",
+      "type": "file",
+      "name": "AbstimmungsListe.tsx",
+      "filePath": "src/components/bundestag/AbstimmungsListe.tsx",
+      "summary": "Searchable, paginated list of Bundestag votes (Abstimmungen) that lets the user filter by title and select a poll to inspect in detail.",
+      "tags": ["component", "list", "bundestag", "search"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/components/bundestag/AbstimmungsListe.tsx:AbstimmungsListe",
+      "type": "function",
+      "name": "AbstimmungsListe",
+      "filePath": "src/components/bundestag/AbstimmungsListe.tsx",
+      "lineRange": [13, 159],
+      "summary": "Component that filters the supplied votes by a search query, shows a capped visible slice with a show-all toggle, and emits the selected poll id to the parent.",
+      "tags": ["component", "list", "search", "bundestag"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/components/bundestag/Hemicycle.tsx",
+      "type": "file",
+      "name": "Hemicycle.tsx",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "summary": "Renders the Bundestag seating chart (hemicycle) as an SVG, coloring each seat by party and overlaying per-seat vote results with reveal animation; the project's central parliamentary visualization.",
+      "tags": ["component", "visualization", "bundestag", "svg"],
+      "complexity": "complex",
+      "languageNotes": "Combines raw seat geometry (RAW_SEATS) with live API seat-distribution and vote data through layered fraction-name canonicalization and useMemo-derived render arrays."
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:canonicalKey",
+      "type": "function",
+      "name": "canonicalKey",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [72, 82],
+      "summary": "Collapses the many spellings of a German party/fraction name into a single canonical lookup key used to merge seat and vote data.",
+      "tags": ["utility", "normalization", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:mergePartiesForLegend",
+      "type": "function",
+      "name": "mergePartiesForLegend",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [88, 135],
+      "summary": "Aggregates seat-distribution rows by canonical party key into legend entries with combined seat counts and representative fill colors.",
+      "tags": ["utility", "aggregation", "bundestag"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:orderedLegend",
+      "type": "function",
+      "name": "orderedLegend",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [148, 169],
+      "summary": "Orders the merged legend entries into political left-to-right sequence, appending any unranked parties by descending seat count.",
+      "tags": ["utility", "sorting", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:matchApiRowForSeat",
+      "type": "function",
+      "name": "matchApiRowForSeat",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [171, 185],
+      "summary": "Finds the API seat-distribution row that best matches a given seat label using exact then fuzzy substring matching.",
+      "tags": ["utility", "matching", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:partyFillForSeat",
+      "type": "function",
+      "name": "partyFillForSeat",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [187, 198],
+      "summary": "Determines the fill color for an individual seat, preferring the matched API party color and falling back to the raw seat color.",
+      "tags": ["utility", "theming", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:matchFraktionVote",
+      "type": "function",
+      "name": "matchFraktionVote",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [207, 228],
+      "summary": "Locates the fraction-level vote tally that matches a seat's party so individual seats can be colored by how their group voted.",
+      "tags": ["utility", "matching", "bundestag"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:voteColorForSeatInPartei",
+      "type": "function",
+      "name": "voteColorForSeatInPartei",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [230, 243],
+      "summary": "Computes a seat's vote color by distributing a fraction's yes/no/abstain/absent counts across its seats by local index.",
+      "tags": ["utility", "theming", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:buildSeatDerived",
+      "type": "function",
+      "name": "buildSeatDerived",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [245, 262],
+      "summary": "Transforms the static RAW_SEATS geometry into per-seat derived records with stable ids and local party-relative indices.",
+      "tags": ["utility", "data-model", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/components/bundestag/Hemicycle.tsx:Hemicycle",
+      "type": "function",
+      "name": "Hemicycle",
+      "filePath": "src/components/bundestag/Hemicycle.tsx",
+      "lineRange": [264, 640],
+      "summary": "Main component that assembles seat geometry, party fills, vote colors, and an animated reveal into the interactive SVG hemicycle with legend and seat selection.",
+      "tags": ["component", "visualization", "bundestag", "svg"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/data/bundestag-seats.ts",
+      "type": "file",
+      "name": "bundestag-seats.ts",
+      "filePath": "src/data/bundestag-seats.ts",
+      "summary": "Static dataset exporting the raw geometric coordinates and party category for every Bundestag seat (RAW_SEATS) plus the total seat count, used to draw the hemicycle.",
+      "tags": ["data-model", "static-data", "bundestag"],
+      "complexity": "complex",
+      "languageNotes": "A large generated constant array; no logic, purely seat geometry data."
+    },
+    {
+      "id": "file:src/design-system/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/design-system/index.ts",
+      "summary": "Barrel module that re-exports the entire design system: theme context, charts, and all reusable UI components plus their prop types for convenient single-source imports.",
+      "tags": ["barrel", "entry-point", "design-system", "type-definition"],
+      "complexity": "simple",
+      "languageNotes": "Pure re-export barrel with 53 named exports and no runtime logic."
+    },
+    {
+      "id": "file:src/hooks/useSearchParamsState.ts",
+      "type": "file",
+      "name": "useSearchParamsState.ts",
+      "filePath": "src/hooks/useSearchParamsState.ts",
+      "summary": "Custom React hook that binds a single URL query-string parameter to component state, returning the current value and a setter that updates the search params.",
+      "tags": ["hook", "utility", "routing", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/hooks/useSearchParamsState.ts:useSearchParamsState",
+      "type": "function",
+      "name": "useSearchParamsState",
+      "filePath": "src/hooks/useSearchParamsState.ts",
+      "lineRange": [4, 25],
+      "summary": "Hook reading a named search param via react-router and exposing a memoized setter that deletes the param on empty values.",
+      "tags": ["hook", "routing", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/layouts/DashboardLayout.tsx",
+      "type": "file",
+      "name": "DashboardLayout.tsx",
+      "filePath": "src/layouts/DashboardLayout.tsx",
+      "summary": "Top-level layout shell that renders the sidebar navigation (or mobile nav), derives the active module from the current path, and hosts the routed page content via React Router's Outlet.",
+      "tags": ["component", "layout", "navigation", "routing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/layouts/DashboardLayout.tsx:DashboardLayout",
+      "type": "function",
+      "name": "DashboardLayout",
+      "filePath": "src/layouts/DashboardLayout.tsx",
+      "lineRange": [46, 166],
+      "summary": "Default-exported layout component building the localized navigation entries, handling responsive sidebar collapse, and rendering the active route through an Outlet.",
+      "tags": ["component", "layout", "navigation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/main.tsx",
+      "type": "file",
+      "name": "main.tsx",
+      "filePath": "src/main.tsx",
+      "summary": "Application bootstrap entry that mounts the App component into the DOM root with React StrictMode and loads global CSS.",
+      "tags": ["entry-point", "bootstrap"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/Admin.tsx",
+      "type": "file",
+      "name": "Admin.tsx",
+      "filePath": "src/pages/Admin.tsx",
+      "summary": "Placeholder admin page rendering a localized page header and phase-placeholder message; a stub awaiting future admin functionality.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/Admin.tsx:Admin",
+      "type": "function",
+      "name": "Admin",
+      "filePath": "src/pages/Admin.tsx",
+      "lineRange": [4, 23],
+      "summary": "Default-exported placeholder admin page component showing a header and a localized placeholder paragraph.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/Bundestag.tsx",
+      "type": "file",
+      "name": "Bundestag.tsx",
+      "filePath": "src/pages/Bundestag.tsx",
+      "summary": "Bundestag page that orchestrates the vote browser: fetches votes, seat distribution, and deputy data via the API, and composes the AbstimmungsListe, AbstimmungsDetail, and Hemicycle components with deep-linkable poll selection.",
+      "tags": ["page", "api-handler", "bundestag", "composition"],
+      "complexity": "complex",
+      "languageNotes": "Bridges API party labels to the static seat dataset via canonicalKey/apiFraktionToRawKategorie matching before passing data down to the visualization components."
+    },
+    {
+      "id": "function:src/pages/Bundestag.tsx:canonicalKey",
+      "type": "function",
+      "name": "canonicalKey",
+      "filePath": "src/pages/Bundestag.tsx",
+      "lineRange": [78, 88],
+      "summary": "Normalizes a party/fraction name into a canonical key for matching API data against the static seat dataset.",
+      "tags": ["utility", "normalization", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/Bundestag.tsx:apiFraktionToRawKategorie",
+      "type": "function",
+      "name": "apiFraktionToRawKategorie",
+      "filePath": "src/pages/Bundestag.tsx",
+      "lineRange": [99, 110],
+      "summary": "Maps an API fraction label to the corresponding raw seat-category key used by the static RAW_SEATS geometry.",
+      "tags": ["utility", "mapping", "bundestag"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/Bundestag.tsx:Bundestag",
+      "type": "function",
+      "name": "Bundestag",
+      "filePath": "src/pages/Bundestag.tsx",
+      "lineRange": [119, 674],
+      "summary": "Default-exported page component managing poll selection state, fetching all Bundestag data via useApi, and wiring the list, detail, and hemicycle views together with route-param deep linking.",
+      "tags": ["page", "api-handler", "bundestag", "composition"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/Coalition.tsx",
+      "type": "file",
+      "name": "Coalition.tsx",
+      "filePath": "src/pages/Coalition.tsx",
+      "summary": "Placeholder page for the coalition agreement (Koalitionsvertrag) showing a localized header and phase-placeholder text.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/Coalition.tsx:Coalition",
+      "type": "function",
+      "name": "Coalition",
+      "filePath": "src/pages/Coalition.tsx",
+      "lineRange": [4, 23],
+      "summary": "Default-exported placeholder coalition page rendering a header and localized placeholder paragraph.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/DemocracyIndex.tsx",
+      "type": "file",
+      "name": "DemocracyIndex.tsx",
+      "filePath": "src/pages/DemocracyIndex.tsx",
+      "summary": "Placeholder page for the democracy index module displaying a localized header and phase-placeholder message.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/DemocracyIndex.tsx:DemocracyIndex",
+      "type": "function",
+      "name": "DemocracyIndex",
+      "filePath": "src/pages/DemocracyIndex.tsx",
+      "lineRange": [4, 23],
+      "summary": "Default-exported placeholder democracy-index page rendering a header and localized placeholder paragraph.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/EuParliament.tsx",
+      "type": "file",
+      "name": "EuParliament.tsx",
+      "filePath": "src/pages/EuParliament.tsx",
+      "summary": "Placeholder page for the EU Parliament module showing a localized header and phase-placeholder text.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/EuParliament.tsx:EuParliament",
+      "type": "function",
+      "name": "EuParliament",
+      "filePath": "src/pages/EuParliament.tsx",
+      "lineRange": [4, 23],
+      "summary": "Default-exported placeholder EU Parliament page rendering a header and localized placeholder paragraph.",
+      "tags": ["component", "page", "placeholder"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/LobbyRegister.tsx",
+      "type": "file",
+      "name": "LobbyRegister.tsx",
+      "filePath": "src/pages/LobbyRegister.tsx",
+      "summary": "Large, data-rich lobby register page that lists registered lobbying organizations with search and pagination and visualizes aggregate statistics through D3, MapLibre maps, and Recharts charts.",
+      "tags": ["page", "api-handler", "visualization", "data-pipeline"],
+      "complexity": "complex",
+      "languageNotes": "Single 2000+ line component combining maplibre-gl maps, d3, and recharts; the heaviest page in the app, hence lazy-loaded in App.tsx."
+    },
+    {
+      "id": "function:src/pages/LobbyRegister.tsx:LobbyRegister",
+      "type": "function",
+      "name": "LobbyRegister",
+      "filePath": "src/pages/LobbyRegister.tsx",
+      "lineRange": [184, 2129],
+      "summary": "Default-exported page component fetching lobby list and statistics via useApi, syncing filters to URL search params, and rendering tables, charts, and an interactive map of lobbying activity.",
+      "tags": ["page", "api-handler", "visualization"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/NotFound.tsx",
+      "type": "file",
+      "name": "NotFound.tsx",
+      "filePath": "src/pages/NotFound.tsx",
+      "summary": "404 fallback page rendered for unmatched routes, showing a localized not-found message and a link back to the dashboard.",
+      "tags": ["component", "page", "error-handling"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/NotFound.tsx:NotFound",
+      "type": "function",
+      "name": "NotFound",
+      "filePath": "src/pages/NotFound.tsx",
+      "lineRange": [5, 36],
+      "summary": "Default-exported 404 component rendering a localized message and a navigation link home.",
+      "tags": ["component", "page", "error-handling"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/Overview.tsx",
+      "type": "file",
+      "name": "Overview.tsx",
+      "filePath": "src/pages/Overview.tsx",
+      "summary": "Dashboard landing page that fetches headline statistics and latest items across modules (laws, EU law, Bundestag votes) and presents them as stat widgets and data cards with navigation shortcuts.",
+      "tags": ["page", "entry-point", "api-handler", "dashboard"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/Overview.tsx:Overview",
+      "type": "function",
+      "name": "Overview",
+      "filePath": "src/pages/Overview.tsx",
+      "lineRange": [85, 536],
+      "summary": "Default-exported landing component aggregating cross-module statistics and recent items via useApi and rendering the dashboard overview with stat widgets and clickable cards.",
+      "tags": ["page", "api-handler", "dashboard"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/App.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/layouts/DashboardLayout.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/Admin.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/Coalition.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/DemocracyIndex.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/EuParliament.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/NotFound.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/Overview.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/Sources.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/App.tsx", "target": "function:src/App.tsx:App", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/App.tsx", "target": "function:src/App.tsx:App", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/Bundestag.tsx", "type": "depends_on", "direction": "forward", "weight": 0.6 },
+    { "source": "file:src/App.tsx", "target": "file:src/pages/LobbyRegister.tsx", "type": "depends_on", "direction": "forward", "weight": 0.6 },
+
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:shortFraktionName", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:matchesOrderToken", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:matchesSitzRow", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:labelColorFromSitzverteilung", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:labelColorForLegendDot", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:sortFraktionenByPoliticalOrder", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:AbstimmungsDetail", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:shortFraktionName", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:labelColorFromSitzverteilung", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:sortFraktionenByPoliticalOrder", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/components/bundestag/AbstimmungsDetail.tsx", "target": "function:src/components/bundestag/AbstimmungsDetail.tsx:AbstimmungsDetail", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/components/bundestag/AbstimmungsListe.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/AbstimmungsListe.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/AbstimmungsListe.tsx", "target": "function:src/components/bundestag/AbstimmungsListe.tsx:AbstimmungsListe", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/AbstimmungsListe.tsx", "target": "function:src/components/bundestag/AbstimmungsListe.tsx:AbstimmungsListe", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "file:src/data/bundestag-seats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "file:src/design-system/ThemeContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:canonicalKey", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:mergePartiesForLegend", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:orderedLegend", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:matchApiRowForSeat", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:partyFillForSeat", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:matchFraktionVote", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:voteColorForSeatInPartei", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:buildSeatDerived", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:Hemicycle", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/components/bundestag/Hemicycle.tsx", "target": "function:src/components/bundestag/Hemicycle.tsx:Hemicycle", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/components/bundestag/Hemicycle.tsx:buildSeatDerived", "target": "file:src/data/bundestag-seats.ts", "type": "depends_on", "direction": "forward", "weight": 0.6 },
+
+    { "source": "file:src/data/bundestag-seats.ts", "target": "file:src/components/bundestag/Hemicycle.tsx", "type": "related", "direction": "forward", "weight": 0.5 },
+
+    { "source": "file:src/hooks/useSearchParamsState.ts", "target": "function:src/hooks/useSearchParamsState.ts:useSearchParamsState", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/hooks/useSearchParamsState.ts", "target": "function:src/hooks/useSearchParamsState.ts:useSearchParamsState", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/layouts/DashboardLayout.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/layouts/DashboardLayout.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/layouts/DashboardLayout.tsx", "target": "file:src/hooks/useMediaQuery.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/layouts/DashboardLayout.tsx", "target": "function:src/layouts/DashboardLayout.tsx:DashboardLayout", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/layouts/DashboardLayout.tsx", "target": "function:src/layouts/DashboardLayout.tsx:DashboardLayout", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/main.tsx", "target": "file:src/App.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/main.tsx", "target": "file:src/index.css", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/pages/Admin.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Admin.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Admin.tsx", "target": "function:src/pages/Admin.tsx:Admin", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Admin.tsx", "target": "function:src/pages/Admin.tsx:Admin", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/components/bundestag/AbstimmungsDetail.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/components/bundestag/AbstimmungsListe.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/components/bundestag/Hemicycle.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/data/bundestag-seats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "file:src/hooks/useApi.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "function:src/pages/Bundestag.tsx:canonicalKey", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "function:src/pages/Bundestag.tsx:apiFraktionToRawKategorie", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "function:src/pages/Bundestag.tsx:Bundestag", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Bundestag.tsx", "target": "function:src/pages/Bundestag.tsx:Bundestag", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/pages/Bundestag.tsx:Bundestag", "target": "function:src/hooks/useApi.ts:useApi", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/Coalition.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Coalition.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Coalition.tsx", "target": "function:src/pages/Coalition.tsx:Coalition", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Coalition.tsx", "target": "function:src/pages/Coalition.tsx:Coalition", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/DemocracyIndex.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/DemocracyIndex.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/DemocracyIndex.tsx", "target": "function:src/pages/DemocracyIndex.tsx:DemocracyIndex", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/DemocracyIndex.tsx", "target": "function:src/pages/DemocracyIndex.tsx:DemocracyIndex", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/EuParliament.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/EuParliament.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/EuParliament.tsx", "target": "function:src/pages/EuParliament.tsx:EuParliament", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/EuParliament.tsx", "target": "function:src/pages/EuParliament.tsx:EuParliament", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "file:src/hooks/useApi.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "file:src/hooks/useSearchParamsState.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "function:src/pages/LobbyRegister.tsx:LobbyRegister", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/LobbyRegister.tsx", "target": "function:src/pages/LobbyRegister.tsx:LobbyRegister", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/pages/LobbyRegister.tsx:LobbyRegister", "target": "function:src/hooks/useApi.ts:useApi", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/pages/LobbyRegister.tsx:LobbyRegister", "target": "function:src/hooks/useSearchParamsState.ts:useSearchParamsState", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/NotFound.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/NotFound.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/NotFound.tsx", "target": "function:src/pages/NotFound.tsx:NotFound", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/NotFound.tsx", "target": "function:src/pages/NotFound.tsx:NotFound", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/pages/Overview.tsx", "target": "file:src/design-system/i18n.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Overview.tsx", "target": "file:src/design-system/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Overview.tsx", "target": "file:src/design-system/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Overview.tsx", "target": "file:src/hooks/useApi.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/pages/Overview.tsx", "target": "function:src/pages/Overview.tsx:Overview", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/pages/Overview.tsx", "target": "function:src/pages/Overview.tsx:Overview", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/pages/Overview.tsx:Overview", "target": "function:src/hooks/useApi.ts:useApi", "type": "calls", "direction": "forward", "weight": 0.8 }
+  ]
+}

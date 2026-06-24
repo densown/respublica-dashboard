@@ -1,0 +1,147 @@
+{
+  "projectRoot": "/root/respublica-dashboard",
+  "batchFiles": [
+    {
+      "path": "src/data/sourcesCatalog.ts",
+      "language": "typescript",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/components/CompareBar.tsx",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/components/LineChart.tsx",
+      "language": "typescript",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/components/MonoLabel.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/components/PercentileBar.tsx",
+      "language": "typescript",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/common.ts",
+      "language": "typescript",
+      "sizeLines": 371,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/elections.ts",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/eu.ts",
+      "language": "typescript",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/gesetze.ts",
+      "language": "typescript",
+      "sizeLines": 147,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/lobby.ts",
+      "language": "typescript",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/overview.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/sources.ts",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/i18n/world.ts",
+      "language": "typescript",
+      "sizeLines": 589,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Sources.tsx",
+      "language": "typescript",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/data/sourcesCatalog.ts": [
+      "src/design-system/i18n.ts"
+    ],
+    "src/design-system/components/CompareBar.tsx": [
+      "src/design-system/components/MonoLabel.tsx",
+      "src/design-system/i18n.ts",
+      "src/design-system/ThemeContext.tsx",
+      "src/design-system/tokens.ts"
+    ],
+    "src/design-system/components/LineChart.tsx": [
+      "src/design-system/components/MonoLabel.tsx",
+      "src/design-system/i18n.ts",
+      "src/design-system/ThemeContext.tsx",
+      "src/design-system/tokens.ts"
+    ],
+    "src/design-system/components/MonoLabel.tsx": [
+      "src/design-system/ThemeContext.tsx",
+      "src/design-system/tokens.ts"
+    ],
+    "src/design-system/components/PercentileBar.tsx": [
+      "src/design-system/components/MonoLabel.tsx",
+      "src/design-system/i18n.ts",
+      "src/design-system/ThemeContext.tsx",
+      "src/design-system/tokens.ts"
+    ],
+    "src/design-system/i18n.ts": [
+      "src/design-system/i18n/common.ts",
+      "src/design-system/i18n/elections.ts",
+      "src/design-system/i18n/eu.ts",
+      "src/design-system/i18n/gesetze.ts",
+      "src/design-system/i18n/lobby.ts",
+      "src/design-system/i18n/overview.ts",
+      "src/design-system/i18n/sources.ts",
+      "src/design-system/i18n/world.ts"
+    ],
+    "src/design-system/i18n/common.ts": [],
+    "src/design-system/i18n/elections.ts": [],
+    "src/design-system/i18n/eu.ts": [],
+    "src/design-system/i18n/gesetze.ts": [],
+    "src/design-system/i18n/lobby.ts": [],
+    "src/design-system/i18n/overview.ts": [],
+    "src/design-system/i18n/sources.ts": [],
+    "src/design-system/i18n/world.ts": [],
+    "src/pages/Sources.tsx": [
+      "src/data/sourcesCatalog.ts",
+      "src/design-system/i18n.ts",
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts",
+      "src/hooks/useApi.ts"
+    ]
+  }
+}

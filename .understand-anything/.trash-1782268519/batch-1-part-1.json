@@ -1,0 +1,1118 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/design-system/ThemeContext.tsx",
+      "type": "file",
+      "name": "ThemeContext.tsx",
+      "filePath": "src/design-system/ThemeContext.tsx",
+      "summary": "React context provider for the design system that manages light/dark theme and DE/EN language state, persisting both to localStorage and exposing a theme palette, spacing tokens, and a translation function.",
+      "tags": [
+        "context",
+        "theme",
+        "i18n",
+        "provider",
+        "state-management"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses React context with useCallback/useMemo memoization and a useTheme hook guarded against missing provider."
+    },
+    {
+      "id": "function:src/design-system/ThemeContext.tsx:ThemeProvider",
+      "type": "function",
+      "name": "ThemeProvider",
+      "filePath": "src/design-system/ThemeContext.tsx",
+      "lineRange": [
+        51,
+        101
+      ],
+      "summary": "Provider component that holds theme and language state, syncs them to localStorage via effects, and supplies the merged theme/i18n context value to descendants.",
+      "tags": [
+        "provider",
+        "context",
+        "state-management",
+        "i18n"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/Badge.tsx",
+      "type": "file",
+      "name": "Badge.tsx",
+      "filePath": "src/design-system/components/Badge.tsx",
+      "summary": "Themed inline badge/pill component rendering short status text in one of several semantic color variants.",
+      "tags": [
+        "component",
+        "badge",
+        "ui",
+        "design-system"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/Badge.tsx:Badge",
+      "type": "function",
+      "name": "Badge",
+      "filePath": "src/design-system/components/Badge.tsx",
+      "lineRange": [
+        27,
+        84
+      ],
+      "summary": "Renders a small labelled pill whose background and text colors are derived from the active theme and the chosen variant.",
+      "tags": [
+        "component",
+        "badge",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/BalanceBarChart.tsx",
+      "type": "file",
+      "name": "BalanceBarChart.tsx",
+      "filePath": "src/design-system/components/BalanceBarChart.tsx",
+      "summary": "SVG trade-balance bar chart that plots yearly export/import net balance with hover interaction and localized currency formatting.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/BalanceBarChart.tsx:BalanceBarChart",
+      "type": "function",
+      "name": "BalanceBarChart",
+      "filePath": "src/design-system/components/BalanceBarChart.tsx",
+      "lineRange": [
+        23,
+        99
+      ],
+      "summary": "Computes a per-year net trade balance from export/import data and renders it as an interactive SVG bar chart with an active-bar tooltip.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/DataCard.tsx",
+      "type": "file",
+      "name": "DataCard.tsx",
+      "filePath": "src/design-system/components/DataCard.tsx",
+      "summary": "Generic themed card container with optional header, footer, and clickable/active states used to wrap dashboard content blocks.",
+      "tags": [
+        "component",
+        "card",
+        "layout",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/DataCard.tsx:DataCard",
+      "type": "function",
+      "name": "DataCard",
+      "filePath": "src/design-system/components/DataCard.tsx",
+      "lineRange": [
+        15,
+        91
+      ],
+      "summary": "Renders a bordered card with optional header/footer slots and keyboard-accessible click handling when interactive.",
+      "tags": [
+        "component",
+        "card",
+        "layout",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/EmptyState.tsx",
+      "type": "file",
+      "name": "EmptyState.tsx",
+      "filePath": "src/design-system/components/EmptyState.tsx",
+      "summary": "Themed placeholder shown when a data view has no results, optionally rendering a call-to-action element.",
+      "tags": [
+        "component",
+        "empty-state",
+        "ui",
+        "design-system"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/EmptyState.tsx:EmptyState",
+      "type": "function",
+      "name": "EmptyState",
+      "filePath": "src/design-system/components/EmptyState.tsx",
+      "lineRange": [
+        9,
+        65
+      ],
+      "summary": "Renders centered placeholder text with an optional action node for empty data views.",
+      "tags": [
+        "component",
+        "empty-state",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/FilterToolbar.tsx",
+      "type": "file",
+      "name": "FilterToolbar.tsx",
+      "filePath": "src/design-system/components/FilterToolbar.tsx",
+      "summary": "Reusable filter/search toolbar that renders a text search field plus a set of declarative select filters for list pages.",
+      "tags": [
+        "component",
+        "filter",
+        "toolbar",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/FilterToolbar.tsx:FilterToolbar",
+      "type": "function",
+      "name": "FilterToolbar",
+      "filePath": "src/design-system/components/FilterToolbar.tsx",
+      "lineRange": [
+        22,
+        113
+      ],
+      "summary": "Builds a themed search-and-filter bar from a declarative filter definition array, wiring each control to its onChange handler.",
+      "tags": [
+        "component",
+        "filter",
+        "toolbar",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/HBar.tsx",
+      "type": "file",
+      "name": "HBar.tsx",
+      "filePath": "src/design-system/components/HBar.tsx",
+      "summary": "Horizontal bar component that visualizes a single value relative to a max, with label, formatted value, and optional icon.",
+      "tags": [
+        "component",
+        "chart",
+        "bar",
+        "data-visualization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/HBar.tsx:HBar",
+      "type": "function",
+      "name": "HBar",
+      "filePath": "src/design-system/components/HBar.tsx",
+      "lineRange": [
+        15,
+        68
+      ],
+      "summary": "Renders a labelled horizontal progress-style bar whose fill width is the value clamped to a maximum.",
+      "tags": [
+        "component",
+        "chart",
+        "bar",
+        "data-visualization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "type": "file",
+      "name": "HSSectionBreakdown.tsx",
+      "filePath": "src/design-system/components/HSSectionBreakdown.tsx",
+      "summary": "Trade breakdown widget that ranks HS commodity sections by export or import value, with partner selection and responsive layout.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "trade",
+        "responsive"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/design-system/components/HSSectionBreakdown.tsx:HSSectionBreakdown",
+      "type": "function",
+      "name": "HSSectionBreakdown",
+      "filePath": "src/design-system/components/HSSectionBreakdown.tsx",
+      "lineRange": [
+        35,
+        156
+      ],
+      "summary": "Aggregates and sorts HS-section trade rows by value, renders ranked bars with localized USD formatting, and integrates a partner picker on wider viewports.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "trade",
+        "responsive"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/design-system/components/InfoToggle.tsx",
+      "type": "file",
+      "name": "InfoToggle.tsx",
+      "filePath": "src/design-system/components/InfoToggle.tsx",
+      "summary": "Small expandable info/help toggle that shows or hides an explanatory text block on click.",
+      "tags": [
+        "component",
+        "toggle",
+        "ui",
+        "help"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/InfoToggle.tsx:InfoToggle",
+      "type": "function",
+      "name": "InfoToggle",
+      "filePath": "src/design-system/components/InfoToggle.tsx",
+      "lineRange": [
+        10,
+        56
+      ],
+      "summary": "Renders an info button that toggles the visibility of an inline explanatory panel using local open state.",
+      "tags": [
+        "component",
+        "toggle",
+        "ui",
+        "help"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/LegalFooter.tsx",
+      "type": "file",
+      "name": "LegalFooter.tsx",
+      "filePath": "src/design-system/components/LegalFooter.tsx",
+      "summary": "Site-wide legal footer that renders data-source attributions for the current route plus imprint and licensing links.",
+      "tags": [
+        "component",
+        "footer",
+        "legal",
+        "sources",
+        "i18n"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/LegalFooter.tsx:LegalFooter",
+      "type": "function",
+      "name": "LegalFooter",
+      "filePath": "src/design-system/components/LegalFooter.tsx",
+      "lineRange": [
+        6,
+        91
+      ],
+      "summary": "Derives the active page from the router location, looks up its source catalog entries, and renders localized attribution and legal links.",
+      "tags": [
+        "component",
+        "footer",
+        "legal",
+        "sources"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/LoadingSpinner.tsx",
+      "type": "file",
+      "name": "LoadingSpinner.tsx",
+      "filePath": "src/design-system/components/LoadingSpinner.tsx",
+      "summary": "Themed CSS loading spinner shown while async data is being fetched.",
+      "tags": [
+        "component",
+        "loading",
+        "spinner",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/design-system/components/LoadingSpinner.tsx:LoadingSpinner",
+      "type": "function",
+      "name": "LoadingSpinner",
+      "filePath": "src/design-system/components/LoadingSpinner.tsx",
+      "lineRange": [
+        3,
+        34
+      ],
+      "summary": "Renders a theme-colored animated spinner element for loading states.",
+      "tags": [
+        "component",
+        "loading",
+        "spinner",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/components/MobileNav.tsx",
+      "type": "file",
+      "name": "MobileNav.tsx",
+      "filePath": "src/design-system/components/MobileNav.tsx",
+      "summary": "Mobile slide-out navigation drawer with module entries, theme and language switches, and embedded share controls.",
+      "tags": [
+        "component",
+        "navigation",
+        "mobile",
+        "menu",
+        "responsive"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/design-system/components/MobileNav.tsx:MobileNav",
+      "type": "function",
+      "name": "MobileNav",
+      "filePath": "src/design-system/components/MobileNav.tsx",
+      "lineRange": [
+        17,
+        280
+      ],
+      "summary": "Renders a toggleable mobile nav drawer that lists navigation entries, dispatches selection, and exposes theme/language and share actions.",
+      "tags": [
+        "component",
+        "navigation",
+        "mobile",
+        "menu"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/design-system/components/MultiLineChart.tsx",
+      "type": "file",
+      "name": "MultiLineChart.tsx",
+      "filePath": "src/design-system/components/MultiLineChart.tsx",
+      "summary": "SVG dual-line chart plotting export and import trade series over time with hover tooltips and localized axis labels.",
+      "tags": [
+        "component",
+        "chart",
+        "line-chart",
+        "data-visualization",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/MultiLineChart.tsx:MultiLineChart",
+      "type": "function",
+      "name": "MultiLineChart",
+      "filePath": "src/design-system/components/MultiLineChart.tsx",
+      "lineRange": [
+        25,
+        117
+      ],
+      "summary": "Projects cleaned trade time-series into SVG polyline paths for exports and imports and renders an interactive hover tooltip.",
+      "tags": [
+        "component",
+        "chart",
+        "line-chart",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/PageHeader.tsx",
+      "type": "file",
+      "name": "PageHeader.tsx",
+      "filePath": "src/design-system/components/PageHeader.tsx",
+      "summary": "Standard page header rendering a title and optional subtitle with consistent design-system typography.",
+      "tags": [
+        "component",
+        "header",
+        "layout",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/design-system/components/PageHeader.tsx:PageHeader",
+      "type": "function",
+      "name": "PageHeader",
+      "filePath": "src/design-system/components/PageHeader.tsx",
+      "lineRange": [
+        9,
+        42
+      ],
+      "summary": "Renders a themed page title with an optional subtitle line.",
+      "tags": [
+        "component",
+        "header",
+        "layout"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/design-system/components/Pagination.tsx",
+      "type": "file",
+      "name": "Pagination.tsx",
+      "filePath": "src/design-system/components/Pagination.tsx",
+      "summary": "Pagination control rendering numbered page buttons with ellipsis truncation and previous/next navigation.",
+      "tags": [
+        "component",
+        "pagination",
+        "navigation",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/Pagination.tsx:getPaginationItems",
+      "type": "function",
+      "name": "getPaginationItems",
+      "filePath": "src/design-system/components/Pagination.tsx",
+      "lineRange": [
+        13,
+        46
+      ],
+      "summary": "Computes the list of page numbers and ellipsis placeholders to display for a given current page and total page count.",
+      "tags": [
+        "utility",
+        "pagination",
+        "algorithm"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/Pagination.tsx:Pagination",
+      "type": "function",
+      "name": "Pagination",
+      "filePath": "src/design-system/components/Pagination.tsx",
+      "lineRange": [
+        48,
+        146
+      ],
+      "summary": "Renders an accessible pagination bar from the computed page-item list, invoking onChange when a page is selected.",
+      "tags": [
+        "component",
+        "pagination",
+        "navigation",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/PartnerPicker.tsx",
+      "type": "file",
+      "name": "PartnerPicker.tsx",
+      "filePath": "src/design-system/components/PartnerPicker.tsx",
+      "summary": "Dropdown selector for choosing a trade partner country, displaying each partner with localized total trade value.",
+      "tags": [
+        "component",
+        "picker",
+        "dropdown",
+        "trade",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/design-system/components/PartnerPicker.tsx:PartnerPicker",
+      "type": "function",
+      "name": "PartnerPicker",
+      "filePath": "src/design-system/components/PartnerPicker.tsx",
+      "lineRange": [
+        27,
+        81
+      ],
+      "summary": "Renders a themed partner select control listing partner names with formatted USD trade volumes and emits selection changes.",
+      "tags": [
+        "component",
+        "picker",
+        "dropdown",
+        "trade"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/design-system/components/ProgressBar.tsx",
+      "type": "file",
+      "name": "ProgressBar.tsx",
+      "filePath": "src/design-system/components/ProgressBar.tsx",
+      "summary": "Multi-segment horizontal progress bar that renders proportional colored segments from a segments definition.",
+      "tags": [
+        "component",
+        "progress",
+        "bar",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/design-system/components/ProgressBar.tsx:ProgressBar",
+      "type": "function",
+      "name": "ProgressBar",
+      "filePath": "src/design-system/components/ProgressBar.tsx",
+      "lineRange": [
+        12,
+        39
+      ],
+      "summary": "Renders a stacked horizontal bar composed of proportionally-sized colored segments.",
+      "tags": [
+        "component",
+        "progress",
+        "bar",
+        "ui"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/design-system/ThemeContext.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/ThemeContext.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/Badge.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/Badge.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/BalanceBarChart.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/BalanceBarChart.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/DataCard.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/DataCard.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/EmptyState.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/EmptyState.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/FilterToolbar.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/FilterToolbar.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HBar.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HBar.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "file:src/design-system/components/PartnerPicker.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "file:src/design-system/hsSections.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "file:src/hooks/useMediaQuery.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/InfoToggle.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/InfoToggle.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/LegalFooter.tsx",
+      "target": "file:src/data/sourcesCatalog.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/LegalFooter.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/LegalFooter.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/LoadingSpinner.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "file:src/design-system/components/ShareCompact.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "file:src/design-system/components/Sidebar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MultiLineChart.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/MultiLineChart.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/PageHeader.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/PageHeader.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/Pagination.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/Pagination.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/PartnerPicker.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/PartnerPicker.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/components/ProgressBar.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/design-system/ThemeContext.tsx",
+      "target": "function:src/design-system/ThemeContext.tsx:ThemeProvider",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/ThemeContext.tsx",
+      "target": "function:src/design-system/ThemeContext.tsx:ThemeProvider",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/Badge.tsx",
+      "target": "function:src/design-system/components/Badge.tsx:Badge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/Badge.tsx",
+      "target": "function:src/design-system/components/Badge.tsx:Badge",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/BalanceBarChart.tsx",
+      "target": "function:src/design-system/components/BalanceBarChart.tsx:BalanceBarChart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/BalanceBarChart.tsx",
+      "target": "function:src/design-system/components/BalanceBarChart.tsx:BalanceBarChart",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/DataCard.tsx",
+      "target": "function:src/design-system/components/DataCard.tsx:DataCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/DataCard.tsx",
+      "target": "function:src/design-system/components/DataCard.tsx:DataCard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/EmptyState.tsx",
+      "target": "function:src/design-system/components/EmptyState.tsx:EmptyState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/EmptyState.tsx",
+      "target": "function:src/design-system/components/EmptyState.tsx:EmptyState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/FilterToolbar.tsx",
+      "target": "function:src/design-system/components/FilterToolbar.tsx:FilterToolbar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/FilterToolbar.tsx",
+      "target": "function:src/design-system/components/FilterToolbar.tsx:FilterToolbar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/HBar.tsx",
+      "target": "function:src/design-system/components/HBar.tsx:HBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/HBar.tsx",
+      "target": "function:src/design-system/components/HBar.tsx:HBar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "function:src/design-system/components/HSSectionBreakdown.tsx:HSSectionBreakdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/HSSectionBreakdown.tsx",
+      "target": "function:src/design-system/components/HSSectionBreakdown.tsx:HSSectionBreakdown",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/design-system/components/HSSectionBreakdown.tsx:HSSectionBreakdown",
+      "target": "function:src/design-system/components/PartnerPicker.tsx:PartnerPicker",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/design-system/components/HSSectionBreakdown.tsx:HSSectionBreakdown",
+      "target": "function:src/hooks/useMediaQuery.ts:useMediaQuery",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/InfoToggle.tsx",
+      "target": "function:src/design-system/components/InfoToggle.tsx:InfoToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/InfoToggle.tsx",
+      "target": "function:src/design-system/components/InfoToggle.tsx:InfoToggle",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/LegalFooter.tsx",
+      "target": "function:src/design-system/components/LegalFooter.tsx:LegalFooter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/LegalFooter.tsx",
+      "target": "function:src/design-system/components/LegalFooter.tsx:LegalFooter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/design-system/components/LegalFooter.tsx:LegalFooter",
+      "target": "function:src/data/sourcesCatalog.ts:footerSourcesLineKey",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/LoadingSpinner.tsx",
+      "target": "function:src/design-system/components/LoadingSpinner.tsx:LoadingSpinner",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/LoadingSpinner.tsx",
+      "target": "function:src/design-system/components/LoadingSpinner.tsx:LoadingSpinner",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "function:src/design-system/components/MobileNav.tsx:MobileNav",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/MobileNav.tsx",
+      "target": "function:src/design-system/components/MobileNav.tsx:MobileNav",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/design-system/components/MobileNav.tsx:MobileNav",
+      "target": "function:src/design-system/components/ShareCompact.tsx:ShareCompact",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/MultiLineChart.tsx",
+      "target": "function:src/design-system/components/MultiLineChart.tsx:MultiLineChart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/MultiLineChart.tsx",
+      "target": "function:src/design-system/components/MultiLineChart.tsx:MultiLineChart",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/PageHeader.tsx",
+      "target": "function:src/design-system/components/PageHeader.tsx:PageHeader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/PageHeader.tsx",
+      "target": "function:src/design-system/components/PageHeader.tsx:PageHeader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/Pagination.tsx",
+      "target": "function:src/design-system/components/Pagination.tsx:getPaginationItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/Pagination.tsx",
+      "target": "function:src/design-system/components/Pagination.tsx:Pagination",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/Pagination.tsx",
+      "target": "function:src/design-system/components/Pagination.tsx:Pagination",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/design-system/components/Pagination.tsx:Pagination",
+      "target": "function:src/design-system/components/Pagination.tsx:getPaginationItems",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/PartnerPicker.tsx",
+      "target": "function:src/design-system/components/PartnerPicker.tsx:PartnerPicker",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/PartnerPicker.tsx",
+      "target": "function:src/design-system/components/PartnerPicker.tsx:PartnerPicker",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/design-system/components/ProgressBar.tsx",
+      "target": "function:src/design-system/components/ProgressBar.tsx:ProgressBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/design-system/components/ProgressBar.tsx",
+      "target": "function:src/design-system/components/ProgressBar.tsx:ProgressBar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

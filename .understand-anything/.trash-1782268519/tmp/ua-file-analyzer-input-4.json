@@ -1,0 +1,37 @@
+{
+  "projectRoot": "/root/respublica-dashboard",
+  "batchFiles": [
+    {"path": "src/components/eulaw/EuCourtCard.tsx", "language": "typescript", "sizeLines": 486, "fileCategory": "code"},
+    {"path": "src/components/eulaw/EuLawCard.tsx", "language": "typescript", "sizeLines": 402, "fileCategory": "code"},
+    {"path": "src/components/eulaw/types.ts", "language": "typescript", "sizeLines": 88, "fileCategory": "code"},
+    {"path": "src/components/gesetze/GesetzDetail.tsx", "language": "typescript", "sizeLines": 688, "fileCategory": "code"},
+    {"path": "src/components/gesetze/UrteilCard.tsx", "language": "typescript", "sizeLines": 272, "fileCategory": "code"},
+    {"path": "src/components/gesetze/types.ts", "language": "typescript", "sizeLines": 46, "fileCategory": "code"},
+    {"path": "src/components/gesetze/utils.ts", "language": "typescript", "sizeLines": 132, "fileCategory": "code"},
+    {"path": "src/hooks/useApi.ts", "language": "typescript", "sizeLines": 93, "fileCategory": "code"},
+    {"path": "src/hooks/useDebouncedValue.ts", "language": "typescript", "sizeLines": 10, "fileCategory": "code"},
+    {"path": "src/hooks/useMediaQuery.ts", "language": "typescript", "sizeLines": 23, "fileCategory": "code"},
+    {"path": "src/pages/Elections.tsx", "language": "typescript", "sizeLines": 347, "fileCategory": "code"},
+    {"path": "src/pages/EuLaw.tsx", "language": "typescript", "sizeLines": 1034, "fileCategory": "code"},
+    {"path": "src/pages/Legislation.tsx", "language": "typescript", "sizeLines": 1343, "fileCategory": "code"},
+    {"path": "src/pages/WorldMap.tsx", "language": "typescript", "sizeLines": 1203, "fileCategory": "code"},
+    {"path": "src/utils/worldFilters.ts", "language": "typescript", "sizeLines": 21, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/components/eulaw/EuCourtCard.tsx": ["src/components/eulaw/types.ts","src/components/gesetze/utils.ts","src/design-system/i18n.ts","src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useMediaQuery.ts"],
+    "src/components/eulaw/EuLawCard.tsx": ["src/components/eulaw/types.ts","src/components/gesetze/utils.ts","src/design-system/i18n.ts","src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useMediaQuery.ts"],
+    "src/components/eulaw/types.ts": [],
+    "src/components/gesetze/GesetzDetail.tsx": ["src/components/gesetze/types.ts","src/components/gesetze/utils.ts","src/design-system/index.ts","src/design-system/tokens.ts"],
+    "src/components/gesetze/UrteilCard.tsx": ["src/components/gesetze/types.ts","src/components/gesetze/utils.ts","src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts"],
+    "src/components/gesetze/types.ts": [],
+    "src/components/gesetze/utils.ts": ["src/design-system/index.ts"],
+    "src/hooks/useApi.ts": [],
+    "src/hooks/useDebouncedValue.ts": [],
+    "src/hooks/useMediaQuery.ts": ["src/design-system/tokens.ts"],
+    "src/pages/Elections.tsx": ["src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useDebouncedValue.ts","src/hooks/useMediaQuery.ts","src/pages/elections/KreisAutocomplete.tsx","src/pages/elections/mapGeometry.ts","src/pages/elections/normalizeWahlen.ts","src/pages/elections/types.ts"],
+    "src/pages/EuLaw.tsx": ["src/components/eulaw/EuCourtCard.tsx","src/components/eulaw/EuLawCard.tsx","src/components/eulaw/types.ts","src/design-system/i18n.ts","src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useDebouncedValue.ts","src/hooks/useMediaQuery.ts"],
+    "src/pages/Legislation.tsx": ["src/components/gesetze/GesetzDetail.tsx","src/components/gesetze/types.ts","src/components/gesetze/UrteilCard.tsx","src/components/gesetze/utils.ts","src/design-system/i18n.ts","src/design-system/index.ts","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useMediaQuery.ts"],
+    "src/pages/WorldMap.tsx": ["src/design-system/index.ts","src/design-system/ThemeContext.tsx","src/design-system/tokens.ts","src/hooks/useApi.ts","src/hooks/useDebouncedValue.ts","src/hooks/useMediaQuery.ts","src/utils/worldFilters.ts"],
+    "src/utils/worldFilters.ts": []
+  }
+}

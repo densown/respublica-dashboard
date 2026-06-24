@@ -1,0 +1,484 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 13,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".cursorrules",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 21,
+      "metrics": {}
+    },
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 47,
+      "nonEmptyLines": 41,
+      "metrics": {}
+    },
+    {
+      "path": ".understand-anything/config.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 3,
+      "nonEmptyLines": 3,
+      "sections": [
+        {
+          "heading": "outputLanguage",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "eslint.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 28,
+      "nonEmptyLines": 27,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "notes/BUG8-gesetz-titel-TODO.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 25,
+      "nonEmptyLines": 16,
+      "sections": [
+        {
+          "heading": "TODO (Bug 8, UX audit): Gesetz-Listenansicht — Anzeigetitel statt Dateikürzel",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Problem",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Aktueller Stand (Code / Schema)",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Offene Entscheidung",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Bei Umsetzung",
+          "level": 2,
+          "line": 21
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "public/data/world.geojson",
+      "language": "geojson",
+      "fileCategory": "code",
+      "totalLines": 241,
+      "nonEmptyLines": 241,
+      "metrics": {}
+    },
+    {
+      "path": "src/hooks/useLocalStorage.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 30,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "useLocalStorage",
+          "startLine": 3,
+          "endLine": 30,
+          "params": [
+            "key",
+            "defaultValue"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useLocalStorage",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useLocalStorage",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "localStorage.getItem",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "JSON.parse",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "useCallback",
+          "lineNumber": 17
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "setState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "localStorage.setItem",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useLocalStorage",
+          "callee": "JSON.stringify",
+          "lineNumber": 21
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useOffsetPagination.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 16,
+      "nonEmptyLines": 14,
+      "functions": [
+        {
+          "name": "useOffsetPagination",
+          "startLine": 11,
+          "endLine": 16,
+          "params": [
+            "limit",
+            "initialPage"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useOffsetPagination",
+          "line": 11,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useOffsetPagination",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useOffsetPagination",
+          "callee": "useMemo",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useOffsetPagination",
+          "callee": "useCallback",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useOffsetPagination",
+          "callee": "setPage",
+          "lineNumber": 14
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/index.css",
+      "language": "css",
+      "fileCategory": "markup",
+      "totalLines": 31,
+      "nonEmptyLines": 28,
+      "metrics": {}
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 9,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ui_kits/dashboard/ConsoleComponents.jsx",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 318,
+      "nonEmptyLines": 306,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ui_kits/dashboard/CountryConsole.jsx",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 757,
+      "nonEmptyLines": 686,
+      "functions": [
+        {
+          "name": "latestValue",
+          "startLine": 62,
+          "endLine": 69,
+          "params": [
+            "indicator"
+          ]
+        },
+        {
+          "name": "tailSeries",
+          "startLine": 72,
+          "endLine": 76,
+          "params": [
+            "indicator"
+          ]
+        },
+        {
+          "name": "trendFromValues",
+          "startLine": 79,
+          "endLine": 85,
+          "params": [
+            "indicator"
+          ]
+        },
+        {
+          "name": "findInd",
+          "startLine": 88,
+          "endLine": 90,
+          "params": [
+            "detail",
+            "code"
+          ]
+        },
+        {
+          "name": "fmtNumber",
+          "startLine": 93,
+          "endLine": 96,
+          "params": [
+            "v"
+          ]
+        },
+        {
+          "name": "fmtUsd",
+          "startLine": 98,
+          "endLine": 103,
+          "params": [
+            "v"
+          ]
+        },
+        {
+          "name": "fmtPopulation",
+          "startLine": 105,
+          "endLine": 111,
+          "params": [
+            "v"
+          ]
+        },
+        {
+          "name": "GlobalView",
+          "startLine": 115,
+          "endLine": 172,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "latestValue",
+          "callee": "isNaN",
+          "lineNumber": 66
+        },
+        {
+          "caller": "tailSeries",
+          "callee": "indicator.values.filter",
+          "lineNumber": 74
+        },
+        {
+          "caller": "tailSeries",
+          "callee": "isNaN",
+          "lineNumber": 74
+        },
+        {
+          "caller": "tailSeries",
+          "callee": "filtered.slice(-n).map",
+          "lineNumber": 75
+        },
+        {
+          "caller": "tailSeries",
+          "callee": "filtered.slice",
+          "lineNumber": 75
+        },
+        {
+          "caller": "trendFromValues",
+          "callee": "tailSeries",
+          "lineNumber": 80
+        },
+        {
+          "caller": "trendFromValues",
+          "callee": "Math.abs",
+          "lineNumber": 84
+        },
+        {
+          "caller": "findInd",
+          "callee": "detail?.indicators?.find",
+          "lineNumber": 89
+        },
+        {
+          "caller": "fmtNumber",
+          "callee": "new Intl.NumberFormat('de-DE', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format",
+          "lineNumber": 95
+        },
+        {
+          "caller": "fmtUsd",
+          "callee": "fmtNumber",
+          "lineNumber": 100
+        },
+        {
+          "caller": "fmtUsd",
+          "callee": "fmtNumber",
+          "lineNumber": 101
+        },
+        {
+          "caller": "fmtUsd",
+          "callee": "fmtNumber",
+          "lineNumber": 102
+        },
+        {
+          "caller": "fmtPopulation",
+          "callee": "fmtNumber",
+          "lineNumber": 107
+        },
+        {
+          "caller": "fmtPopulation",
+          "callee": "fmtNumber",
+          "lineNumber": 108
+        },
+        {
+          "caller": "fmtPopulation",
+          "callee": "fmtNumber",
+          "lineNumber": 109
+        },
+        {
+          "caller": "fmtPopulation",
+          "callee": "fmtNumber",
+          "lineNumber": 110
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "useTheme",
+          "lineNumber": 116
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "(ranking || []).slice",
+          "lineNumber": 117
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "(ranking || []).slice(-5).reverse",
+          "lineNumber": 118
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "(ranking || []).slice",
+          "lineNumber": 118
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "fmtNumber",
+          "lineNumber": 133
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "fmtNumber",
+          "lineNumber": 134
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "top5.map",
+          "lineNumber": 141
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "fmtNumber",
+          "lineNumber": 145
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "bot5.map",
+          "lineNumber": 154
+        },
+        {
+          "caller": "GlobalView",
+          "callee": "fmtNumber",
+          "lineNumber": 158
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 8,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "vite.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 18,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

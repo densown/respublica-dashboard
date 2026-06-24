@@ -1,0 +1,2911 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 33,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/design-system/ThemeContext.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 109,
+      "nonEmptyLines": 93,
+      "functions": [
+        {
+          "name": "readStoredTheme",
+          "startLine": 30,
+          "endLine": 38,
+          "params": []
+        },
+        {
+          "name": "readStoredLang",
+          "startLine": 40,
+          "endLine": 49,
+          "params": []
+        },
+        {
+          "name": "ThemeProvider",
+          "startLine": 51,
+          "endLine": 101,
+          "params": [
+            "{ children }"
+          ]
+        },
+        {
+          "name": "useTheme",
+          "startLine": 103,
+          "endLine": 109,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "ThemeProvider",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "useTheme",
+          "line": 103,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "readStoredTheme",
+          "callee": "localStorage.getItem",
+          "lineNumber": 32
+        },
+        {
+          "caller": "readStoredLang",
+          "callee": "localStorage.getItem",
+          "lineNumber": 42
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useState",
+          "lineNumber": 52
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "readStoredTheme",
+          "lineNumber": 52
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useState",
+          "lineNumber": 53
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "readStoredLang",
+          "lineNumber": 53
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useEffect",
+          "lineNumber": 55
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "localStorage.setItem",
+          "lineNumber": 57
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useEffect",
+          "lineNumber": 63
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "localStorage.setItem",
+          "lineNumber": 65
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useCallback",
+          "lineNumber": 71
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "setThemeState",
+          "lineNumber": 72
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useCallback",
+          "lineNumber": 75
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "setLangState",
+          "lineNumber": 76
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useCallback",
+          "lineNumber": 81
+        },
+        {
+          "caller": "ThemeProvider",
+          "callee": "useMemo",
+          "lineNumber": 86
+        },
+        {
+          "caller": "useTheme",
+          "callee": "useContext",
+          "lineNumber": 104
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/Badge.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 84,
+      "nonEmptyLines": 77,
+      "functions": [
+        {
+          "name": "Badge",
+          "startLine": 27,
+          "endLine": 84,
+          "params": [
+            "{ text, variant = 'default' }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Badge",
+          "line": 27,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Badge",
+          "callee": "useTheme",
+          "lineNumber": 28
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/BalanceBarChart.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 99,
+      "nonEmptyLines": 91,
+      "functions": [
+        {
+          "name": "fmtBn",
+          "startLine": 18,
+          "endLine": 21,
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ]
+        },
+        {
+          "name": "BalanceBarChart",
+          "startLine": 23,
+          "endLine": 99,
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "BalanceBarChart",
+          "line": 23,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fmtBn",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 19
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "useTheme",
+          "lineNumber": 24
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "useMemo",
+          "lineNumber": 27
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "(data || [])\n        .filter((d) => Number.isFinite(d.total_export_usd) && Number.isFinite(d.total_import_usd))\n        .sort((a, b) => a.year - b.year)\n        .map",
+          "lineNumber": 29
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "(data || [])\n        .filter((d) => Number.isFinite(d.total_export_usd) && Number.isFinite(d.total_import_usd))\n        .sort",
+          "lineNumber": 29
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "(data || [])\n        .filter",
+          "lineNumber": 29
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 30
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 30
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "t",
+          "lineNumber": 40
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.max",
+          "lineNumber": 50
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "clean.map",
+          "lineNumber": 50
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.abs",
+          "lineNumber": 50
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "toY",
+          "lineNumber": 52
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.max",
+          "lineNumber": 54
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "clean.map",
+          "lineNumber": 63
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.min",
+          "lineNumber": 65
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "toY",
+          "lineNumber": 65
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.abs",
+          "lineNumber": 66
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "toY",
+          "lineNumber": 66
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.max",
+          "lineNumber": 74
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "setActiveIndex",
+          "lineNumber": 79
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "Math.max",
+          "lineNumber": 81
+        },
+        {
+          "caller": "BalanceBarChart",
+          "callee": "fmtBn",
+          "lineNumber": 94
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/DataCard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 91,
+      "nonEmptyLines": 87,
+      "functions": [
+        {
+          "name": "DataCard",
+          "startLine": 15,
+          "endLine": 91,
+          "params": [
+            "{\n  header,\n  children,\n  footer,\n  onClick,\n  active,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "DataCard",
+          "line": 15,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "DataCard",
+          "callee": "useTheme",
+          "lineNumber": 22
+        },
+        {
+          "caller": "DataCard",
+          "callee": "Boolean",
+          "lineNumber": 23
+        },
+        {
+          "caller": "DataCard",
+          "callee": "e.preventDefault",
+          "lineNumber": 34
+        },
+        {
+          "caller": "DataCard",
+          "callee": "onClick",
+          "lineNumber": 35
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/EmptyState.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 65,
+      "nonEmptyLines": 62,
+      "functions": [
+        {
+          "name": "EmptyState",
+          "startLine": 9,
+          "endLine": 65,
+          "params": [
+            "{ text, action }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EmptyState",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EmptyState",
+          "callee": "useTheme",
+          "lineNumber": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/FilterToolbar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 113,
+      "nonEmptyLines": 106,
+      "functions": [
+        {
+          "name": "FilterToolbar",
+          "startLine": 22,
+          "endLine": 113,
+          "params": [
+            "{ placeholder, filters }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "FilterToolbar",
+          "line": 22,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "FilterToolbar",
+          "callee": "useTheme",
+          "lineNumber": 23
+        },
+        {
+          "caller": "FilterToolbar",
+          "callee": "useMemo",
+          "lineNumber": 25
+        },
+        {
+          "caller": "FilterToolbar",
+          "callee": "encodeURIComponent",
+          "lineNumber": 27
+        },
+        {
+          "caller": "FilterToolbar",
+          "callee": "t",
+          "lineNumber": 42
+        },
+        {
+          "caller": "FilterToolbar",
+          "callee": "filters.map",
+          "lineNumber": 63
+        },
+        {
+          "caller": "FilterToolbar",
+          "callee": "f.options.map",
+          "lineNumber": 103
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/HBar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 68,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "HBar",
+          "startLine": 15,
+          "endLine": 68,
+          "params": [
+            "{ label, value, max, formatted, color, icon, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "HBar",
+          "line": 15,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "HBar",
+          "callee": "useTheme",
+          "lineNumber": 16
+        },
+        {
+          "caller": "HBar",
+          "callee": "Math.min",
+          "lineNumber": 59
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/HSSectionBreakdown.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 156,
+      "nonEmptyLines": 147,
+      "functions": [
+        {
+          "name": "fmtUsd",
+          "startLine": 26,
+          "endLine": 33,
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ]
+        },
+        {
+          "name": "HSSectionBreakdown",
+          "startLine": 35,
+          "endLine": 156,
+          "params": [
+            "{\n  sectionsExport,\n  sectionsImport,\n  mode,\n  sourceLabel,\n  partners = [],\n  selectedPartner = null,\n  onPartnerChange,\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "HSSectionBreakdown",
+          "line": 35,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fmtUsd",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fmtUsd",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format",
+          "lineNumber": 31
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "useTheme",
+          "lineNumber": 45
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "useMediaQuery",
+          "lineNumber": 47
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "useState",
+          "lineNumber": 48
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "useMemo",
+          "lineNumber": 50
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "[...(src || [])]\n      .filter((r) => Number.isFinite(r.value_usd) && r.value_usd > 0)\n      .sort",
+          "lineNumber": 52
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "[...(src || [])]\n      .filter",
+          "lineNumber": 52
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "Number.isFinite",
+          "lineNumber": 53
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "t",
+          "lineNumber": 68
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "Math.max",
+          "lineNumber": 74
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "rows.map",
+          "lineNumber": 74
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "rows.find",
+          "lineNumber": 75
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "rows.map",
+          "lineNumber": 86
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "Math.min",
+          "lineNumber": 87
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "setActive",
+          "lineNumber": 95
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "fmtUsd",
+          "lineNumber": 131
+        },
+        {
+          "caller": "HSSectionBreakdown",
+          "callee": "fmtUsd",
+          "lineNumber": 151
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/InfoToggle.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 54,
+      "functions": [
+        {
+          "name": "InfoToggle",
+          "startLine": 10,
+          "endLine": 56,
+          "params": [
+            "{ text, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "InfoToggle",
+          "line": 10,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "InfoToggle",
+          "callee": "useTheme",
+          "lineNumber": 11
+        },
+        {
+          "caller": "InfoToggle",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "InfoToggle",
+          "callee": "setOpen",
+          "lineNumber": 17
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/LegalFooter.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 91,
+      "nonEmptyLines": 87,
+      "functions": [
+        {
+          "name": "LegalFooter",
+          "startLine": 6,
+          "endLine": 91,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "LegalFooter",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LegalFooter",
+          "callee": "useLocation",
+          "lineNumber": 7
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "useTheme",
+          "lineNumber": 8
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "footerSourcesLineKey",
+          "lineNumber": 9
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 57
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 65
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 73
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 81
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 84
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 85
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 86
+        },
+        {
+          "caller": "LegalFooter",
+          "callee": "t",
+          "lineNumber": 87
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/LoadingSpinner.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 34,
+      "nonEmptyLines": 32,
+      "functions": [
+        {
+          "name": "LoadingSpinner",
+          "startLine": 3,
+          "endLine": 34,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "LoadingSpinner",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LoadingSpinner",
+          "callee": "useTheme",
+          "lineNumber": 4
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/MobileNav.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 280,
+      "nonEmptyLines": 270,
+      "functions": [
+        {
+          "name": "MobileNav",
+          "startLine": 17,
+          "endLine": 280,
+          "params": [
+            "{\n  entries,\n  active,\n  onSelect,\n  shareTitle,\n  shareUrl,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MobileNav",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MobileNav",
+          "callee": "useTheme",
+          "lineNumber": 24
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "useState",
+          "lineNumber": 25
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "useCallback",
+          "lineNumber": 27
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "setOpen",
+          "lineNumber": 27
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "useCallback",
+          "lineNumber": 29
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "onSelect",
+          "lineNumber": 31
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "close",
+          "lineNumber": 32
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "useCallback",
+          "lineNumber": 37
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "setTheme",
+          "lineNumber": 38
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "useCallback",
+          "lineNumber": 41
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "setLang",
+          "lineNumber": 42
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "setOpen",
+          "lineNumber": 113
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "close",
+          "lineNumber": 143
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "t",
+          "lineNumber": 203
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "entries.map",
+          "lineNumber": 213
+        },
+        {
+          "caller": "MobileNav",
+          "callee": "handleSelect",
+          "lineNumber": 238
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/MultiLineChart.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 117,
+      "nonEmptyLines": 108,
+      "functions": [
+        {
+          "name": "fmtUsdShort",
+          "startLine": 18,
+          "endLine": 23,
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ]
+        },
+        {
+          "name": "MultiLineChart",
+          "startLine": 25,
+          "endLine": 117,
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MultiLineChart",
+          "line": 25,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fmtUsdShort",
+          "callee": "Math.abs",
+          "lineNumber": 19
+        },
+        {
+          "caller": "fmtUsdShort",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 20
+        },
+        {
+          "caller": "fmtUsdShort",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 21
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "useTheme",
+          "lineNumber": 26
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "useMemo",
+          "lineNumber": 29
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "(data || [])\n        .filter((d) => Number.isFinite(d.total_export_usd) && Number.isFinite(d.total_import_usd))\n        .sort",
+          "lineNumber": 31
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "(data || [])\n        .filter",
+          "lineNumber": 31
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 32
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 32
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "t",
+          "lineNumber": 41
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "Math.max",
+          "lineNumber": 51
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "clean.flatMap",
+          "lineNumber": 51
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 56
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "clean.map((d, i) => `${toX(i).toFixed(1)},${toY(d.total_export_usd).toFixed(1)}`).join",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "clean.map",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY(d.total_export_usd).toFixed",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 58
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "clean.map((d, i) => `${toX(i).toFixed(1)},${toY(d.total_import_usd).toFixed(1)}`).join",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "clean.map",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY(d.total_import_usd).toFixed",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 59
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX",
+          "lineNumber": 62
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "(ev.currentTarget as SVGSVGElement).getBoundingClientRect",
+          "lineNumber": 72
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "Math.abs",
+          "lineNumber": 77
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toX",
+          "lineNumber": 77
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "setActiveIndex",
+          "lineNumber": 83
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "[0.25, 0.5, 0.75, 1].map",
+          "lineNumber": 86
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 87
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 96
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "toY",
+          "lineNumber": 97
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "fmtUsdShort",
+          "lineNumber": 108
+        },
+        {
+          "caller": "MultiLineChart",
+          "callee": "fmtUsdShort",
+          "lineNumber": 111
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/PageHeader.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 42,
+      "nonEmptyLines": 39,
+      "functions": [
+        {
+          "name": "PageHeader",
+          "startLine": 9,
+          "endLine": 42,
+          "params": [
+            "{ title, subtitle }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PageHeader",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PageHeader",
+          "callee": "useTheme",
+          "lineNumber": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/Pagination.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 146,
+      "nonEmptyLines": 133,
+      "functions": [
+        {
+          "name": "getPaginationItems",
+          "startLine": 13,
+          "endLine": 46,
+          "params": [
+            "current",
+            "total"
+          ]
+        },
+        {
+          "name": "Pagination",
+          "startLine": 48,
+          "endLine": 146,
+          "params": [
+            "{ current, total, onChange }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Pagination",
+          "line": 48,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getPaginationItems",
+          "callee": "Array.from",
+          "lineNumber": 18
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 24
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 29
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 30
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 33
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 34
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 37
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 38
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 39
+        },
+        {
+          "caller": "getPaginationItems",
+          "callee": "items.push",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Pagination",
+          "callee": "useTheme",
+          "lineNumber": 49
+        },
+        {
+          "caller": "Pagination",
+          "callee": "useCallback",
+          "lineNumber": 51
+        },
+        {
+          "caller": "Pagination",
+          "callee": "onChange",
+          "lineNumber": 54
+        },
+        {
+          "caller": "Pagination",
+          "callee": "useCallback",
+          "lineNumber": 59
+        },
+        {
+          "caller": "Pagination",
+          "callee": "getPaginationItems",
+          "lineNumber": 76
+        },
+        {
+          "caller": "Pagination",
+          "callee": "go",
+          "lineNumber": 93
+        },
+        {
+          "caller": "Pagination",
+          "callee": "btn",
+          "lineNumber": 95
+        },
+        {
+          "caller": "Pagination",
+          "callee": "items.map",
+          "lineNumber": 102
+        },
+        {
+          "caller": "Pagination",
+          "callee": "go",
+          "lineNumber": 123
+        },
+        {
+          "caller": "Pagination",
+          "callee": "btn",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Pagination",
+          "callee": "go",
+          "lineNumber": 135
+        },
+        {
+          "caller": "Pagination",
+          "callee": "btn",
+          "lineNumber": 137
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/PartnerPicker.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 81,
+      "nonEmptyLines": 76,
+      "functions": [
+        {
+          "name": "fmtUsd",
+          "startLine": 18,
+          "endLine": 25,
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ]
+        },
+        {
+          "name": "PartnerPicker",
+          "startLine": 27,
+          "endLine": 81,
+          "params": [
+            "{\n  partners,\n  selected,\n  onChange,\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PartnerPicker",
+          "line": 27,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fmtUsd",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 20
+        },
+        {
+          "caller": "fmtUsd",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format",
+          "lineNumber": 23
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "useTheme",
+          "lineNumber": 33
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "t",
+          "lineNumber": 55
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "onChange",
+          "lineNumber": 59
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "t",
+          "lineNumber": 72
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "partners.map",
+          "lineNumber": 73
+        },
+        {
+          "caller": "PartnerPicker",
+          "callee": "fmtUsd",
+          "lineNumber": 75
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/ProgressBar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "ProgressBar",
+          "startLine": 12,
+          "endLine": 39,
+          "params": [
+            "{ segments }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ProgressBar",
+          "line": 12,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ProgressBar",
+          "callee": "useTheme",
+          "lineNumber": 13
+        },
+        {
+          "caller": "ProgressBar",
+          "callee": "segments.map",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/ProjectionToggle.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "ProjectionToggle",
+          "startLine": 13,
+          "endLine": 71,
+          "params": [
+            "{\n  value,\n  onChange,\n  disabled = false,\n  disabledReason,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ProjectionToggle",
+          "line": 13,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ProjectionToggle",
+          "callee": "useTheme",
+          "lineNumber": 19
+        },
+        {
+          "caller": "ProjectionToggle",
+          "callee": "t",
+          "lineNumber": 22
+        },
+        {
+          "caller": "ProjectionToggle",
+          "callee": "t",
+          "lineNumber": 23
+        },
+        {
+          "caller": "ProjectionToggle",
+          "callee": "t",
+          "lineNumber": 29
+        },
+        {
+          "caller": "ProjectionToggle",
+          "callee": "options.map",
+          "lineNumber": 42
+        },
+        {
+          "caller": "ProjectionToggle",
+          "callee": "onChange",
+          "lineNumber": 48
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/RadarChart.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 103,
+      "nonEmptyLines": 98,
+      "functions": [
+        {
+          "name": "RadarChart",
+          "startLine": 17,
+          "endLine": 103,
+          "params": [
+            "{ axes, color, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "RadarChart",
+          "line": 17,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "RadarChart",
+          "callee": "useTheme",
+          "lineNumber": 18
+        },
+        {
+          "caller": "pt",
+          "callee": "angle",
+          "lineNumber": 26
+        },
+        {
+          "caller": "pt",
+          "callee": "Math.cos",
+          "lineNumber": 27
+        },
+        {
+          "caller": "pt",
+          "callee": "Math.sin",
+          "lineNumber": 27
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes\n    .map((a, i) => {\n      const v = Math.max(0, Math.min(1, a.value))\n      const p = pt(R * v, i)\n      return `${p.x.toFixed(1)},${p.y.toFixed(1)}`\n    })\n    .join",
+          "lineNumber": 32
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes\n    .map",
+          "lineNumber": 32
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "Math.max",
+          "lineNumber": 34
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "Math.min",
+          "lineNumber": 34
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 35
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "p.x.toFixed",
+          "lineNumber": 36
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "p.y.toFixed",
+          "lineNumber": 36
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "gridLevels.map",
+          "lineNumber": 48
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes\n            .map((_, i) => {\n              const p = pt(R * g, i)\n              return `${p.x.toFixed(1)},${p.y.toFixed(1)}`\n            })\n            .join",
+          "lineNumber": 51
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes\n            .map",
+          "lineNumber": 51
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 53
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "p.x.toFixed",
+          "lineNumber": 54
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "p.y.toFixed",
+          "lineNumber": 54
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes.map",
+          "lineNumber": 62
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 63
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 64
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes.map",
+          "lineNumber": 78
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "Math.max",
+          "lineNumber": 79
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "Math.min",
+          "lineNumber": 79
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 80
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "axes.map",
+          "lineNumber": 83
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "pt",
+          "lineNumber": 84
+        },
+        {
+          "caller": "RadarChart",
+          "callee": "a.label.toUpperCase",
+          "lineNumber": 97
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/SectionDivider.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "SectionDivider",
+          "startLine": 10,
+          "endLine": 37,
+          "params": [
+            "{ label, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SectionDivider",
+          "line": 10,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SectionDivider",
+          "callee": "useTheme",
+          "lineNumber": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/ShareCompact.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 149,
+      "nonEmptyLines": 139,
+      "functions": [
+        {
+          "name": "ShareCompact",
+          "startLine": 19,
+          "endLine": 149,
+          "params": [
+            "{\n  title,\n  url,\n  compact,\n  variant = 'sidebar',\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ShareCompact",
+          "line": 19,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ShareCompact",
+          "callee": "useTheme",
+          "lineNumber": 25
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "encodeURIComponent",
+          "lineNumber": 29
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "encodeURIComponent",
+          "lineNumber": 30
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "useCallback",
+          "lineNumber": 36
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "navigator.clipboard.writeText",
+          "lineNumber": 38
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "setCopied",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "window.setTimeout",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "setCopied",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "t",
+          "lineNumber": 111
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "baseLink",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "t('shareReddit').slice",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "t",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "baseLink",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "baseLink",
+          "lineNumber": 116
+        },
+        {
+          "caller": "ShareCompact",
+          "callee": "t",
+          "lineNumber": 120
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/ShareToolbar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 212,
+      "nonEmptyLines": 202,
+      "functions": [
+        {
+          "name": "ShareToolbar",
+          "startLine": 17,
+          "endLine": 212,
+          "params": [
+            "{ title, url }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ShareToolbar",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ShareToolbar",
+          "callee": "useTheme",
+          "lineNumber": 18
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "encodeURIComponent",
+          "lineNumber": 21
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "encodeURIComponent",
+          "lineNumber": 22
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "useCallback",
+          "lineNumber": 31
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "navigator.clipboard.writeText",
+          "lineNumber": 33
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "setCopied",
+          "lineNumber": 34
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "window.setTimeout",
+          "lineNumber": 35
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "setCopied",
+          "lineNumber": 35
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "useCallback",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "navigator.share",
+          "lineNumber": 44
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 89
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 97
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 130
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 146
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 162
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 178
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 193
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 208
+        },
+        {
+          "caller": "ShareToolbar",
+          "callee": "t",
+          "lineNumber": 208
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/Sidebar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 280,
+      "nonEmptyLines": 263,
+      "functions": [
+        {
+          "name": "Sidebar",
+          "startLine": 37,
+          "endLine": 280,
+          "params": [
+            "{\n  entries,\n  active,\n  onSelect,\n  collapsed,\n  onToggle,\n  shareTitle,\n  shareUrl,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Sidebar",
+          "line": 37,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Sidebar",
+          "callee": "useTheme",
+          "lineNumber": 46
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "useCallback",
+          "lineNumber": 50
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "onSelect",
+          "lineNumber": 52
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "useCallback",
+          "lineNumber": 57
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "setTheme",
+          "lineNumber": 58
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "useCallback",
+          "lineNumber": 61
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "setLang",
+          "lineNumber": 62
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "t",
+          "lineNumber": 143
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "entries.map",
+          "lineNumber": 156
+        },
+        {
+          "caller": "Sidebar",
+          "callee": "handleModule",
+          "lineNumber": 191
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/Sparkline.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 80,
+      "nonEmptyLines": 77,
+      "functions": [
+        {
+          "name": "Sparkline",
+          "startLine": 15,
+          "endLine": 80,
+          "params": [
+            "{\n  data,\n  color,\n  height = 48,\n  showMarkers = false,\n  width = 260,\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Sparkline",
+          "line": 15,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Sparkline",
+          "callee": "useTheme",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "data.map",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "Math.min",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "Math.max",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "vals.map",
+          "lineNumber": 32
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "pts.map",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "p.x.toFixed",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "p.y.toFixed",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "vals.indexOf",
+          "lineNumber": 38
+        },
+        {
+          "caller": "Sparkline",
+          "callee": "vals.indexOf",
+          "lineNumber": 39
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/StackedAreaChart.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 125,
+      "nonEmptyLines": 116,
+      "functions": [
+        {
+          "name": "fmtUsdShort",
+          "startLine": 18,
+          "endLine": 23,
+          "params": [
+            "v",
+            "locale",
+            "lang"
+          ]
+        },
+        {
+          "name": "StackedAreaChart",
+          "startLine": 25,
+          "endLine": 125,
+          "params": [
+            "{ data, sourceLabel, height = 170, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "StackedAreaChart",
+          "line": 25,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fmtUsdShort",
+          "callee": "Math.abs",
+          "lineNumber": 19
+        },
+        {
+          "caller": "fmtUsdShort",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 20
+        },
+        {
+          "caller": "fmtUsdShort",
+          "callee": "new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format",
+          "lineNumber": 21
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "useTheme",
+          "lineNumber": 26
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "useMemo",
+          "lineNumber": 29
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "(data || [])\n        .filter((d) => Number.isFinite(d.total_export_usd) && Number.isFinite(d.total_import_usd))\n        .sort",
+          "lineNumber": 31
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "(data || [])\n        .filter",
+          "lineNumber": 31
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 32
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "Number.isFinite",
+          "lineNumber": 32
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "t",
+          "lineNumber": 41
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean.map",
+          "lineNumber": 51
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "Math.max",
+          "lineNumber": 52
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY",
+          "lineNumber": 55
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean.map((d, i) => `${toX(i).toFixed(1)},${toY(d.total_import_usd).toFixed(1)}`).join",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean.map",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY(d.total_import_usd).toFixed",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY",
+          "lineNumber": 57
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .map((d, i) => `${toX(i).toFixed(1)},${toY(d.total_import_usd + d.total_export_usd).toFixed(1)}`)\n    .join",
+          "lineNumber": 58
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .map",
+          "lineNumber": 58
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 59
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 59
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY(d.total_import_usd + d.total_export_usd).toFixed",
+          "lineNumber": 59
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY",
+          "lineNumber": 59
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 61
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 61
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .map((d, i) => `${toX(i).toFixed(1)},${toY(d.total_import_usd + d.total_export_usd).toFixed(1)}`)\n    .join",
+          "lineNumber": 62
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .map",
+          "lineNumber": 62
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX(i).toFixed",
+          "lineNumber": 63
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 63
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY(d.total_import_usd + d.total_export_usd).toFixed",
+          "lineNumber": 63
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY",
+          "lineNumber": 63
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .slice()\n    .reverse()\n    .map((d, i) => {\n      const idx = clean.length - 1 - i\n      return `${toX(idx).toFixed(1)},${toY(d.total_import_usd).toFixed(1)}`\n    })\n    .join",
+          "lineNumber": 65
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .slice()\n    .reverse()\n    .map",
+          "lineNumber": 65
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .slice()\n    .reverse",
+          "lineNumber": 65
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "clean\n    .slice",
+          "lineNumber": 65
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX(idx).toFixed",
+          "lineNumber": 70
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 70
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY(d.total_import_usd).toFixed",
+          "lineNumber": 70
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toY",
+          "lineNumber": 70
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 77
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "(ev.currentTarget as SVGSVGElement).getBoundingClientRect",
+          "lineNumber": 87
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "Math.abs",
+          "lineNumber": 92
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "toX",
+          "lineNumber": 92
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "setActiveIndex",
+          "lineNumber": 98
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "fmtUsdShort",
+          "lineNumber": 116
+        },
+        {
+          "caller": "StackedAreaChart",
+          "callee": "fmtUsdShort",
+          "lineNumber": 119
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/StatTile.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 50,
+      "nonEmptyLines": 48,
+      "functions": [
+        {
+          "name": "StatTile",
+          "startLine": 14,
+          "endLine": 50,
+          "params": [
+            "{ label, value, sub, icon, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "StatTile",
+          "line": 14,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "StatTile",
+          "callee": "useTheme",
+          "lineNumber": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/StatWidget.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 78,
+      "nonEmptyLines": 75,
+      "functions": [
+        {
+          "name": "StatWidget",
+          "startLine": 14,
+          "endLine": 78,
+          "params": [
+            "{ label, value, sub, icon, fluid }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "StatWidget",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "StatWidget",
+          "callee": "useTheme",
+          "lineNumber": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/TradeBalance.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 98,
+      "functions": [
+        {
+          "name": "TradeBalance",
+          "startLine": 13,
+          "endLine": 100,
+          "params": [
+            "{\n  exports,\n  imports,\n  currency = 'Mrd. $',\n  style,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TradeBalance",
+          "line": 13,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "TradeBalance",
+          "callee": "useTheme",
+          "lineNumber": 19
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "Number.isFinite",
+          "lineNumber": 21
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "interpolate",
+          "lineNumber": 79
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "t",
+          "lineNumber": 79
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "String",
+          "lineNumber": 80
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "interpolate",
+          "lineNumber": 85
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "t",
+          "lineNumber": 85
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "String",
+          "lineNumber": 87
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "interpolate",
+          "lineNumber": 92
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "t",
+          "lineNumber": 92
+        },
+        {
+          "caller": "TradeBalance",
+          "callee": "String",
+          "lineNumber": 93
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/TrendArrow.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 47,
+      "nonEmptyLines": 44,
+      "functions": [
+        {
+          "name": "TrendArrow",
+          "startLine": 11,
+          "endLine": 34,
+          "params": [
+            "{ value, inverted = false, style }"
+          ]
+        },
+        {
+          "name": "trendDirectionFromValues",
+          "startLine": 37,
+          "endLine": 47,
+          "params": [
+            "older",
+            "newer"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TrendArrow",
+          "line": 11,
+          "isDefault": true
+        },
+        {
+          "name": "trendDirectionFromValues",
+          "line": 37,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "TrendArrow",
+          "callee": "useTheme",
+          "lineNumber": 12
+        },
+        {
+          "caller": "TrendArrow",
+          "callee": "Number.isNaN",
+          "lineNumber": 13
+        },
+        {
+          "caller": "TrendArrow",
+          "callee": "Math.abs",
+          "lineNumber": 15
+        },
+        {
+          "caller": "TrendArrow",
+          "callee": "(Math.abs(value) * 100).toFixed",
+          "lineNumber": 18
+        },
+        {
+          "caller": "TrendArrow",
+          "callee": "Math.abs",
+          "lineNumber": 18
+        },
+        {
+          "caller": "trendDirectionFromValues",
+          "callee": "Number.isNaN",
+          "lineNumber": 41
+        },
+        {
+          "caller": "trendDirectionFromValues",
+          "callee": "Number.isNaN",
+          "lineNumber": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/ViewToggle.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "ViewToggle",
+          "startLine": 26,
+          "endLine": 75,
+          "params": [
+            "{ value, onChange, options, style }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ViewToggle",
+          "line": 26,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ViewToggle",
+          "callee": "useTheme",
+          "lineNumber": 27
+        },
+        {
+          "caller": "ViewToggle",
+          "callee": "opts.map",
+          "lineNumber": 45
+        },
+        {
+          "caller": "ViewToggle",
+          "callee": "onChange",
+          "lineNumber": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/components/VoteBar.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 198,
+      "nonEmptyLines": 190,
+      "functions": [
+        {
+          "name": "VoteBar",
+          "startLine": 31,
+          "endLine": 198,
+          "params": [
+            "{\n  label,\n  labelColor,\n  ja,\n  nein,\n  enthalten,\n  abwesend,\n  trackVariant = 'default',\n  segmentColors,\n  expandedDetails = 'all',\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "VoteBar",
+          "line": 31,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "VoteBar",
+          "callee": "useTheme",
+          "lineNumber": 42
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "useState",
+          "lineNumber": 43
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "useMemo",
+          "lineNumber": 46
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "useCallback",
+          "lineNumber": 56
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "setOpen",
+          "lineNumber": 56
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 113
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 113
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 172
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 175
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 178
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 181
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 187
+        },
+        {
+          "caller": "VoteBar",
+          "callee": "t",
+          "lineNumber": 190
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/hsSections.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 49,
+      "nonEmptyLines": 48,
+      "exports": [
+        {
+          "name": "HS_SECTION_LABELS_DE",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "HS_SECTION_LABELS_EN",
+          "line": 26,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/design-system/tokens.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 97,
+      "nonEmptyLines": 92,
+      "exports": [
+        {
+          "name": "light",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "dark",
+          "line": 39,
+          "isDefault": false
+        },
+        {
+          "name": "spacing",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "fonts",
+          "line": 87,
+          "isDefault": false
+        },
+        {
+          "name": "breakpoints",
+          "line": 93,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

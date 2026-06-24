@@ -1,0 +1,5415 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 126,
+  "totalBatches": 8,
+  "exportsByPath": {
+    ".cursorrules": [],
+    ".understand-anything/.understandignore": [],
+    "eslint.config.js": [],
+    "public/data/world.geojson": [],
+    "src/App.tsx": [
+      "App"
+    ],
+    "src/components/bundestag/AbstimmungsDetail.tsx": [
+      "shortFraktionName",
+      "PARTEI_ORDER",
+      "labelColorFromSitzverteilung",
+      "sortFraktionenByPoliticalOrder",
+      "AbstimmungsDetail"
+    ],
+    "src/components/bundestag/AbstimmungsListe.tsx": [
+      "AbstimmungsListe"
+    ],
+    "src/components/bundestag/Hemicycle.tsx": [
+      "Hemicycle"
+    ],
+    "src/components/eulaw/EuCourtCard.tsx": [
+      "EuCourtCard"
+    ],
+    "src/components/eulaw/EuLawCard.tsx": [
+      "EuLawCard"
+    ],
+    "src/components/eulaw/types.ts": [],
+    "src/components/gesetze/GesetzDetail.tsx": [
+      "GesetzDetail"
+    ],
+    "src/components/gesetze/types.ts": [],
+    "src/components/gesetze/UrteilCard.tsx": [
+      "UrteilCard"
+    ],
+    "src/components/gesetze/utils.ts": [
+      "normalizeKuerzelCode",
+      "rechtGebietFromKuerzel",
+      "courtBadgeVariant",
+      "URTEIL_RECHTSGEBIET_OPTIONS",
+      "parseIsoDate",
+      "formatDisplayDate",
+      "buildUrteilListEndpoint",
+      "rechtsprechungFullTextUrl"
+    ],
+    "src/data/bundestag-seats.ts": [
+      "RAW_SEATS",
+      "RAW_SEAT_COUNT"
+    ],
+    "src/data/sourcesCatalog.ts": [
+      "SOURCES_BY_PAGE",
+      "footerSourcesLineKey"
+    ],
+    "src/design-system/components/Badge.tsx": [
+      "Badge"
+    ],
+    "src/design-system/components/BalanceBarChart.tsx": [
+      "BalanceBarChart"
+    ],
+    "src/design-system/components/CompareBar.tsx": [
+      "CompareBar"
+    ],
+    "src/design-system/components/DataCard.tsx": [
+      "DataCard"
+    ],
+    "src/design-system/components/EmptyState.tsx": [
+      "EmptyState"
+    ],
+    "src/design-system/components/FilterToolbar.tsx": [
+      "FilterToolbar"
+    ],
+    "src/design-system/components/HBar.tsx": [
+      "HBar"
+    ],
+    "src/design-system/components/HSSectionBreakdown.tsx": [
+      "HSSectionBreakdown"
+    ],
+    "src/design-system/components/InfoToggle.tsx": [
+      "InfoToggle"
+    ],
+    "src/design-system/components/LegalFooter.tsx": [
+      "LegalFooter"
+    ],
+    "src/design-system/components/LineChart.tsx": [
+      "LineChart"
+    ],
+    "src/design-system/components/LoadingSpinner.tsx": [
+      "LoadingSpinner"
+    ],
+    "src/design-system/components/MobileNav.tsx": [
+      "MobileNav"
+    ],
+    "src/design-system/components/MonoLabel.tsx": [
+      "MonoLabel"
+    ],
+    "src/design-system/components/MultiLineChart.tsx": [
+      "MultiLineChart"
+    ],
+    "src/design-system/components/PageHeader.tsx": [
+      "PageHeader"
+    ],
+    "src/design-system/components/Pagination.tsx": [
+      "Pagination"
+    ],
+    "src/design-system/components/PartnerPicker.tsx": [
+      "PartnerPicker"
+    ],
+    "src/design-system/components/PercentileBar.tsx": [
+      "PercentileBar"
+    ],
+    "src/design-system/components/ProgressBar.tsx": [
+      "ProgressBar"
+    ],
+    "src/design-system/components/ProjectionToggle.tsx": [
+      "ProjectionToggle"
+    ],
+    "src/design-system/components/RadarChart.tsx": [
+      "RadarChart"
+    ],
+    "src/design-system/components/SectionDivider.tsx": [
+      "SectionDivider"
+    ],
+    "src/design-system/components/ShareCompact.tsx": [
+      "ShareCompact"
+    ],
+    "src/design-system/components/ShareToolbar.tsx": [
+      "ShareToolbar"
+    ],
+    "src/design-system/components/Sidebar.tsx": [
+      "Sidebar"
+    ],
+    "src/design-system/components/Sparkline.tsx": [
+      "Sparkline"
+    ],
+    "src/design-system/components/StackedAreaChart.tsx": [
+      "StackedAreaChart"
+    ],
+    "src/design-system/components/StatTile.tsx": [
+      "StatTile"
+    ],
+    "src/design-system/components/StatWidget.tsx": [
+      "StatWidget"
+    ],
+    "src/design-system/components/TradeBalance.tsx": [
+      "TradeBalance"
+    ],
+    "src/design-system/components/TrendArrow.tsx": [
+      "TrendArrow",
+      "trendDirectionFromValues"
+    ],
+    "src/design-system/components/ViewToggle.tsx": [
+      "ViewToggle"
+    ],
+    "src/design-system/components/VoteBar.tsx": [
+      "VoteBar"
+    ],
+    "src/design-system/hsSections.ts": [
+      "HS_SECTION_LABELS_DE",
+      "HS_SECTION_LABELS_EN"
+    ],
+    "src/design-system/i18n.ts": [
+      "de",
+      "en",
+      "messages",
+      "interpolate"
+    ],
+    "src/design-system/i18n/common.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/elections.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/eu.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/gesetze.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/lobby.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/overview.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/sources.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/i18n/world.ts": [
+      "de",
+      "en"
+    ],
+    "src/design-system/index.ts": [
+      "ThemeProvider",
+      "useTheme",
+      "CompareBar",
+      "HBar",
+      "InfoToggle",
+      "LineChart",
+      "MonoLabel",
+      "PercentileBar",
+      "ProjectionToggle",
+      "MapProjectionMode",
+      "RadarChart",
+      "SectionDivider",
+      "Sparkline",
+      "StatTile",
+      "TradeBalance",
+      "TrendArrow",
+      "trendDirectionFromValues",
+      "Badge",
+      "BadgeProps",
+      "BadgeVariant",
+      "DataCard",
+      "DataCardProps",
+      "EmptyState",
+      "EmptyStateProps",
+      "FilterToolbar",
+      "FilterDef",
+      "FilterOption",
+      "FilterToolbarProps",
+      "LegalFooter",
+      "LoadingSpinner",
+      "MobileNav",
+      "MobileNavProps",
+      "PageHeader",
+      "PageHeaderProps",
+      "Pagination",
+      "PaginationProps",
+      "ProgressBar",
+      "ProgressBarProps",
+      "ProgressSegment",
+      "ShareCompact",
+      "ShareCompactProps",
+      "ShareToolbar",
+      "ShareToolbarProps",
+      "Sidebar",
+      "SidebarModule",
+      "SidebarNavEntry",
+      "SidebarNavLink",
+      "SidebarNavSection",
+      "SidebarProps",
+      "StatWidget",
+      "StatWidgetProps",
+      "VoteBar",
+      "VoteBarProps"
+    ],
+    "src/design-system/ThemeContext.tsx": [
+      "ThemeProvider",
+      "useTheme"
+    ],
+    "src/design-system/tokens.ts": [
+      "light",
+      "dark",
+      "spacing",
+      "fonts",
+      "breakpoints"
+    ],
+    "src/hooks/useApi.ts": [
+      "useApi"
+    ],
+    "src/hooks/useDebouncedValue.ts": [
+      "useDebouncedValue"
+    ],
+    "src/hooks/useLocalStorage.ts": [
+      "useLocalStorage"
+    ],
+    "src/hooks/useMediaQuery.ts": [
+      "useMediaQuery",
+      "useIsMobile"
+    ],
+    "src/hooks/useOffsetPagination.ts": [
+      "useOffsetPagination"
+    ],
+    "src/hooks/useSearchParamsState.ts": [
+      "useSearchParamsState"
+    ],
+    "src/layouts/DashboardLayout.tsx": [
+      "DashboardLayout"
+    ],
+    "src/main.tsx": [],
+    "src/pages/Admin.tsx": [
+      "Admin"
+    ],
+    "src/pages/Bundestag.tsx": [
+      "Bundestag"
+    ],
+    "src/pages/Coalition.tsx": [
+      "Coalition"
+    ],
+    "src/pages/DemocracyIndex.tsx": [
+      "DemocracyIndex"
+    ],
+    "src/pages/Elections.tsx": [
+      "Elections"
+    ],
+    "src/pages/elections/AdvancedAnalysis.tsx": [
+      "AdvancedAnalysis"
+    ],
+    "src/pages/elections/ChangeAnalysisCharts.tsx": [
+      "ChangeGainsLossesBarCharts",
+      "ChangeDeltaHistogram",
+      "ChangeStateAverageBars"
+    ],
+    "src/pages/elections/ChangeMap.tsx": [
+      "ChangeMap"
+    ],
+    "src/pages/elections/CompareMode.tsx": [
+      "CompareMode"
+    ],
+    "src/pages/elections/DifferenceTable.tsx": [
+      "DifferenceTable"
+    ],
+    "src/pages/elections/DistrictAnalysis.tsx": [
+      "DistrictAnalysis"
+    ],
+    "src/pages/elections/ElectionMap.tsx": [
+      "ElectionMap",
+      "ElectionMapLegend"
+    ],
+    "src/pages/elections/electionUiUtils.tsx": [
+      "ELECTION_TYPES",
+      "selectCss",
+      "typeLabelT",
+      "normAgs",
+      "sectionTitle"
+    ],
+    "src/pages/elections/HistoricalTable.tsx": [
+      "HistoricalTable"
+    ],
+    "src/pages/elections/KreisAutocomplete.tsx": [
+      "filterKreiseSearchHits",
+      "KreisAutocomplete"
+    ],
+    "src/pages/elections/mapColors.ts": [
+      "partyShareColor",
+      "turnoutColor",
+      "changeColor",
+      "mapFillColor"
+    ],
+    "src/pages/elections/mapGeometry.ts": [
+      "MAP_VIEW_W",
+      "MAP_VIEW_H",
+      "projectCoords",
+      "featureToPath",
+      "buildKreiseMap"
+    ],
+    "src/pages/elections/MapMode.tsx": [
+      "MapMode"
+    ],
+    "src/pages/elections/normalizeWahlen.ts": [
+      "toDisplayPercent",
+      "changeToDisplayPp",
+      "resolveKreisDisplayName",
+      "normalizeMapRow"
+    ],
+    "src/pages/elections/PartyBarChart.tsx": [
+      "PartyBarChart"
+    ],
+    "src/pages/elections/partyColors.ts": [
+      "PARTY_COLORS_LIGHT",
+      "PARTY_COLORS_DARK",
+      "PARTY_COLORS",
+      "partyColorsForTheme",
+      "PARTY_LABELS",
+      "TURNOUT_SCALE",
+      "CHANGE_SCALE_NEG",
+      "CHANGE_SCALE_POS",
+      "MAIN_PARTIES",
+      "STATE_PREFIX_COLORS",
+      "STATE_COLORS",
+      "STATE_NAMES",
+      "statePrefixFromAgs",
+      "colorForStatePrefix"
+    ],
+    "src/pages/elections/PartyToggles.tsx": [
+      "DISTRICT_CHART_PARTIES",
+      "PartyToggles"
+    ],
+    "src/pages/elections/PercentileBar.tsx": [
+      "PercentileBar"
+    ],
+    "src/pages/elections/RadarCompare.tsx": [
+      "RADAR_COMPARE_KEYS",
+      "RadarCompare",
+      "radarSubjectLabel"
+    ],
+    "src/pages/elections/RankingTable.tsx": [
+      "RankingTable"
+    ],
+    "src/pages/elections/regionBarRows.ts": [
+      "regionRowToSingleResultBars"
+    ],
+    "src/pages/elections/RegionPanel.tsx": [
+      "RegionPanel"
+    ],
+    "src/pages/elections/ScatterPlot.tsx": [
+      "scatterAxisLabel",
+      "ScatterPlot",
+      "SCATTER_AXIS_OPTIONS"
+    ],
+    "src/pages/elections/TimeSeriesChart.tsx": [
+      "TimeSeriesChart",
+      "TIMESERIES_PARTIES"
+    ],
+    "src/pages/elections/types.ts": [
+      "MapRow",
+      "MapRowFromApi"
+    ],
+    "src/pages/EuLaw.tsx": [
+      "EuLaw"
+    ],
+    "src/pages/EuParliament.tsx": [
+      "EuParliament"
+    ],
+    "src/pages/Legislation.tsx": [
+      "Legislation"
+    ],
+    "src/pages/LobbyRegister.tsx": [
+      "LobbyRegister"
+    ],
+    "src/pages/NotFound.tsx": [
+      "NotFound"
+    ],
+    "src/pages/Overview.tsx": [
+      "Overview"
+    ],
+    "src/pages/Sources.tsx": [
+      "Sources"
+    ],
+    "src/pages/WorldMap.tsx": [
+      "WorldMap"
+    ],
+    "src/utils/worldFilters.ts": [
+      "isRealCountry",
+      "hasWorldBankRegionOnAnyRow"
+    ],
+    "src/vite-env.d.ts": [],
+    "ui_kits/dashboard/ConsoleComponents.jsx": [],
+    "ui_kits/dashboard/CountryConsole.jsx": [],
+    "vite.config.ts": []
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "src/design-system/ThemeContext.tsx",
+          "language": "typescript",
+          "sizeLines": 109,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/Badge.tsx",
+          "language": "typescript",
+          "sizeLines": 84,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/BalanceBarChart.tsx",
+          "language": "typescript",
+          "sizeLines": 99,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/DataCard.tsx",
+          "language": "typescript",
+          "sizeLines": 91,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/EmptyState.tsx",
+          "language": "typescript",
+          "sizeLines": 65,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/FilterToolbar.tsx",
+          "language": "typescript",
+          "sizeLines": 113,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/HBar.tsx",
+          "language": "typescript",
+          "sizeLines": 68,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/HSSectionBreakdown.tsx",
+          "language": "typescript",
+          "sizeLines": 156,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/InfoToggle.tsx",
+          "language": "typescript",
+          "sizeLines": 56,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/LegalFooter.tsx",
+          "language": "typescript",
+          "sizeLines": 91,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/LoadingSpinner.tsx",
+          "language": "typescript",
+          "sizeLines": 34,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/MobileNav.tsx",
+          "language": "typescript",
+          "sizeLines": 280,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/MultiLineChart.tsx",
+          "language": "typescript",
+          "sizeLines": 117,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/PageHeader.tsx",
+          "language": "typescript",
+          "sizeLines": 42,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/Pagination.tsx",
+          "language": "typescript",
+          "sizeLines": 146,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/PartnerPicker.tsx",
+          "language": "typescript",
+          "sizeLines": 81,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/ProgressBar.tsx",
+          "language": "typescript",
+          "sizeLines": 39,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/ProjectionToggle.tsx",
+          "language": "typescript",
+          "sizeLines": 71,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/RadarChart.tsx",
+          "language": "typescript",
+          "sizeLines": 103,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/SectionDivider.tsx",
+          "language": "typescript",
+          "sizeLines": 37,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/ShareCompact.tsx",
+          "language": "typescript",
+          "sizeLines": 149,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/ShareToolbar.tsx",
+          "language": "typescript",
+          "sizeLines": 212,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/Sidebar.tsx",
+          "language": "typescript",
+          "sizeLines": 280,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/Sparkline.tsx",
+          "language": "typescript",
+          "sizeLines": 80,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/StackedAreaChart.tsx",
+          "language": "typescript",
+          "sizeLines": 125,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/StatTile.tsx",
+          "language": "typescript",
+          "sizeLines": 50,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/StatWidget.tsx",
+          "language": "typescript",
+          "sizeLines": 78,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/TradeBalance.tsx",
+          "language": "typescript",
+          "sizeLines": 100,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/TrendArrow.tsx",
+          "language": "typescript",
+          "sizeLines": 47,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/ViewToggle.tsx",
+          "language": "typescript",
+          "sizeLines": 75,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/VoteBar.tsx",
+          "language": "typescript",
+          "sizeLines": 198,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/hsSections.ts",
+          "language": "typescript",
+          "sizeLines": 49,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/tokens.ts",
+          "language": "typescript",
+          "sizeLines": 97,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/design-system/ThemeContext.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/Badge.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/BalanceBarChart.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/DataCard.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/EmptyState.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/FilterToolbar.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/HBar.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/HSSectionBreakdown.tsx": [
+          "src/design-system/components/PartnerPicker.tsx",
+          "src/design-system/hsSections.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/design-system/components/InfoToggle.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/LegalFooter.tsx": [
+          "src/data/sourcesCatalog.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/LoadingSpinner.tsx": [
+          "src/design-system/ThemeContext.tsx"
+        ],
+        "src/design-system/components/MobileNav.tsx": [
+          "src/design-system/components/ShareCompact.tsx",
+          "src/design-system/components/Sidebar.tsx",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/MultiLineChart.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/PageHeader.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/Pagination.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/PartnerPicker.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/ProgressBar.tsx": [
+          "src/design-system/ThemeContext.tsx"
+        ],
+        "src/design-system/components/ProjectionToggle.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/RadarChart.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/SectionDivider.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/ShareCompact.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/ShareToolbar.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/Sidebar.tsx": [
+          "src/design-system/components/ShareCompact.tsx",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/Sparkline.tsx": [
+          "src/design-system/ThemeContext.tsx"
+        ],
+        "src/design-system/components/StackedAreaChart.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/StatTile.tsx": [
+          "src/design-system/components/MonoLabel.tsx",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/StatWidget.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/TradeBalance.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/TrendArrow.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/ViewToggle.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/VoteBar.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/hsSections.ts": [],
+        "src/design-system/tokens.ts": []
+      },
+      "neighborMap": {
+        "src/design-system/ThemeContext.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/components/bundestag/Hemicycle.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Hemicycle"
+            ]
+          },
+          {
+            "path": "src/design-system/components/CompareBar.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "CompareBar"
+            ]
+          },
+          {
+            "path": "src/design-system/components/LineChart.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "LineChart"
+            ]
+          },
+          {
+            "path": "src/design-system/components/MonoLabel.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "MonoLabel"
+            ]
+          },
+          {
+            "path": "src/design-system/components/PercentileBar.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DifferenceTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DifferenceTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ElectionMap.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ElectionMap",
+              "ElectionMapLegend"
+            ]
+          },
+          {
+            "path": "src/pages/elections/HistoricalTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "HistoricalTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyBarChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PartyBarChart"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyToggles.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DISTRICT_CHART_PARTIES",
+              "PartyToggles"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PercentileBar.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RadarCompare.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RADAR_COMPARE_KEYS",
+              "RadarCompare",
+              "radarSubjectLabel"
+            ]
+          },
+          {
+            "path": "src/pages/elections/TimeSeriesChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "TimeSeriesChart",
+              "TIMESERIES_PARTIES"
+            ]
+          },
+          {
+            "path": "src/pages/WorldMap.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "WorldMap"
+            ]
+          }
+        ],
+        "src/design-system/components/HSSectionBreakdown.tsx": [
+          {
+            "path": "src/hooks/useMediaQuery.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useMediaQuery",
+              "useIsMobile"
+            ]
+          }
+        ],
+        "src/design-system/components/LegalFooter.tsx": [
+          {
+            "path": "src/data/sourcesCatalog.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "SOURCES_BY_PAGE",
+              "footerSourcesLineKey"
+            ]
+          }
+        ],
+        "src/design-system/components/StatTile.tsx": [
+          {
+            "path": "src/design-system/components/MonoLabel.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "MonoLabel"
+            ]
+          }
+        ],
+        "src/design-system/components/TradeBalance.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          }
+        ],
+        "src/design-system/tokens.ts": [
+          {
+            "path": "src/pages/elections/DistrictAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DistrictAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/AdvancedAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "AdvancedAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/CompareMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "CompareMode"
+            ]
+          },
+          {
+            "path": "src/hooks/useMediaQuery.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useMediaQuery",
+              "useIsMobile"
+            ]
+          },
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ElectionMap.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ElectionMap",
+              "ElectionMapLegend"
+            ]
+          },
+          {
+            "path": "src/pages/elections/MapMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "MapMode"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyBarChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PartyBarChart"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RegionPanel.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RegionPanel"
+            ]
+          },
+          {
+            "path": "src/pages/EuLaw.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLaw"
+            ]
+          },
+          {
+            "path": "src/pages/Legislation.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Legislation"
+            ]
+          },
+          {
+            "path": "src/components/eulaw/EuCourtCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuCourtCard"
+            ]
+          },
+          {
+            "path": "src/components/eulaw/EuLawCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLawCard"
+            ]
+          },
+          {
+            "path": "src/pages/elections/HistoricalTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "HistoricalTable"
+            ]
+          },
+          {
+            "path": "src/pages/Bundestag.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Bundestag"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ChangeMap.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ChangeMap"
+            ]
+          },
+          {
+            "path": "src/pages/elections/KreisAutocomplete.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "filterKreiseSearchHits",
+              "KreisAutocomplete"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ScatterPlot.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "scatterAxisLabel",
+              "ScatterPlot",
+              "SCATTER_AXIS_OPTIONS"
+            ]
+          },
+          {
+            "path": "src/pages/WorldMap.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "WorldMap"
+            ]
+          },
+          {
+            "path": "src/components/gesetze/UrteilCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "UrteilCard"
+            ]
+          },
+          {
+            "path": "src/design-system/components/MonoLabel.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "MonoLabel"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ChangeAnalysisCharts.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ChangeGainsLossesBarCharts",
+              "ChangeDeltaHistogram",
+              "ChangeStateAverageBars"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DifferenceTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DifferenceTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyToggles.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DISTRICT_CHART_PARTIES",
+              "PartyToggles"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RadarCompare.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RADAR_COMPARE_KEYS",
+              "RadarCompare",
+              "radarSubjectLabel"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RankingTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RankingTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/TimeSeriesChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "TimeSeriesChart",
+              "TIMESERIES_PARTIES"
+            ]
+          },
+          {
+            "path": "src/pages/Sources.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "Sources"
+            ]
+          },
+          {
+            "path": "src/components/gesetze/GesetzDetail.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "GesetzDetail"
+            ]
+          },
+          {
+            "path": "src/pages/elections/electionUiUtils.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ELECTION_TYPES",
+              "selectCss",
+              "typeLabelT",
+              "normAgs",
+              "sectionTitle"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PercentileBar.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/pages/Overview.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Overview"
+            ]
+          },
+          {
+            "path": "src/components/bundestag/Hemicycle.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Hemicycle"
+            ]
+          },
+          {
+            "path": "src/design-system/components/CompareBar.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "CompareBar"
+            ]
+          },
+          {
+            "path": "src/design-system/components/LineChart.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "LineChart"
+            ]
+          },
+          {
+            "path": "src/design-system/components/PercentileBar.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/layouts/DashboardLayout.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "DashboardLayout"
+            ]
+          },
+          {
+            "path": "src/pages/LobbyRegister.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "LobbyRegister"
+            ]
+          },
+          {
+            "path": "src/components/bundestag/AbstimmungsDetail.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "shortFraktionName",
+              "PARTEI_ORDER",
+              "labelColorFromSitzverteilung",
+              "sortFraktionenByPoliticalOrder",
+              "AbstimmungsDetail"
+            ]
+          },
+          {
+            "path": "src/components/bundestag/AbstimmungsListe.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "AbstimmungsListe"
+            ]
+          },
+          {
+            "path": "src/pages/Admin.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Admin"
+            ]
+          },
+          {
+            "path": "src/pages/Coalition.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Coalition"
+            ]
+          },
+          {
+            "path": "src/pages/DemocracyIndex.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "DemocracyIndex"
+            ]
+          },
+          {
+            "path": "src/pages/EuParliament.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "EuParliament"
+            ]
+          },
+          {
+            "path": "src/pages/NotFound.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "NotFound"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "src/pages/elections/AdvancedAnalysis.tsx",
+          "language": "typescript",
+          "sizeLines": 795,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/ChangeAnalysisCharts.tsx",
+          "language": "typescript",
+          "sizeLines": 457,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/ChangeMap.tsx",
+          "language": "typescript",
+          "sizeLines": 295,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/CompareMode.tsx",
+          "language": "typescript",
+          "sizeLines": 687,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/DifferenceTable.tsx",
+          "language": "typescript",
+          "sizeLines": 370,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/DistrictAnalysis.tsx",
+          "language": "typescript",
+          "sizeLines": 1159,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/ElectionMap.tsx",
+          "language": "typescript",
+          "sizeLines": 380,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/HistoricalTable.tsx",
+          "language": "typescript",
+          "sizeLines": 333,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/KreisAutocomplete.tsx",
+          "language": "typescript",
+          "sizeLines": 205,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/MapMode.tsx",
+          "language": "typescript",
+          "sizeLines": 437,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/PartyBarChart.tsx",
+          "language": "typescript",
+          "sizeLines": 115,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/PartyToggles.tsx",
+          "language": "typescript",
+          "sizeLines": 94,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/PercentileBar.tsx",
+          "language": "typescript",
+          "sizeLines": 95,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/RadarCompare.tsx",
+          "language": "typescript",
+          "sizeLines": 122,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/RankingTable.tsx",
+          "language": "typescript",
+          "sizeLines": 184,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/RegionPanel.tsx",
+          "language": "typescript",
+          "sizeLines": 387,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/ScatterPlot.tsx",
+          "language": "typescript",
+          "sizeLines": 447,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/TimeSeriesChart.tsx",
+          "language": "typescript",
+          "sizeLines": 172,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/electionUiUtils.tsx",
+          "language": "typescript",
+          "sizeLines": 70,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/mapColors.ts",
+          "language": "typescript",
+          "sizeLines": 89,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/mapGeometry.ts",
+          "language": "typescript",
+          "sizeLines": 133,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/normalizeWahlen.ts",
+          "language": "typescript",
+          "sizeLines": 86,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/partyColors.ts",
+          "language": "typescript",
+          "sizeLines": 138,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/regionBarRows.ts",
+          "language": "typescript",
+          "sizeLines": 25,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/elections/types.ts",
+          "language": "typescript",
+          "sizeLines": 111,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/pages/elections/AdvancedAnalysis.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useMediaQuery.ts",
+          "src/pages/elections/ChangeAnalysisCharts.tsx",
+          "src/pages/elections/ChangeMap.tsx",
+          "src/pages/elections/mapGeometry.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/RankingTable.tsx",
+          "src/pages/elections/ScatterPlot.tsx",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/ChangeAnalysisCharts.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/ChangeMap.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/mapColors.ts",
+          "src/pages/elections/mapGeometry.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/CompareMode.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/pages/elections/DifferenceTable.tsx",
+          "src/pages/elections/electionUiUtils.tsx",
+          "src/pages/elections/KreisAutocomplete.tsx",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/PartyBarChart.tsx",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/PartyToggles.tsx",
+          "src/pages/elections/RadarCompare.tsx",
+          "src/pages/elections/regionBarRows.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/DifferenceTable.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/DistrictAnalysis.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/pages/elections/electionUiUtils.tsx",
+          "src/pages/elections/HistoricalTable.tsx",
+          "src/pages/elections/KreisAutocomplete.tsx",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/PartyBarChart.tsx",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/PartyToggles.tsx",
+          "src/pages/elections/PercentileBar.tsx",
+          "src/pages/elections/regionBarRows.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/ElectionMap.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/mapColors.ts",
+          "src/pages/elections/mapGeometry.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/HistoricalTable.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/KreisAutocomplete.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/MapMode.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/AdvancedAnalysis.tsx",
+          "src/pages/elections/ElectionMap.tsx",
+          "src/pages/elections/KreisAutocomplete.tsx",
+          "src/pages/elections/mapGeometry.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/PartyBarChart.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/PartyToggles.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/PercentileBar.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/elections/RadarCompare.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/RankingTable.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/RegionPanel.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useMediaQuery.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/PartyBarChart.tsx",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/TimeSeriesChart.tsx",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/ScatterPlot.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/TimeSeriesChart.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/electionUiUtils.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/tokens.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/mapColors.ts": [
+          "src/pages/elections/partyColors.ts"
+        ],
+        "src/pages/elections/mapGeometry.ts": [
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/normalizeWahlen.ts": [],
+        "src/pages/elections/partyColors.ts": [],
+        "src/pages/elections/regionBarRows.ts": [
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/PartyBarChart.tsx",
+          "src/pages/elections/partyColors.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/elections/types.ts": []
+      },
+      "neighborMap": {
+        "src/pages/elections/AdvancedAnalysis.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          },
+          {
+            "path": "src/hooks/useMediaQuery.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useMediaQuery",
+              "useIsMobile"
+            ]
+          }
+        ],
+        "src/pages/elections/ChangeAnalysisCharts.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/ChangeMap.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/CompareMode.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          }
+        ],
+        "src/pages/elections/DifferenceTable.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/DistrictAnalysis.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          }
+        ],
+        "src/pages/elections/ElectionMap.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/HistoricalTable.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/KreisAutocomplete.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          }
+        ],
+        "src/pages/elections/MapMode.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/PartyBarChart.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/PartyToggles.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/PercentileBar.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/RadarCompare.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/RankingTable.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/RegionPanel.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          },
+          {
+            "path": "src/hooks/useMediaQuery.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useMediaQuery",
+              "useIsMobile"
+            ]
+          }
+        ],
+        "src/pages/elections/ScatterPlot.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/TimeSeriesChart.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/electionUiUtils.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/elections/mapGeometry.ts": [
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          }
+        ],
+        "src/pages/elections/normalizeWahlen.ts": [
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          }
+        ],
+        "src/pages/elections/types.ts": [
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "src/App.tsx",
+          "language": "typescript",
+          "sizeLines": 53,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/bundestag/AbstimmungsDetail.tsx",
+          "language": "typescript",
+          "sizeLines": 281,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/bundestag/AbstimmungsListe.tsx",
+          "language": "typescript",
+          "sizeLines": 159,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/bundestag/Hemicycle.tsx",
+          "language": "typescript",
+          "sizeLines": 640,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/data/bundestag-seats.ts",
+          "language": "typescript",
+          "sizeLines": 638,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/index.ts",
+          "language": "typescript",
+          "sizeLines": 44,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useSearchParamsState.ts",
+          "language": "typescript",
+          "sizeLines": 25,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/layouts/DashboardLayout.tsx",
+          "language": "typescript",
+          "sizeLines": 166,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/main.tsx",
+          "language": "typescript",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Admin.tsx",
+          "language": "typescript",
+          "sizeLines": 23,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Bundestag.tsx",
+          "language": "typescript",
+          "sizeLines": 674,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Coalition.tsx",
+          "language": "typescript",
+          "sizeLines": 23,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/DemocracyIndex.tsx",
+          "language": "typescript",
+          "sizeLines": 23,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/EuParliament.tsx",
+          "language": "typescript",
+          "sizeLines": 23,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/LobbyRegister.tsx",
+          "language": "typescript",
+          "sizeLines": 2129,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/NotFound.tsx",
+          "language": "typescript",
+          "sizeLines": 36,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Overview.tsx",
+          "language": "typescript",
+          "sizeLines": 536,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/App.tsx": [
+          "src/design-system/index.ts",
+          "src/layouts/DashboardLayout.tsx",
+          "src/pages/Admin.tsx",
+          "src/pages/Coalition.tsx",
+          "src/pages/DemocracyIndex.tsx",
+          "src/pages/EuParliament.tsx",
+          "src/pages/NotFound.tsx",
+          "src/pages/Overview.tsx",
+          "src/pages/Sources.tsx"
+        ],
+        "src/components/bundestag/AbstimmungsDetail.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/components/bundestag/AbstimmungsListe.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/components/bundestag/Hemicycle.tsx": [
+          "src/data/bundestag-seats.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/data/bundestag-seats.ts": [],
+        "src/design-system/index.ts": [],
+        "src/hooks/useSearchParamsState.ts": [],
+        "src/layouts/DashboardLayout.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/main.tsx": [
+          "src/App.tsx",
+          "src/index.css"
+        ],
+        "src/pages/Admin.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/Bundestag.tsx": [
+          "src/components/bundestag/AbstimmungsDetail.tsx",
+          "src/components/bundestag/AbstimmungsListe.tsx",
+          "src/components/bundestag/Hemicycle.tsx",
+          "src/data/bundestag-seats.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts"
+        ],
+        "src/pages/Coalition.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/DemocracyIndex.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/EuParliament.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/LobbyRegister.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useSearchParamsState.ts"
+        ],
+        "src/pages/NotFound.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/Overview.tsx": [
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts"
+        ]
+      },
+      "neighborMap": {
+        "src/App.tsx": [
+          {
+            "path": "src/pages/Sources.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "Sources"
+            ]
+          }
+        ],
+        "src/components/bundestag/AbstimmungsDetail.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/bundestag/AbstimmungsListe.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/bundestag/Hemicycle.tsx": [
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/design-system/index.ts": [
+          {
+            "path": "src/components/eulaw/EuCourtCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuCourtCard"
+            ]
+          },
+          {
+            "path": "src/components/eulaw/EuLawCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLawCard"
+            ]
+          },
+          {
+            "path": "src/components/gesetze/GesetzDetail.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "GesetzDetail"
+            ]
+          },
+          {
+            "path": "src/components/gesetze/UrteilCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "UrteilCard"
+            ]
+          },
+          {
+            "path": "src/components/gesetze/utils.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "normalizeKuerzelCode",
+              "rechtGebietFromKuerzel",
+              "courtBadgeVariant",
+              "URTEIL_RECHTSGEBIET_OPTIONS",
+              "parseIsoDate",
+              "formatDisplayDate",
+              "buildUrteilListEndpoint",
+              "rechtsprechungFullTextUrl"
+            ]
+          },
+          {
+            "path": "src/pages/Elections.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Elections"
+            ]
+          },
+          {
+            "path": "src/pages/elections/AdvancedAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "AdvancedAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ChangeAnalysisCharts.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ChangeGainsLossesBarCharts",
+              "ChangeDeltaHistogram",
+              "ChangeStateAverageBars"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ChangeMap.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ChangeMap"
+            ]
+          },
+          {
+            "path": "src/pages/elections/CompareMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "CompareMode"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DifferenceTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DifferenceTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DistrictAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DistrictAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ElectionMap.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ElectionMap",
+              "ElectionMapLegend"
+            ]
+          },
+          {
+            "path": "src/pages/elections/HistoricalTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "HistoricalTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/KreisAutocomplete.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "filterKreiseSearchHits",
+              "KreisAutocomplete"
+            ]
+          },
+          {
+            "path": "src/pages/elections/MapMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "MapMode"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyBarChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PartyBarChart"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PartyToggles.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DISTRICT_CHART_PARTIES",
+              "PartyToggles"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PercentileBar.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RadarCompare.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RADAR_COMPARE_KEYS",
+              "RadarCompare",
+              "radarSubjectLabel"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RankingTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RankingTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RegionPanel.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RegionPanel"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ScatterPlot.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "scatterAxisLabel",
+              "ScatterPlot",
+              "SCATTER_AXIS_OPTIONS"
+            ]
+          },
+          {
+            "path": "src/pages/elections/TimeSeriesChart.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "TimeSeriesChart",
+              "TIMESERIES_PARTIES"
+            ]
+          },
+          {
+            "path": "src/pages/EuLaw.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLaw"
+            ]
+          },
+          {
+            "path": "src/pages/Legislation.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Legislation"
+            ]
+          },
+          {
+            "path": "src/pages/Sources.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "Sources"
+            ]
+          },
+          {
+            "path": "src/pages/WorldMap.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "WorldMap"
+            ]
+          }
+        ],
+        "src/layouts/DashboardLayout.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useMediaQuery.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useMediaQuery",
+              "useIsMobile"
+            ]
+          }
+        ],
+        "src/main.tsx": [
+          {
+            "path": "src/index.css",
+            "batchIndex": 8,
+            "symbols": []
+          }
+        ],
+        "src/pages/Admin.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/Bundestag.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          }
+        ],
+        "src/pages/Coalition.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/DemocracyIndex.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/EuParliament.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/LobbyRegister.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          }
+        ],
+        "src/pages/NotFound.tsx": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/Overview.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": "src/components/eulaw/EuCourtCard.tsx",
+          "language": "typescript",
+          "sizeLines": 486,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/eulaw/EuLawCard.tsx",
+          "language": "typescript",
+          "sizeLines": 402,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/eulaw/types.ts",
+          "language": "typescript",
+          "sizeLines": 88,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/gesetze/GesetzDetail.tsx",
+          "language": "typescript",
+          "sizeLines": 688,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/gesetze/UrteilCard.tsx",
+          "language": "typescript",
+          "sizeLines": 272,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/gesetze/types.ts",
+          "language": "typescript",
+          "sizeLines": 46,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/components/gesetze/utils.ts",
+          "language": "typescript",
+          "sizeLines": 132,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useApi.ts",
+          "language": "typescript",
+          "sizeLines": 93,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useDebouncedValue.ts",
+          "language": "typescript",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useMediaQuery.ts",
+          "language": "typescript",
+          "sizeLines": 23,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Elections.tsx",
+          "language": "typescript",
+          "sizeLines": 347,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/EuLaw.tsx",
+          "language": "typescript",
+          "sizeLines": 1034,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Legislation.tsx",
+          "language": "typescript",
+          "sizeLines": 1343,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/WorldMap.tsx",
+          "language": "typescript",
+          "sizeLines": 1203,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/utils/worldFilters.ts",
+          "language": "typescript",
+          "sizeLines": 21,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/components/eulaw/EuCourtCard.tsx": [
+          "src/components/eulaw/types.ts",
+          "src/components/gesetze/utils.ts",
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/components/eulaw/EuLawCard.tsx": [
+          "src/components/eulaw/types.ts",
+          "src/components/gesetze/utils.ts",
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/components/eulaw/types.ts": [],
+        "src/components/gesetze/GesetzDetail.tsx": [
+          "src/components/gesetze/types.ts",
+          "src/components/gesetze/utils.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts"
+        ],
+        "src/components/gesetze/UrteilCard.tsx": [
+          "src/components/gesetze/types.ts",
+          "src/components/gesetze/utils.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts"
+        ],
+        "src/components/gesetze/types.ts": [],
+        "src/components/gesetze/utils.ts": [
+          "src/design-system/index.ts"
+        ],
+        "src/hooks/useApi.ts": [],
+        "src/hooks/useDebouncedValue.ts": [],
+        "src/hooks/useMediaQuery.ts": [
+          "src/design-system/tokens.ts"
+        ],
+        "src/pages/Elections.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useDebouncedValue.ts",
+          "src/hooks/useMediaQuery.ts",
+          "src/pages/elections/KreisAutocomplete.tsx",
+          "src/pages/elections/mapGeometry.ts",
+          "src/pages/elections/normalizeWahlen.ts",
+          "src/pages/elections/types.ts"
+        ],
+        "src/pages/EuLaw.tsx": [
+          "src/components/eulaw/EuCourtCard.tsx",
+          "src/components/eulaw/EuLawCard.tsx",
+          "src/components/eulaw/types.ts",
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useDebouncedValue.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/pages/Legislation.tsx": [
+          "src/components/gesetze/GesetzDetail.tsx",
+          "src/components/gesetze/types.ts",
+          "src/components/gesetze/UrteilCard.tsx",
+          "src/components/gesetze/utils.ts",
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useMediaQuery.ts"
+        ],
+        "src/pages/WorldMap.tsx": [
+          "src/design-system/index.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts",
+          "src/hooks/useDebouncedValue.ts",
+          "src/hooks/useMediaQuery.ts",
+          "src/utils/worldFilters.ts"
+        ],
+        "src/utils/worldFilters.ts": []
+      },
+      "neighborMap": {
+        "src/components/eulaw/EuCourtCard.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/eulaw/EuLawCard.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/gesetze/GesetzDetail.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/gesetze/UrteilCard.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/components/gesetze/utils.ts": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          }
+        ],
+        "src/hooks/useApi.ts": [
+          {
+            "path": "src/pages/Bundestag.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Bundestag"
+            ]
+          },
+          {
+            "path": "src/pages/elections/AdvancedAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "AdvancedAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/CompareMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "CompareMode"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DistrictAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DistrictAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RegionPanel.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RegionPanel"
+            ]
+          },
+          {
+            "path": "src/pages/LobbyRegister.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "LobbyRegister"
+            ]
+          },
+          {
+            "path": "src/pages/Overview.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Overview"
+            ]
+          },
+          {
+            "path": "src/pages/Sources.tsx",
+            "batchIndex": 5,
+            "symbols": [
+              "Sources"
+            ]
+          }
+        ],
+        "src/hooks/useMediaQuery.ts": [
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/design-system/components/HSSectionBreakdown.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "HSSectionBreakdown"
+            ]
+          },
+          {
+            "path": "src/layouts/DashboardLayout.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "DashboardLayout"
+            ]
+          },
+          {
+            "path": "src/pages/elections/AdvancedAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "AdvancedAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/RegionPanel.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "RegionPanel"
+            ]
+          }
+        ],
+        "src/pages/Elections.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/pages/elections/KreisAutocomplete.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "filterKreiseSearchHits",
+              "KreisAutocomplete"
+            ]
+          },
+          {
+            "path": "src/pages/elections/mapGeometry.ts",
+            "batchIndex": 2,
+            "symbols": [
+              "MAP_VIEW_W",
+              "MAP_VIEW_H",
+              "projectCoords",
+              "featureToPath",
+              "buildKreiseMap"
+            ]
+          },
+          {
+            "path": "src/pages/elections/normalizeWahlen.ts",
+            "batchIndex": 2,
+            "symbols": [
+              "toDisplayPercent",
+              "changeToDisplayPp",
+              "resolveKreisDisplayName",
+              "normalizeMapRow"
+            ]
+          },
+          {
+            "path": "src/pages/elections/types.ts",
+            "batchIndex": 2,
+            "symbols": [
+              "MapRow",
+              "MapRowFromApi"
+            ]
+          }
+        ],
+        "src/pages/EuLaw.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/Legislation.tsx": [
+          {
+            "path": "src/design-system/i18n.ts",
+            "batchIndex": 5,
+            "symbols": [
+              "de",
+              "en",
+              "messages",
+              "interpolate"
+            ]
+          },
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/pages/WorldMap.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "src/data/sourcesCatalog.ts",
+          "language": "typescript",
+          "sizeLines": 145,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/CompareBar.tsx",
+          "language": "typescript",
+          "sizeLines": 79,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/LineChart.tsx",
+          "language": "typescript",
+          "sizeLines": 192,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/MonoLabel.tsx",
+          "language": "typescript",
+          "sizeLines": 28,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/components/PercentileBar.tsx",
+          "language": "typescript",
+          "sizeLines": 61,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n.ts",
+          "language": "typescript",
+          "sizeLines": 48,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/common.ts",
+          "language": "typescript",
+          "sizeLines": 371,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/elections.ts",
+          "language": "typescript",
+          "sizeLines": 49,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/eu.ts",
+          "language": "typescript",
+          "sizeLines": 149,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/gesetze.ts",
+          "language": "typescript",
+          "sizeLines": 147,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/lobby.ts",
+          "language": "typescript",
+          "sizeLines": 169,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/overview.ts",
+          "language": "typescript",
+          "sizeLines": 57,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/sources.ts",
+          "language": "typescript",
+          "sizeLines": 87,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/design-system/i18n/world.ts",
+          "language": "typescript",
+          "sizeLines": 589,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/pages/Sources.tsx",
+          "language": "typescript",
+          "sizeLines": 358,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/data/sourcesCatalog.ts": [
+          "src/design-system/i18n.ts"
+        ],
+        "src/design-system/components/CompareBar.tsx": [
+          "src/design-system/components/MonoLabel.tsx",
+          "src/design-system/i18n.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/LineChart.tsx": [
+          "src/design-system/components/MonoLabel.tsx",
+          "src/design-system/i18n.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/MonoLabel.tsx": [
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/components/PercentileBar.tsx": [
+          "src/design-system/components/MonoLabel.tsx",
+          "src/design-system/i18n.ts",
+          "src/design-system/ThemeContext.tsx",
+          "src/design-system/tokens.ts"
+        ],
+        "src/design-system/i18n.ts": [
+          "src/design-system/i18n/common.ts",
+          "src/design-system/i18n/elections.ts",
+          "src/design-system/i18n/eu.ts",
+          "src/design-system/i18n/gesetze.ts",
+          "src/design-system/i18n/lobby.ts",
+          "src/design-system/i18n/overview.ts",
+          "src/design-system/i18n/sources.ts",
+          "src/design-system/i18n/world.ts"
+        ],
+        "src/design-system/i18n/common.ts": [],
+        "src/design-system/i18n/elections.ts": [],
+        "src/design-system/i18n/eu.ts": [],
+        "src/design-system/i18n/gesetze.ts": [],
+        "src/design-system/i18n/lobby.ts": [],
+        "src/design-system/i18n/overview.ts": [],
+        "src/design-system/i18n/sources.ts": [],
+        "src/design-system/i18n/world.ts": [],
+        "src/pages/Sources.tsx": [
+          "src/data/sourcesCatalog.ts",
+          "src/design-system/i18n.ts",
+          "src/design-system/index.ts",
+          "src/design-system/tokens.ts",
+          "src/hooks/useApi.ts"
+        ]
+      },
+      "neighborMap": {
+        "src/data/sourcesCatalog.ts": [
+          {
+            "path": "src/design-system/components/LegalFooter.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "LegalFooter"
+            ]
+          }
+        ],
+        "src/design-system/components/CompareBar.tsx": [
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/design-system/components/LineChart.tsx": [
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/design-system/components/MonoLabel.tsx": [
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/design-system/components/StatTile.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "StatTile"
+            ]
+          }
+        ],
+        "src/design-system/components/PercentileBar.tsx": [
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          }
+        ],
+        "src/design-system/i18n.ts": [
+          {
+            "path": "src/components/eulaw/EuCourtCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuCourtCard"
+            ]
+          },
+          {
+            "path": "src/components/eulaw/EuLawCard.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLawCard"
+            ]
+          },
+          {
+            "path": "src/design-system/components/TradeBalance.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "TradeBalance"
+            ]
+          },
+          {
+            "path": "src/design-system/ThemeContext.tsx",
+            "batchIndex": 1,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ChangeAnalysisCharts.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ChangeGainsLossesBarCharts",
+              "ChangeDeltaHistogram",
+              "ChangeStateAverageBars"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DifferenceTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DifferenceTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/DistrictAnalysis.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "DistrictAnalysis"
+            ]
+          },
+          {
+            "path": "src/pages/elections/electionUiUtils.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "ELECTION_TYPES",
+              "selectCss",
+              "typeLabelT",
+              "normAgs",
+              "sectionTitle"
+            ]
+          },
+          {
+            "path": "src/pages/elections/HistoricalTable.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "HistoricalTable"
+            ]
+          },
+          {
+            "path": "src/pages/elections/MapMode.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "MapMode"
+            ]
+          },
+          {
+            "path": "src/pages/elections/PercentileBar.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "PercentileBar"
+            ]
+          },
+          {
+            "path": "src/pages/elections/ScatterPlot.tsx",
+            "batchIndex": 2,
+            "symbols": [
+              "scatterAxisLabel",
+              "ScatterPlot",
+              "SCATTER_AXIS_OPTIONS"
+            ]
+          },
+          {
+            "path": "src/pages/EuLaw.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "EuLaw"
+            ]
+          },
+          {
+            "path": "src/pages/Legislation.tsx",
+            "batchIndex": 4,
+            "symbols": [
+              "Legislation"
+            ]
+          },
+          {
+            "path": "src/pages/Overview.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "Overview"
+            ]
+          }
+        ],
+        "src/pages/Sources.tsx": [
+          {
+            "path": "src/design-system/index.ts",
+            "batchIndex": 3,
+            "symbols": [
+              "ThemeProvider",
+              "useTheme",
+              "CompareBar",
+              "HBar",
+              "InfoToggle",
+              "LineChart",
+              "MonoLabel",
+              "PercentileBar",
+              "ProjectionToggle",
+              "MapProjectionMode",
+              "RadarChart",
+              "SectionDivider",
+              "Sparkline",
+              "StatTile",
+              "TradeBalance",
+              "TrendArrow",
+              "trendDirectionFromValues",
+              "Badge",
+              "BadgeProps",
+              "BadgeVariant",
+              "DataCard",
+              "DataCardProps",
+              "EmptyState",
+              "EmptyStateProps",
+              "FilterToolbar",
+              "FilterDef",
+              "FilterOption",
+              "FilterToolbarProps",
+              "LegalFooter",
+              "LoadingSpinner",
+              "MobileNav",
+              "MobileNavProps",
+              "PageHeader",
+              "PageHeaderProps",
+              "Pagination",
+              "PaginationProps",
+              "ProgressBar",
+              "ProgressBarProps",
+              "ProgressSegment",
+              "ShareCompact",
+              "ShareCompactProps",
+              "ShareToolbar",
+              "ShareToolbarProps",
+              "Sidebar",
+              "SidebarModule",
+              "SidebarNavEntry",
+              "SidebarNavLink",
+              "SidebarNavSection",
+              "SidebarProps",
+              "StatWidget",
+              "StatWidgetProps",
+              "VoteBar",
+              "VoteBarProps"
+            ]
+          },
+          {
+            "path": "src/design-system/tokens.ts",
+            "batchIndex": 1,
+            "symbols": [
+              "light",
+              "dark",
+              "spacing",
+              "fonts",
+              "breakpoints"
+            ]
+          },
+          {
+            "path": "src/hooks/useApi.ts",
+            "batchIndex": 4,
+            "symbols": [
+              "useApi"
+            ]
+          },
+          {
+            "path": "src/App.tsx",
+            "batchIndex": 3,
+            "symbols": [
+              "App"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 6,
+      "files": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "language": "yaml",
+          "sizeLines": 22,
+          "fileCategory": "infra"
+        }
+      ],
+      "batchImportData": {
+        ".github/workflows/ci.yml": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 7,
+      "files": [
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 83,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "deploy.sh",
+          "language": "shell",
+          "sizeLines": 12,
+          "fileCategory": "script"
+        },
+        {
+          "path": "index.html",
+          "language": "html",
+          "sizeLines": 16,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "package.json",
+          "language": "json",
+          "sizeLines": 35,
+          "fileCategory": "config"
+        },
+        {
+          "path": "tsconfig.app.json",
+          "language": "json",
+          "sizeLines": 26,
+          "fileCategory": "config"
+        },
+        {
+          "path": "tsconfig.json",
+          "language": "json",
+          "sizeLines": 7,
+          "fileCategory": "config"
+        },
+        {
+          "path": "tsconfig.node.json",
+          "language": "json",
+          "sizeLines": 24,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "README.md": [],
+        "deploy.sh": [],
+        "index.html": [],
+        "package.json": [],
+        "tsconfig.app.json": [],
+        "tsconfig.json": [],
+        "tsconfig.node.json": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 8,
+      "files": [
+        {
+          "path": ".cursorrules",
+          "language": "unknown",
+          "sizeLines": 29,
+          "fileCategory": "code"
+        },
+        {
+          "path": ".understand-anything/.understandignore",
+          "language": "unknown",
+          "sizeLines": 47,
+          "fileCategory": "code"
+        },
+        {
+          "path": ".understand-anything/config.json",
+          "language": "json",
+          "sizeLines": 3,
+          "fileCategory": "config"
+        },
+        {
+          "path": "eslint.config.js",
+          "language": "javascript",
+          "sizeLines": 28,
+          "fileCategory": "code"
+        },
+        {
+          "path": "notes/BUG8-gesetz-titel-TODO.md",
+          "language": "markdown",
+          "sizeLines": 25,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "public/data/world.geojson",
+          "language": "geojson",
+          "sizeLines": 240,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useLocalStorage.ts",
+          "language": "typescript",
+          "sizeLines": 30,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/hooks/useOffsetPagination.ts",
+          "language": "typescript",
+          "sizeLines": 16,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/index.css",
+          "language": "css",
+          "sizeLines": 31,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "src/vite-env.d.ts",
+          "language": "typescript",
+          "sizeLines": 11,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ui_kits/dashboard/ConsoleComponents.jsx",
+          "language": "javascript",
+          "sizeLines": 318,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ui_kits/dashboard/CountryConsole.jsx",
+          "language": "javascript",
+          "sizeLines": 757,
+          "fileCategory": "code"
+        },
+        {
+          "path": "vite.config.ts",
+          "language": "typescript",
+          "sizeLines": 19,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".cursorrules": [],
+        ".understand-anything/.understandignore": [],
+        ".understand-anything/config.json": [],
+        "eslint.config.js": [],
+        "notes/BUG8-gesetz-titel-TODO.md": [],
+        "public/data/world.geojson": [],
+        "src/hooks/useLocalStorage.ts": [],
+        "src/hooks/useOffsetPagination.ts": [],
+        "src/index.css": [],
+        "src/vite-env.d.ts": [],
+        "ui_kits/dashboard/ConsoleComponents.jsx": [],
+        "ui_kits/dashboard/CountryConsole.jsx": [],
+        "vite.config.ts": []
+      },
+      "neighborMap": {
+        "src/index.css": [
+          {
+            "path": "src/main.tsx",
+            "batchIndex": 3,
+            "symbols": []
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 4,
+  "edgesRestored": 13,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "Fixed section sane: 272 nodes preserved (no ID-correction skew reported beyond expected func:->function: normalization); all node types valid (file/function/pipeline/document/config), all complexity values valid (simple/moderate/complex). No nodes lacked an id.",
+    "Recovered 4 in-file function nodes the LLM batches never emitted, all verified as real exported functions in source: toDisplayPercent (normalizeWahlen.ts:5-9), useDebouncedValue (useDebouncedValue.ts:3-10), useTheme (ThemeContext.tsx:103-109), MonoLabel (MonoLabel.tsx:10-28). Their parent file nodes existed but the function nodes were dropped, taking dependent calls/contains/exports edges with them.",
+    "Restored 11 source-backed edges after recovering those nodes: 2 calls->toDisplayPercent, 2 calls->useDebouncedValue, 5 calls->useTheme (CompareBar/LineChart/MonoLabel/PercentileBar/Sources), plus MonoLabel contains+exports.",
+    "Retargeted 2 dropped 'configures' edges (package.json->vite.config.ts, tsconfig.node.json->vite.config.ts) from the non-existent id config:vite.config.ts to the real node file:vite.config.ts (vite.config.ts was emitted as type 'file', not 'config').",
+    "Step 3 cross-batch import check: all 336 import relationships in import-map.json (126 entries) already have corresponding 'imports' edges; 0 missing, matching the merge script's 'Recovered 0 imports edges'.",
+    "Every scanned file is represented by a node. The 3 files without a 'file'-type node (.github/workflows/ci.yml, README.md, notes/BUG8-gesetz-titel-TODO.md) are intentionally typed as pipeline/document nodes respectively.",
+    "No speculative nodes or edges were invented; all 13 restored edges trace back to original batch output (batches 2/4/5/7) and confirmed source. Final graph: 276 nodes, 689 edges, 0 dangling edges, 0 duplicate nodes/edges."
+  ]
+}

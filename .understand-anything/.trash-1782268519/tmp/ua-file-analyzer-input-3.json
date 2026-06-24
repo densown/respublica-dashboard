@@ -1,0 +1,186 @@
+{
+  "projectRoot": "/root/respublica-dashboard",
+  "batchFiles": [
+    {
+      "path": "src/App.tsx",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bundestag/AbstimmungsDetail.tsx",
+      "language": "typescript",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bundestag/AbstimmungsListe.tsx",
+      "language": "typescript",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bundestag/Hemicycle.tsx",
+      "language": "typescript",
+      "sizeLines": 640,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/bundestag-seats.ts",
+      "language": "typescript",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/design-system/index.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSearchParamsState.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/layouts/DashboardLayout.tsx",
+      "language": "typescript",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/main.tsx",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Admin.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Bundestag.tsx",
+      "language": "typescript",
+      "sizeLines": 674,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Coalition.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/DemocracyIndex.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/EuParliament.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/LobbyRegister.tsx",
+      "language": "typescript",
+      "sizeLines": 2129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/NotFound.tsx",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Overview.tsx",
+      "language": "typescript",
+      "sizeLines": 536,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/App.tsx": [
+      "src/design-system/index.ts",
+      "src/layouts/DashboardLayout.tsx",
+      "src/pages/Admin.tsx",
+      "src/pages/Coalition.tsx",
+      "src/pages/DemocracyIndex.tsx",
+      "src/pages/EuParliament.tsx",
+      "src/pages/NotFound.tsx",
+      "src/pages/Overview.tsx",
+      "src/pages/Sources.tsx"
+    ],
+    "src/components/bundestag/AbstimmungsDetail.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/components/bundestag/AbstimmungsListe.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/components/bundestag/Hemicycle.tsx": [
+      "src/data/bundestag-seats.ts",
+      "src/design-system/ThemeContext.tsx",
+      "src/design-system/tokens.ts"
+    ],
+    "src/data/bundestag-seats.ts": [],
+    "src/design-system/index.ts": [],
+    "src/hooks/useSearchParamsState.ts": [],
+    "src/layouts/DashboardLayout.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts",
+      "src/hooks/useMediaQuery.ts"
+    ],
+    "src/main.tsx": [
+      "src/App.tsx",
+      "src/index.css"
+    ],
+    "src/pages/Admin.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/pages/Bundestag.tsx": [
+      "src/components/bundestag/AbstimmungsDetail.tsx",
+      "src/components/bundestag/AbstimmungsListe.tsx",
+      "src/components/bundestag/Hemicycle.tsx",
+      "src/data/bundestag-seats.ts",
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts",
+      "src/hooks/useApi.ts"
+    ],
+    "src/pages/Coalition.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/pages/DemocracyIndex.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/pages/EuParliament.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/pages/LobbyRegister.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts",
+      "src/hooks/useApi.ts",
+      "src/hooks/useSearchParamsState.ts"
+    ],
+    "src/pages/NotFound.tsx": [
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts"
+    ],
+    "src/pages/Overview.tsx": [
+      "src/design-system/i18n.ts",
+      "src/design-system/index.ts",
+      "src/design-system/tokens.ts",
+      "src/hooks/useApi.ts"
+    ]
+  }
+}

@@ -1,0 +1,2898 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "type": "file",
+      "name": "AdvancedAnalysis.tsx",
+      "filePath": "src/pages/elections/AdvancedAnalysis.tsx",
+      "summary": "Election analysis dashboard tab hosting scatter plots, ranking tables, and change-over-time visualizations for district (Kreis) election data, with search, region filtering, and gain/loss leaderboards.",
+      "tags": [
+        "component",
+        "page",
+        "data-visualization",
+        "elections",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "type": "file",
+      "name": "ChangeAnalysisCharts.tsx",
+      "filePath": "src/pages/elections/ChangeAnalysisCharts.tsx",
+      "summary": "Chart components rendering vote-change analysis: top gains/losses bar charts, a delta histogram, and per-state average change bars for election comparisons.",
+      "tags": [
+        "component",
+        "data-visualization",
+        "elections",
+        "charts"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/ChangeMap.tsx",
+      "type": "file",
+      "name": "ChangeMap.tsx",
+      "filePath": "src/pages/elections/ChangeMap.tsx",
+      "summary": "Interactive SVG choropleth map coloring districts by vote-share change between two elections, with hover tooltips, zoom-to-region, and a diverging legend.",
+      "tags": [
+        "component",
+        "map",
+        "data-visualization",
+        "elections",
+        "svg"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/CompareMode.tsx",
+      "type": "file",
+      "name": "CompareMode.tsx",
+      "filePath": "src/pages/elections/CompareMode.tsx",
+      "summary": "Multi-region comparison view that fetches election results for several Kreise and renders side-by-side bar charts, time series, and difference tables.",
+      "tags": [
+        "component",
+        "data-visualization",
+        "elections",
+        "comparison",
+        "api-consumer"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/DifferenceTable.tsx",
+      "type": "file",
+      "name": "DifferenceTable.tsx",
+      "filePath": "src/pages/elections/DifferenceTable.tsx",
+      "summary": "Table comparing per-party vote shares across multiple selected regions, color-coding the spread between min and max values per party.",
+      "tags": [
+        "component",
+        "table",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "type": "file",
+      "name": "DistrictAnalysis.tsx",
+      "filePath": "src/pages/elections/DistrictAnalysis.tsx",
+      "summary": "Deep-dive single-district (Kreis) analysis page combining historical tables, party bar charts, percentile bars, and election-type comparison line charts.",
+      "tags": [
+        "component",
+        "page",
+        "data-visualization",
+        "elections",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/ElectionMap.tsx",
+      "type": "file",
+      "name": "ElectionMap.tsx",
+      "filePath": "src/pages/elections/ElectionMap.tsx",
+      "summary": "Interactive SVG choropleth of Germany's districts colored by party share or turnout, with hover tooltips, zoom-to-region, and a metric-aware legend.",
+      "tags": [
+        "component",
+        "map",
+        "data-visualization",
+        "elections",
+        "svg"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/HistoricalTable.tsx",
+      "type": "file",
+      "name": "HistoricalTable.tsx",
+      "filePath": "src/pages/elections/HistoricalTable.tsx",
+      "summary": "Table presenting a district's party vote shares across historical election years, highlighting the winning party per row.",
+      "tags": [
+        "component",
+        "table",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "type": "file",
+      "name": "KreisAutocomplete.tsx",
+      "filePath": "src/pages/elections/KreisAutocomplete.tsx",
+      "summary": "Autocomplete search input for German districts (Kreise) that filters GeoJSON features by name and exposes a reusable hit-filtering helper.",
+      "tags": [
+        "component",
+        "search",
+        "autocomplete",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/MapMode.tsx",
+      "type": "file",
+      "name": "MapMode.tsx",
+      "filePath": "src/pages/elections/MapMode.tsx",
+      "summary": "Map-centric election view orchestrating the choropleth map, metric/type selectors, district search, and the advanced analysis tabs.",
+      "tags": [
+        "component",
+        "map",
+        "elections",
+        "orchestration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/PartyBarChart.tsx",
+      "type": "file",
+      "name": "PartyBarChart.tsx",
+      "filePath": "src/pages/elections/PartyBarChart.tsx",
+      "summary": "Horizontal bar chart rendering a single region's party vote shares for one election year, using shared party colors.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/PartyToggles.tsx",
+      "type": "file",
+      "name": "PartyToggles.tsx",
+      "filePath": "src/pages/elections/PartyToggles.tsx",
+      "summary": "Toggle-button group letting users enable or disable individual parties in district charts, with readable text contrast against party colors.",
+      "tags": [
+        "component",
+        "filter",
+        "elections",
+        "ui-control"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/PercentileBar.tsx",
+      "type": "file",
+      "name": "PercentileBar.tsx",
+      "filePath": "src/pages/elections/PercentileBar.tsx",
+      "summary": "Percentile bar widget positioning a district's value within a min/max range to show relative standing among all districts.",
+      "tags": [
+        "component",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/RadarCompare.tsx",
+      "type": "file",
+      "name": "RadarCompare.tsx",
+      "filePath": "src/pages/elections/RadarCompare.tsx",
+      "summary": "Radar chart comparing multiple regions across fixed party-share axes, with localized subject labels.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "elections",
+        "comparison"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/RankingTable.tsx",
+      "type": "file",
+      "name": "RankingTable.tsx",
+      "filePath": "src/pages/elections/RankingTable.tsx",
+      "summary": "Sortable ranking table listing districts by a metric, deriving the Bundesland (state) from each district's AGS code.",
+      "tags": [
+        "component",
+        "table",
+        "data-visualization",
+        "elections",
+        "ranking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/RegionPanel.tsx",
+      "type": "file",
+      "name": "RegionPanel.tsx",
+      "filePath": "src/pages/elections/RegionPanel.tsx",
+      "summary": "Side panel showing a selected region's election detail: per-party bars, time series across years, and metadata, fetched from the API.",
+      "tags": [
+        "component",
+        "panel",
+        "data-visualization",
+        "elections",
+        "api-consumer"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/ScatterPlot.tsx",
+      "type": "file",
+      "name": "ScatterPlot.tsx",
+      "filePath": "src/pages/elections/ScatterPlot.tsx",
+      "summary": "Configurable scatter plot correlating two district metrics with selectable axes and party/state color modes, plus an interactive color legend.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "type": "file",
+      "name": "TimeSeriesChart.tsx",
+      "filePath": "src/pages/elections/TimeSeriesChart.tsx",
+      "summary": "Multi-party line chart plotting vote shares over election years, supporting comparison overlays between regions.",
+      "tags": [
+        "component",
+        "chart",
+        "data-visualization",
+        "elections",
+        "time-series"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/electionUiUtils.tsx",
+      "type": "file",
+      "name": "electionUiUtils.tsx",
+      "filePath": "src/pages/elections/electionUiUtils.tsx",
+      "summary": "Shared UI helpers for the elections module: election-type constants, themed select styling, localized type labels, AGS normalization, and section-title rendering.",
+      "tags": [
+        "utility",
+        "elections",
+        "ui-helpers"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/mapColors.ts",
+      "type": "file",
+      "name": "mapColors.ts",
+      "filePath": "src/pages/elections/mapColors.ts",
+      "summary": "Color-scale functions mapping election metrics (party share, turnout, vote change) to fill colors for choropleth maps.",
+      "tags": [
+        "utility",
+        "color",
+        "map",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/mapGeometry.ts",
+      "type": "file",
+      "name": "mapGeometry.ts",
+      "filePath": "src/pages/elections/mapGeometry.ts",
+      "summary": "GeoJSON projection utilities converting district coordinates into SVG path data and building a lookup map of district geometries.",
+      "tags": [
+        "utility",
+        "geometry",
+        "map",
+        "svg",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "file",
+      "name": "normalizeWahlen.ts",
+      "filePath": "src/pages/elections/normalizeWahlen.ts",
+      "summary": "Normalization helpers converting raw API election values into display percentages and resolving district display names.",
+      "tags": [
+        "utility",
+        "data-transformation",
+        "elections",
+        "normalization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/partyColors.ts",
+      "type": "file",
+      "name": "partyColors.ts",
+      "filePath": "src/pages/elections/partyColors.ts",
+      "summary": "Central palette and labels for German parties and federal states, with light/dark theme variants and AGS-to-state-color helpers.",
+      "tags": [
+        "constants",
+        "color",
+        "elections",
+        "theme"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/pages/elections/regionBarRows.ts",
+      "type": "file",
+      "name": "regionBarRows.ts",
+      "filePath": "src/pages/elections/regionBarRows.ts",
+      "summary": "Helper transforming a region's election row into bar-chart data using shared party colors and normalization utilities.",
+      "tags": [
+        "utility",
+        "data-transformation",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/pages/elections/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "src/pages/elections/types.ts",
+      "summary": "Shared TypeScript type definitions for election map rows, distinguishing API-shaped rows from normalized display rows.",
+      "tags": [
+        "type-definition",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/AdvancedAnalysis.tsx:AdvancedAnalysis",
+      "type": "function",
+      "name": "AdvancedAnalysis",
+      "filePath": "src/pages/elections/AdvancedAnalysis.tsx",
+      "lineRange": [
+        92,
+        795
+      ],
+      "summary": "Main analysis tab component wiring scatter/ranking/change views, managing tab state, region search, and gain/loss leaderboards.",
+      "tags": [
+        "component",
+        "elections",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/AdvancedAnalysis.tsx:selectStyle",
+      "type": "function",
+      "name": "selectStyle",
+      "filePath": "src/pages/elections/AdvancedAnalysis.tsx",
+      "lineRange": [
+        66,
+        84
+      ],
+      "summary": "Builds themed inline styles for native select elements used in the analysis toolbar.",
+      "tags": [
+        "utility",
+        "styling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeGainsLossesBarCharts",
+      "type": "function",
+      "name": "ChangeGainsLossesBarCharts",
+      "filePath": "src/pages/elections/ChangeAnalysisCharts.tsx",
+      "lineRange": [
+        71,
+        200
+      ],
+      "summary": "Renders side-by-side bar charts of the largest vote-share gains and losses across districts.",
+      "tags": [
+        "component",
+        "chart",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeDeltaHistogram",
+      "type": "function",
+      "name": "ChangeDeltaHistogram",
+      "filePath": "src/pages/elections/ChangeAnalysisCharts.tsx",
+      "lineRange": [
+        216,
+        350
+      ],
+      "summary": "Renders a histogram binning districts by their vote-change delta.",
+      "tags": [
+        "component",
+        "chart",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeStateAverageBars",
+      "type": "function",
+      "name": "ChangeStateAverageBars",
+      "filePath": "src/pages/elections/ChangeAnalysisCharts.tsx",
+      "lineRange": [
+        357,
+        457
+      ],
+      "summary": "Renders per-state average vote-change bars aggregated from district rows.",
+      "tags": [
+        "component",
+        "chart",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/ChangeMap.tsx:ChangeMap",
+      "type": "function",
+      "name": "ChangeMap",
+      "filePath": "src/pages/elections/ChangeMap.tsx",
+      "lineRange": [
+        50,
+        290
+      ],
+      "summary": "SVG choropleth map coloring districts by vote-share change with hover tooltips and zoom-to-region.",
+      "tags": [
+        "component",
+        "map",
+        "elections",
+        "svg"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/CompareMode.tsx:CompareMode",
+      "type": "function",
+      "name": "CompareMode",
+      "filePath": "src/pages/elections/CompareMode.tsx",
+      "lineRange": [
+        84,
+        687
+      ],
+      "summary": "Multi-region comparison view fetching and rendering side-by-side election results, time series, and difference tables.",
+      "tags": [
+        "component",
+        "comparison",
+        "elections",
+        "api-consumer"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/DifferenceTable.tsx:DifferenceTable",
+      "type": "function",
+      "name": "DifferenceTable",
+      "filePath": "src/pages/elections/DifferenceTable.tsx",
+      "lineRange": [
+        40,
+        370
+      ],
+      "summary": "Table comparing per-party vote shares across regions with color-coded spreads.",
+      "tags": [
+        "component",
+        "table",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/DifferenceTable.tsx:spanColor",
+      "type": "function",
+      "name": "spanColor",
+      "filePath": "src/pages/elections/DifferenceTable.tsx",
+      "lineRange": [
+        30,
+        38
+      ],
+      "summary": "Maps a value's position within a min/max spread to a color intensity.",
+      "tags": [
+        "utility",
+        "color"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/DistrictAnalysis.tsx:DistrictAnalysis",
+      "type": "function",
+      "name": "DistrictAnalysis",
+      "filePath": "src/pages/elections/DistrictAnalysis.tsx",
+      "lineRange": [
+        176,
+        1159
+      ],
+      "summary": "Single-district deep-dive page combining historical tables, party charts, percentile bars, and type-comparison line charts.",
+      "tags": [
+        "component",
+        "page",
+        "elections",
+        "analysis"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/DistrictAnalysis.tsx:ElectionTypeCompareLineLegend",
+      "type": "function",
+      "name": "ElectionTypeCompareLineLegend",
+      "filePath": "src/pages/elections/DistrictAnalysis.tsx",
+      "lineRange": [
+        74,
+        131
+      ],
+      "summary": "Renders the legend for the election-type comparison line chart.",
+      "tags": [
+        "component",
+        "chart",
+        "legend"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/DistrictAnalysis.tsx:winnerPartyKey",
+      "type": "function",
+      "name": "winnerPartyKey",
+      "filePath": "src/pages/elections/DistrictAnalysis.tsx",
+      "lineRange": [
+        138,
+        149
+      ],
+      "summary": "Determines the winning party key for an election row by comparing party shares.",
+      "tags": [
+        "utility",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/ElectionMap.tsx:ElectionMap",
+      "type": "function",
+      "name": "ElectionMap",
+      "filePath": "src/pages/elections/ElectionMap.tsx",
+      "lineRange": [
+        50,
+        249
+      ],
+      "summary": "SVG choropleth of districts colored by party share or turnout, with hover tooltips and zoom.",
+      "tags": [
+        "component",
+        "map",
+        "elections",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/ElectionMap.tsx:ElectionMapLegend",
+      "type": "function",
+      "name": "ElectionMapLegend",
+      "filePath": "src/pages/elections/ElectionMap.tsx",
+      "lineRange": [
+        251,
+        380
+      ],
+      "summary": "Metric-aware legend for the election choropleth, switching between party-share and turnout scales.",
+      "tags": [
+        "component",
+        "map",
+        "legend",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/HistoricalTable.tsx:HistoricalTable",
+      "type": "function",
+      "name": "HistoricalTable",
+      "filePath": "src/pages/elections/HistoricalTable.tsx",
+      "lineRange": [
+        57,
+        333
+      ],
+      "summary": "Table of a district's party vote shares across historical years with winner highlighting.",
+      "tags": [
+        "component",
+        "table",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/HistoricalTable.tsx:winnerKey",
+      "type": "function",
+      "name": "winnerKey",
+      "filePath": "src/pages/elections/HistoricalTable.tsx",
+      "lineRange": [
+        37,
+        48
+      ],
+      "summary": "Determines the winning party key for a historical election row.",
+      "tags": [
+        "utility",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/KreisAutocomplete.tsx:filterKreiseSearchHits",
+      "type": "function",
+      "name": "filterKreiseSearchHits",
+      "filePath": "src/pages/elections/KreisAutocomplete.tsx",
+      "lineRange": [
+        12,
+        30
+      ],
+      "summary": "Filters GeoJSON district features by a search query, returning ranked name hits.",
+      "tags": [
+        "utility",
+        "search",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/KreisAutocomplete.tsx:KreisAutocomplete",
+      "type": "function",
+      "name": "KreisAutocomplete",
+      "filePath": "src/pages/elections/KreisAutocomplete.tsx",
+      "lineRange": [
+        63,
+        205
+      ],
+      "summary": "Autocomplete input component for searching and selecting German districts.",
+      "tags": [
+        "component",
+        "search",
+        "autocomplete"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/KreisAutocomplete.tsx:selectInputStyle",
+      "type": "function",
+      "name": "selectInputStyle",
+      "filePath": "src/pages/elections/KreisAutocomplete.tsx",
+      "lineRange": [
+        32,
+        49
+      ],
+      "summary": "Builds themed inline styles for the autocomplete input element.",
+      "tags": [
+        "utility",
+        "styling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/MapMode.tsx:MapMode",
+      "type": "function",
+      "name": "MapMode",
+      "filePath": "src/pages/elections/MapMode.tsx",
+      "lineRange": [
+        151,
+        437
+      ],
+      "summary": "Map view orchestrating the choropleth, metric/type selectors, district search, and analysis tabs.",
+      "tags": [
+        "component",
+        "map",
+        "elections",
+        "orchestration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/MapMode.tsx:sparseKreisBannerText",
+      "type": "function",
+      "name": "sparseKreisBannerText",
+      "filePath": "src/pages/elections/MapMode.tsx",
+      "lineRange": [
+        82,
+        111
+      ],
+      "summary": "Builds a localized banner message warning of sparse district data coverage.",
+      "tags": [
+        "utility",
+        "i18n",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/MapMode.tsx:typeLabel",
+      "type": "function",
+      "name": "typeLabel",
+      "filePath": "src/pages/elections/MapMode.tsx",
+      "lineRange": [
+        59,
+        74
+      ],
+      "summary": "Returns a localized label for an election type.",
+      "tags": [
+        "utility",
+        "i18n",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "function",
+      "name": "PartyBarChart",
+      "filePath": "src/pages/elections/PartyBarChart.tsx",
+      "lineRange": [
+        29,
+        115
+      ],
+      "summary": "Horizontal bar chart of a region's party vote shares for one election year.",
+      "tags": [
+        "component",
+        "chart",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/PartyToggles.tsx:PartyToggles",
+      "type": "function",
+      "name": "PartyToggles",
+      "filePath": "src/pages/elections/PartyToggles.tsx",
+      "lineRange": [
+        35,
+        94
+      ],
+      "summary": "Toggle-button group for enabling/disabling parties in district charts.",
+      "tags": [
+        "component",
+        "filter",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/PercentileBar.tsx:PercentileBar",
+      "type": "function",
+      "name": "PercentileBar",
+      "filePath": "src/pages/elections/PercentileBar.tsx",
+      "lineRange": [
+        18,
+        95
+      ],
+      "summary": "Percentile bar widget showing a district's standing within a min/max range.",
+      "tags": [
+        "component",
+        "data-visualization",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/RadarCompare.tsx:RadarCompare",
+      "type": "function",
+      "name": "RadarCompare",
+      "filePath": "src/pages/elections/RadarCompare.tsx",
+      "lineRange": [
+        44,
+        118
+      ],
+      "summary": "Radar chart comparing regions across fixed party-share axes.",
+      "tags": [
+        "component",
+        "chart",
+        "elections",
+        "comparison"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/RankingTable.tsx:RankingTable",
+      "type": "function",
+      "name": "RankingTable",
+      "filePath": "src/pages/elections/RankingTable.tsx",
+      "lineRange": [
+        21,
+        184
+      ],
+      "summary": "Sortable ranking table of districts by a metric with state derivation from AGS codes.",
+      "tags": [
+        "component",
+        "table",
+        "elections",
+        "ranking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/RegionPanel.tsx:RegionPanel",
+      "type": "function",
+      "name": "RegionPanel",
+      "filePath": "src/pages/elections/RegionPanel.tsx",
+      "lineRange": [
+        80,
+        387
+      ],
+      "summary": "Side panel rendering a selected region's election detail with bars, time series, and metadata.",
+      "tags": [
+        "component",
+        "panel",
+        "elections",
+        "api-consumer"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/RegionPanel.tsx:rowToBarData",
+      "type": "function",
+      "name": "rowToBarData",
+      "filePath": "src/pages/elections/RegionPanel.tsx",
+      "lineRange": [
+        41,
+        65
+      ],
+      "summary": "Transforms an election row into per-party bar-chart data entries.",
+      "tags": [
+        "utility",
+        "data-transformation",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/ScatterPlot.tsx:ScatterPlot",
+      "type": "function",
+      "name": "ScatterPlot",
+      "filePath": "src/pages/elections/ScatterPlot.tsx",
+      "lineRange": [
+        63,
+        290
+      ],
+      "summary": "Configurable scatter plot correlating two district metrics with selectable axes and color modes.",
+      "tags": [
+        "component",
+        "chart",
+        "elections"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/pages/elections/ScatterPlot.tsx:ScatterColorLegend",
+      "type": "function",
+      "name": "ScatterColorLegend",
+      "filePath": "src/pages/elections/ScatterPlot.tsx",
+      "lineRange": [
+        296,
+        445
+      ],
+      "summary": "Interactive color legend for the scatter plot's party/state color modes.",
+      "tags": [
+        "component",
+        "chart",
+        "legend",
+        "elections"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/ScatterPlot.tsx:scatterAxisLabel",
+      "type": "function",
+      "name": "scatterAxisLabel",
+      "filePath": "src/pages/elections/ScatterPlot.tsx",
+      "lineRange": [
+        50,
+        61
+      ],
+      "summary": "Returns a localized axis label for a scatter plot metric key.",
+      "tags": [
+        "utility",
+        "i18n",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/TimeSeriesChart.tsx:TimeSeriesChart",
+      "type": "function",
+      "name": "TimeSeriesChart",
+      "filePath": "src/pages/elections/TimeSeriesChart.tsx",
+      "lineRange": [
+        26,
+        170
+      ],
+      "summary": "Multi-party line chart plotting vote shares over election years with comparison overlays.",
+      "tags": [
+        "component",
+        "chart",
+        "elections",
+        "time-series"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/electionUiUtils.tsx:selectCss",
+      "type": "function",
+      "name": "selectCss",
+      "filePath": "src/pages/elections/electionUiUtils.tsx",
+      "lineRange": [
+        14,
+        31
+      ],
+      "summary": "Builds themed CSS for native select elements in the elections UI.",
+      "tags": [
+        "utility",
+        "styling",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/electionUiUtils.tsx:typeLabelT",
+      "type": "function",
+      "name": "typeLabelT",
+      "filePath": "src/pages/elections/electionUiUtils.tsx",
+      "lineRange": [
+        33,
+        48
+      ],
+      "summary": "Returns a localized label for an election type via the translation function.",
+      "tags": [
+        "utility",
+        "i18n",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/electionUiUtils.tsx:sectionTitle",
+      "type": "function",
+      "name": "sectionTitle",
+      "filePath": "src/pages/elections/electionUiUtils.tsx",
+      "lineRange": [
+        54,
+        70
+      ],
+      "summary": "Renders a styled section-title element for the elections layout.",
+      "tags": [
+        "utility",
+        "ui-helpers",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/mapColors.ts:turnoutColor",
+      "type": "function",
+      "name": "turnoutColor",
+      "filePath": "src/pages/elections/mapColors.ts",
+      "lineRange": [
+        20,
+        35
+      ],
+      "summary": "Maps a turnout value within a range to a sequential fill color.",
+      "tags": [
+        "utility",
+        "color",
+        "map"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/mapColors.ts:changeColor",
+      "type": "function",
+      "name": "changeColor",
+      "filePath": "src/pages/elections/mapColors.ts",
+      "lineRange": [
+        41,
+        57
+      ],
+      "summary": "Maps a vote-change delta to a diverging fill color around a neutral midpoint.",
+      "tags": [
+        "utility",
+        "color",
+        "map"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/mapColors.ts:mapFillColor",
+      "type": "function",
+      "name": "mapFillColor",
+      "filePath": "src/pages/elections/mapColors.ts",
+      "lineRange": [
+        59,
+        89
+      ],
+      "summary": "Dispatches to the appropriate color scale based on the active map metric.",
+      "tags": [
+        "utility",
+        "color",
+        "map"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/mapGeometry.ts:projectCoords",
+      "type": "function",
+      "name": "projectCoords",
+      "filePath": "src/pages/elections/mapGeometry.ts",
+      "lineRange": [
+        24,
+        43
+      ],
+      "summary": "Projects geographic coordinates into SVG pixel space within a bounding box.",
+      "tags": [
+        "utility",
+        "geometry",
+        "map",
+        "svg"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/mapGeometry.ts:featureToPath",
+      "type": "function",
+      "name": "featureToPath",
+      "filePath": "src/pages/elections/mapGeometry.ts",
+      "lineRange": [
+        45,
+        96
+      ],
+      "summary": "Converts a GeoJSON feature's geometry into an SVG path data string.",
+      "tags": [
+        "utility",
+        "geometry",
+        "map",
+        "svg"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/pages/elections/mapGeometry.ts:buildKreiseMap",
+      "type": "function",
+      "name": "buildKreiseMap",
+      "filePath": "src/pages/elections/mapGeometry.ts",
+      "lineRange": [
+        105,
+        133
+      ],
+      "summary": "Builds a lookup map of district SVG path data and bounds from a GeoJSON collection.",
+      "tags": [
+        "utility",
+        "geometry",
+        "map"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "function",
+      "name": "resolveKreisDisplayName",
+      "filePath": "src/pages/elections/normalizeWahlen.ts",
+      "lineRange": [
+        24,
+        48
+      ],
+      "summary": "Resolves a district's display name from AGS code, name map, and API-provided name.",
+      "tags": [
+        "utility",
+        "normalization",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "function",
+      "name": "normalizeMapRow",
+      "filePath": "src/pages/elections/normalizeWahlen.ts",
+      "lineRange": [
+        67,
+        86
+      ],
+      "summary": "Normalizes a raw API map row into a display-ready row with percentages and names.",
+      "tags": [
+        "utility",
+        "data-transformation",
+        "elections"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/pages/elections/regionBarRows.ts:regionRowToSingleResultBars",
+      "type": "function",
+      "name": "regionRowToSingleResultBars",
+      "filePath": "src/pages/elections/regionBarRows.ts",
+      "lineRange": [
+        14,
+        25
+      ],
+      "summary": "Transforms a region's election row into single-result bar-chart data.",
+      "tags": [
+        "utility",
+        "data-transformation",
+        "elections"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/AdvancedAnalysis.tsx:AdvancedAnalysis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/AdvancedAnalysis.tsx:AdvancedAnalysis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/AdvancedAnalysis.tsx:selectStyle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeGainsLossesBarCharts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeGainsLossesBarCharts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeDeltaHistogram",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeDeltaHistogram",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeStateAverageBars",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeStateAverageBars",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "function:src/pages/elections/ChangeMap.tsx:ChangeMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "function:src/pages/elections/ChangeMap.tsx:ChangeMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/CompareMode.tsx:CompareMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/CompareMode.tsx:CompareMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "function:src/pages/elections/DifferenceTable.tsx:DifferenceTable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "function:src/pages/elections/DifferenceTable.tsx:DifferenceTable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "function:src/pages/elections/DifferenceTable.tsx:spanColor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/DistrictAnalysis.tsx:DistrictAnalysis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/DistrictAnalysis.tsx:DistrictAnalysis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/DistrictAnalysis.tsx:ElectionTypeCompareLineLegend",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/DistrictAnalysis.tsx:winnerPartyKey",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/ElectionMap.tsx:ElectionMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/ElectionMap.tsx:ElectionMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/ElectionMap.tsx:ElectionMapLegend",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/ElectionMap.tsx:ElectionMapLegend",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "function:src/pages/elections/HistoricalTable.tsx:HistoricalTable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "function:src/pages/elections/HistoricalTable.tsx:HistoricalTable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "function:src/pages/elections/HistoricalTable.tsx:winnerKey",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:filterKreiseSearchHits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:filterKreiseSearchHits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:KreisAutocomplete",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:KreisAutocomplete",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:selectInputStyle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/MapMode.tsx:MapMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/MapMode.tsx:MapMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/MapMode.tsx:sparseKreisBannerText",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/MapMode.tsx:typeLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "function:src/pages/elections/PartyToggles.tsx:PartyToggles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "function:src/pages/elections/PartyToggles.tsx:PartyToggles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "function:src/pages/elections/PercentileBar.tsx:PercentileBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "function:src/pages/elections/PercentileBar.tsx:PercentileBar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "function:src/pages/elections/RadarCompare.tsx:RadarCompare",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "function:src/pages/elections/RadarCompare.tsx:RadarCompare",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "function:src/pages/elections/RankingTable.tsx:RankingTable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "function:src/pages/elections/RankingTable.tsx:RankingTable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "function:src/pages/elections/RegionPanel.tsx:RegionPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "function:src/pages/elections/RegionPanel.tsx:RegionPanel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "function:src/pages/elections/RegionPanel.tsx:rowToBarData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:ScatterPlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:ScatterPlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:ScatterColorLegend",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:scatterAxisLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:scatterAxisLabel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "function:src/pages/elections/TimeSeriesChart.tsx:TimeSeriesChart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "function:src/pages/elections/TimeSeriesChart.tsx:TimeSeriesChart",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:selectCss",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:selectCss",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:typeLabelT",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:typeLabelT",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:sectionTitle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "function:src/pages/elections/electionUiUtils.tsx:sectionTitle",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:turnoutColor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:turnoutColor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:changeColor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:changeColor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:mapFillColor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "function:src/pages/elections/mapColors.ts:mapFillColor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:projectCoords",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:projectCoords",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:featureToPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:featureToPath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:buildKreiseMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "function:src/pages/elections/mapGeometry.ts:buildKreiseMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/normalizeWahlen.ts",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/normalizeWahlen.ts",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/normalizeWahlen.ts",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/normalizeWahlen.ts",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "function:src/pages/elections/regionBarRows.ts:regionRowToSingleResultBars",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "function:src/pages/elections/regionBarRows.ts:regionRowToSingleResultBars",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/hooks/useApi.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/hooks/useMediaQuery.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/ChangeMap.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/mapGeometry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/RankingTable.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/ScatterPlot.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeAnalysisCharts.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/pages/elections/mapColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/pages/elections/mapGeometry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/hooks/useApi.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/DifferenceTable.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/electionUiUtils.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/PartyBarChart.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/PartyToggles.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/RadarCompare.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/regionBarRows.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DifferenceTable.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/hooks/useApi.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/electionUiUtils.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/HistoricalTable.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/PartyBarChart.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/PartyToggles.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/PercentileBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/regionBarRows.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/pages/elections/mapColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/pages/elections/mapGeometry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/ElectionMap.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/KreisAutocomplete.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/mapGeometry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PartyToggles.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/PercentileBar.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/hooks/useApi.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/hooks/useMediaQuery.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/pages/elections/PartyBarChart.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "file:src/design-system/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "file:src/design-system/ThemeContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "file:src/design-system/i18n.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "file:src/design-system/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/electionUiUtils.tsx",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/mapColors.ts",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/mapGeometry.ts",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "file:src/pages/elections/normalizeWahlen.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "file:src/pages/elections/PartyBarChart.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "file:src/pages/elections/partyColors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "file:src/pages/elections/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:scatterAxisLabel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "function:src/pages/elections/mapColors.ts:changeColor",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/regionBarRows.ts:regionRowToSingleResultBars",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:filterKreiseSearchHits",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/mapColors.ts:mapFillColor",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ElectionMap.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:resolveKreisDisplayName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/mapGeometry.ts:buildKreiseMap",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/mapGeometry.ts:buildKreiseMap",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ChangeMap.tsx",
+      "target": "function:src/pages/elections/mapGeometry.ts:featureToPath",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/regionBarRows.ts",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RankingTable.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/ScatterPlot.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/HistoricalTable.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/TimeSeriesChart.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:toDisplayPercent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/PartyBarChart.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:normalizeMapRow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RadarCompare.tsx",
+      "target": "function:src/pages/elections/normalizeWahlen.ts:toDisplayPercent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/AdvancedAnalysis.tsx:AdvancedAnalysis",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/ElectionMap.tsx:ElectionMap",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/MapMode.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:KreisAutocomplete",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/ChangeMap.tsx:ChangeMap",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/RankingTable.tsx:RankingTable",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/ScatterPlot.tsx:ScatterPlot",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/AdvancedAnalysis.tsx",
+      "target": "function:src/pages/elections/ChangeAnalysisCharts.tsx:ChangeGainsLossesBarCharts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/DifferenceTable.tsx:DifferenceTable",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/RadarCompare.tsx:RadarCompare",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/CompareMode.tsx",
+      "target": "function:src/pages/elections/PartyToggles.tsx:PartyToggles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/HistoricalTable.tsx:HistoricalTable",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/PartyToggles.tsx:PartyToggles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/DistrictAnalysis.tsx",
+      "target": "function:src/pages/elections/KreisAutocomplete.tsx:KreisAutocomplete",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "function:src/pages/elections/PartyBarChart.tsx:PartyBarChart",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/pages/elections/RegionPanel.tsx",
+      "target": "function:src/pages/elections/TimeSeriesChart.tsx:TimeSeriesChart",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}
