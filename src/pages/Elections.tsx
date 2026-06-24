@@ -232,7 +232,7 @@ export default function Elections() {
                   flexShrink: 0,
                   border: 'none',
                   borderBottom: isActive
-                    ? '3px solid #C8102E'
+                    ? `3px solid ${c.red}`
                     : '3px solid transparent',
                   background: 'transparent',
                   cursor: 'pointer',

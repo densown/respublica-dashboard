@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { ShareCompact } from './ShareCompact'
 
@@ -32,8 +32,6 @@ export type SidebarProps = {
   shareUrl: string
 }
 
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
-
 export function Sidebar({
   entries,
   active,
@@ -62,7 +60,7 @@ export function Sidebar({
     setLang(lang === 'de' ? 'en' : 'de')
   }, [lang, setLang])
 
-  const sectionColor = theme === 'light' ? '#888' : '#666'
+  const sectionColor = c.sidebarText
 
   return (
     <aside
@@ -78,7 +76,7 @@ export function Sidebar({
         flexDirection: 'column',
         fontFamily: fonts.mono,
         fontSize: '0.73rem',
-        transition: `width 0.3s ${transition}, min-width 0.3s ${transition}`,
+        transition: `width 0.3s ${motion.easing}, min-width 0.3s ${motion.easing}`,
         boxShadow: c.shadow,
         overflow: 'hidden',
         flexShrink: 0,
@@ -98,7 +96,7 @@ export function Sidebar({
           cursor: 'pointer',
           textAlign: 'left',
           width: '100%',
-          transition: `color 0.2s ${transition}`,
+          transition: `color 0.2s ${motion.easing}`,
         }}
         aria-expanded={!collapsed}
         aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -115,11 +113,11 @@ export function Sidebar({
         >
           {collapsed ? (
             <>
-              R<span style={{ color: '#C8102E' }}>.</span>
+              R<span style={{ color: c.red }}>.</span>
             </>
           ) : (
             <>
-              Res<span style={{ color: '#C8102E' }}>.</span>Publica
+              Res<span style={{ color: c.red }}>.</span>Publica
             </>
           )}
         </span>
@@ -137,7 +135,7 @@ export function Sidebar({
           whiteSpace: collapsed ? 'nowrap' : 'normal',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          transition: `color 0.2s ${transition}`,
+          transition: `color 0.2s ${motion.easing}`,
         }}
       >
         {collapsed ? '←' : `← ${t('backToArticles')}`}
@@ -201,7 +199,7 @@ export function Sidebar({
                 cursor: 'pointer',
                 textAlign: 'left',
                 width: '100%',
-                transition: `color 0.2s ${transition}, border-color 0.2s ${transition}, background 0.2s ${transition}`,
+                transition: `color 0.2s ${motion.easing}, border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}`,
               }}
             >
               <span style={{ flexShrink: 0, width: '1.2em', textAlign: 'center' }}>
@@ -243,7 +241,7 @@ export function Sidebar({
             cursor: 'pointer',
             fontFamily: fonts.mono,
             fontSize: '0.73rem',
-            transition: `border-color 0.2s ${transition}, color 0.2s ${transition}`,
+            transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
           }}
         >
           {theme === 'light' ? 'Dark' : 'Light'}

@@ -1,4 +1,5 @@
 export { ThemeProvider, useTheme } from './ThemeContext'
+export { spacing, fonts, breakpoints, fontSize, fontWeight, lineHeight, radius, elevation, elevationDark, motion } from './tokens'
 export { default as CompareBar } from './components/CompareBar'
 export { default as HBar } from './components/HBar'
 export { default as InfoToggle } from './components/InfoToggle'

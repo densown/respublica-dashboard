@@ -1,5 +1,5 @@
 import { useCallback, useState, type CSSProperties } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type ShareToolbarProps = {
@@ -11,8 +11,6 @@ const REDDIT = '#FF4500'
 const LINKEDIN = '#0A66C2'
 const WHATSAPP = '#25D366'
 const TELEGRAM = '#229ED9'
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function ShareToolbar({ title, url }: ShareToolbarProps) {
   const { c, t } = useTheme()
@@ -62,7 +60,7 @@ export function ShareToolbar({ title, url }: ShareToolbarProps) {
     letterSpacing: '0.06em',
     cursor: 'pointer',
     textDecoration: 'none',
-    transition: `border-color 0.2s ${transition}, color 0.2s ${transition}`,
+    transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
     whiteSpace: 'nowrap',
   }
 

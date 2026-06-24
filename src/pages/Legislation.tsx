@@ -33,11 +33,10 @@ import {
   rechtGebietFromKuerzel,
   type RechtGebietFilter,
 } from '../components/gesetze/utils'
-import { fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing, motion } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 const PAGE_SIZE = 20
 
 const COURT_VALUES = [
@@ -481,7 +480,7 @@ export default function Legislation() {
       fontFamily: fonts.body,
       fontSize: '0.9rem',
       outline: 'none' as const,
-      transition: `border-color 0.2s ${transition}, box-shadow 0.2s ${transition}`,
+      transition: `border-color 0.2s ${motion.easing}, box-shadow 0.2s ${motion.easing}`,
     }),
     [c],
   )
@@ -570,7 +569,7 @@ export default function Legislation() {
           letterSpacing: '0.06em',
           textTransform: 'uppercase' as const,
           cursor: 'pointer',
-          transition: `border-color 0.2s ${transition}, background 0.2s ${transition}, color 0.2s ${transition}`,
+          transition: `border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
         }}
       >
         {label}
@@ -628,10 +627,10 @@ export default function Legislation() {
                 padding: '8px 16px',
                 border:
                   lobbyFilter === chip.value
-                    ? '2px solid #C8102E'
-                    : '1px solid var(--border-color, #ccc)',
+                    ? `2px solid ${c.red}`
+                    : `1px solid ${c.border}`,
                 backgroundColor:
-                  lobbyFilter === chip.value ? '#C8102E' : 'transparent',
+                  lobbyFilter === chip.value ? c.red : 'transparent',
                 color: lobbyFilter === chip.value ? '#fff' : 'inherit',
                 borderRadius: '999px',
                 fontFamily: 'IBM Plex Mono, monospace',
@@ -665,7 +664,7 @@ export default function Legislation() {
             <span
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.52rem',
+                fontSize: '0.625rem',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 color: c.muted,
@@ -701,7 +700,7 @@ export default function Legislation() {
             <span
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.52rem',
+                fontSize: '0.625rem',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 color: c.muted,
@@ -737,7 +736,7 @@ export default function Legislation() {
             <span
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.52rem',
+                fontSize: '0.625rem',
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 color: c.muted,
@@ -832,7 +831,7 @@ export default function Legislation() {
                         flexWrap: 'wrap',
                         alignItems: 'flex-start',
                         gap: spacing.sm,
-                        transition: `background 0.15s ${transition}`,
+                        transition: `background 0.15s ${motion.easing}`,
                       }}
                     >
                       <div style={{ flex: '1 1 120px', minWidth: 0 }}>
@@ -1018,7 +1017,7 @@ export default function Legislation() {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.52rem',
+              fontSize: '0.625rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,
@@ -1054,7 +1053,7 @@ export default function Legislation() {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.52rem',
+              fontSize: '0.625rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,
@@ -1088,7 +1087,7 @@ export default function Legislation() {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.52rem',
+              fontSize: '0.625rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,
@@ -1122,7 +1121,7 @@ export default function Legislation() {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.52rem',
+              fontSize: '0.625rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,
@@ -1156,7 +1155,7 @@ export default function Legislation() {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.52rem',
+              fontSize: '0.625rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,

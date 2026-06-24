@@ -62,19 +62,19 @@ export function Badge({ text, variant = 'default' }: BadgeProps) {
     },
     amber: {
       background: AMBER,
-      color: '#FFFFFF',
+      color: c.badgeText,
     },
     purple: {
       background: PURPLE,
-      color: '#FFFFFF',
+      color: c.badgeText,
     },
     teal: {
       background: TEAL,
-      color: '#FFFFFF',
+      color: c.badgeText,
     },
     gray: {
       background: GRAY,
-      color: '#FFFFFF',
+      color: c.badgeText,
     },
   }
 

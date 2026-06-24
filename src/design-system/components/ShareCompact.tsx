@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 const REDDIT = '#FF4500'
@@ -13,8 +13,6 @@ export type ShareCompactProps = {
   /** Mobile drawer uses light surface tokens */
   variant?: 'sidebar' | 'mobile'
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function ShareCompact({
   title,
@@ -71,7 +69,7 @@ export function ShareCompact({
         fontFamily: fonts.mono,
         fontSize: compact ? '0.62rem' : '0.65rem',
         textDecoration: 'none',
-        transition: `border-color 0.2s ${transition}, color 0.2s ${transition}`,
+        transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = hoverBorder
@@ -131,7 +129,7 @@ export function ShareCompact({
           fontFamily: fonts.mono,
           fontSize: compact ? '0.62rem' : '0.65rem',
           cursor: 'pointer',
-          transition: `border-color 0.2s ${transition}, color 0.2s ${transition}`,
+          transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = c.red

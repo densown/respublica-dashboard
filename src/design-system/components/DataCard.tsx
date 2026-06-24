@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { spacing } from '../tokens'
+import { spacing, radius, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type DataCardProps = {
@@ -9,8 +9,6 @@ export type DataCardProps = {
   onClick?: () => void
   active?: boolean
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function DataCard({
   header,
@@ -40,11 +38,11 @@ export function DataCard({
       style={{
         background: c.cardBg,
         border: `1px solid ${active ? c.red : c.cardBorder}`,
-        borderRadius: 8,
+        borderRadius: radius.lg,
         boxShadow: c.shadow,
         overflow: 'hidden',
         cursor: interactive ? 'pointer' : 'default',
-        transition: `border-color 0.25s ${transition}, box-shadow 0.25s ${transition}, transform 0.2s ${transition}`,
+        transition: `border-color ${motion.normal} ${motion.easing}, box-shadow ${motion.normal} ${motion.easing}, transform 0.2s ${motion.easing}`,
       }}
       onMouseEnter={
         interactive

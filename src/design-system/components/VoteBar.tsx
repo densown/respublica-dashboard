@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type VoteBarProps = {
@@ -25,8 +25,6 @@ export type VoteBarProps = {
    */
   expandedDetails?: 'all' | 'secondary'
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function VoteBar({
   label,
@@ -128,28 +126,28 @@ export function VoteBar({
             style={{
               width: `${pct.ja}%`,
               background: colJa,
-              transition: `width 0.45s ${transition}`,
+              transition: `width 0.45s ${motion.easing}`,
             }}
           />
           <div
             style={{
               width: `${pct.nein}%`,
               background: colNein,
-              transition: `width 0.45s ${transition}`,
+              transition: `width 0.45s ${motion.easing}`,
             }}
           />
           <div
             style={{
               width: `${pct.enthalten}%`,
               background: colEnthalten,
-              transition: `width 0.45s ${transition}`,
+              transition: `width 0.45s ${motion.easing}`,
             }}
           />
           <div
             style={{
               width: `${pct.abwesend}%`,
               background: colAbwesend,
-              transition: `width 0.45s ${transition}`,
+              transition: `width 0.45s ${motion.easing}`,
             }}
           />
         </div>

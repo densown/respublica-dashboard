@@ -34,6 +34,11 @@ function readStoredTheme(): ThemeMode {
   } catch {
     /* ignore */
   }
+  try {
+    if (matchMedia('(prefers-color-scheme: dark)').matches) return 'dark'
+  } catch {
+    /* ignore */
+  }
   return 'light'
 }
 
@@ -58,6 +63,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
+    document.documentElement.dataset.theme = theme
   }, [theme])
 
   useEffect(() => {

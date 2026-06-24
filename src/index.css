@@ -16,6 +16,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+:root {
+  --rp-red: #C8102E;
+  --rp-border: #E8E4DC;
+}
+:root[data-theme="dark"] {
+  --rp-red: #E8384F;
+  --rp-border: #2D2D2D;
+}
+
+:focus-visible {
+  outline: 2px solid var(--rp-red, #C8102E);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Dezente Lade-Platzhalter (Weltkarte, Lobby-Treemap) */
 @keyframes rp-skeleton-pulse {
   0%,

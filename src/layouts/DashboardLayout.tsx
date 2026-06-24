@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 const WORLD_MAP_PATH = '/weltkarte'
-import { fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing, motion } from '../design-system/tokens'
 import { LegalFooter, MobileNav, Sidebar, useTheme } from '../design-system'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
@@ -100,7 +100,7 @@ export default function DashboardLayout() {
         color: c.ink,
         overflow: 'hidden',
         transition:
-          'background 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          `background ${motion.slow} ${motion.easing}, color ${motion.slow} ${motion.easing}`,
       }}
     >
       {!isMobile && (
@@ -145,7 +145,7 @@ export default function DashboardLayout() {
         >
           <div
             style={{
-              maxWidth: isWorldMapPage ? 'none' : 1100,
+              maxWidth: isWorldMapPage ? 'none' : 1280,
               margin: '0 auto',
               width: '100%',
               padding: isWorldMapPage ? 0 : mainPad,

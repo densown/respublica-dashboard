@@ -26,13 +26,12 @@ import type {
   EuUrteilListResponse,
   EuUrteilStats,
 } from '../components/eulaw/types'
-import { fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing, motion } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
 const PAGE_SIZE = 20
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 const LEGAL_AREA_KEYS: { value: string; key: I18nKey }[] = [
   { value: 'Handel', key: 'euLawRgHandel' },
@@ -293,7 +292,7 @@ export default function EuLaw() {
       fontWeight: active ? 600 : 400,
       cursor: 'pointer',
       whiteSpace: 'nowrap' as const,
-      transition: `background 0.2s ${transition}, color 0.2s ${transition}, border-color 0.2s ${transition}`,
+      transition: `background 0.2s ${motion.easing}, color 0.2s ${motion.easing}, border-color 0.2s ${motion.easing}`,
     }),
     [c],
   )
@@ -388,7 +387,7 @@ export default function EuLaw() {
           letterSpacing: '0.06em',
           textTransform: 'uppercase' as const,
           cursor: 'pointer',
-          transition: `border-color 0.2s ${transition}, background 0.2s ${transition}, color 0.2s ${transition}`,
+          transition: `border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
         }}
       >
         {label}

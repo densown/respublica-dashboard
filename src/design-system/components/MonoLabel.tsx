@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { fonts } from '../tokens'
+import { fonts, fontSize as fs } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type MonoLabelProps = {
@@ -14,7 +14,7 @@ export default function MonoLabel({ children, style }: MonoLabelProps) {
       style={{
         display: 'block',
         fontFamily: fonts.mono,
-        fontSize: 9,
+        fontSize: fs.sm,
         letterSpacing: '0.12em',
         textTransform: 'uppercase',
         color: c.muted,

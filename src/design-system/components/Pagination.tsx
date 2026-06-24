@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, radius, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type PaginationProps = {
@@ -7,8 +7,6 @@ export type PaginationProps = {
   total: number
   onChange: (page: number) => void
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 function getPaginationItems(
   current: number,
@@ -62,13 +60,13 @@ export function Pagination({ current, total, onChange }: PaginationProps) {
       height: 36,
       padding: `0 ${spacing.sm}px`,
       border: `1px solid ${active ? c.red : c.border}`,
-      borderRadius: 6,
+      borderRadius: radius.md,
       background: active ? c.bgHover : c.bgAlt,
       color: active ? c.red : c.inkSoft,
       fontFamily: fonts.mono,
       fontSize: '0.75rem',
       cursor: 'pointer',
-      transition: `border-color 0.2s ${transition}, color 0.2s ${transition}, background 0.2s ${transition}`,
+      transition: `border-color ${motion.fast} ${motion.easing}, color ${motion.fast} ${motion.easing}, background ${motion.fast} ${motion.easing}`,
     }),
     [c],
   )

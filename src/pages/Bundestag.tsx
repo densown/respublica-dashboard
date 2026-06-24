@@ -344,7 +344,7 @@ export default function Bundestag() {
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
               borderRadius: 8,
-              padding: 24,
+              padding: spacing.xl,
               boxShadow: c.shadow,
             }}
           >
@@ -420,7 +420,7 @@ export default function Bundestag() {
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
               borderRadius: 8,
-              padding: 24,
+              padding: spacing.xl,
               boxShadow: c.shadow,
             }}
           >
@@ -442,7 +442,7 @@ export default function Bundestag() {
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
               borderRadius: 8,
-              padding: 24,
+              padding: spacing.xl,
               boxShadow: c.shadow,
             }}
           >

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, fontSize as fs, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type FilterOption = {
@@ -16,8 +16,6 @@ export type FilterToolbarProps = {
   placeholder?: string
   filters: FilterDef[]
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
   const { c, t } = useTheme()
@@ -51,7 +49,7 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
           fontFamily: fonts.body,
           fontSize: '0.9rem',
           outline: 'none',
-          transition: `border-color 0.2s ${transition}`,
+          transition: `border-color ${motion.fast} ${motion.easing}`,
         }}
         onFocus={(e) => {
           e.target.style.borderColor = c.red
@@ -74,7 +72,7 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.6rem',
+              fontSize: fs.sm,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: c.muted,

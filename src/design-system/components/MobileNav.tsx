@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import type { SidebarNavEntry } from './Sidebar'
 import { ShareCompact } from './ShareCompact'
@@ -11,8 +11,6 @@ export type MobileNavProps = {
   shareTitle: string
   shareUrl: string
 }
-
-const transition = 'cubic-bezier(0.4, 0, 0.2, 1)'
 
 export function MobileNav({
   entries,
@@ -42,7 +40,7 @@ export function MobileNav({
     setLang(lang === 'de' ? 'en' : 'de')
   }, [lang, setLang])
 
-  const sectionColor = theme === 'light' ? '#888' : '#666'
+  const sectionColor = c.muted
 
   return (
     <>
@@ -51,7 +49,7 @@ export function MobileNav({
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          height: 52,
+          height: 56,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -249,7 +247,7 @@ export function MobileNav({
                         textAlign: 'left',
                         fontFamily: fonts.mono,
                         fontSize: '0.8rem',
-                        transition: `background 0.2s ${transition}, border-color 0.2s ${transition}`,
+                        transition: `background 0.2s ${motion.easing}, border-color 0.2s ${motion.easing}`,
                       }}
                     >
                       <span>{entry.icon}</span>

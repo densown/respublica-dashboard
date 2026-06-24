@@ -1,3 +1,4 @@
+import { spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export function LoadingSpinner() {
@@ -9,7 +10,7 @@ export function LoadingSpinner() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 48,
+        padding: spacing.xxxl,
       }}
     >
       <style>{`

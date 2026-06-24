@@ -6,8 +6,8 @@ export const light = {
   /** Primärer Fließtext / Überschriften (semantisch; gleicher Kontrast wie ink) */
   text: '#0F0F0F',
   inkSoft: '#3D3D3D',
-  muted: '#6B7280',
-  subtle: '#9CA3AF',
+  muted: '#525960',
+  subtle: '#71767D',
   red: '#C8102E',
   redHover: '#A30D24',
   yes: '#2D7D46',
@@ -81,6 +81,7 @@ export const spacing = {
   lg: 16,
   xl: 24,
   xxl: 32,
+  xl2: 40,
   xxxl: 48,
 } as const
 
@@ -88,6 +89,56 @@ export const fonts = {
   display: "'Playfair Display', serif",
   body: "'Source Serif 4', serif",
   mono: "'IBM Plex Mono', monospace",
+} as const
+
+export const fontSize = {
+  xs: '0.625rem',
+  sm: '0.6875rem',
+  md: '0.8125rem',
+  base: '0.9375rem',
+  lg: '1.125rem',
+  xl: '1.5rem',
+  xxl: '2rem',
+} as const
+
+export const fontWeight = {
+  normal: 400,
+  medium: 600,
+  bold: 700,
+  black: 900,
+} as const
+
+export const lineHeight = {
+  tight: 1.2,
+  normal: 1.5,
+  relaxed: 1.7,
+} as const
+
+export const radius = {
+  sm: 4,
+  md: 6,
+  lg: 8,
+  xl: 12,
+  pill: 999,
+} as const
+
+export const elevation = {
+  sm: '0 1px 3px rgba(0,0,0,0.06)',
+  md: '0 2px 8px rgba(0,0,0,0.1)',
+  lg: '0 4px 16px rgba(0,0,0,0.12)',
+} as const
+
+export const elevationDark = {
+  sm: '0 1px 3px rgba(0,0,0,0.3)',
+  md: '0 2px 8px rgba(0,0,0,0.4)',
+  lg: '0 4px 16px rgba(0,0,0,0.5)',
+} as const
+
+export const motion = {
+  easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  fast: '0.15s',
+  normal: '0.25s',
+  slow: '0.35s',
 } as const
 
 export const breakpoints = {
