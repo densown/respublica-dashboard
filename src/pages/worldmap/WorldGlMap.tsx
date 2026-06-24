@@ -254,12 +254,12 @@ export function WorldGlMap({
     () => [
       'case',
       ['==', ['upcase', ['get', 'iso3']], selectedKey],
-      '#C8102E',
+      c.red,
       ['boolean', ['feature-state', 'hover'], false],
       '#ffffff',
       '#000000',
     ],
-    [selectedKey],
+    [selectedKey, c.red],
   )
 
   const borderLineWidth: ExpressionSpecification = useMemo(
@@ -339,7 +339,7 @@ export function WorldGlMap({
       source: 'countries',
       filter: ['literal', false] as maplibregl.FilterSpecification,
       paint: {
-        'line-color': '#C8102E',
+        'line-color': c.red,
         'line-width': 1,
         'line-dasharray': [3, 2],
       },

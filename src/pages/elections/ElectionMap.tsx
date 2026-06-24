@@ -132,7 +132,7 @@ export function ElectionMap({
             fill={fillForPath(p.ags)}
             fillOpacity={1}
             stroke={
-              isSel ? '#C8102E' : isHover ? (theme === 'dark' ? '#E8E4DC' : '#ffffff') : '#333'
+              isSel ? c.red : isHover ? (theme === 'dark' ? '#E8E4DC' : '#ffffff') : '#333'
             }
             strokeWidth={isSel || isHover ? 2 : 0.3}
             vectorEffect="non-scaling-stroke"

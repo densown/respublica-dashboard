@@ -26,7 +26,7 @@ import {
   StatWidget,
   useTheme,
 } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fonts, spacing, motion } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useSearchParamsState } from '../hooks/useSearchParamsState'
 
@@ -157,7 +157,7 @@ const TREEMAP_COLORS = [
 ]
 const MAP_STYLE_LIGHT = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 const MAP_STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
-const TAB_TRANSITION = 'cubic-bezier(0.4, 0, 0.2, 1)'
+const TAB_TRANSITION = motion.easing
 const CITY_COORDS: Record<string, [number, number]> = {
   Berlin: [13.405, 52.52],
   Hamburg: [9.993, 53.551],
@@ -640,7 +640,7 @@ export default function LobbyRegister() {
         type: 'circle',
         source: 'lobby-cities',
         paint: {
-          'circle-color': '#C8102E',
+          'circle-color': c.red,
           'circle-opacity': 0.7,
           'circle-stroke-color': '#ffffff',
           'circle-stroke-width': ['case', ['==', ['get', 'city'], selectedCity], 3, 1],
@@ -1108,7 +1108,7 @@ export default function LobbyRegister() {
                           width={Math.max(0, width)}
                           height={yScale.bandwidth()}
                           rx={4}
-                          fill={isActiveCity ? (theme === 'dark' ? '#ff5a6f' : '#8f0018') : '#C8102E'}
+                          fill={isActiveCity ? (theme === 'dark' ? '#ff5a6f' : '#8f0018') : c.red}
                           opacity={isActiveCity ? 1 : 0.9}
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
