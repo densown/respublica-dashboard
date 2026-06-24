@@ -37,8 +37,11 @@ Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponen
 
 - Pfad: `src/design-system/`
 - Fonts: Playfair Display, Source Serif 4, IBM Plex Mono (Einbindung in `App.tsx` über Google Fonts)
-- Farben: Rot `#C8102E`, Tinte `#0F0F0F`, Papier `#F5F0E8` (siehe `tokens.ts`)
-- Themes: Light + Dark über `ThemeProvider` / `useTheme()` in `ThemeContext.tsx`
+- Farben: Rot `#C8102E` (Light) / `#E8384F` (Dark), Tinte `#0F0F0F`, Papier `#F5F0E8` (siehe `tokens.ts`)
+- Themes: Light + Dark über `ThemeProvider` / `useTheme()` in `ThemeContext.tsx`; `prefers-color-scheme` als Default
+- Token-System (`tokens.ts`): `spacing`, `fontSize`, `fontWeight`, `lineHeight`, `radius`, `elevation`, `elevationDark`, `motion` -- alle UI-Werte zentral, keine Magic Numbers in Komponenten
+- Accessibility: Focus-visible Ring (WCAG 2.4.7), `prefers-reduced-motion` Support, WCAG-konforme Kontrastwerte fuer muted/subtle Text
+- CSS Custom Properties in `index.css`: `--rp-red`, `--rp-border` (sync via `data-theme` auf `<html>`)
 - i18n: DE + EN (`src/design-system/i18n.ts`)
 
 ## API
@@ -80,4 +83,4 @@ npm run build
 
 ---
 
-**Zuletzt aktualisiert:** 2. Juni 2026 (Serverweite Navigation: WordPress Theme ergänzt globale Bottom-Bar und Sidebar-Quick-Actions für Dashboard/Newsletter/Kaffee)
+**Zuletzt aktualisiert:** 24. Juni 2026 (Design-System Refactoring: Token-System erweitert, Kontrast/Accessibility-Fixes, Dark-Mode-Konsistenz, hardcoded Werte eliminiert)
