@@ -6,6 +6,7 @@ import {
 import {
   DataCard,
   EmptyState,
+  ExportableContainer,
   useTheme,
 } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
@@ -341,6 +342,7 @@ export function MapMode({
                 )}
               </div>
             )}
+          <ExportableContainer title={t('electionsTitle')}>
           <div
             style={{
               width: '100%',
@@ -370,6 +372,7 @@ export function MapMode({
             turnoutMax={turnoutStats.maxT}
             partyForScale={debouncedMetric}
           />
+          </ExportableContainer>
 
           <div
             style={{

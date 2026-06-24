@@ -181,6 +181,10 @@ export const de = {
   bottom20: "Bottom 20",
   exportCsv: "CSV Export",
   exportPng: "PNG Export",
+  exportSocial: "Social Media",
+  exportAcademic: "Wissenschaftlich",
+  exportPresentation: "Präsentation",
+  exportGenerating: "Bild wird erstellt…",
   noData: "Keine Daten verfügbar",
   loading: "Laden...",
 } as const
@@ -366,6 +370,10 @@ export const en = {
   bottom20: "Bottom 20",
   exportCsv: "Export CSV",
   exportPng: "Export PNG",
+  exportSocial: "Social Media",
+  exportAcademic: "Academic",
+  exportPresentation: "Presentation",
+  exportGenerating: "Generating image…",
   noData: "No data available",
   loading: "Loading...",
 } as const

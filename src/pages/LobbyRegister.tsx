@@ -20,6 +20,7 @@ import {
   Badge,
   DataCard,
   EmptyState,
+  ExportableContainer,
   LoadingSpinner,
   PageHeader,
   Pagination,
@@ -1001,6 +1002,7 @@ export default function LobbyRegister() {
         </div>
       </DataCard>
 
+      <ExportableContainer title={t('lobbyGeoTitle')} mapRef={geoMapRef}>
       <DataCard>
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
           <h3 style={{ margin: 0, fontFamily: fonts.display, color: c.ink }}>
@@ -1149,6 +1151,7 @@ export default function LobbyRegister() {
           )}
         </div>
       </DataCard>
+      </ExportableContainer>
 
       <DataCard>
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>

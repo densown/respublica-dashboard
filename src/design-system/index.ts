@@ -43,3 +43,4 @@ export {
 } from './components/Sidebar'
 export { StatWidget, type StatWidgetProps } from './components/StatWidget'
 export { VoteBar, type VoteBarProps } from './components/VoteBar'
+export { ExportableContainer, type ExportableContainerProps } from './components/ExportableContainer'

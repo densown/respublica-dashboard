@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { LngLat } from 'maplibre-gl'
-import { type MapProjectionMode, useTheme } from '../design-system'
+import { ExportableContainer, type MapProjectionMode, useTheme } from '../design-system'
 import type { Lang } from '../design-system/ThemeContext'
 import { breakpoints, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
@@ -776,6 +776,7 @@ export default function WorldMap() {
           </p>
         )}
 
+        <ExportableContainer title={t('worldConsoleWorldMapTitle')}>
         <div
           style={{
             flex: 1,
@@ -945,6 +946,7 @@ export default function WorldMap() {
             </div>
           ) : null}
         </div>
+        </ExportableContainer>
 
         <div
           style={{

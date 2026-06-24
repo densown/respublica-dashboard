@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Badge,
+  ExportableContainer,
   LoadingSpinner,
   PageHeader,
   useTheme,
@@ -339,6 +340,7 @@ export default function Bundestag() {
             marginBottom: spacing.xl,
           }}
         >
+          <ExportableContainer title={t('seatDistribution')}>
           <div
             style={{
               background: c.cardBg,
@@ -414,6 +416,7 @@ export default function Bundestag() {
               onSeatSelect={setSelectedSeatId}
             />
           </div>
+          </ExportableContainer>
 
           <div
             style={{
