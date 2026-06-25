@@ -15,6 +15,14 @@ export type ExportableContainerProps = {
   source?: string
   mapRef?: MutableRefObject<maplibregl.Map | null>
   children: ReactNode
+  /**
+   * Reicht Hoehe/Flex an die Children durch (display:flex column, flex:1).
+   * Noetig, wenn der Inhalt die volle Hoehe des Elternelements fuellen soll
+   * (z. B. die fullViewport-Weltkarte). Ohne fill kollabiert ein
+   * height:100%-Inhalt auf 0, weil die beiden Wrapper-Divs die Layout-Kette
+   * unterbrechen.
+   */
+  fill?: boolean
 }
 
 export function ExportableContainer({
@@ -22,6 +30,7 @@ export function ExportableContainer({
   source,
   mapRef,
   children,
+  fill = false,
 }: ExportableContainerProps) {
   const { c, t, lang } = useTheme()
   const location = useLocation()
@@ -79,14 +88,34 @@ export function ExportableContainer({
 
   return (
     <div
-      style={{ position: 'relative' }}
+      style={{
+        position: 'relative',
+        ...(fill
+          ? {
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              minHeight: 0,
+              width: '100%',
+            }
+          : {}),
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false)
         if (!loading) setShowPicker(false)
       }}
     >
-      <div ref={containerRef}>{children}</div>
+      <div
+        ref={containerRef}
+        style={
+          fill
+            ? { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }
+            : undefined
+        }
+      >
+        {children}
+      </div>
 
       <div
         data-export-ignore="true"

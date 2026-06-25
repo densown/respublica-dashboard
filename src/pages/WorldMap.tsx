@@ -776,7 +776,7 @@ export default function WorldMap() {
           </p>
         )}
 
-        <ExportableContainer title={t('worldConsoleWorldMapTitle')}>
+        <ExportableContainer title={t('worldConsoleWorldMapTitle')} fill>
         <div
           style={{
             flex: 1,

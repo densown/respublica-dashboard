@@ -25,6 +25,38 @@ const GLOBE_BOUNDS: maplibregl.LngLatBoundsLike = [
   [179.5, 85],
 ]
 
+// Wasserfarbe des lokalen Fallback-Styles (an CARTO positron/dark-matter angelehnt)
+const FALLBACK_WATER_DARK = '#13141f'
+const FALLBACK_WATER_LIGHT = '#d7dde6'
+
+// Sekunden, nach denen ohne geladenen Basemap-Style auf den lokalen Fallback
+// umgeschaltet wird (langsames/blockiertes CDN ohne 'error'-Event).
+const STYLE_FALLBACK_TIMEOUT_MS = 8000
+
+/**
+ * Minimaler, vollständig lokaler MapLibre-Style ohne Netzwerkabhängigkeit.
+ * Dient als Fallback, falls der externe CARTO-Basemap-Style nicht lädt (CDN
+ * blockiert, Mobilfunk, Timeout). Die Länder-Choropleth kommt ohnehin aus
+ * lokalem GeoJSON, daher bleibt die Karte (und der Globus) so immer sichtbar.
+ */
+function buildFallbackStyle(isDark: boolean): maplibregl.StyleSpecification {
+  const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || ''
+  return {
+    version: 8,
+    glyphs: `${base}/fonts/{fontstack}/{range}.pbf`,
+    sources: {},
+    layers: [
+      {
+        id: 'background',
+        type: 'background',
+        paint: {
+          'background-color': isDark ? FALLBACK_WATER_DARK : FALLBACK_WATER_LIGHT,
+        },
+      },
+    ],
+  }
+}
+
 function normIso(s: string): string {
   return s.trim().toUpperCase()
 }
@@ -496,15 +528,40 @@ export function WorldGlMap({
     mapRef.current = map
     prevThemeDarkRef.current = isDark
 
-    const onLoad = () => {
+    let settled = false
+    let fellBack = false
+
+    const finishInit = () => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(styleWatchdog)
+      map.off('error', onError)
       installChoropleth(map)
       hideBasemapLabels(map)
       applyProjection(map, projectionRef.current, 'init')
     }
+
+    // Schlaegt der externe CARTO-Basemap-Style fehl (CDN blockiert, Mobilfunk,
+    // Timeout), feuert 'load' nie und die Karte bliebe komplett schwarz. Dann
+    // auf den lokalen Fallback-Style wechseln, damit Karte und Globus erscheinen.
+    const goFallback = () => {
+      if (settled || fellBack) return
+      if (map.isStyleLoaded()) return
+      fellBack = true
+      map.setStyle(buildFallbackStyle(isDark))
+      map.once('style.load', finishInit)
+    }
+
+    const onLoad = () => finishInit()
+    const onError = () => goFallback()
     map.on('load', onLoad)
+    map.on('error', onError)
+    const styleWatchdog = window.setTimeout(goFallback, STYLE_FALLBACK_TIMEOUT_MS)
 
     return () => {
+      window.clearTimeout(styleWatchdog)
       map.off('load', onLoad)
+      map.off('error', onError)
       detachHandlers(map, handlersRef.current, hoveredIsoRef)
       handlersRef.current = undefined
       popupRef.current?.remove()
@@ -550,14 +607,37 @@ export function WorldGlMap({
     const styleUrl = isDark ? STYLE_DARK : STYLE_LIGHT
     map.setStyle(styleUrl)
 
+    let settled = false
+    let fellBack = false
+
     const onStyleReady = () => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(styleWatchdog)
+      map.off('error', onError)
       installChoropleth(map)
       hideBasemapLabels(map)
       applyProjection(map, projectionRef.current, 'style')
     }
+
+    // Auch beim Theme-Wechsel auf den lokalen Fallback-Style ausweichen, falls
+    // der neue CARTO-Style nicht laedt, damit die Karte nicht schwarz wird.
+    const goFallback = () => {
+      if (settled || fellBack) return
+      if (map.isStyleLoaded()) return
+      fellBack = true
+      map.setStyle(buildFallbackStyle(isDark))
+    }
+
+    const onError = () => goFallback()
     map.once('style.load', onStyleReady)
+    map.on('error', onError)
+    const styleWatchdog = window.setTimeout(goFallback, STYLE_FALLBACK_TIMEOUT_MS)
+
     return () => {
+      window.clearTimeout(styleWatchdog)
       map.off('style.load', onStyleReady)
+      map.off('error', onError)
     }
   }, [isDark, geojson, applyProjection])
 
