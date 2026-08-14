@@ -11,6 +11,7 @@ import { EmptyState, PageHeader, useTheme } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
+import { ElectionsSubNav } from './elections/ElectionsSubNav'
 import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
@@ -196,6 +197,7 @@ export default function Elections() {
   return (
     <div style={{ paddingBottom: spacing.xl }}>
       <PageHeader title={t('electionsTitle')} subtitle={t('electionsSubtitle')} />
+      <ElectionsSubNav />
 
       <div
         style={{

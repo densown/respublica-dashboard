@@ -15,6 +15,7 @@ const LobbyRegister = lazy(() => import('./pages/LobbyRegister'))
 const Legislation = lazy(() => import('./pages/Legislation'))
 const EuLaw = lazy(() => import('./pages/EuLaw'))
 const Elections = lazy(() => import('./pages/Elections'))
+const ElectionPolls = lazy(() => import('./pages/ElectionPolls'))
 const Bundestag = lazy(() => import('./pages/Bundestag'))
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<Overview />} />
             <Route path="wahlen" element={<Elections />} />
+            <Route path="wahlen/umfragen" element={<ElectionPolls />} />
             <Route path="quellen" element={<Sources />} />
             <Route path="bundestag" element={<Bundestag />} />
             <Route path="bundestag/:pollId" element={<Bundestag />} />

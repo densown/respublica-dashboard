@@ -22,6 +22,26 @@ export const de = {
   electionsAxisY: "Y-Achse",
   electionsAllStates: "Alle Bundesländer",
   electionsRegion: "Region",
+
+  // --- Unterseite Wahlumfragen (/wahlen/umfragen) ---
+  electionPollsNavResults: "Ergebnisse",
+  electionPollsNavPolls: "Umfragen",
+  electionPollsTitle: "Wahlumfragen",
+  electionPollsSubtitle: "Sonntagsfrage-Zeitreihen zu Bundes- und Landtagswahlen.",
+  electionPollsElectionDay: "Wahltag",
+  electionPollsDaysLeft: "noch {days} Tage",
+  electionPollsCount: "Umfragen",
+  electionPollsLatest: "Neueste",
+  electionPollsLeading: "Stärkste Kraft",
+  electionPollsTrend: "Verlauf",
+  electionPollsRecent: "Letzte Umfragen",
+  electionPollsInstitute: "Institut",
+  electionPollsAllInstitutes: "Alle Institute",
+  electionPollsPublished: "Veröffentlicht",
+  electionPollsNoData: "Für diese Wahl liegen noch zu wenige Umfragen vor.",
+  electionPollsError: "Umfragen konnten nicht geladen werden.",
+  electionPollsThresholdHint: "Gestrichelte Linie: 5-%-Hürde. Legende anklicken, um Parteien aus- und einzublenden.",
+  electionPollsSource: "Quelle",
 } as const
 
 export const en = {
@@ -46,4 +66,24 @@ export const en = {
   electionsAxisY: "Y axis",
   electionsAllStates: "All federal states",
   electionsRegion: "Region",
+
+  // --- Sub-page: election polls (/wahlen/umfragen) ---
+  electionPollsNavResults: "Results",
+  electionPollsNavPolls: "Polls",
+  electionPollsTitle: "Election polls",
+  electionPollsSubtitle: "Voting-intention time series for federal and state elections.",
+  electionPollsElectionDay: "Election day",
+  electionPollsDaysLeft: "{days} days to go",
+  electionPollsCount: "Polls",
+  electionPollsLatest: "Latest",
+  electionPollsLeading: "Leading party",
+  electionPollsTrend: "Trend",
+  electionPollsRecent: "Recent polls",
+  electionPollsInstitute: "Institute",
+  electionPollsAllInstitutes: "All institutes",
+  electionPollsPublished: "Published",
+  electionPollsNoData: "Not enough polls available for this election yet.",
+  electionPollsError: "Polls could not be loaded.",
+  electionPollsThresholdHint: "Dashed line: 5% threshold. Click the legend to show or hide parties.",
+  electionPollsSource: "Source",
 } as const
