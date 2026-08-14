@@ -233,6 +233,25 @@ export default function ElectionCandidates() {
       : null
   }, [proWahlkreis])
 
+  const wkIndex = wahlkreise.findIndex(([nr]) => nr === aktiverWk)
+  const schritt = (d: number) => {
+    const ziel = wahlkreise[wkIndex + d]
+    if (ziel) setParam('wk', String(ziel[0]))
+  }
+  const pfeilStil = (aus: boolean) => ({
+    fontFamily: fonts.mono,
+    fontSize: '1rem',
+    lineHeight: 1,
+    width: 40,
+    minHeight: 44,
+    borderRadius: radius.md,
+    border: `1px solid ${c.border}`,
+    background: 'transparent',
+    color: aus ? c.subtle : c.inkSoft,
+    cursor: aus ? 'default' : 'pointer',
+    opacity: aus ? 0.5 : 1,
+  })
+
   const chip = (aktiv: boolean) => ({
     fontFamily: fonts.mono,
     fontSize: '0.72rem',
@@ -475,32 +494,72 @@ export default function ElectionCandidates() {
                 )}
 
                 <div>
-              {/* Nummernliste bleibt: als Rueckfallebene ohne Geodaten und
-                  weil eine Karte auf dem Handy fummelig zu treffen ist. */}
+              {/* Auswahlfeld statt 41 Nummernknoepfen: die Karte ist der
+                  eigentliche Selektor, die Liste war Dopplung. Bleibt als
+                  Rueckfallebene fuer Wahlen ohne Geodaten und fuer Tastatur
+                  und Screenreader. */}
               <div
                 style={{
                   display: 'flex',
+                  alignItems: 'center',
                   gap: spacing.xs,
-                  flexWrap: 'wrap',
                   marginBottom: spacing.lg,
+                  flexWrap: 'wrap',
                 }}
               >
-                {wahlkreise.map(([nr, label]) => (
-                  <button
-                    key={nr}
-                    type="button"
-                    onClick={() => setParam('wk', String(nr))}
-                    title={label}
-                    style={{
-                      ...chip(nr === aktiverWk),
-                      fontSize: '0.7rem',
-                      padding: '10px 11px',
-                      minWidth: 40,
-                    }}
-                  >
-                    {nr}
-                  </button>
-                ))}
+                <button
+                  type="button"
+                  aria-label={t('electionCandidatesPrev')}
+                  disabled={wkIndex <= 0}
+                  onClick={() => schritt(-1)}
+                  style={pfeilStil(wkIndex <= 0)}
+                >
+                  ‹
+                </button>
+                <select
+                  value={aktiverWk ?? ''}
+                  onChange={(e) => setParam('wk', e.target.value)}
+                  aria-label={t('electionCandidatesConstituency')}
+                  style={{
+                    fontFamily: fonts.mono,
+                    fontSize: '0.8rem',
+                    padding: '10px 12px',
+                    minHeight: 44,
+                    flex: 1,
+                    minWidth: 180,
+                    maxWidth: 340,
+                    borderRadius: radius.md,
+                    border: `1px solid ${c.border}`,
+                    background: c.inputBg,
+                    color: c.ink,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {wahlkreise.map(([nr, label]) => (
+                    <option key={nr} value={nr}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  aria-label={t('electionCandidatesNext')}
+                  disabled={wkIndex < 0 || wkIndex >= wahlkreise.length - 1}
+                  onClick={() => schritt(1)}
+                  style={pfeilStil(wkIndex < 0 || wkIndex >= wahlkreise.length - 1)}
+                >
+                  ›
+                </button>
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    fontSize: '0.7rem',
+                    color: c.muted,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {wkIndex + 1}/{wahlkreise.length}
+                </span>
               </div>
 
               <h2
@@ -512,6 +571,17 @@ export default function ElectionCandidates() {
                 }}
               >
                 {wahlkreise.find(([nr]) => nr === aktiverWk)?.[1] ?? '—'}
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    fontSize: '0.78rem',
+                    fontWeight: 400,
+                    color: c.muted,
+                    marginLeft: spacing.sm,
+                  }}
+                >
+                  {imWahlkreis.length} {t('electionCandidatesCount')}
+                </span>
               </h2>
 
               <div style={{ display: 'grid', gap: 0 }}>
