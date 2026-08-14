@@ -9,6 +9,7 @@ type SubNavEntry = { to: string; labelKey: I18nKey; end: boolean }
 const ENTRIES: SubNavEntry[] = [
   { to: '/wahlen', labelKey: 'electionPollsNavResults', end: true },
   { to: '/wahlen/umfragen', labelKey: 'electionPollsNavPolls', end: false },
+  { to: '/wahlen/kandidaturen', labelKey: 'electionPollsNavCandidates', end: false },
 ]
 
 /**
