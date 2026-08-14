@@ -15,8 +15,6 @@ export const de = {
   featureBundestagDesc: "Hemicycle mit 629 Abgeordneten",
   featureLegislationTitle: "Gesetzgebung",
   featureLegislationDesc: "250 Gesetze mit Änderungshistorie",
-  featureCoalitionTitle: "Koalitionsvertrag",
-  featureCoalitionDesc: "Tracker für Koalitionsversprechen",
   featureLobbyTitle: "Lobbyregister",
   featureLobbyDesc: "6.798 registrierte Interessenvertreter",
   featureWorldMapTitle: "Weltkarte",
@@ -24,8 +22,6 @@ export const de = {
   featureEuLawTitle: "EU-Recht",
   featureEuLawDescNoCount: "EU-Rechtsakte mit KI-Zusammenfassung aus EUR-Lex",
   featureEuLawDescWithCount: "{count} EU-Rechtsakte mit KI-Zusammenfassung",
-  featureEuParliamentTitle: "EU-Parlament",
-  featureEuParliamentDesc: "Abstimmungen und Fraktionen",
 } as const
 
 export const en = {
@@ -43,8 +39,6 @@ export const en = {
   featureBundestagDesc: "Hemicycle with 629 MPs",
   featureLegislationTitle: "Legislation",
   featureLegislationDesc: "250 laws with change history",
-  featureCoalitionTitle: "Coalition agreement",
-  featureCoalitionDesc: "Tracker for coalition promises",
   featureLobbyTitle: "Lobby register",
   featureLobbyDesc: "6,798 registered interest representatives",
   featureWorldMapTitle: "World map",
@@ -52,6 +46,4 @@ export const en = {
   featureEuLawTitle: "EU law",
   featureEuLawDescNoCount: "EU legal acts with AI summaries from EUR-Lex",
   featureEuLawDescWithCount: "{count} EU legal acts with AI summaries",
-  featureEuParliamentTitle: "EU Parliament",
-  featureEuParliamentDesc: "Votes and parliamentary groups",
 } as const

@@ -98,6 +98,16 @@ export default function DashboardLayout() {
   const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
   const navEntries = useMemo(() => {
+    // Koalitionsvertrag, EU-Parlament und Demokratie-Index sind nicht
+    // aufgefuehrt: es sind Platzhalterseiten mit einem einzigen Satz. Drei von
+    // elf Eintraegen ins Leere fuehren zu lassen laesst die ganze App
+    // unfertig wirken. Die Routen bleiben erreichbar, damit vorhandene Links
+    // nicht brechen — sobald es Inhalt gibt, ist der Eintrag eine Zeile.
+    //
+    // "Tools" ist entfallen: der Abschnitt enthielt Weltdaten, deutsche Daten
+    // und eine Meta-Seite nebeneinander. Das war keine Kategorie, sondern ein
+    // Restehaufen. Das Lobbyregister steht jetzt bei den uebrigen deutschen
+    // Quellen, die Quellenseite als Meta-Eintrag ohne Abschnitt am Ende.
     const entries = [
       { kind: 'link' as const, id: 'overview', icon: '◉', label: t('overview') },
       { kind: 'link' as const, id: 'worldmap', icon: '⊕', label: t('worldMap') },
@@ -105,13 +115,10 @@ export default function DashboardLayout() {
       { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
       { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },
       { kind: 'link' as const, id: 'legislation', icon: '§', label: t('legislation') },
-      { kind: 'link' as const, id: 'coalition', icon: '✓', label: t('coalition') },
+      { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
       { kind: 'section' as const, label: t('sectionEurope') },
       { kind: 'link' as const, id: 'euLaw', icon: '★', label: t('euLaw') },
-      { kind: 'link' as const, id: 'euParl', icon: '⊞', label: t('euParliament') },
-      { kind: 'section' as const, label: t('sectionTools') },
-      { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') },
-      { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
+      { kind: 'section' as const, label: t('sectionAbout') },
       { kind: 'link' as const, id: 'sources', icon: '◆', label: t('navSources') },
     ]
     if (showAdminInNav) {

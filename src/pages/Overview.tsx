@@ -138,13 +138,6 @@ export default function Overview() {
         tag: t('tagGermany'),
       },
       {
-        title: t('featureCoalitionTitle'),
-        description: t('featureCoalitionDesc'),
-        href: '/koalitionsvertrag',
-        icon: '✓',
-        tag: t('tagGermany'),
-      },
-      {
         title: t('featureLobbyTitle'),
         description: t('featureLobbyDesc'),
         href: '/lobbyregister',
@@ -163,13 +156,6 @@ export default function Overview() {
         description: euLawFeatureDescription,
         href: '/eu-recht',
         icon: '⚖️',
-        tag: t('tagEurope'),
-      },
-      {
-        title: t('featureEuParliamentTitle'),
-        description: t('featureEuParliamentDesc'),
-        href: '/eu-parlament',
-        icon: '🇪🇺',
         tag: t('tagEurope'),
       },
     ],

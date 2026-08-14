@@ -70,18 +70,6 @@ export const SOURCES_BY_PAGE: SourceCatalogPage[] = [
     ],
   },
   {
-    pageTitleKey: 'coalition',
-    href: '/koalitionsvertrag',
-    sources: [
-      {
-        nameKey: 'sourcesNmCoalitionTreaty2025',
-        url: 'https://www.bundesregierung.de',
-        licenseKey: 'sourcesLicPublicDoc',
-        descKey: 'sourcesDescCoalitionManual',
-      },
-    ],
-  },
-  {
     pageTitleKey: 'euLaw',
     href: '/eu-recht',
     sources: [
@@ -90,18 +78,6 @@ export const SOURCES_BY_PAGE: SourceCatalogPage[] = [
         url: 'https://eur-lex.europa.eu',
         licenseKey: 'sourcesLicEuReuse',
         descKey: 'sourcesDescEurlex',
-      },
-    ],
-  },
-  {
-    pageTitleKey: 'euParliament',
-    href: '/eu-parlament',
-    sources: [
-      {
-        nameKey: 'sourcesNmAbgeordnetenwatchApi',
-        url: 'https://www.abgeordnetenwatch.de/api',
-        licenseKey: 'sourcesLicCc0',
-        descKey: 'sourcesDescAbwEuParliament',
       },
     ],
   },
