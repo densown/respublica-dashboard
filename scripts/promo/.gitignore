@@ -1,0 +1,6 @@
+# Zwischenstufen und Ergebnisse. Wiederherstellbar durch einen Lauf der drei
+# Skripte, und die Zahlen darin sind ohnehin nur so lange richtig wie der Tag,
+# an dem sie erzeugt wurden.
+frames/
+cards/
+out/
