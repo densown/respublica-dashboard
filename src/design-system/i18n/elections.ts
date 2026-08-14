@@ -42,6 +42,16 @@ export const de = {
   electionPollsError: "Umfragen konnten nicht geladen werden.",
   electionPollsThresholdHint: "Gestrichelte Linie: 5-%-Hürde. Legende anklicken, um Parteien aus- und einzublenden.",
   electionPollsSource: "Quelle",
+  electionPollsKicker: "Sonntagsfrage",
+  electionPollsInstitutes: "Institute",
+  electionPollsPastElections: "Vergangene Wahlen",
+  electionPollsStanding: "Aktueller Stand",
+  electionPollsStandingHint:
+    "Mittel der letzten {n} Umfragen, jüngste vom {date}. Die Veränderung bezieht sich auf die drei Umfragen davor. Ein gleitender Schnitt, weil einzelne Umfragen stärker schwanken als der tatsächliche Trend. Der senkrechte Strich markiert die 5-%-Hürde.",
+  electionPollsCoalitions: "Rechnerische Mehrheiten",
+  electionPollsCoalitionsHint:
+    "Anteile der Parteien über der 5-%-Hürde, auf 100 normiert. Eine Näherung: die tatsächliche Sitzverteilung hängt vom Zuteilungsverfahren des jeweiligen Landes ab. Aufgeführt sind alle rechnerischen Mehrheiten, unabhängig davon, ob sie politisch angestrebt werden.",
+  electionPollsNoCoalition: "Keine Zweier- oder Dreierkoalition erreicht eine Mehrheit.",
 } as const
 
 export const en = {
@@ -86,4 +96,14 @@ export const en = {
   electionPollsError: "Polls could not be loaded.",
   electionPollsThresholdHint: "Dashed line: 5% threshold. Click the legend to show or hide parties.",
   electionPollsSource: "Source",
+  electionPollsKicker: "Voting intention",
+  electionPollsInstitutes: "institutes",
+  electionPollsPastElections: "Past elections",
+  electionPollsStanding: "Current standing",
+  electionPollsStandingHint:
+    "Average of the last {n} polls, most recent from {date}. Change is measured against the three polls before that. A rolling average, because individual polls fluctuate more than the underlying trend. The vertical line marks the 5% threshold.",
+  electionPollsCoalitions: "Arithmetic majorities",
+  electionPollsCoalitionsHint:
+    "Shares of parties above the 5% threshold, normalised to 100. An approximation: actual seat counts depend on each state's allocation method. All arithmetic majorities are listed, regardless of whether they are politically sought.",
+  electionPollsNoCoalition: "No two- or three-party coalition reaches a majority.",
 } as const
