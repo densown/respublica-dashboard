@@ -98,11 +98,10 @@ export default function DashboardLayout() {
   const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
   const navEntries = useMemo(() => {
-    // Koalitionsvertrag, EU-Parlament und Demokratie-Index sind nicht
-    // aufgefuehrt: es sind Platzhalterseiten mit einem einzigen Satz. Drei von
-    // elf Eintraegen ins Leere fuehren zu lassen laesst die ganze App
-    // unfertig wirken. Die Routen bleiben erreichbar, damit vorhandene Links
-    // nicht brechen — sobald es Inhalt gibt, ist der Eintrag eine Zeile.
+    // Koalitionsvertrag und EU-Parlament sind nicht aufgefuehrt: es sind
+    // Platzhalterseiten mit einem einzigen Satz. Eintraege ins Leere fuehren
+    // zu lassen laesst die ganze App unfertig wirken. Die Routen bleiben
+    // erreichbar, damit vorhandene Links nicht brechen.
     //
     // "Tools" ist entfallen: der Abschnitt enthielt Weltdaten, deutsche Daten
     // und eine Meta-Seite nebeneinander. Das war keine Kategorie, sondern ein
@@ -111,6 +110,10 @@ export default function DashboardLayout() {
     const entries = [
       { kind: 'link' as const, id: 'overview', icon: '◉', label: t('overview') },
       { kind: 'link' as const, id: 'worldmap', icon: '⊕', label: t('worldMap') },
+      // Demokratie-Index steht bei der Weltkarte, nicht bei den deutschen
+      // Modulen: es sind Weltdaten fuer 205 Laender, mit Deutschland als
+      // einem Fall darunter.
+      { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') },
       { kind: 'section' as const, label: t('sectionGermany') },
       { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
       { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },

@@ -111,3 +111,24 @@ export const SSW = '#003F8E'
  */
 export const MAP_OUTLINE = '#000000'
 export const MAP_OUTLINE_HOVER = '#FFFFFF'
+
+/**
+ * Divergierende Skala fuer Regierungsfuehrungs-Werte.
+ *
+ * Die Weltbank normiert ihre Dimensionen auf den weltweiten Mittelwert, null
+ * ist also "Durchschnitt" und nicht "schlecht". Die Skala divergiert deshalb um
+ * null statt hell nach dunkel zu laufen.
+ *
+ * Blau und Rot statt Gruen und Rot: die haeufigste Form der Farbenblindheit
+ * trifft genau die Gruen-Rot-Achse, und diese Grafik hat keine zweite
+ * Kodierung, an der man sich sonst festhalten koennte.
+ *
+ * Der Neutralton hat zwei Fassungen — im Dunkelmodus muss die Mitte dunkel
+ * sein, sonst leuchten mittlere Werte staerker als gute.
+ */
+export const GOVERNANCE_DIVERGING = {
+  hoch: [42, 120, 214],
+  tief: [208, 59, 59],
+  neutralHell: [240, 239, 236],
+  neutralDunkel: [56, 56, 53],
+} as const
