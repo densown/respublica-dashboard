@@ -39,7 +39,10 @@ export type SeoOptions = {
  */
 export function useSeo({ titel, beschreibung, pfad, nichtIndexieren }: SeoOptions) {
   useEffect(() => {
-    const voll = titel.includes(MARKE) ? titel : `${titel} — ${MARKE}`
+    // Mittelpunkt als Trenner, kein Gedankenstrich: derselbe Trenner steht
+    // auf dem Teilen-Bild zwischen den Kennzahlen, und der lange Strich
+    // liest sich in Suchergebnissen wie ein Nachsatz statt wie ein Titel.
+    const voll = titel.includes(MARKE) ? titel : `${titel} · ${MARKE}`
     document.title = voll
 
     const url = `${BASIS}${pfad ?? window.location.pathname}`
