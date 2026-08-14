@@ -88,7 +88,14 @@ mitte('AUS AMTLICHEN QUELLEN, TÄGLICH AKTUALISIERT', mono6(18), 546, TINTE, spe
 # --- Adresse ganz unten ------------------------------------------------
 mitte('app.respublica.media', mono(18), 584, GEDAEMPFT)
 
-ziel = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public', 'share-1200x630.png')
+# Der Dateiname traegt eine Fassungsnummer. Reddit, X und WhatsApp
+# speichern Vorschaubilder unter ihrer Adresse zwischen; aendert sich nur
+# der Inhalt bei gleichem Namen, zeigen sie weiter die alte Fassung. Bei
+# jeder gestalterischen Aenderung hochzaehlen und in index.html nachziehen.
+FASSUNG = 2
+ziel = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'public', f'share-1200x630-v{FASSUNG}.png')
 bild.save(ziel, 'PNG', optimize=True)
 import os
 print(f'{ziel}  {os.path.getsize(ziel)/1024:.0f} KB  {bild.size}')
