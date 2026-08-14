@@ -18,7 +18,6 @@ import {
 } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
-import { ElectionsSubNav } from './elections/ElectionsSubNav'
 import {
   ConstituencyMap,
   type ConstituencyGeoJson,
@@ -268,7 +267,6 @@ export default function ElectionCandidates() {
 
   return (
     <div style={{ paddingBottom: spacing.xxl }}>
-      <ElectionsSubNav />
 
       <PageHeader
         kicker={t('electionCandidatesKicker')}

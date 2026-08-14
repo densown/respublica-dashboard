@@ -11,6 +11,13 @@ export const de = {
   backToArticles: "Zurück zu Artikeln",
   lawsTracked: "Gesetze",
   rulings: "Urteile",
+  // Kurzformen fuer die Seitenleiste. Bewusst eigene Schluessel: die
+  // seiteninternen Reiter heissen ausgeschrieben "Gesetzesaenderungen" und
+  // "EU-Rechtsprechung", was in 228 Pixeln Breite abgeschnitten wuerde.
+  navLaws: "Gesetze",
+  navRulings: "Urteile",
+  navEuActs: "Rechtsakte",
+  navEuCaseLaw: "Rechtsprechung",
   votes: "Abstimmungen",
   memberTopicsTitle: "Abstimmungsverhalten nach Thema",
   memberTopicsEmpty: "Für diese Person liegen keine thematisch zugeordneten Abstimmungen vor.",
@@ -204,6 +211,10 @@ export const en = {
   backToArticles: "Back to articles",
   lawsTracked: "Laws",
   rulings: "Rulings",
+  navLaws: "Laws",
+  navRulings: "Rulings",
+  navEuActs: "Legal acts",
+  navEuCaseLaw: "Case law",
   votes: "Votes",
   memberTopicsTitle: "Voting record by topic",
   memberTopicsEmpty: "No topic-tagged votes available for this member.",

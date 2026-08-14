@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 const WORLD_MAP_PATH = '/weltkarte'
 import { fonts, spacing, motion } from '../design-system/tokens'
 import { LegalFooter, MobileNav, Sidebar, useTheme } from '../design-system'
+import type { I18nKey } from '../design-system/i18n'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
 const ROUTE_PREFIX: Record<string, string> = {
@@ -35,6 +36,48 @@ const MODULE_PATH: Record<string, string> = {
   admin: '/admin',
 }
 
+/**
+ * Unterreiter je Modul. Alle Ziele sind ueber die URL adressierbar — entweder
+ * als eigene Route (Wahlen) oder ueber ?tab= (Gesetzgebung, EU-Recht). Reiter,
+ * die nur in React-State leben, gehoeren nicht hierher: sie waeren nicht
+ * verlinkbar und der Eintrag koennte seinen Zustand nicht anzeigen.
+ */
+const SUB_NAV: Record<string, { id: string; labelKey: string; path: string }[]> = {
+  elections: [
+    { id: 'elections.results', labelKey: 'electionPollsNavResults', path: '/wahlen' },
+    { id: 'elections.polls', labelKey: 'electionPollsNavPolls', path: '/wahlen/umfragen' },
+    { id: 'elections.candidates', labelKey: 'electionPollsNavCandidates', path: '/wahlen/kandidaturen' },
+  ],
+  legislation: [
+    { id: 'legislation.laws', labelKey: 'navLaws', path: '/gesetze' },
+    { id: 'legislation.rulings', labelKey: 'navRulings', path: '/gesetze?tab=urteile' },
+  ],
+  euLaw: [
+    { id: 'euLaw.acts', labelKey: 'navEuActs', path: '/eu-recht' },
+    { id: 'euLaw.caselaw', labelKey: 'navEuCaseLaw', path: '/eu-recht?tab=case-law' },
+  ],
+}
+
+/**
+ * Welcher Unterreiter ist aktiv? Das haengt am Zusammenspiel von Pfad und
+ * Query und ist deshalb hier verortet, nicht in der Sidebar.
+ */
+function activeChildFromLocation(pathname: string, search: string): string | undefined {
+  const tab = new URLSearchParams(search).get('tab')
+  if (pathname.startsWith('/wahlen')) {
+    if (pathname.startsWith('/wahlen/umfragen')) return 'elections.polls'
+    if (pathname.startsWith('/wahlen/kandidaturen')) return 'elections.candidates'
+    return 'elections.results'
+  }
+  if (pathname.startsWith('/gesetze') || pathname.startsWith('/gesetzgebung')) {
+    return tab === 'urteile' ? 'legislation.rulings' : 'legislation.laws'
+  }
+  if (pathname.startsWith('/eu-recht')) {
+    return tab === 'case-law' ? 'euLaw.caselaw' : 'euLaw.acts'
+  }
+  return undefined
+}
+
 function activeModuleFromPath(pathname: string): string {
   if (pathname === '/' || pathname === '') return 'overview'
   const first = pathname.split('/').filter(Boolean)[0]
@@ -51,6 +94,7 @@ export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false)
 
   const activeModule = activeModuleFromPath(location.pathname)
+  const activeChild = activeChildFromLocation(location.pathname, location.search)
   const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
   const navEntries = useMemo(() => {
@@ -73,7 +117,18 @@ export default function DashboardLayout() {
     if (showAdminInNav) {
       entries.push({ kind: 'link' as const, id: 'admin', icon: '⚙', label: t('admin') })
     }
-    return entries
+    return entries.map((e) =>
+      e.kind === 'link' && SUB_NAV[e.id]
+        ? {
+            ...e,
+            children: SUB_NAV[e.id].map((k) => ({
+              id: k.id,
+              label: t(k.labelKey as I18nKey),
+              path: k.path,
+            })),
+          }
+        : e,
+    )
   }, [t])
 
   const handleModuleSelect = useCallback((moduleId: string) => {
@@ -107,6 +162,8 @@ export default function DashboardLayout() {
         <Sidebar
           entries={navEntries}
           active={activeModule}
+          activeChild={activeChild}
+          onSelectChild={(pfad: string) => navigate(pfad)}
           onSelect={handleModuleSelect}
           collapsed={collapsed}
           onToggle={onToggleSidebar}
@@ -127,6 +184,8 @@ export default function DashboardLayout() {
         {isMobile && (
           <MobileNav
             entries={navEntries}
+            activeChild={activeChild}
+            onSelectChild={(pfad: string) => navigate(pfad)}
             active={activeModule}
             onSelect={handleModuleSelect}
             shareTitle={shareTitle}

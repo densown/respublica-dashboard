@@ -20,7 +20,6 @@ import {
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { CoalitionCalculator } from './elections/CoalitionCalculator'
-import { ElectionsSubNav } from './elections/ElectionsSubNav'
 import { PollStanding } from './elections/PollStanding'
 import { PollTrendChart } from './elections/PollTrendChart'
 import { SourceNote } from './elections/SourceNote'
@@ -174,7 +173,6 @@ export default function ElectionPolls() {
 
   return (
     <div style={{ paddingBottom: spacing.xxl }}>
-      <ElectionsSubNav />
 
       <PageHeader
         kicker={t('electionPollsKicker')}

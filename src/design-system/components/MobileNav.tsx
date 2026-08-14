@@ -7,7 +7,9 @@ import { ShareCompact } from './ShareCompact'
 export type MobileNavProps = {
   entries: SidebarNavEntry[]
   active: string
+  activeChild?: string
   onSelect: (id: string) => void
+  onSelectChild?: (path: string) => void
   shareTitle: string
   shareUrl: string
 }
@@ -15,7 +17,9 @@ export type MobileNavProps = {
 export function MobileNav({
   entries,
   active,
+  activeChild,
   onSelect,
+  onSelectChild,
   shareTitle,
   shareUrl,
 }: MobileNavProps) {
@@ -229,9 +233,10 @@ export function MobileNav({
                     )
                   }
                   const isActive = entry.id === active
+                  const kinder = isActive ? (entry.children ?? []) : []
                   return (
+                    <div key={entry.id}>
                     <button
-                      key={entry.id}
                       type="button"
                       onClick={() => handleSelect(entry.id)}
                       style={{
@@ -253,6 +258,40 @@ export function MobileNav({
                       <span>{entry.icon}</span>
                       <span>{entry.label}</span>
                     </button>
+
+                    {kinder.map((kind) => {
+                      const kindAktiv = kind.id === activeChild
+                      return (
+                        <button
+                          key={kind.id}
+                          type="button"
+                          onClick={() => {
+                            onSelectChild?.(kind.path)
+                            close()
+                          }}
+                          aria-current={kindAktiv ? 'page' : undefined}
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            // Einzug bis unter das Modul-Label, nicht unter das Zeichen
+                            padding: `${spacing.md}px ${spacing.lg}px ${spacing.md}px 48px`,
+                            minHeight: 44,
+                            border: 'none',
+                            borderLeft: `3px solid ${kindAktiv ? c.red : 'transparent'}`,
+                            background: 'transparent',
+                            color: kindAktiv ? c.red : c.inkSoft,
+                            fontFamily: fonts.mono,
+                            fontSize: fontSize.xs,
+                            fontWeight: kindAktiv ? 700 : 400,
+                            textAlign: 'left',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {kind.label}
+                        </button>
+                      )
+                    })}
+                    </div>
                   )
                 })}
               </div>

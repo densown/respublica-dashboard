@@ -3,12 +3,25 @@ import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { ShareCompact } from './ShareCompact'
 
+/**
+ * Unterreiter eines Moduls. Wird nur eingeblendet, wenn das Modul aktiv ist —
+ * dauerhaft ausgeklappt waere die Leiste bei drei Modulen mit Unterreitern
+ * um sieben Eintraege laenger, ohne dass die meisten davon je gebraucht werden.
+ */
+export type SidebarNavChild = {
+  id: string
+  label: string
+  /** Zielpfad inklusive Query, etwa "/gesetze?tab=urteile". */
+  path: string
+}
+
 /** Ein Nav-Link (wie bisher mit id / icon / label). */
 export type SidebarNavLink = {
   kind: 'link'
   id: string
   icon: string
   label: string
+  children?: SidebarNavChild[]
 }
 
 /** Sektions-Überschrift, nicht klickbar. */
@@ -25,7 +38,14 @@ export type SidebarModule = SidebarNavLink
 export type SidebarProps = {
   entries: SidebarNavEntry[]
   active: string
+  /**
+   * Id des aktiven Unterreiters. Bewusst vom Layout bestimmt, nicht hier:
+   * ob "/gesetze" ohne Query den Reiter "Gesetze" meint, ist Routing-Wissen
+   * und gehoert nicht in eine Darstellungskomponente.
+   */
+  activeChild?: string
   onSelect: (id: string) => void
+  onSelectChild?: (path: string) => void
   collapsed: boolean
   onToggle: () => void
   shareTitle: string
@@ -35,7 +55,9 @@ export type SidebarProps = {
 export function Sidebar({
   entries,
   active,
+  activeChild,
   onSelect,
+  onSelectChild,
   collapsed,
   onToggle,
   shareTitle,
@@ -182,9 +204,10 @@ export function Sidebar({
             )
           }
           const isActive = entry.id === active
+          const kinder = isActive && !collapsed ? (entry.children ?? []) : []
           return (
+            <div key={entry.id}>
             <button
-              key={entry.id}
               type="button"
               onClick={() => handleModule(entry.id)}
               style={{
@@ -211,6 +234,46 @@ export function Sidebar({
                 </span>
               )}
             </button>
+
+            {kinder.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {kinder.map((kind) => {
+                  const kindAktiv = kind.id === activeChild
+                  return (
+                    <button
+                      key={kind.id}
+                      type="button"
+                      onClick={() => onSelectChild?.(kind.path)}
+                      aria-current={kindAktiv ? 'page' : undefined}
+                      style={{
+                        display: 'block',
+                        // Einzug auf Hoehe des Modul-Labels, damit die
+                        // Unterreiter unter dem Text stehen, nicht unter dem Zeichen
+                        padding: `${spacing.sm}px ${spacing.sm}px ${spacing.sm}px 30px`,
+                        border: 'none',
+                        borderLeft: `3px solid ${kindAktiv ? c.sidebarActive : 'transparent'}`,
+                        background: 'transparent',
+                        color: kindAktiv ? c.sidebarActive : c.sidebarText,
+                        fontFamily: fonts.mono,
+                        fontSize: fontSize.micro,
+                        fontWeight: kindAktiv ? 700 : 400,
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        width: '100%',
+                        opacity: kindAktiv ? 1 : 0.75,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        transition: `color 0.2s ${motion.easing}, opacity 0.2s ${motion.easing}`,
+                      }}
+                    >
+                      {kind.label}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+            </div>
           )
         })}
       </nav>
