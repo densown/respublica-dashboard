@@ -8,7 +8,7 @@ import {
   PageHeader,
   useTheme,
 } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import {
   AbstimmungsDetail,
@@ -357,7 +357,7 @@ export default function Bundestag() {
             style={{
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               padding: spacing.xl,
               boxShadow: c.shadow,
             }}
@@ -375,7 +375,7 @@ export default function Bundestag() {
                 style={{
                   margin: 0,
                   fontFamily: fonts.display,
-                  fontSize: '1.15rem',
+                  fontSize: fontSize.lg,
                   fontWeight: 700,
                   color: c.ink,
                 }}
@@ -385,7 +385,7 @@ export default function Bundestag() {
               <span
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.85rem',
+                  fontSize: fontSize.md,
                   color: c.muted,
                 }}
               >
@@ -401,11 +401,11 @@ export default function Bundestag() {
                 }}
                 style={{
                   border: `1px solid ${c.border}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: c.bg,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.84rem',
+                  fontSize: fontSize.sm,
                   cursor: 'pointer',
                   minHeight: 44,
                   padding: `${spacing.xs}px ${spacing.sm}px`,
@@ -434,7 +434,7 @@ export default function Bundestag() {
             style={{
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               padding: spacing.xl,
               boxShadow: c.shadow,
             }}
@@ -456,7 +456,7 @@ export default function Bundestag() {
             style={{
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               padding: spacing.xl,
               boxShadow: c.shadow,
             }}
@@ -521,7 +521,7 @@ export default function Bundestag() {
               overflowY: 'auto',
               background: c.cardBg,
               border: `1px solid ${c.cardBorder}`,
-              borderRadius: 10,
+              borderRadius: radius.lg,
               padding: spacing.lg,
               boxShadow: c.shadow,
             }}
@@ -532,11 +532,11 @@ export default function Bundestag() {
                 onClick={() => setSelectedSeatId(null)}
                 style={{
                   border: `1px solid ${c.border}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: c.bg,
                   color: c.ink,
                   fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
+                  fontSize: fontSize.xs,
                   cursor: 'pointer',
                   padding: `${spacing.xs}px ${spacing.sm}px`,
                 }}
@@ -583,7 +583,7 @@ export default function Bundestag() {
                       placeItems: 'center',
                       fontFamily: fonts.display,
                       color: c.muted,
-                      fontSize: '1.2rem',
+                      fontSize: fontSize.xl,
                       fontWeight: 700,
                     }}
                   >
@@ -613,7 +613,7 @@ export default function Bundestag() {
                         marginTop: spacing.sm,
                         color: c.red,
                         fontFamily: fonts.mono,
-                        fontSize: '0.74rem',
+                        fontSize: fontSize.xs,
                       }}
                     >
                       Abgeordnetenwatch

@@ -1,6 +1,6 @@
 import HBar from '../../../design-system/components/HBar'
 import { useTheme } from '../../../design-system'
-import { fonts, spacing } from '../../../design-system/tokens'
+import { fonts, radius, spacing } from '../../../design-system/tokens'
 import type { ClimateResponse, ClimateScenario } from '../worldTypes'
 import type { ConsoleTabLayoutDirection } from '../CountrySidebar'
 import { ON_DATA_DARK, ON_DATA_LIGHT } from '../../../design-system/palettes'
@@ -116,7 +116,7 @@ export function TabKlima({
                 background: bg,
                 color: fg,
                 border: `1px solid ${c.border}`,
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 padding: spacing.sm,
                 display: 'flex',
                 flexDirection: 'column',

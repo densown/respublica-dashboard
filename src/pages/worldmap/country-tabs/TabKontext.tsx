@@ -1,6 +1,6 @@
 import SectionDivider from '../../../design-system/components/SectionDivider'
 import { useTheme } from '../../../design-system'
-import { fonts, spacing } from '../../../design-system/tokens'
+import { fonts, radius, spacing } from '../../../design-system/tokens'
 import type { WorldCountryDetail } from '../worldTypes'
 import type { ConsoleTabLayoutDirection, WorldConsoleArticle } from '../CountrySidebar'
 
@@ -84,7 +84,7 @@ export function TabKontext({
                     textTransform: 'uppercase',
                     color: '#fff',
                     background: c.badgeBg,
-                    borderRadius: 3,
+                    borderRadius: radius.xs,
                     padding: '2px 6px',
                   }}
                 >

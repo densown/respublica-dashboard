@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { PageHeader, useTheme } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../design-system/tokens'
 import { interpolate } from '../design-system/i18n'
 import { useApi } from '../hooks/useApi'
 import { SOURCES_BY_PAGE, type SourceCatalogPage } from '../data/sourcesCatalog'
@@ -41,7 +41,7 @@ function sectionHeading(
       id={headingId}
       style={{
         fontFamily: fonts.display,
-        fontSize: '1.15rem',
+        fontSize: fontSize.lg,
         fontWeight: 600,
         marginTop: spacing.xl,
         marginBottom: spacing.md,
@@ -73,7 +73,7 @@ function sectionHeading(
 function bodyStyle(c: { ink: string; inkSoft: string }) {
   return {
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     lineHeight: 1.6,
     color: c.ink,
     marginBottom: spacing.md,
@@ -85,7 +85,7 @@ function aiSectionTitle(c: { inkSoft: string }, text: string) {
     <h2
       style={{
         fontFamily: fonts.mono,
-        fontSize: '0.7rem',
+        fontSize: fontSize.micro,
         textTransform: 'uppercase',
         letterSpacing: '0.08em',
         color: c.inkSoft,
@@ -153,7 +153,7 @@ function renderStaticSourcesBlock(
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.95rem',
+                  fontSize: fontSize.base,
                   fontWeight: 600,
                   color: c.red,
                   textDecoration: 'none',
@@ -208,13 +208,13 @@ export default function Sources() {
 
   const badgeStyle = {
     fontFamily: fonts.mono,
-    fontSize: '0.62rem',
+    fontSize: fontSize.micro,
     fontWeight: 500,
     letterSpacing: '0.02em',
     background: c.badgeBg,
     color: c.badgeText,
     padding: '4px 10px',
-    borderRadius: 6,
+    borderRadius: radius.md,
     whiteSpace: 'nowrap' as const,
   }
 
@@ -250,7 +250,7 @@ export default function Sources() {
                     rel="noopener noreferrer"
                     style={{
                       fontFamily: fonts.body,
-                      fontSize: '0.95rem',
+                      fontSize: fontSize.base,
                       fontWeight: 600,
                       color: c.red,
                       textDecoration: 'none',
@@ -271,7 +271,7 @@ export default function Sources() {
                   <span
                     style={{
                       fontFamily: fonts.body,
-                      fontSize: '0.95rem',
+                      fontSize: fontSize.base,
                       fontWeight: 600,
                       color: c.ink,
                       minHeight: 44,
@@ -324,7 +324,7 @@ export default function Sources() {
                       ...bodyStyle(c),
                       marginBottom: 0,
                       fontFamily: fonts.mono,
-                      fontSize: '0.75rem',
+                      fontSize: fontSize.xs,
                       color: c.inkSoft,
                     }}
                   >
@@ -347,7 +347,7 @@ export default function Sources() {
           ...bodyStyle(c),
           marginTop: spacing.xl,
           fontFamily: fonts.mono,
-          fontSize: '0.75rem',
+          fontSize: fontSize.xs,
           color: c.inkSoft,
         }}
       >

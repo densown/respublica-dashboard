@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { I18nKey } from '../../design-system/i18n'
 import type { ElectionType } from './types'
 
@@ -18,12 +18,12 @@ export function selectCss(
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     width: '100%',
     maxWidth: narrow ? '100%' : 280,
     boxSizing: 'border-box',
@@ -56,7 +56,7 @@ export function sectionTitle(text: string, c: { border: string; text: string }) 
     <h3
       style={{
         fontFamily: fonts.display,
-        fontSize: '1.05rem',
+        fontSize: fontSize.lg,
         marginTop: spacing.xl,
         marginBottom: spacing.md,
         paddingBottom: spacing.sm,

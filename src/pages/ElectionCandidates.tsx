@@ -593,7 +593,7 @@ function CandidateRow({
             width: 4,
             alignSelf: 'stretch',
             minHeight: 26,
-            borderRadius: 2,
+            borderRadius: radius.xs,
             background: farbe,
             flexShrink: 0,
           }}

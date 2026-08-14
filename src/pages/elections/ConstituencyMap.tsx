@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts, motion, radius, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../../design-system/tokens'
 
 export type ConstituencyFeature = {
   type: 'Feature'
@@ -220,7 +220,7 @@ export function ConstituencyMap({
         aria-live="polite"
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.72rem',
+          fontSize: fontSize.xs,
           color: c.muted,
           marginTop: spacing.xs,
           minHeight: 18,

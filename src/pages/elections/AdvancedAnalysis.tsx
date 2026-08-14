@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DataCard, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import {
@@ -71,12 +71,12 @@ function selectStyle(c: {
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     cursor: 'pointer',
     flex: '1 1 140px',
     maxWidth: '100%',
@@ -263,12 +263,12 @@ export function AdvancedAnalysis({
       style={{
         minHeight: 44,
         padding: '0 16px',
-        borderRadius: 8,
+        borderRadius: radius.lg,
         border: `1px solid ${tab === id ? c.red : c.border}`,
         background: tab === id ? c.bgHover : c.inputBg,
         color: c.text,
         fontFamily: fonts.body,
-        fontSize: '0.9rem',
+        fontSize: fontSize.md,
         cursor: 'pointer',
       }}
     >
@@ -281,7 +281,7 @@ export function AdvancedAnalysis({
       <h2
         style={{
           fontFamily: fonts.display,
-          fontSize: '1.5rem',
+          fontSize: fontSize.xxl,
           color: c.text,
           marginBottom: spacing.lg,
         }}
@@ -324,7 +324,7 @@ export function AdvancedAnalysis({
               alignItems: 'center',
             }}
           >
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('electionsAxisX')}
               <select
                 value={xKey}
@@ -338,7 +338,7 @@ export function AdvancedAnalysis({
                 ))}
               </select>
             </label>
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('electionsAxisY')}
               <select
                 value={yKey}
@@ -352,7 +352,7 @@ export function AdvancedAnalysis({
                 ))}
               </select>
             </label>
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('electionsColorBy')}
               <select
                 value={colorMode}
@@ -365,7 +365,7 @@ export function AdvancedAnalysis({
                 <option value="winner">{t('electionsByWinner')}</option>
               </select>
             </label>
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('electionsRegion')}
               <select
                 value={scatterRegionFilter}
@@ -413,7 +413,7 @@ export function AdvancedAnalysis({
               alignItems: 'flex-end',
             }}
           >
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('metric')}
               <select
                 value={rankParty}
@@ -434,7 +434,7 @@ export function AdvancedAnalysis({
                 style={{
                   minHeight: 44,
                   padding: '0 14px',
-                  borderRadius: 8,
+                  borderRadius: radius.lg,
                   border: `1px solid ${rankOrder === 'desc' ? c.red : c.border}`,
                   background: rankOrder === 'desc' ? c.bgHover : c.inputBg,
                   color: c.ink,
@@ -450,7 +450,7 @@ export function AdvancedAnalysis({
                 style={{
                   minHeight: 44,
                   padding: '0 14px',
-                  borderRadius: 8,
+                  borderRadius: radius.lg,
                   border: `1px solid ${rankOrder === 'asc' ? c.red : c.border}`,
                   background: rankOrder === 'asc' ? c.bgHover : c.inputBg,
                   color: c.ink,
@@ -488,7 +488,7 @@ export function AdvancedAnalysis({
               marginBottom: spacing.lg,
             }}
           >
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('changeFrom')}
               <select
                 value={changeFrom ?? ''}
@@ -502,7 +502,7 @@ export function AdvancedAnalysis({
                 ))}
               </select>
             </label>
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('changeTo')}
               <select
                 value={changeTo ?? ''}
@@ -516,7 +516,7 @@ export function AdvancedAnalysis({
                 ))}
               </select>
             </label>
-            <label style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted }}>
+            <label style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted }}>
               {t('metric')}
               <select
                 value={changeParty}
@@ -569,7 +569,7 @@ export function AdvancedAnalysis({
                       style={{
                         display: 'block',
                         fontFamily: fonts.body,
-                        fontSize: '0.85rem',
+                        fontSize: fontSize.md,
                         color: c.muted,
                         marginBottom: 6,
                       }}
@@ -610,7 +610,7 @@ export function AdvancedAnalysis({
                           background: c.surface,
                           border: `1px solid ${c.border}`,
                           boxShadow: c.shadow,
-                          borderRadius: 8,
+                          borderRadius: radius.lg,
                           maxHeight: 300,
                           overflowY: 'auto',
                         }}
@@ -635,7 +635,7 @@ export function AdvancedAnalysis({
                               cursor: 'pointer',
                               textAlign: 'left',
                               fontFamily: fonts.body,
-                              fontSize: '0.9rem',
+                              fontSize: fontSize.md,
                               color: c.ink,
                               boxSizing: 'border-box',
                             }}
@@ -655,7 +655,7 @@ export function AdvancedAnalysis({
                   <label
                     style={{
                       fontFamily: fonts.body,
-                      fontSize: '0.85rem',
+                      fontSize: fontSize.md,
                       color: c.muted,
                       flex: narrow ? '1 1 100%' : '0 1 200px',
                     }}
@@ -696,7 +696,7 @@ export function AdvancedAnalysis({
               <div
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.85rem',
+                  fontSize: fontSize.md,
                   flex: narrow ? 'none' : '0 0 220px',
                   minWidth: narrow ? undefined : 200,
                 }}

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { fonts, spacing, radius, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { FORMAT_PRESETS, type ExportFormat } from '../export/exportFormats'
 
@@ -60,7 +60,7 @@ export function ExportFormatPicker({ onSelect, onClose, loading }: Props) {
             padding: spacing.md,
             textAlign: 'center',
             color: c.muted,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
           }}
         >
           {t('exportGenerating')}
@@ -93,10 +93,10 @@ export function ExportFormatPicker({ onSelect, onClose, loading }: Props) {
                 e.currentTarget.style.background = 'transparent'
               }}
             >
-              <div style={{ fontSize: '0.8rem', fontWeight: 600, color: c.ink }}>
+              <div style={{ fontSize: fontSize.sm, fontWeight: 600, color: c.ink }}>
                 {t(preset.labelKey)}
               </div>
-              <div style={{ fontSize: '0.65rem', color: c.muted, marginTop: 2 }}>
+              <div style={{ fontSize: fontSize.micro, color: c.muted, marginTop: 2 }}>
                 {hint[lang]}
               </div>
             </button>

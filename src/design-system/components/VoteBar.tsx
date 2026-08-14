@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { fonts, spacing, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type VoteBarProps = {
@@ -93,7 +93,7 @@ export function VoteBar({
             style={{
               fontFamily: fonts.body,
               fontWeight: 600,
-              fontSize: '0.88rem',
+              fontSize: fontSize.md,
               color: lc,
             }}
           >
@@ -102,7 +102,7 @@ export function VoteBar({
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.68rem',
+              fontSize: fontSize.micro,
               color: c.muted,
               flexShrink: 0,
               textAlign: 'right',
@@ -115,7 +115,7 @@ export function VoteBar({
           style={{
             display: 'flex',
             height: 10,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             overflow: 'hidden',
             background: trackBg,
             border: trackBorder,
@@ -160,7 +160,7 @@ export function VoteBar({
             gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
             gap: spacing.sm,
             fontFamily: fonts.mono,
-            fontSize: '0.65rem',
+            fontSize: fontSize.micro,
             color: c.muted,
           }}
         >

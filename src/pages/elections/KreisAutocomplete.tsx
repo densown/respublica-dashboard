@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import type { KreiseGeoJson } from './types'
 
 export type KreisSearchHit = {
@@ -37,12 +37,12 @@ function selectInputStyle(c: {
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.inputBorder}`,
     background: c.inputBg,
     color: c.ink,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     width: '100%',
     boxSizing: 'border-box',
   }
@@ -116,7 +116,7 @@ export function KreisAutocomplete({
         style={{
           display: 'block',
           fontFamily: fonts.body,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.muted,
           marginBottom: 6,
         }}
@@ -139,7 +139,7 @@ export function KreisAutocomplete({
         style={{
           ...selectInputStyle(c),
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
         }}
       />
       {open && results.length > 0 && (
@@ -155,7 +155,7 @@ export function KreisAutocomplete({
             background: c.surface,
             border: `1px solid ${c.border}`,
             boxShadow: c.shadow,
-            borderRadius: 8,
+            borderRadius: radius.lg,
             maxHeight: 300,
             overflowY: 'auto',
           }}
@@ -181,7 +181,7 @@ export function KreisAutocomplete({
                 cursor: 'pointer',
                 textAlign: 'left',
                 fontFamily: fonts.body,
-                fontSize: '0.9rem',
+                fontSize: fontSize.md,
                 color: c.ink,
                 boxSizing: 'border-box',
               }}

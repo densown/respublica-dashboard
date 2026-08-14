@@ -8,7 +8,7 @@ import {
   StatWidget,
   useTheme,
 } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../design-system/tokens'
 import { interpolate } from '../design-system/i18n'
 import { useApi } from '../hooks/useApi'
 
@@ -188,7 +188,7 @@ export default function Overview() {
       onClick={() => navigate(path)}
       style={{
         fontFamily: fonts.mono,
-        fontSize: '0.75rem',
+        fontSize: fontSize.xs,
         color: c.red,
         background: 'none',
         border: 'none',
@@ -212,7 +212,7 @@ export default function Overview() {
           style={{
             margin: `0 0 ${spacing.lg}px 0`,
             fontFamily: fonts.body,
-            fontSize: '0.95rem',
+            fontSize: fontSize.base,
             lineHeight: 1.55,
             color: c.inkSoft,
             maxWidth: 900,
@@ -272,7 +272,7 @@ export default function Overview() {
         <h2
           style={{
             fontFamily: fonts.display,
-            fontSize: '1.15rem',
+            fontSize: fontSize.lg,
             fontWeight: 700,
             color: c.ink,
             margin: `0 0 ${spacing.md}px 0`,
@@ -312,7 +312,7 @@ export default function Overview() {
                         aria-hidden
                         style={{
                           fontFamily: fonts.body,
-                          fontSize: '1.25rem',
+                          fontSize: fontSize.xl,
                           lineHeight: 1,
                           flexShrink: 0,
                         }}
@@ -325,7 +325,7 @@ export default function Overview() {
                       <h3
                         style={{
                           fontFamily: fonts.body,
-                          fontSize: '1rem',
+                          fontSize: fontSize.base,
                           fontWeight: 700,
                           color: c.ink,
                           margin: 0,
@@ -337,7 +337,7 @@ export default function Overview() {
                       <p
                         style={{
                           fontFamily: fonts.body,
-                          fontSize: '0.9rem',
+                          fontSize: fontSize.md,
                           color: c.inkSoft,
                           margin: `${spacing.sm}px 0 0`,
                           lineHeight: 1.45,
@@ -359,7 +359,7 @@ export default function Overview() {
         <h2
           style={{
             fontFamily: fonts.display,
-            fontSize: '1.15rem',
+            fontSize: fontSize.lg,
             fontWeight: 700,
             color: c.ink,
             margin: `0 0 ${spacing.md}px 0`,
@@ -379,7 +379,7 @@ export default function Overview() {
           <DataCard
             header={
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: spacing.md }}>
-                <span style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.muted }}>
+                <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                   {t('recentVotes')}
                 </span>
               </div>
@@ -388,7 +388,7 @@ export default function Overview() {
             {pollsLoading ? (
               <LoadingSpinner />
             ) : pollsError ? (
-              <p style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted, margin: 0 }}>
+              <p style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted, margin: 0 }}>
                 {t('dataLoadError')}
               </p>
             ) : (
@@ -407,16 +407,16 @@ export default function Overview() {
                       textAlign: 'left',
                       background: 'none',
                       border: `1px solid ${c.border}`,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       padding: spacing.md,
                       cursor: 'pointer',
                       minHeight: 44,
                     }}
                   >
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
+                    <span style={{ fontSize: fontSize.md, fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
                       {poll.poll_titel}
                     </span>
-                    <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem', color: c.muted, flexShrink: 0 }}>
+                    <span style={{ fontFamily: fonts.mono, fontSize: fontSize.micro, color: c.muted, flexShrink: 0 }}>
                       {fmtDate(poll.poll_datum, lang)}
                     </span>
                   </button>
@@ -429,7 +429,7 @@ export default function Overview() {
           <DataCard
             header={
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: spacing.md }}>
-                <span style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.muted }}>
+                <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                   {t('overviewLiveLawsTitle')}
                 </span>
               </div>
@@ -438,7 +438,7 @@ export default function Overview() {
             {gesetzeLoading ? (
               <LoadingSpinner />
             ) : gesetzeError ? (
-              <p style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted, margin: 0 }}>
+              <p style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted, margin: 0 }}>
                 {t('dataLoadError')}
               </p>
             ) : (
@@ -457,16 +457,16 @@ export default function Overview() {
                       textAlign: 'left',
                       background: 'none',
                       border: `1px solid ${c.border}`,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       padding: spacing.md,
                       cursor: 'pointer',
                       minHeight: 44,
                     }}
                   >
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
+                    <span style={{ fontSize: fontSize.md, fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
                       {trunc(row.kuerzel, 60)}
                     </span>
-                    <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem', color: c.muted, flexShrink: 0 }}>
+                    <span style={{ fontFamily: fonts.mono, fontSize: fontSize.micro, color: c.muted, flexShrink: 0 }}>
                       {fmtDate(row.datum, lang)}
                     </span>
                   </button>
@@ -479,7 +479,7 @@ export default function Overview() {
           <DataCard
             header={
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: spacing.md }}>
-                <span style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.muted }}>
+                <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                   {t('overviewLiveEuActsTitle')}
                 </span>
               </div>
@@ -488,7 +488,7 @@ export default function Overview() {
             {euListLoading ? (
               <LoadingSpinner />
             ) : euListError ? (
-              <p style={{ fontFamily: fonts.body, fontSize: '0.85rem', color: c.muted, margin: 0 }}>
+              <p style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.muted, margin: 0 }}>
                 {t('dataLoadError')}
               </p>
             ) : (
@@ -510,16 +510,16 @@ export default function Overview() {
                         textAlign: 'left',
                         background: 'none',
                         border: `1px solid ${c.border}`,
-                        borderRadius: 8,
+                        borderRadius: radius.lg,
                         padding: spacing.md,
                         cursor: 'pointer',
                         minHeight: 44,
                       }}
                     >
-                      <span style={{ fontSize: '0.9rem', fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
+                      <span style={{ fontSize: fontSize.md, fontWeight: 600, color: c.ink, lineHeight: 1.3 }}>
                         {title}
                       </span>
-                      <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem', color: c.muted, flexShrink: 0 }}>
+                      <span style={{ fontFamily: fonts.mono, fontSize: fontSize.micro, color: c.muted, flexShrink: 0 }}>
                         {fmtDate(item.datum, lang)}
                       </span>
                     </button>

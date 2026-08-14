@@ -13,7 +13,7 @@ import {
 } from 'recharts'
 import { useTheme } from '../../design-system'
 import { interpolate } from '../../design-system/i18n'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { statePrefixFromAgs } from './partyColors'
 import type { ChangeRow } from './types'
 
@@ -114,7 +114,7 @@ export function ChangeGainsLossesBarCharts({
       <div
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
           fontWeight: 600,
           color: c.ink,
           marginBottom: 10,
@@ -127,7 +127,7 @@ export function ChangeGainsLossesBarCharts({
           style={{
             color: c.muted,
             fontFamily: fonts.body,
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             margin: '12px 0 0',
             minHeight: 44,
           }}
@@ -267,7 +267,7 @@ export function ChangeDeltaHistogram({ rows, narrow }: HistogramProps) {
       <div
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
           fontWeight: 600,
           color: c.ink,
           marginBottom: 10,
@@ -321,10 +321,10 @@ export function ChangeDeltaHistogram({ rows, narrow }: HistogramProps) {
                     style={{
                       background: c.cardBg,
                       border: `1px solid ${c.border}`,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       padding: '8px 10px',
                       fontFamily: fonts.body,
-                      fontSize: '0.8rem',
+                      fontSize: fontSize.sm,
                       color: c.ink,
                       boxShadow: c.shadow,
                     }}
@@ -388,7 +388,7 @@ export function ChangeStateAverageBars({ rows, narrow }: StateAvgProps) {
       <div
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
           fontWeight: 600,
           color: c.ink,
           marginBottom: 10,
@@ -427,10 +427,10 @@ export function ChangeStateAverageBars({ rows, narrow }: StateAvgProps) {
                     style={{
                       background: c.cardBg,
                       border: `1px solid ${c.border}`,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       padding: '8px 10px',
                       fontFamily: fonts.body,
-                      fontSize: '0.8rem',
+                      fontSize: fontSize.sm,
                       color: c.ink,
                       boxShadow: c.shadow,
                     }}

@@ -1,4 +1,4 @@
-import { fonts, spacing } from '../tokens'
+import { fontSize, fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type EmptyStateProps = {
@@ -25,7 +25,7 @@ export function EmptyState({ text, action }: EmptyStateProps) {
       <span
         aria-hidden
         style={{
-          fontSize: '2rem',
+          fontSize: fontSize.hero,
           lineHeight: 1,
           color: c.subtle,
         }}
@@ -35,7 +35,7 @@ export function EmptyState({ text, action }: EmptyStateProps) {
       <p
         style={{
           fontFamily: fonts.body,
-          fontSize: '1rem',
+          fontSize: fontSize.base,
           maxWidth: 320,
         }}
       >
@@ -48,11 +48,11 @@ export function EmptyState({ text, action }: EmptyStateProps) {
           style={{
             padding: `${spacing.md}px ${spacing.xl}px`,
             border: `1px solid ${c.red}`,
-            borderRadius: 6,
+            borderRadius: radius.md,
             background: 'transparent',
             color: c.red,
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             cursor: 'pointer',
             transition: 'background 0.2s ease, color 0.2s ease',
           }}

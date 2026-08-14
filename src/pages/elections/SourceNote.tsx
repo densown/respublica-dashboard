@@ -1,5 +1,5 @@
 import { useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, spacing } from '../../design-system/tokens'
 import type { Quelle } from './pollTypes'
 
 type SourceNoteProps = { quelle: Quelle | undefined }
@@ -18,7 +18,7 @@ export function SourceNote({ quelle }: SourceNoteProps) {
     <p
       style={{
         fontFamily: fonts.mono,
-        fontSize: '0.72rem',
+        fontSize: fontSize.xs,
         lineHeight: 1.6,
         color: c.muted,
         margin: 0,

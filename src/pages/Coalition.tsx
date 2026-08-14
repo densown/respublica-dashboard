@@ -1,5 +1,5 @@
 import { PageHeader, useTheme } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fontSize, fonts, spacing } from '../design-system/tokens'
 
 export default function Coalition() {
   const { t, c } = useTheme()
@@ -10,7 +10,7 @@ export default function Coalition() {
       <p
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.95rem',
+          fontSize: fontSize.base,
           color: c.muted,
           marginTop: spacing.md,
           lineHeight: 1.6,

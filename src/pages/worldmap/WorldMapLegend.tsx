@@ -1,5 +1,5 @@
 import { useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fonts, radius, spacing } from '../../design-system/tokens'
 import { worldChoroplethGradientCss } from './worldColors'
 
 type WorldMapLegendProps = {
@@ -52,7 +52,7 @@ export function WorldMapLegend({
       <div
         style={{
           height: barH,
-          borderRadius: 4,
+          borderRadius: radius.sm,
           border: `1px solid ${c.border}`,
           width: '100%',
           maxWidth: '100%',

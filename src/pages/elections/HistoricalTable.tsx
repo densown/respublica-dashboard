@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import type { I18nKey } from '../../design-system/i18n'
 import { MAIN_PARTIES, PARTY_LABELS } from './partyColors'
@@ -179,7 +179,7 @@ export function HistoricalTable({
         borderBottom: `2px solid ${c.border}`,
         cursor: 'pointer',
         fontFamily: fonts.body,
-        fontSize: '0.78rem',
+        fontSize: fontSize.xs,
         color: sortKey === key ? c.red : c.muted,
         whiteSpace: 'nowrap',
       }}
@@ -211,12 +211,12 @@ export function HistoricalTable({
           style={{
             minHeight: 40,
             padding: '0 14px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             cursor: 'pointer',
           }}
         >
@@ -228,7 +228,7 @@ export function HistoricalTable({
           width: '100%',
           borderCollapse: 'collapse',
           fontFamily: fonts.mono,
-          fontSize: '0.78rem',
+          fontSize: fontSize.xs,
         }}
       >
         <thead>
@@ -285,7 +285,7 @@ export function HistoricalTable({
             gap: spacing.md,
             marginTop: spacing.md,
             fontFamily: fonts.body,
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             color: c.muted,
           }}
         >
@@ -296,7 +296,7 @@ export function HistoricalTable({
             style={{
               minHeight: 36,
               padding: '0 12px',
-              borderRadius: 8,
+              borderRadius: radius.lg,
               border: `1px solid ${c.border}`,
               background: c.inputBg,
               color: c.text,
@@ -316,7 +316,7 @@ export function HistoricalTable({
             style={{
               minHeight: 36,
               padding: '0 12px',
-              borderRadius: 8,
+              borderRadius: radius.lg,
               border: `1px solid ${c.border}`,
               background: c.inputBg,
               color: c.text,

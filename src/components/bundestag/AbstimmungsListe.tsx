@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { DataCard, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 
 export interface AbstimmungsListeProps {
   abstimmungen: { poll_id: number; poll_titel: string; poll_datum: string }[]
@@ -45,7 +45,7 @@ export function AbstimmungsListe({
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.65rem',
+            fontSize: fontSize.micro,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
             color: c.muted,
@@ -63,11 +63,11 @@ export function AbstimmungsListe({
             maxWidth: 320,
             padding: `${spacing.md}px ${spacing.lg}px`,
             border: `1px solid ${c.inputBorder}`,
-            borderRadius: 6,
+            borderRadius: radius.md,
             background: c.inputBg,
             color: c.ink,
             fontFamily: fonts.mono,
-            fontSize: '0.8rem',
+            fontSize: fontSize.sm,
             outline: 'none',
           }}
           onFocus={(e) => {
@@ -108,7 +108,7 @@ export function AbstimmungsListe({
                   <span
                     style={{
                       fontFamily: fonts.body,
-                      fontSize: '0.9rem',
+                      fontSize: fontSize.md,
                       fontWeight: 600,
                       color: c.ink,
                       flex: '1 1 200px',
@@ -120,7 +120,7 @@ export function AbstimmungsListe({
                   <span
                     style={{
                       fontFamily: fonts.mono,
-                      fontSize: '0.7rem',
+                      fontSize: fontSize.micro,
                       color: c.muted,
                       flexShrink: 0,
                     }}
@@ -145,7 +145,7 @@ export function AbstimmungsListe({
             padding: 0,
             cursor: 'pointer',
             fontFamily: fonts.mono,
-            fontSize: '0.68rem',
+            fontSize: fontSize.micro,
             letterSpacing: '0.06em',
             textTransform: 'uppercase',
             color: c.red,

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Badge, ShareToolbar, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { NEUTRAL_FALLBACK } from '../../design-system/palettes'
 
 export type AbstimmungsDetailData = {
@@ -157,7 +157,7 @@ export function AbstimmungsDetail({
           style={{
             margin: 0,
             fontFamily: fonts.display,
-            fontSize: '1.1rem',
+            fontSize: fontSize.lg,
             fontWeight: 700,
             color: c.ink,
             flex: '1 1 240px',
@@ -169,7 +169,7 @@ export function AbstimmungsDetail({
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             flexShrink: 0,
           }}
@@ -188,7 +188,7 @@ export function AbstimmungsDetail({
       <p
         style={{
           fontFamily: fonts.display,
-          fontSize: '1.5rem',
+          fontSize: fontSize.xxl,
           fontWeight: 700,
           margin: `0 0 ${spacing.sm}px`,
           lineHeight: 1.25,
@@ -203,7 +203,7 @@ export function AbstimmungsDetail({
       <p
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.75rem',
+          fontSize: fontSize.xs,
           color: c.muted,
           margin: `0 0 ${spacing.lg}px`,
         }}
@@ -225,7 +225,7 @@ export function AbstimmungsDetail({
             key={f.partei}
             style={{
               border: `1px solid ${c.border}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               padding: spacing.sm,
               background: c.bg,
             }}
@@ -251,7 +251,7 @@ export function AbstimmungsDetail({
                 style={{
                   fontFamily: fonts.body,
                   color: c.ink,
-                  fontSize: '0.84rem',
+                  fontSize: fontSize.sm,
                   fontWeight: 700,
                 }}
               >
@@ -264,7 +264,7 @@ export function AbstimmungsDetail({
                 flexWrap: 'wrap',
                 gap: 8,
                 fontFamily: fonts.mono,
-                fontSize: '0.68rem',
+                fontSize: fontSize.micro,
                 color: c.muted,
               }}
             >

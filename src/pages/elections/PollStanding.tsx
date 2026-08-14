@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTheme } from '../../design-system'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, radius, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
 import { THRESHOLD, type Standing } from './pollMath'
 
@@ -53,7 +53,7 @@ export function PollStanding({ werte, lang }: PollStandingProps) {
             <span
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.9rem',
+                fontSize: fontSize.md,
                 color: drin ? c.ink : c.muted,
                 fontWeight: drin ? 600 : 400,
                 textAlign: 'right',
@@ -105,7 +105,7 @@ export function PollStanding({ werte, lang }: PollStandingProps) {
               <span
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '1rem',
+                  fontSize: fontSize.base,
                   fontWeight: 700,
                   color: drin ? c.ink : c.muted,
                   minWidth: 52,
@@ -113,13 +113,13 @@ export function PollStanding({ werte, lang }: PollStandingProps) {
                 }}
               >
                 {fmt(s.wert, lang)}
-                <span style={{ fontSize: '0.7rem', fontWeight: 400 }}> %</span>
+                <span style={{ fontSize: fontSize.micro, fontWeight: 400 }}> %</span>
               </span>
 
               <span
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
+                  fontSize: fontSize.xs,
                   minWidth: 46,
                   textAlign: 'right',
                   color:

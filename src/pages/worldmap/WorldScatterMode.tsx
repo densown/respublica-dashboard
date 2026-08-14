@@ -17,7 +17,7 @@ import {
 import { EmptyState, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { isRealCountry } from '../../utils/worldFilters'
 import { worldRegionScatterColor } from './worldColors'
@@ -68,12 +68,12 @@ function selectCss(c: {
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     width: '100%',
     maxWidth: '100%',
     boxSizing: 'border-box',
@@ -205,7 +205,7 @@ export function WorldScatterMode({
       style={{
         display: 'block',
         fontFamily: fonts.body,
-        fontSize: '0.8rem',
+        fontSize: fontSize.sm,
         color: c.muted,
         marginBottom: 6,
       }}
@@ -231,7 +231,7 @@ export function WorldScatterMode({
         value={value}
         disabled={!categories?.length}
         onChange={(e) => onChange(e.target.value)}
-        style={{ ...selectCss(c), fontFamily: fonts.mono, fontSize: '0.82rem' }}
+        style={{ ...selectCss(c), fontFamily: fonts.mono, fontSize: fontSize.sm }}
       >
         {(categories ?? []).map((cat) => (
           <optgroup
@@ -368,7 +368,7 @@ export function WorldScatterMode({
                         style={{
                           background: tooltipBg,
                           border: `1px solid ${c.border}`,
-                          borderRadius: 6,
+                          borderRadius: radius.md,
                           padding: '10px 14px',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           maxWidth: 220,

@@ -12,7 +12,7 @@ import {
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import {
   hasWorldBankRegionOnAnyRow,
   isRealCountry,
@@ -209,7 +209,7 @@ function RankingWidgetBody({
             style={{
               height: 22,
               marginBottom: 6,
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.bgHover,
             }}
           />
@@ -225,7 +225,7 @@ function RankingWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.red,
         }}
       >
@@ -241,7 +241,7 @@ function RankingWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.82rem',
+          fontSize: fontSize.sm,
           color: c.muted,
         }}
       >
@@ -421,7 +421,7 @@ function StatCardWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.82rem',
+          fontSize: fontSize.sm,
           lineHeight: 1.4,
           color: c.muted,
         }}
@@ -438,7 +438,7 @@ function StatCardWidgetBody({
           style={{
             height: 20,
             width: '70%',
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: c.bgHover,
             marginBottom: spacing.sm,
           }}
@@ -447,12 +447,12 @@ function StatCardWidgetBody({
           style={{
             height: 36,
             width: '90%',
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: c.bgHover,
             marginBottom: spacing.sm,
           }}
         />
-        <div style={{ height: 40, borderRadius: 4, background: c.bgHover }} />
+        <div style={{ height: 40, borderRadius: radius.sm, background: c.bgHover }} />
       </div>
     )
   }
@@ -464,7 +464,7 @@ function StatCardWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.red,
         }}
       >
@@ -500,7 +500,7 @@ function StatCardWidgetBody({
             height={14}
             alt=""
             style={{
-              borderRadius: 2,
+              borderRadius: radius.xs,
               objectFit: 'cover',
               border: `1px solid ${c.border}`,
               flexShrink: 0,
@@ -544,7 +544,7 @@ function StatCardWidgetBody({
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: '1.1rem',
+            fontSize: fontSize.lg,
             color: c.red,
           }}
           aria-hidden
@@ -595,7 +595,7 @@ function TradeFlowWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.82rem',
+          fontSize: fontSize.sm,
           color: c.muted,
         }}
       >
@@ -608,10 +608,10 @@ function TradeFlowWidgetBody({
     return (
       <div style={{ padding: spacing.md }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.sm }}>
-          <div style={{ height: 28, borderRadius: 4, background: c.bgHover }} />
-          <div style={{ height: 28, borderRadius: 4, background: c.bgHover }} />
+          <div style={{ height: 28, borderRadius: radius.sm, background: c.bgHover }} />
+          <div style={{ height: 28, borderRadius: radius.sm, background: c.bgHover }} />
         </div>
-        <div style={{ height: 16, marginTop: 8, borderRadius: 4, background: c.bgHover }} />
+        <div style={{ height: 16, marginTop: 8, borderRadius: radius.sm, background: c.bgHover }} />
       </div>
     )
   }
@@ -623,7 +623,7 @@ function TradeFlowWidgetBody({
           margin: 0,
           padding: spacing.md,
           fontFamily: fonts.body,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.red,
         }}
       >
@@ -652,7 +652,7 @@ function TradeFlowWidgetBody({
       <div
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.95rem',
+          fontSize: fontSize.base,
           fontWeight: 700,
           color: c.text,
           marginBottom: spacing.sm,
@@ -680,7 +680,7 @@ function TradeFlowWidgetBody({
                   height={14}
                   alt=""
                   style={{
-                    borderRadius: 2,
+                    borderRadius: radius.xs,
                     objectFit: 'cover',
                     border: `1px solid ${c.border}`,
                     flexShrink: 0,
@@ -779,7 +779,7 @@ export function WidgetShell({
     minWidth: 0,
     background: c.cardBg,
     border: `1px solid ${c.border}`,
-    borderRadius: 8,
+    borderRadius: radius.lg,
     overflow: 'hidden',
     boxSizing: 'border-box',
   }
@@ -806,7 +806,7 @@ export function WidgetShell({
     alignItems: 'center',
     justifyContent: 'center',
     color: c.muted,
-    borderRadius: 6,
+    borderRadius: radius.md,
   }
 
   const headerMouseDown = (e: React.MouseEvent) => {
@@ -865,12 +865,12 @@ export function WidgetShell({
                 marginTop: 4,
                 maxWidth: 280,
                 padding: spacing.md,
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 background: c.surface,
                 border: `1px solid ${c.border}`,
                 boxShadow: c.shadow,
                 fontFamily: fonts.body,
-                fontSize: '0.82rem',
+                fontSize: fontSize.sm,
                 lineHeight: 1.45,
                 color: c.text,
                 zIndex: 50,
@@ -930,12 +930,12 @@ function PlaceholderBody({
         justifyContent: 'center',
         gap: spacing.sm,
         fontFamily: fonts.body,
-        fontSize: '0.88rem',
+        fontSize: fontSize.md,
         color: c.muted,
       }}
     >
       <p style={{ margin: 0 }}>{t('worldWidgetPlaceholderBody')}</p>
-      <p style={{ margin: 0, fontFamily: fonts.mono, fontSize: '0.72rem' }}>
+      <p style={{ margin: 0, fontFamily: fonts.mono, fontSize: fontSize.xs }}>
         {indicatorCode}
         {selectedCountry ? ` · ${selectedCountry}` : ''}
       </p>

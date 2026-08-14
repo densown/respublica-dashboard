@@ -10,7 +10,7 @@ import {
   useTheme,
 } from '../../design-system'
 import type { BadgeVariant } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import {
   courtBadgeVariant,
@@ -86,18 +86,18 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
     background: 'none',
     cursor: 'pointer',
     fontFamily: fonts.body,
-    fontSize: '0.88rem',
+    fontSize: fontSize.md,
     color: c.red,
   }
 
   const panelStyle: CSSProperties = {
     marginTop: spacing.sm,
     padding: spacing.md,
-    borderRadius: 6,
+    borderRadius: radius.md,
     background: c.bgAlt,
     border: `1px solid ${c.border}`,
     fontFamily: fonts.body,
-    fontSize: '0.88rem',
+    fontSize: fontSize.md,
     lineHeight: 1.6,
     color: c.ink,
   }
@@ -111,7 +111,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
       <p
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.84rem',
+          fontSize: fontSize.sm,
           color: c.inkSoft,
           marginBottom: rg ? spacing.xs : spacing.md,
         }}
@@ -133,7 +133,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.92rem',
+              fontSize: fontSize.base,
               lineHeight: 1.6,
               color: c.ink,
             }}
@@ -143,7 +143,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.76rem',
+              fontSize: fontSize.xs,
               color: c.muted,
               marginTop: spacing.sm,
             }}
@@ -200,7 +200,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                 }}
               >
@@ -238,7 +238,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                 }}
               >
@@ -257,7 +257,7 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
             rel="noopener noreferrer"
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.72rem',
+              fontSize: fontSize.xs,
               color: c.red,
               textDecoration: 'none',
               borderBottom: `1px solid ${c.red}55`,

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type HBarProps = {
@@ -52,13 +52,13 @@ export default function HBar({ label, value, max, formatted, color, icon, style 
           {formatted}
         </span>
       </div>
-      <div style={{ height: 5, background: c.bgHover, borderRadius: 2, overflow: 'hidden' }}>
+      <div style={{ height: 5, background: c.bgHover, borderRadius: radius.xs, overflow: 'hidden' }}>
         <div
           style={{
             height: '100%',
             width: `${Math.min(100, (value / max) * 100)}%`,
             background: col,
-            borderRadius: 2,
+            borderRadius: radius.xs,
             transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)',
           }}
         />

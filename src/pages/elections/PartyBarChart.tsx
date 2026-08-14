@@ -9,7 +9,7 @@ import {
   YAxis,
 } from 'recharts'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { toDisplayPercent } from './normalizeWahlen'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
@@ -50,7 +50,7 @@ export function PartyBarChart({
         <div
           style={{
             fontFamily: fonts.body,
-            fontSize: '0.9rem',
+            fontSize: fontSize.md,
             fontWeight: 600,
             color: c.text,
             marginBottom: 4,
@@ -62,7 +62,7 @@ export function PartyBarChart({
       <div
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.85rem',
+          fontSize: fontSize.md,
           color: c.muted,
           marginBottom: 8,
         }}

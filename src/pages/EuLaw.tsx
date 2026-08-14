@@ -26,7 +26,7 @@ import type {
   EuUrteilListResponse,
   EuUrteilStats,
 } from '../components/eulaw/types'
-import { fonts, spacing, motion } from '../design-system/tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
@@ -284,12 +284,12 @@ export default function EuLaw() {
       flex: '0 0 auto',
       minHeight: 44,
       padding: `0 ${spacing.lg}px`,
-      borderRadius: 999,
+      borderRadius: radius.pill,
       border: `1px solid ${active ? c.red : c.border}`,
       background: active ? c.red : c.cardBg,
       color: active ? ON_DATA_LIGHT : c.muted,
       fontFamily: fonts.body,
-      fontSize: '0.85rem',
+      fontSize: fontSize.md,
       fontWeight: active ? 600 : 400,
       cursor: 'pointer',
       whiteSpace: 'nowrap' as const,
@@ -317,7 +317,7 @@ export default function EuLaw() {
       width: '100%',
       minHeight: 44,
       padding: `${spacing.md}px ${spacing.xl}px ${spacing.md}px ${spacing.md}px`,
-      borderRadius: 6,
+      borderRadius: radius.md,
       outline: 'none' as const,
       borderStyle: 'solid' as const,
       borderWidth: '1px',
@@ -331,7 +331,7 @@ export default function EuLaw() {
       backgroundPosition: 'right 12px center',
       color: c.ink,
       fontFamily: fonts.body,
-      fontSize: '0.88rem',
+      fontSize: fontSize.md,
       cursor: 'pointer' as const,
     }),
     [c, selectArrowDataUrl],
@@ -379,12 +379,12 @@ export default function EuLaw() {
         onClick={() => (tab === 'acts' ? goActsTab() : goCourtTab())}
         style={{
           padding: `${spacing.md}px ${spacing.lg}px`,
-          borderRadius: 6,
+          borderRadius: radius.md,
           border: `1px solid ${active ? c.red : c.border}`,
           background: active ? c.bgHover : c.bgAlt,
           color: active ? c.red : c.muted,
           fontFamily: fonts.mono,
-          fontSize: '0.72rem',
+          fontSize: fontSize.xs,
           letterSpacing: '0.06em',
           textTransform: 'uppercase' as const,
           cursor: 'pointer',
@@ -501,7 +501,7 @@ export default function EuLaw() {
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.92rem',
+              fontSize: fontSize.base,
               lineHeight: 1.65,
               color: c.muted,
               marginBottom: spacing.xl,
@@ -549,11 +549,11 @@ export default function EuLaw() {
                   minHeight: 44,
                   padding: `${spacing.md}px ${spacing.lg}px`,
                   border: `1px solid ${c.border}`,
-                  borderRadius: 6,
+                  borderRadius: radius.md,
                   background: c.cardBg,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.9rem',
+                  fontSize: fontSize.md,
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
@@ -612,7 +612,7 @@ export default function EuLaw() {
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.6rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -649,7 +649,7 @@ export default function EuLaw() {
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.6rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -688,7 +688,7 @@ export default function EuLaw() {
               style={{
                 color: c.muted,
                 fontFamily: fonts.body,
-                fontSize: '0.88rem',
+                fontSize: fontSize.md,
                 marginBottom: spacing.md,
               }}
             >
@@ -720,7 +720,7 @@ export default function EuLaw() {
               <p
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
+                  fontSize: fontSize.xs,
                   color: c.muted,
                   marginBottom: spacing.md,
                 }}
@@ -785,7 +785,7 @@ export default function EuLaw() {
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.92rem',
+              fontSize: fontSize.base,
               lineHeight: 1.65,
               color: c.muted,
               marginBottom: spacing.xl,
@@ -833,11 +833,11 @@ export default function EuLaw() {
                   minHeight: 44,
                   padding: `${spacing.md}px ${spacing.lg}px`,
                   border: `1px solid ${c.border}`,
-                  borderRadius: 6,
+                  borderRadius: radius.md,
                   background: c.cardBg,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.9rem',
+                  fontSize: fontSize.md,
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
@@ -896,7 +896,7 @@ export default function EuLaw() {
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.6rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -933,7 +933,7 @@ export default function EuLaw() {
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.6rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -974,7 +974,7 @@ export default function EuLaw() {
               style={{
                 color: c.muted,
                 fontFamily: fonts.body,
-                fontSize: '0.88rem',
+                fontSize: fontSize.md,
                 marginBottom: spacing.md,
               }}
             >
@@ -1009,7 +1009,7 @@ export default function EuLaw() {
               <p
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
+                  fontSize: fontSize.xs,
                   color: c.muted,
                   marginBottom: spacing.md,
                 }}

@@ -3,7 +3,7 @@ import {
   LoadingSpinner,
   useTheme,
 } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { PartyBarChart, type PartyBarRow } from './PartyBarChart'
@@ -203,7 +203,7 @@ export function RegionPanel({
             <h2
               style={{
                 fontFamily: fonts.display,
-                fontSize: '1.35rem',
+                fontSize: fontSize.xl,
                 fontWeight: 700,
                 color: c.ink,
                 margin: 0,
@@ -217,7 +217,7 @@ export function RegionPanel({
             <div
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.85rem',
+                fontSize: fontSize.md,
                 color: c.muted,
                 marginTop: 6,
               }}
@@ -231,11 +231,11 @@ export function RegionPanel({
             style={{
               minWidth: 44,
               minHeight: 44,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               border: `1px solid ${c.border}`,
               background: c.inputBg,
               color: c.ink,
-              fontSize: '1.25rem',
+              fontSize: fontSize.xl,
               lineHeight: 1,
               cursor: 'pointer',
             }}
@@ -250,11 +250,11 @@ export function RegionPanel({
             style={{
               padding: spacing.md,
               marginBottom: spacing.lg,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               background: c.bgAlt,
               border: `1px solid ${c.border}`,
               fontFamily: fonts.body,
-              fontSize: '0.85rem',
+              fontSize: fontSize.md,
               color: c.inkSoft,
             }}
           >
@@ -294,12 +294,12 @@ export function RegionPanel({
                   style={{
                     minHeight: 44,
                     padding: '0 12px',
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${panelTyp === tp ? c.red : c.border}`,
                     background: panelTyp === tp ? c.bgHover : c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.8rem',
+                    fontSize: fontSize.sm,
                     cursor: 'pointer',
                   }}
                 >
@@ -324,7 +324,7 @@ export function RegionPanel({
             <h3
               style={{
                 fontFamily: fonts.display,
-                fontSize: '1.05rem',
+                fontSize: fontSize.lg,
                 marginTop: spacing.xl,
                 marginBottom: spacing.md,
                 color: c.ink,
@@ -347,12 +347,12 @@ export function RegionPanel({
                   style={{
                     minHeight: 44,
                     padding: '0 14px',
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.border}`,
                     background: c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.9rem',
+                    fontSize: fontSize.md,
                     cursor: 'pointer',
                     textAlign: 'left',
                   }}
@@ -366,12 +366,12 @@ export function RegionPanel({
                   style={{
                     minHeight: 44,
                     padding: '0 14px',
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.border}`,
                     background: c.bgAlt,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.9rem',
+                    fontSize: fontSize.md,
                     cursor: 'pointer',
                   }}
                 >

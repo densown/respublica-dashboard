@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fontSize, fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type StatWidgetProps = {
@@ -19,7 +19,7 @@ export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) 
       style={{
         background: c.cardBg,
         border: `1px solid ${c.cardBorder}`,
-        borderRadius: 6,
+        borderRadius: radius.md,
         padding: spacing.lg,
         boxShadow: c.shadow,
         minWidth: fluid ? 0 : 140,
@@ -39,7 +39,7 @@ export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) 
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.58rem',
+            fontSize: fontSize.micro,
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             color: c.muted,
@@ -66,7 +66,7 @@ export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) 
           style={{
             marginTop: spacing.xs,
             fontFamily: fonts.body,
-            fontSize: '0.78rem',
+            fontSize: fontSize.xs,
             color: c.muted,
           }}
         >

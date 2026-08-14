@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
 import { HS_SECTION_LABELS_DE, HS_SECTION_LABELS_EN } from '../hsSections'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import PartnerPicker, { type TradePartnerOption } from './PartnerPicker'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 
@@ -131,7 +131,7 @@ export default function HSSectionBreakdown({
                 {fmtUsd(r.value_usd, locale, lang)}
               </span>
             </div>
-            <div style={{ height: 6, borderRadius: 3, background: c.bgHover, overflow: 'hidden' }}>
+            <div style={{ height: 6, borderRadius: radius.xs, background: c.bgHover, overflow: 'hidden' }}>
               <div
                 style={{
                   height: '100%',

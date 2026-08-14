@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { useCallback, useRef, useState } from 'react'
 import { interpolate } from '../i18n'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import MonoLabel from './MonoLabel'
 
@@ -167,7 +167,7 @@ export default function LineChart({
               transform: 'translate(-50%, 0)',
               maxWidth: 'min(92%, 200px)',
               padding: '4px 8px',
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.cardBg,
               border: `1px solid ${c.border}`,
               boxShadow: '0 2px 8px rgba(0,0,0,0.12)',

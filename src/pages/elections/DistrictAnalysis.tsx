@@ -17,7 +17,7 @@ import {
   YAxis,
 } from 'recharts'
 import { LoadingSpinner, useTheme } from '../../design-system'
-import { fonts, spacing, type ThemeColors } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing, type ThemeColors } from '../../design-system/tokens'
 import { interpolate, type I18nKey } from '../../design-system/i18n'
 import { useApi } from '../../hooks/useApi'
 import {
@@ -118,7 +118,7 @@ function ElectionTypeCompareLineLegend({
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.75rem',
+              fontSize: fontSize.xs,
               color: c.muted,
             }}
           >
@@ -483,8 +483,8 @@ export function DistrictAnalysis({
     background: c.red,
     color: '#fff',
     padding: '8px 16px',
-    borderRadius: 4,
-    fontSize: '0.8rem',
+    borderRadius: radius.sm,
+    fontSize: fontSize.sm,
     fontFamily: fonts.body,
     border: 'none',
     cursor: addToCompareDisabled ? 'not-allowed' : 'pointer',
@@ -528,12 +528,12 @@ export function DistrictAnalysis({
           style={{
             minHeight: 44,
             padding: '0 16px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.inputBg,
             color: c.text,
             fontFamily: fonts.mono,
-            fontSize: '0.8rem',
+            fontSize: fontSize.sm,
             cursor: 'pointer',
             alignSelf: narrow ? 'stretch' : 'auto',
           }}
@@ -544,7 +544,7 @@ export function DistrictAnalysis({
           <h2
             style={{
               fontFamily: fonts.display,
-              fontSize: '1.35rem',
+              fontSize: fontSize.xl,
               fontWeight: 700,
               color: c.text,
               margin: 0,
@@ -556,7 +556,7 @@ export function DistrictAnalysis({
           <div
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.85rem',
+              fontSize: fontSize.md,
               color: c.muted,
               marginTop: 6,
             }}
@@ -590,12 +590,12 @@ export function DistrictAnalysis({
               style={{
                 minHeight: 44,
                 padding: '0 18px',
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 border: `1px solid ${c.border}`,
                 background: c.inputBg,
                 color: c.text,
                 fontFamily: fonts.body,
-                fontSize: '0.9rem',
+                fontSize: fontSize.md,
                 cursor: 'pointer',
               }}
             >
@@ -611,7 +611,7 @@ export function DistrictAnalysis({
                 border: 'none',
                 padding: 0,
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.red,
                 textDecoration: 'underline',
                 cursor: 'pointer',
@@ -656,7 +656,7 @@ export function DistrictAnalysis({
               style={{
                 display: 'block',
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
                 marginBottom: 8,
               }}
@@ -675,7 +675,7 @@ export function DistrictAnalysis({
                 gap: 8,
                 marginTop: spacing.sm,
                 fontFamily: fonts.body,
-                fontSize: '0.82rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
                 cursor: 'pointer',
                 width: 'fit-content',
@@ -702,7 +702,7 @@ export function DistrictAnalysis({
             <span
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
               }}
             >
@@ -749,7 +749,7 @@ export function DistrictAnalysis({
                   contentStyle={{
                     background: c.surface,
                     border: `1px solid ${c.border}`,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     fontFamily: fonts.mono,
                     fontSize: 12,
                     color: c.text,
@@ -771,7 +771,7 @@ export function DistrictAnalysis({
                         style={{
                           background: c.surface,
                           border: `1px solid ${c.border}`,
-                          borderRadius: 8,
+                          borderRadius: radius.lg,
                           padding: '8px 10px',
                         }}
                       >
@@ -861,7 +861,7 @@ export function DistrictAnalysis({
             <span
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
               }}
             >
@@ -908,7 +908,7 @@ export function DistrictAnalysis({
                     contentStyle={{
                       background: c.surface,
                       border: `1px solid ${c.border}`,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       fontFamily: fonts.mono,
                       fontSize: 12,
                       color: c.text,
@@ -961,7 +961,7 @@ export function DistrictAnalysis({
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.8rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                 }}
               >
@@ -984,7 +984,7 @@ export function DistrictAnalysis({
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.8rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                 }}
               >
@@ -1016,7 +1016,7 @@ export function DistrictAnalysis({
             <div
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.9rem',
+                fontSize: fontSize.md,
                 color: c.text,
                 lineHeight: 1.6,
                 minWidth: 0,
@@ -1100,7 +1100,7 @@ export function DistrictAnalysis({
             <span
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
               }}
             >
@@ -1121,7 +1121,7 @@ export function DistrictAnalysis({
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.82rem',
+              fontSize: fontSize.sm,
               color: c.muted,
               marginBottom: spacing.sm,
             }}

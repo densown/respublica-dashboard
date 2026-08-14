@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, type CSSProperties, type ReactNode } from 'react'
 import { EmptyState, useTheme } from '../../design-system'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import {
   hasWorldBankRegionOnAnyRow,
@@ -40,12 +40,12 @@ function selectCss(c: {
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     width: '100%',
     maxWidth: '100%',
     boxSizing: 'border-box',
@@ -121,7 +121,7 @@ export function WorldRankingMode({
       style={{
         display: 'block',
         fontFamily: fonts.body,
-        fontSize: '0.8rem',
+        fontSize: fontSize.sm,
         color: c.muted,
         marginBottom: 6,
       }}
@@ -226,14 +226,14 @@ export function WorldRankingMode({
           onClick={exportCsv}
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.78rem',
+            fontSize: fontSize.xs,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
             padding: `${spacing.sm} ${spacing.md}`,
-            borderRadius: 6,
+            borderRadius: radius.md,
             cursor: 'pointer',
           }}
         >
@@ -255,7 +255,7 @@ export function WorldRankingMode({
         <div
           style={{
             border: `1px solid ${c.border}`,
-            borderRadius: 8,
+            borderRadius: radius.lg,
             overflow: 'hidden',
             background: c.cardBg,
           }}
@@ -288,7 +288,7 @@ export function WorldRankingMode({
               <div
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   fontWeight: top10 ? 700 : 400,
                   color: c.text,
                 }}
@@ -303,7 +303,7 @@ export function WorldRankingMode({
                     height={20}
                     alt=""
                     style={{
-                      borderRadius: 3,
+                      borderRadius: radius.xs,
                       border: `1px solid ${c.border}`,
                       display: 'block',
                     }}
@@ -316,7 +316,7 @@ export function WorldRankingMode({
                 <div
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.9rem',
+                    fontSize: fontSize.md,
                     color: c.text,
                     fontWeight: isHi ? 700 : 400,
                   }}
@@ -327,7 +327,7 @@ export function WorldRankingMode({
                       style={{
                         marginLeft: 8,
                         fontFamily: fonts.mono,
-                        fontSize: '0.65rem',
+                        fontSize: fontSize.micro,
                         textTransform: 'uppercase',
                         color: c.red,
                       }}
@@ -340,7 +340,7 @@ export function WorldRankingMode({
                   <div
                     style={{
                       fontFamily: fonts.mono,
-                      fontSize: '0.72rem',
+                      fontSize: fontSize.xs,
                       color: c.muted,
                     }}
                   >
@@ -352,7 +352,7 @@ export function WorldRankingMode({
                 <div
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.88rem',
+                    fontSize: fontSize.md,
                     textAlign: 'right',
                     color: c.text,
                   }}
@@ -364,7 +364,7 @@ export function WorldRankingMode({
                 style={{
                   gridColumn: narrow ? '1 / -1' : undefined,
                   height: 8,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: c.bg,
                   overflow: 'hidden',
                 }}
@@ -374,7 +374,7 @@ export function WorldRankingMode({
                     width: `${pct}%`,
                     height: '100%',
                     background: top10 ? c.red : c.inkSoft,
-                    borderRadius: 4,
+                    borderRadius: radius.sm,
                     transition: 'width 0.2s ease',
                   }}
                 />
@@ -384,7 +384,7 @@ export function WorldRankingMode({
                   style={{
                     gridColumn: '1 / -1',
                     fontFamily: fonts.mono,
-                    fontSize: '0.85rem',
+                    fontSize: fontSize.md,
                     color: c.text,
                   }}
                 >

@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from 'recharts'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fonts, radius } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { PARTY_LABELS } from './partyColors'
 import { toDisplayPercent } from './normalizeWahlen'
@@ -85,7 +85,7 @@ export function RadarCompare({
             contentStyle={{
               background: c.surface,
               border: `1px solid ${c.border}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               fontFamily: fonts.mono,
               fontSize: 12,
               color: c.text,

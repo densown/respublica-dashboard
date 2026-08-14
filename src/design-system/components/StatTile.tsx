@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import MonoLabel from './MonoLabel'
 
@@ -18,7 +18,7 @@ export default function StatTile({ label, value, sub, icon, style }: StatTilePro
       style={{
         background: c.bg,
         border: `1px solid ${c.border}`,
-        borderRadius: 6,
+        borderRadius: radius.md,
         padding: `${spacing.sm}px ${spacing.md}px`,
         minWidth: 0,
         ...style,

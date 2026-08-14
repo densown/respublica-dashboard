@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Badge, useTheme } from '../../design-system'
-import { fonts, radius, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 
 export type MemberTopicRow = {
   slug: string
@@ -102,7 +102,7 @@ export function MemberTopicProfile({
                   justifyContent: 'space-between',
                   gap: spacing.sm,
                   fontFamily: fonts.body,
-                  fontSize: '0.84rem',
+                  fontSize: fontSize.sm,
                   color: c.ink,
                   marginBottom: 3,
                 }}
@@ -111,7 +111,7 @@ export function MemberTopicProfile({
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.74rem',
+                    fontSize: fontSize.xs,
                     color: t.abweichungen > 0 ? c.red : c.muted,
                     whiteSpace: 'nowrap',
                   }}
@@ -145,7 +145,7 @@ export function MemberTopicProfile({
       <p
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.78rem',
+          fontSize: fontSize.xs,
           color: c.muted,
           margin: 0,
           marginTop: spacing.md,

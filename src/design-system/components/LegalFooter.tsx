@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { fonts, spacing } from '../tokens'
+import { fontSize, fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { footerSourcesLineKey } from '../../data/sourcesCatalog'
 
@@ -10,7 +10,7 @@ export function LegalFooter() {
 
   const linkStyle = {
     fontFamily: fonts.mono,
-    fontSize: '0.67rem',
+    fontSize: fontSize.micro,
     color: c.footerLink,
     textDecoration: 'none',
     transition: 'color 0.2s ease',
@@ -18,7 +18,7 @@ export function LegalFooter() {
 
   const textStyle = {
     fontFamily: fonts.body,
-    fontSize: '0.68rem',
+    fontSize: fontSize.micro,
     color: c.footerText,
     lineHeight: 1.5,
     maxWidth: 720,

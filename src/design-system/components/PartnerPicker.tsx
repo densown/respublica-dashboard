@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 
 export type TradePartnerOption = {
   iso3: string
@@ -60,7 +60,7 @@ export default function PartnerPicker({
         style={{
           width: '100%',
           minHeight: 44,
-          borderRadius: 6,
+          borderRadius: radius.md,
           border: `1px solid ${c.border}`,
           background: c.bg,
           color: c.ink,

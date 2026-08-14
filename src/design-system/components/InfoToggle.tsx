@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type InfoToggleProps = {
@@ -37,7 +37,7 @@ export default function InfoToggle({ text, style }: InfoToggleProps) {
             transform: 'translateX(-50%)',
             background: c.cardBg,
             border: `1px solid ${c.border}`,
-            borderRadius: 6,
+            borderRadius: radius.md,
             padding: `${spacing.sm}px ${spacing.md}px`,
             width: 220,
             zIndex: 20,

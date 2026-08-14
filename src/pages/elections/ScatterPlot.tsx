@@ -10,7 +10,7 @@ import {
 } from 'recharts'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { toDisplayPercent } from './normalizeWahlen'
 import {
   MAIN_PARTIES,
@@ -164,12 +164,12 @@ export function ScatterPlot({
           style={{
             minHeight: 44,
             padding: '0 14px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.inputBg,
             color: c.ink,
             fontFamily: fonts.body,
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             cursor: 'pointer',
           }}
         >
@@ -218,7 +218,7 @@ export function ScatterPlot({
                   style={{
                     background: c.cardBg,
                     border: `1px solid ${c.border}`,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     padding: '8px 10px',
                     fontFamily: fonts.body,
                     fontSize: 12,
@@ -345,7 +345,7 @@ function ScatterColorLegend({
         paddingTop: 14,
         borderTop: `1px solid ${c.border}`,
         fontFamily: fonts.mono,
-        fontSize: '0.72rem',
+        fontSize: fontSize.xs,
         color: c.inkSoft,
       }}
     >
@@ -396,7 +396,7 @@ function ScatterColorLegend({
             style={{
               width: 12,
               height: 12,
-              borderRadius: 2,
+              borderRadius: radius.xs,
               marginRight: 4,
               flexShrink: 0,
               background: color,

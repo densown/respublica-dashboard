@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import type { WorldGeoJson } from './worldTypes'
 
 type CountryAutocompleteProps = {
@@ -50,9 +50,9 @@ export function CountryAutocomplete({
           minHeight: 44,
           boxSizing: 'border-box',
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
           padding: '0 12px',
-          borderRadius: 8,
+          borderRadius: radius.lg,
           border: `1px solid ${c.inputBorder}`,
           background: c.inputBg,
           color: c.text,
@@ -72,7 +72,7 @@ export function CountryAutocomplete({
             marginTop: 4,
             background: c.surface,
             border: `1px solid ${c.border}`,
-            borderRadius: 8,
+            borderRadius: radius.lg,
             boxShadow: c.shadow,
             maxHeight: 220,
             overflowY: 'auto',
@@ -93,10 +93,10 @@ export function CountryAutocomplete({
                   background: 'transparent',
                   cursor: 'pointer',
                   fontFamily: fonts.body,
-                  fontSize: '0.85rem',
+                  fontSize: fontSize.md,
                   color: c.text,
                   padding: '8px 10px',
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                 }}
               >
                 {h.name}{' '}
@@ -112,7 +112,7 @@ export function CountryAutocomplete({
         <div
           style={{
             marginTop: 6,
-            fontSize: '0.8rem',
+            fontSize: fontSize.sm,
             color: c.muted,
             fontFamily: fonts.body,
           }}

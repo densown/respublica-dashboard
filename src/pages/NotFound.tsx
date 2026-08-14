@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { PageHeader, useTheme } from '../design-system'
-import { fonts, spacing } from '../design-system/tokens'
+import { fontSize, fonts, spacing } from '../design-system/tokens'
 
 export default function NotFound() {
   const { t, c } = useTheme()
@@ -11,7 +11,7 @@ export default function NotFound() {
       <p
         style={{
           fontFamily: fonts.body,
-          fontSize: '0.95rem',
+          fontSize: fontSize.base,
           color: c.muted,
           marginTop: spacing.md,
           marginBottom: spacing.lg,
@@ -24,7 +24,7 @@ export default function NotFound() {
         to="/"
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.red,
           textDecoration: 'none',
         }}

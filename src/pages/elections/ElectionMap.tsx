@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { mapFillColor } from './mapColors'
 import {
   MAIN_PARTIES,
@@ -202,7 +202,7 @@ export function ElectionMap({
           aspectRatio: `${vbW} / ${vbH}`,
           boxSizing: 'border-box',
           background: c.cardBg,
-          borderRadius: 8,
+          borderRadius: radius.lg,
           border: `1px solid ${c.border}`,
         }}
       >
@@ -220,16 +220,16 @@ export function ElectionMap({
             padding: '10px 12px',
             background: c.surface,
             border: `1px solid ${c.border}`,
-            borderRadius: 8,
+            borderRadius: radius.lg,
             boxShadow: c.shadow,
             pointerEvents: 'none',
             fontFamily: fonts.body,
-            fontSize: '0.875rem',
+            fontSize: fontSize.md,
             color: c.text,
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 4 }}>{tip.name}</div>
-          <div style={{ color: c.inkSoft, fontFamily: fonts.mono, fontSize: '0.8rem' }}>
+          <div style={{ color: c.inkSoft, fontFamily: fonts.mono, fontSize: fontSize.sm }}>
             {tip.line1}
           </div>
           <div
@@ -237,7 +237,7 @@ export function ElectionMap({
               marginTop: 6,
               color: c.muted,
               fontFamily: fonts.mono,
-              fontSize: '0.75rem',
+              fontSize: fontSize.xs,
             }}
           >
             {tip.winnerLine}
@@ -277,7 +277,7 @@ export function ElectionMapLegend({
           gap: '10px 16px',
           marginTop: 12,
           fontFamily: fonts.body,
-          fontSize: '0.8rem',
+          fontSize: fontSize.sm,
           color: c.inkSoft,
         }}
       >
@@ -287,7 +287,7 @@ export function ElectionMapLegend({
               style={{
                 width: 14,
                 height: 14,
-                borderRadius: 2,
+                borderRadius: radius.xs,
                 background: partyColors[k] ?? partyColors.other,
                 border: `1px solid ${c.border}`,
               }}
@@ -307,13 +307,13 @@ export function ElectionMapLegend({
       return `${x.toFixed(1).replace('.', sep)} %`
     }
     return (
-      <div style={{ marginTop: 12, fontFamily: fonts.mono, fontSize: '0.75rem' }}>
+      <div style={{ marginTop: 12, fontFamily: fonts.mono, fontSize: fontSize.xs }}>
         <div style={{ color: c.muted, marginBottom: 6 }}>{t('turnout')}</div>
         <div
           style={{
             display: 'flex',
             height: 14,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             overflow: 'hidden',
             border: `1px solid ${c.border}`,
             maxWidth: '100%',
@@ -346,12 +346,12 @@ export function ElectionMapLegend({
   const base = partyColors[party] ?? partyColors.other
   const label = PARTY_LABELS[party]?.[lang] ?? party
   return (
-    <div style={{ marginTop: 12, fontFamily: fonts.mono, fontSize: '0.75rem' }}>
+    <div style={{ marginTop: 12, fontFamily: fonts.mono, fontSize: fontSize.xs }}>
       <div style={{ color: c.muted, marginBottom: 6 }}>{label}</div>
       <div
         style={{
           height: 14,
-          borderRadius: 4,
+          borderRadius: radius.sm,
           border: `1px solid ${c.border}`,
           maxWidth: '100%',
           width: '100%',

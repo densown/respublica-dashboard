@@ -5,7 +5,7 @@ import {
   useTheme,
 } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fonts, radius, spacing } from '../../design-system/tokens'
 import type { WorldCategoryApi } from './worldTypes'
 import type { FloatingWidgetType } from './WidgetDashboard'
 
@@ -103,7 +103,7 @@ export default function MapTopbar({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 4,
+    borderRadius: radius.sm,
   }
 
   const onRowClick = useCallback(
@@ -148,7 +148,7 @@ export default function MapTopbar({
                 fontSize: 9,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                borderRadius: 999,
+                borderRadius: radius.pill,
                 border: active ? 'none' : `1px solid ${c.border}`,
                 background: active ? c.red : 'transparent',
                 color: active ? '#fff' : c.muted,
@@ -193,7 +193,7 @@ export default function MapTopbar({
             background: c.bg,
             color: c.ink,
             padding: '8px 12px',
-            borderRadius: 4,
+            borderRadius: radius.sm,
             boxSizing: 'border-box',
           }}
         >
@@ -300,7 +300,7 @@ export default function MapTopbar({
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               cursor: 'pointer',
-              borderRadius: 4,
+              borderRadius: radius.sm,
             }}
           >
             {t('worldTopbarAddWidget')}
@@ -315,7 +315,7 @@ export default function MapTopbar({
                 minWidth: 220,
                 background: c.cardBg,
                 border: `1px solid ${c.border}`,
-                borderRadius: 6,
+                borderRadius: radius.md,
                 boxShadow: c.shadow,
                 zIndex: 80,
                 padding: `${spacing.xs}px 0`,

@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import type { I18nKey } from '../i18n'
 import MonoLabel from './MonoLabel'
@@ -59,13 +59,13 @@ export default function CompareBar({
           }}
         >
           <MonoLabel style={{ margin: 0 }}>{t(item.k)}</MonoLabel>
-          <div style={{ height: 8, background: c.bgHover, borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{ height: 8, background: c.bgHover, borderRadius: radius.xs, overflow: 'hidden' }}>
             <div
               style={{
                 height: '100%',
                 width: `${(item.v / max) * 100}%`,
                 background: item.col,
-                borderRadius: 2,
+                borderRadius: radius.xs,
               }}
             />
           </div>

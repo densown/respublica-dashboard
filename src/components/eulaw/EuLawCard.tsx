@@ -10,7 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { EU_DOC_TYPE, EU_DOC_TYPE_FALLBACK } from '../../design-system/palettes'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
@@ -152,11 +152,11 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             display: 'inline-block',
             alignSelf: 'flex-start',
             fontFamily: fonts.mono,
-            fontSize: '0.63rem',
+            fontSize: fontSize.micro,
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             padding: `${spacing.xs}px ${spacing.sm}px`,
-            borderRadius: 3,
+            borderRadius: radius.xs,
             background: tc.bg,
             color: tc.fg,
             lineHeight: 1.2,
@@ -167,7 +167,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
         <p
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.72rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             margin: 0,
           }}
@@ -180,7 +180,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
           dateTime={item.datum}
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             flexShrink: 0,
             marginTop: 2,
@@ -224,7 +224,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             <p
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.88rem',
+                fontSize: fontSize.md,
                 lineHeight: 1.6,
                 color: c.ink,
                 marginTop: spacing.md,
@@ -236,7 +236,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             <p
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.76rem',
+                fontSize: fontSize.xs,
                 color: c.muted,
                 marginTop: spacing.sm,
                 marginBottom: 0,
@@ -258,7 +258,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -270,7 +270,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.88rem',
+                    fontSize: fontSize.md,
                     lineHeight: 1.6,
                     color: c.ink,
                     marginTop: 0,
@@ -282,7 +282,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.76rem',
+                    fontSize: fontSize.xs,
                     color: c.muted,
                     marginTop: spacing.sm,
                     marginBottom: spacing.md,
@@ -297,7 +297,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -338,7 +338,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
               <p
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                   marginBottom: spacing.md,
                 }}
@@ -350,7 +350,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -381,7 +381,7 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                   rel="noopener noreferrer"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.78rem',
+                    fontSize: fontSize.xs,
                     color: c.red,
                     textDecoration: 'none',
                     borderBottom: `1px solid ${c.red}55`,

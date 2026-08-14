@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { fonts, spacing, fontSize as fs, motion } from '../tokens'
+import { fontSize, fontSize as fs, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type FilterOption = {
@@ -43,11 +43,11 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
           minWidth: 160,
           padding: `${spacing.md}px ${spacing.lg}px`,
           border: `1px solid ${c.inputBorder}`,
-          borderRadius: 6,
+          borderRadius: radius.md,
           background: c.inputBg,
           color: c.ink,
           fontFamily: fonts.body,
-          fontSize: '0.9rem',
+          fontSize: fontSize.md,
           outline: 'none',
           transition: `border-color ${motion.fast} ${motion.easing}`,
         }}
@@ -85,11 +85,11 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
             style={{
               padding: `${spacing.md}px ${spacing.xl}px ${spacing.md}px ${spacing.md}px`,
               border: `1px solid ${c.inputBorder}`,
-              borderRadius: 6,
+              borderRadius: radius.md,
               background: c.inputBg,
               color: c.ink,
               fontFamily: fonts.body,
-              fontSize: '0.88rem',
+              fontSize: fontSize.md,
               appearance: 'none',
               WebkitAppearance: 'none',
               backgroundImage: selectArrowDataUrl,

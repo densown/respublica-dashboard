@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { interpolate } from '../i18n'
 import { useTheme } from '../ThemeContext'
 
@@ -28,7 +28,7 @@ export default function TradeBalance({
         style={{
           display: 'flex',
           height: 20,
-          borderRadius: 3,
+          borderRadius: radius.xs,
           overflow: 'hidden',
           marginBottom: spacing.sm,
         }}

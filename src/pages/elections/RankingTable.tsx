@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { DataTable, useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { STATE_NAMES, statePrefixFromAgs } from './partyColors'
 import { resolveKreisDisplayName, toDisplayPercent } from './normalizeWahlen'
 import type { RankingRow } from './types'
@@ -98,12 +98,12 @@ export function RankingTable({ rows, kreisNameByAgs, onRowClick }: RankingTableP
           style={{
             minHeight: 44,
             padding: '0 14px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.inputBg,
             color: c.ink,
             fontFamily: fonts.body,
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             cursor: 'pointer',
           }}
         >

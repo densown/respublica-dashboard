@@ -9,7 +9,7 @@ import {
   YAxis,
 } from 'recharts'
 import { LoadingSpinner, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { DifferenceTable } from './DifferenceTable'
 import {
@@ -349,12 +349,12 @@ export function CompareMode({
           style={{
             minHeight: 44,
             padding: '0 16px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
             fontFamily: fonts.mono,
-            fontSize: '0.8rem',
+            fontSize: fontSize.sm,
             cursor: 'pointer',
           }}
         >
@@ -363,7 +363,7 @@ export function CompareMode({
         <h2
           style={{
             fontFamily: fonts.display,
-            fontSize: '1.35rem',
+            fontSize: fontSize.xl,
             fontWeight: 700,
             color: c.text,
             margin: 0,
@@ -387,7 +387,7 @@ export function CompareMode({
           <span
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.8rem',
+              fontSize: fontSize.sm,
               color: c.muted,
             }}
           >
@@ -409,7 +409,7 @@ export function CompareMode({
           <span
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.8rem',
+              fontSize: fontSize.sm,
               color: c.muted,
             }}
           >
@@ -434,7 +434,7 @@ export function CompareMode({
           style={{
             display: 'block',
             fontFamily: fonts.body,
-            fontSize: '0.8rem',
+            fontSize: fontSize.sm,
             color: c.muted,
             marginBottom: 8,
           }}
@@ -455,7 +455,7 @@ export function CompareMode({
             <span
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.85rem',
+                fontSize: fontSize.md,
                 color: c.text,
                 minWidth: 24,
               }}
@@ -476,12 +476,12 @@ export function CompareMode({
               style={{
                 minHeight: 36,
                 padding: '0 12px',
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 border: `1px solid ${c.border}`,
                 background: c.bgAlt,
                 color: c.text,
                 fontFamily: fonts.mono,
-                fontSize: '0.72rem',
+                fontSize: fontSize.xs,
                 cursor: 'pointer',
               }}
             >
@@ -558,7 +558,7 @@ export function CompareMode({
                   contentStyle={{
                     background: c.surface,
                     border: `1px solid ${c.border}`,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     fontFamily: fonts.mono,
                     fontSize: 12,
                     color: c.text,
@@ -617,7 +617,7 @@ export function CompareMode({
             <span
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.8rem',
+                fontSize: fontSize.sm,
                 color: c.muted,
               }}
             >

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fonts, spacing, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { SHARE_BRAND } from '../palettes'
 
@@ -64,7 +64,7 @@ export function ShareCompact({
         minWidth: compact ? 32 : 36,
         padding: compact ? `${spacing.xs}px` : `${spacing.xs}px ${spacing.sm}px`,
         border: `1px solid ${defaultBorder}`,
-        borderRadius: 4,
+        borderRadius: radius.sm,
         background: defaultBg,
         color: defaultColor,
         fontFamily: fonts.mono,
@@ -99,7 +99,7 @@ export function ShareCompact({
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.58rem',
+            fontSize: fontSize.micro,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
             color: labelMuted,
@@ -124,7 +124,7 @@ export function ShareCompact({
           minWidth: compact ? 32 : 36,
           padding: compact ? `${spacing.xs}px` : `${spacing.xs}px ${spacing.sm}px`,
           border: `1px solid ${defaultBorder}`,
-          borderRadius: 4,
+          borderRadius: radius.sm,
           background: defaultBg,
           color: defaultColor,
           fontFamily: fonts.mono,

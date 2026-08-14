@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { EU_COURT } from '../../design-system/palettes'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
@@ -140,12 +140,12 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
             display: 'inline-block',
             alignSelf: 'flex-start',
             fontFamily: fonts.body,
-            fontSize: '0.72rem',
+            fontSize: fontSize.xs,
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
             padding: `${spacing.xs}px ${spacing.sm}px`,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: cc.bg,
             color: cc.fg,
             lineHeight: 1.2,
@@ -157,7 +157,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
           <p
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.68rem',
+              fontSize: fontSize.micro,
               color: c.muted,
               margin: 0,
               wordBreak: 'break-all',
@@ -169,7 +169,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
           <p
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.72rem',
+              fontSize: fontSize.xs,
               color: c.muted,
               margin: 0,
             }}
@@ -183,7 +183,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
           dateTime={item.datum}
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             flexShrink: 0,
             marginTop: 2,
@@ -204,7 +204,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
     <p
       style={{
         fontFamily: fonts.body,
-        fontSize: '0.76rem',
+        fontSize: fontSize.xs,
         color: c.muted,
         marginTop: spacing.sm,
         marginBottom: 0,
@@ -241,7 +241,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
             <p
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.88rem',
+                fontSize: fontSize.md,
                 lineHeight: 1.6,
                 color: c.ink,
                 marginTop: spacing.md,
@@ -265,7 +265,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -277,7 +277,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.88rem',
+                    fontSize: fontSize.md,
                     lineHeight: 1.6,
                     color: c.ink,
                     marginTop: 0,
@@ -294,7 +294,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -306,7 +306,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.88rem',
+                    fontSize: fontSize.md,
                     lineHeight: 1.6,
                     color: c.ink,
                     marginTop: 0,
@@ -324,7 +324,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
               <p
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   color: c.muted,
                   marginTop: spacing.md,
                   marginBottom: spacing.sm,
@@ -339,7 +339,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -351,7 +351,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.86rem',
+                    fontSize: fontSize.md,
                     lineHeight: 1.6,
                     color: c.ink,
                     margin: 0,
@@ -367,7 +367,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -395,7 +395,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                 <p
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.58rem',
+                    fontSize: fontSize.micro,
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: c.muted,
@@ -409,7 +409,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                     margin: 0,
                     paddingLeft: spacing.lg,
                     fontFamily: fonts.body,
-                    fontSize: '0.84rem',
+                    fontSize: fontSize.sm,
                     color: c.ink,
                     lineHeight: 1.5,
                   }}
@@ -422,7 +422,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                     const cx = lr.akt_celex ?? lr.rechtsakt_celex ?? '—'
                     return (
                       <li key={lr.link_id}>
-                        <span style={{ fontFamily: fonts.mono, fontSize: '0.8rem' }}>
+                        <span style={{ fontFamily: fonts.mono, fontSize: fontSize.sm }}>
                           {cx}
                         </span>
                         {tit ? ` — ${tit}` : null}
@@ -447,7 +447,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                   rel="noopener noreferrer"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.78rem',
+                    fontSize: fontSize.xs,
                     color: c.red,
                     textDecoration: 'none',
                     borderBottom: `1px solid ${c.red}55`,
@@ -466,7 +466,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
                   rel="noopener noreferrer"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.78rem',
+                    fontSize: fontSize.xs,
                     color: c.red,
                     textDecoration: 'none',
                     borderBottom: `1px solid ${c.red}55`,

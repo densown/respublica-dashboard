@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { changeColor } from './mapColors'
 import type { KreiseMapBuild } from './mapGeometry'
 import { resolveKreisDisplayName } from './normalizeWahlen'
@@ -185,7 +185,7 @@ export function ChangeMap({
           maxHeight: 600,
           display: 'block',
           background: c.cardBg,
-          borderRadius: 8,
+          borderRadius: radius.lg,
           border: `1px solid ${c.border}`,
         }}
       >
@@ -241,17 +241,17 @@ export function ChangeMap({
             padding: '10px 12px',
             background: c.surface,
             border: `1px solid ${c.border}`,
-            borderRadius: 8,
+            borderRadius: radius.lg,
             boxShadow: c.shadow,
             pointerEvents: 'none',
             fontFamily: fonts.body,
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             color: c.text,
             maxWidth: 280,
           }}
         >
           <div style={{ fontWeight: 600 }}>{activeTip.name}</div>
-          <div style={{ fontFamily: fonts.mono, fontSize: '0.8rem', color: c.inkSoft, marginTop: 4 }}>
+          <div style={{ fontFamily: fonts.mono, fontSize: fontSize.sm, color: c.inkSoft, marginTop: 4 }}>
             {activeTip.line}
           </div>
         </div>
@@ -262,7 +262,7 @@ export function ChangeMap({
             width: '100%',
             maxWidth: '100%',
             height: 20,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: `linear-gradient(to right, ${legendLeft}, ${legendNeutral}, ${legendRight})`,
             border: `1px solid ${c.border}`,
             boxSizing: 'border-box',
@@ -274,7 +274,7 @@ export function ChangeMap({
             justifyContent: 'space-between',
             marginTop: 6,
             fontFamily: fonts.mono,
-            fontSize: '0.72rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             width: '100%',
             maxWidth: '100%',

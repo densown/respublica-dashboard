@@ -9,7 +9,7 @@ import {
   ExportableContainer,
   useTheme,
 } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { AdvancedAnalysis } from './AdvancedAnalysis'
 import { ElectionMap, ElectionMapLegend } from './ElectionMap'
 import { KreisAutocomplete, type KreisSearchHit } from './KreisAutocomplete'
@@ -45,12 +45,12 @@ function selectCss(c: {
   return {
     minHeight: 44,
     padding: '0 12px',
-    borderRadius: 8,
+    borderRadius: radius.lg,
     border: `1px solid ${c.border}`,
     background: c.cardBg,
     color: c.text,
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     width: '100%',
     maxWidth: '100%',
     boxSizing: 'border-box',
@@ -182,11 +182,11 @@ export function MapMode({
   const { c, t, lang } = useTheme()
 
   const statCard = (title: string, body: string) => (
-    <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: '0.8rem', color: c.muted }}>{title}</span>}>
+    <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: fontSize.sm, color: c.muted }}>{title}</span>}>
       <div
         style={{
           fontFamily: fonts.mono,
-          fontSize: '1.1rem',
+          fontSize: fontSize.lg,
           color: c.text,
           lineHeight: 1.4,
         }}
@@ -225,7 +225,7 @@ export function MapMode({
             style={{
               display: 'block',
               fontFamily: fonts.body,
-              fontSize: '0.8rem',
+              fontSize: fontSize.sm,
               color: c.muted,
               marginBottom: 6,
             }}
@@ -249,7 +249,7 @@ export function MapMode({
             style={{
               display: 'block',
               fontFamily: fonts.body,
-              fontSize: '0.8rem',
+              fontSize: fontSize.sm,
               color: c.muted,
               marginBottom: 6,
             }}
@@ -274,7 +274,7 @@ export function MapMode({
             style={{
               display: 'block',
               fontFamily: fonts.body,
-              fontSize: '0.8rem',
+              fontSize: fontSize.sm,
               color: c.muted,
               marginBottom: 6,
             }}
@@ -324,8 +324,8 @@ export function MapMode({
                 style={{
                   padding: '8px 16px',
                   marginBottom: spacing.md,
-                  borderRadius: 4,
-                  fontSize: '0.82rem',
+                  borderRadius: radius.sm,
+                  fontSize: fontSize.sm,
                   fontFamily: fonts.body,
                   lineHeight: 1.45,
                   background: c.noticeBg,
@@ -410,12 +410,12 @@ export function MapMode({
           style={{
             minHeight: 44,
             padding: '0 18px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
             fontFamily: fonts.body,
-            fontSize: '0.95rem',
+            fontSize: fontSize.base,
             cursor: 'pointer',
           }}
         >

@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge, EmptyState, LoadingSpinner, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { courtBadgeVariant, formatDisplayDate } from './utils'
 import type { Gesetz, Urteil } from './types'
 
@@ -46,10 +46,10 @@ function DiffSynopse({ diff }: { diff: string }) {
     <div
       style={{
         fontFamily: fonts.mono,
-        fontSize: '0.72rem',
+        fontSize: fontSize.xs,
         lineHeight: 1.5,
         border: `1px solid ${c.border}`,
-        borderRadius: 8,
+        borderRadius: radius.lg,
         overflowX: 'auto',
         overflowY: 'auto',
         maxHeight: 420,
@@ -159,7 +159,7 @@ export function GesetzDetail({
     background: 'none',
     cursor: 'pointer',
     fontFamily: fonts.body,
-    fontSize: '0.9rem',
+    fontSize: fontSize.md,
     color: c.red,
     textDecoration: 'underline',
     textUnderlineOffset: 3,
@@ -216,7 +216,7 @@ export function GesetzDetail({
             flexWrap: 'wrap',
             gap: spacing.sm,
             fontFamily: fonts.mono,
-            fontSize: '0.78rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             marginBottom: spacing.md,
           }}
@@ -235,13 +235,13 @@ export function GesetzDetail({
         <p
           style={{
             fontFamily: fonts.body,
-            fontSize: '0.82rem',
+            fontSize: fontSize.sm,
             lineHeight: 1.5,
             color: c.muted,
             marginBottom: spacing.md,
           }}
         >
-          <span style={{ fontFamily: fonts.mono, fontSize: '0.68rem' }}>
+          <span style={{ fontFamily: fonts.mono, fontSize: fontSize.micro }}>
             {t('gesetzeLetzterStand')}
             {': '}
           </span>
@@ -254,7 +254,7 @@ export function GesetzDetail({
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.98rem',
+              fontSize: fontSize.base,
               lineHeight: 1.65,
               color: c.ink,
               marginBottom: spacing.sm,
@@ -265,7 +265,7 @@ export function GesetzDetail({
           <p
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.78rem',
+              fontSize: fontSize.xs,
               lineHeight: 1.5,
               color: c.muted,
               marginBottom: spacing.lg,
@@ -290,7 +290,7 @@ export function GesetzDetail({
             <p
               style={{
                 fontFamily: fonts.body,
-                fontSize: '0.92rem',
+                fontSize: fontSize.base,
                 lineHeight: 1.65,
                 color: c.inkSoft,
                 marginTop: spacing.md,
@@ -330,7 +330,7 @@ export function GesetzDetail({
               <p
                 style={{
                   fontFamily: fonts.body,
-                  fontSize: '0.85rem',
+                  fontSize: fontSize.md,
                   color: c.muted,
                   marginBottom: spacing.sm,
                   fontStyle: 'italic',
@@ -344,7 +344,7 @@ export function GesetzDetail({
                 <p
                   style={{
                     fontFamily: fonts.body,
-                    fontSize: '0.82rem',
+                    fontSize: fontSize.sm,
                     color: c.no,
                     marginBottom: spacing.sm,
                   }}
@@ -365,7 +365,7 @@ export function GesetzDetail({
           style={{
             fontFamily: fonts.display,
             fontWeight: 700,
-            fontSize: '1.1rem',
+            fontSize: fontSize.lg,
             color: c.ink,
             marginBottom: spacing.md,
           }}
@@ -379,7 +379,7 @@ export function GesetzDetail({
             style={{
               fontFamily: fonts.body,
               color: c.no,
-              fontSize: '0.86rem',
+              fontSize: fontSize.md,
               marginBottom: spacing.lg,
             }}
           >
@@ -390,7 +390,7 @@ export function GesetzDetail({
             style={{
               fontFamily: fonts.body,
               color: c.muted,
-              fontSize: '0.9rem',
+              fontSize: fontSize.md,
               marginBottom: spacing.lg,
             }}
           >
@@ -412,7 +412,7 @@ export function GesetzDetail({
                     style={{
                       fontFamily: fonts.display,
                       fontWeight: 700,
-                      fontSize: '0.98rem',
+                      fontSize: fontSize.base,
                       color: c.ink,
                       margin: 0,
                     }}
@@ -425,7 +425,7 @@ export function GesetzDetail({
                   style={{
                     fontFamily: fonts.body,
                     color: c.muted,
-                    fontSize: '0.84rem',
+                    fontSize: fontSize.sm,
                     marginTop: 0,
                     marginBottom: spacing.md,
                   }}
@@ -467,7 +467,7 @@ export function GesetzDetail({
                           {item.lobbyist_name || '—'}
                         </div>
                       )}
-                      <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
+                      <div style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                         {formatMoney(item.financial_expenses_euro)}
                       </div>
                       <div
@@ -475,7 +475,7 @@ export function GesetzDetail({
                           fontFamily: fonts.body,
                           fontStyle: 'italic',
                           color: c.inkSoft,
-                          fontSize: '0.9rem',
+                          fontSize: fontSize.md,
                           marginTop: 2,
                         }}
                       >
@@ -488,7 +488,7 @@ export function GesetzDetail({
                           rel="noopener noreferrer"
                           style={{
                             fontFamily: fonts.mono,
-                            fontSize: '0.75rem',
+                            fontSize: fontSize.xs,
                             color: c.red,
                             textDecoration: 'none',
                           }}
@@ -516,7 +516,7 @@ export function GesetzDetail({
                     style={{
                       fontFamily: fonts.display,
                       fontWeight: 700,
-                      fontSize: '0.98rem',
+                      fontSize: fontSize.base,
                       color: c.ink,
                       margin: 0,
                     }}
@@ -529,7 +529,7 @@ export function GesetzDetail({
                   style={{
                     fontFamily: fonts.body,
                     color: c.muted,
-                    fontSize: '0.84rem',
+                    fontSize: fontSize.sm,
                     marginTop: 0,
                     marginBottom: spacing.md,
                   }}
@@ -571,7 +571,7 @@ export function GesetzDetail({
                           {item.lobbyist_name || '—'}
                         </div>
                       )}
-                      <div style={{ fontFamily: fonts.mono, fontSize: '0.78rem', color: c.muted }}>
+                      <div style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                         {formatMoney(item.financial_expenses_euro)}
                       </div>
                       <div
@@ -579,7 +579,7 @@ export function GesetzDetail({
                           fontFamily: fonts.body,
                           fontStyle: 'italic',
                           color: c.inkSoft,
-                          fontSize: '0.9rem',
+                          fontSize: fontSize.md,
                           marginTop: 2,
                         }}
                       >
@@ -592,7 +592,7 @@ export function GesetzDetail({
                           rel="noopener noreferrer"
                           style={{
                             fontFamily: fonts.mono,
-                            fontSize: '0.75rem',
+                            fontSize: fontSize.xs,
                             color: c.red,
                             textDecoration: 'none',
                           }}
@@ -614,7 +614,7 @@ export function GesetzDetail({
           style={{
             fontFamily: fonts.display,
             fontWeight: 700,
-            fontSize: '1.1rem',
+            fontSize: fontSize.lg,
             color: c.ink,
             marginBottom: spacing.md,
           }}
@@ -626,7 +626,7 @@ export function GesetzDetail({
             style={{
               fontFamily: fonts.body,
               color: c.muted,
-              fontSize: '0.9rem',
+              fontSize: fontSize.md,
             }}
           >
             {t('noRulingsForLaw')}
@@ -661,7 +661,7 @@ export function GesetzDetail({
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.82rem',
+                    fontSize: fontSize.sm,
                     color: c.ink,
                   }}
                 >
@@ -671,7 +671,7 @@ export function GesetzDetail({
                   dateTime={u.datum ?? undefined}
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.75rem',
+                    fontSize: fontSize.xs,
                     color: c.muted,
                     marginLeft: 'auto',
                   }}

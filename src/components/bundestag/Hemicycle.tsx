@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { RAW_SEATS } from '../../data/bundestag-seats'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useTheme } from '../../design-system/ThemeContext'
 import { SSW } from '../../design-system/palettes'
 
@@ -466,7 +466,7 @@ export function Hemicycle({
             zIndex: 3,
             background: c.cardBg,
             border: `1px solid ${c.border}`,
-            borderRadius: 6,
+            borderRadius: radius.md,
             padding: `${spacing.xs}px ${spacing.sm}px`,
             boxShadow: c.shadow,
             minWidth: 140,
@@ -476,7 +476,7 @@ export function Hemicycle({
             style={{
               fontFamily: fonts.body,
               color: c.ink,
-              fontSize: '0.78rem',
+              fontSize: fontSize.xs,
               fontWeight: 700,
               lineHeight: 1.3,
             }}
@@ -487,7 +487,7 @@ export function Hemicycle({
             style={{
               fontFamily: fonts.mono,
               color: c.muted,
-              fontSize: '0.66rem',
+              fontSize: fontSize.micro,
               marginTop: 2,
             }}
           >
@@ -503,7 +503,7 @@ export function Hemicycle({
         style={{
           marginTop: spacing.lg,
           padding: spacing.md,
-          borderRadius: 8,
+          borderRadius: radius.lg,
           border: `1px solid ${c.border}`,
           borderLeft: `3px solid ${c.red}`,
           background: c.cardBg,
@@ -516,7 +516,7 @@ export function Hemicycle({
             gap: spacing.md,
             justifyContent: 'center',
             fontFamily: fonts.body,
-            fontSize: '0.78rem',
+            fontSize: fontSize.xs,
             color: c.muted,
           }}
         >
@@ -541,7 +541,7 @@ export function Hemicycle({
                 />
                 <span style={{ color: c.ink }}>
                   {p.partei}{' '}
-                  <span style={{ fontFamily: fonts.mono, fontSize: '0.7rem' }}>
+                  <span style={{ fontFamily: fonts.mono, fontSize: fontSize.micro }}>
                     ({p.sitze} {t('seats')})
                   </span>
                 </span>
@@ -626,7 +626,7 @@ export function Hemicycle({
               marginTop: spacing.md,
               marginBottom: 0,
               fontFamily: fonts.body,
-              fontSize: '0.72rem',
+              fontSize: fontSize.xs,
               color: c.subtle,
               textAlign: 'center',
               lineHeight: 1.4,

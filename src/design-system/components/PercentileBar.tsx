@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 import { interpolate } from '../i18n'
 import { useTheme } from '../ThemeContext'
 import MonoLabel from './MonoLabel'
@@ -31,13 +31,13 @@ export default function PercentileBar({
           {Math.round(displayed)}. Pz.
         </span>
       </div>
-      <div style={{ height: 6, background: c.bgHover, borderRadius: 3, overflow: 'hidden' }}>
+      <div style={{ height: 6, background: c.bgHover, borderRadius: radius.xs, overflow: 'hidden' }}>
         <div
           style={{
             height: '100%',
             width: `${displayed}%`,
             background: color,
-            borderRadius: 3,
+            borderRadius: radius.xs,
             transition: 'width 0.6s cubic-bezier(0.4,0,0.2,1)',
           }}
         />

@@ -9,7 +9,7 @@ import {
 import type { LngLat } from 'maplibre-gl'
 import { ExportableContainer, type MapProjectionMode, useTheme } from '../design-system'
 import type { Lang } from '../design-system/ThemeContext'
-import { breakpoints, fonts, spacing } from '../design-system/tokens'
+import { breakpoints, fontSize, fonts, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { isRealCountry } from '../utils/worldFilters'
@@ -724,12 +724,12 @@ export default function WorldMap() {
               zIndex: 25,
               margin: 0,
               padding: spacing.sm,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               background: c.cardBg,
               border: `1px solid ${c.border}`,
               color: c.red,
               fontFamily: fonts.body,
-              fontSize: '0.88rem',
+              fontSize: fontSize.md,
             }}
           >
             {t('dataLoadError')} (world.geojson)
@@ -746,7 +746,7 @@ export default function WorldMap() {
               margin: 0,
               color: c.red,
               fontFamily: fonts.body,
-              fontSize: '0.88rem',
+              fontSize: fontSize.md,
               pointerEvents: 'none',
             }}
           >
@@ -765,7 +765,7 @@ export default function WorldMap() {
               margin: 0,
               color: c.muted,
               fontFamily: fonts.body,
-              fontSize: '0.78rem',
+              fontSize: fontSize.xs,
               lineHeight: 1.35,
               pointerEvents: 'none',
             }}
@@ -818,7 +818,7 @@ export default function WorldMap() {
                 maxWidth: 'min(92vw, 280px)',
                 background: c.cardBg,
                 border: `1px solid ${c.border}`,
-                borderRadius: 6,
+                borderRadius: radius.md,
                 boxShadow: isDark
                   ? '0 4px 24px rgba(0,0,0,0.45)'
                   : '0 4px 20px rgba(0,0,0,0.12)',

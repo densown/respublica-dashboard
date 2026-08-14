@@ -27,7 +27,7 @@ import {
   StatWidget,
   useTheme,
 } from '../design-system'
-import { fonts, spacing, motion } from '../design-system/tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
 import { CATEGORICAL } from '../design-system/palettes'
 import { useApi } from '../hooks/useApi'
 import { useSearchParamsState } from '../hooks/useSearchParamsState'
@@ -768,10 +768,10 @@ export default function LobbyRegister() {
             <h3 style={{ margin: 0, fontFamily: fonts.display, color: c.ink }}>
               {t('lobbyTreemapTitle')}
             </h3>
-            <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: '0.85rem' }}>
+            <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: fontSize.md }}>
               {t('lobbyTreemapTotalAll')}: {formatMoney(totalTreemapExpenses)}
             </p>
-            <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: '0.92rem' }}>
+            <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: fontSize.base }}>
               {t('lobbyTreemapSubtitle')}
             </p>
           </div>
@@ -785,7 +785,7 @@ export default function LobbyRegister() {
                 position: 'relative',
                 width: '100%',
                 minHeight: treemapHeight,
-                borderRadius: 10,
+                borderRadius: radius.lg,
                 overflow: 'hidden',
                 background: c.bgAlt,
                 display: 'flex',
@@ -813,7 +813,7 @@ export default function LobbyRegister() {
                     style={{
                       width: `${w}%`,
                       height: 10,
-                      borderRadius: 5,
+                      borderRadius: radius.sm,
                       background: c.subtle,
                       animationDelay: `${i * 0.09}s`,
                     }}
@@ -827,7 +827,7 @@ export default function LobbyRegister() {
                   gap: 12,
                   fontFamily: fonts.body,
                   color: c.muted,
-                  fontSize: '0.88rem',
+                  fontSize: fontSize.md,
                 }}
               >
                 <LoadingSpinner />
@@ -843,7 +843,7 @@ export default function LobbyRegister() {
           ) : (
             <div
               ref={treemapRef}
-              style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 10 }}
+              style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: radius.lg }}
             >
               <svg
                 viewBox={`0 0 ${Math.max(320, viewportWidth - 64)} ${treemapHeight}`}
@@ -966,7 +966,7 @@ export default function LobbyRegister() {
                     transform: isMobile ? 'translateX(-50%)' : 'translate(0, 0)',
                     background: c.cardBg,
                     border: `1px solid ${c.border}`,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     padding: spacing.sm,
                     boxShadow: c.shadow,
                     display: 'flex',
@@ -979,17 +979,17 @@ export default function LobbyRegister() {
                     zIndex: 2,
                   }}
                 >
-                  <strong style={{ fontFamily: fonts.body, color: c.ink, fontSize: '0.9rem' }}>
+                  <strong style={{ fontFamily: fonts.body, color: c.ink, fontSize: fontSize.md }}>
                     {getFoiLabel(selectedFieldTile.item)}
                   </strong>
-                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: '0.82rem' }}>
+                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: fontSize.sm }}>
                     {t('lobbyTreemapTotal')}: {formatMoney(selectedFieldTile.item.total_expenses)}
                   </span>
-                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: '0.82rem' }}>
+                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: fontSize.sm }}>
                     {t('lobbyTreemapCount')}:{' '}
                     {selectedFieldTile.item.count.toLocaleString(lang === 'de' ? 'de-DE' : 'en-GB')}
                   </span>
-                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: '0.82rem' }}>
+                  <span style={{ fontFamily: fonts.body, color: c.inkSoft, fontSize: fontSize.sm }}>
                     {t('lobbyTreemapAvg')}: {formatMoney(selectedFieldTile.item.avg_expenses)}
                   </span>
                 </div>
@@ -1031,12 +1031,12 @@ export default function LobbyRegister() {
                   onClick={() => setGeoTab(tab.key)}
                   style={{
                     padding: `${spacing.md}px ${spacing.lg}px`,
-                    borderRadius: 6,
+                    borderRadius: radius.md,
                     border: `1px solid ${active ? c.red : c.border}`,
                     background: active ? c.bgHover : c.bgAlt,
                     color: active ? c.red : c.muted,
                     fontFamily: fonts.mono,
-                    fontSize: '0.72rem',
+                    fontSize: fontSize.xs,
                     letterSpacing: '0.06em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
@@ -1065,7 +1065,7 @@ export default function LobbyRegister() {
                 style={{
                   width: '100%',
                   height: isMobile ? 300 : 450,
-                  borderRadius: 10,
+                  borderRadius: radius.lg,
                   border: `1px solid ${c.border}`,
                   overflow: 'hidden',
                 }}
@@ -1170,7 +1170,7 @@ export default function LobbyRegister() {
           ) : (
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: spacing.md }}>
               <div>
-                <p style={{ margin: `0 0 ${spacing.xs}px`, fontFamily: fonts.mono, color: c.muted, fontSize: '0.72rem' }}>
+                <p style={{ margin: `0 0 ${spacing.xs}px`, fontFamily: fonts.mono, color: c.muted, fontSize: fontSize.xs }}>
                   {t('lobbyTimelineMonthlyTitle')}
                 </p>
                 <ResponsiveContainer width="100%" height={monthlyChartHeight}>
@@ -1195,7 +1195,7 @@ export default function LobbyRegister() {
                       contentStyle={{
                         background: c.surface,
                         border: `1px solid ${c.border}`,
-                        borderRadius: 4,
+                        borderRadius: radius.sm,
                         fontFamily: fonts.body,
                       }}
                     />
@@ -1208,7 +1208,7 @@ export default function LobbyRegister() {
               </div>
 
               <div>
-                <p style={{ margin: `0 0 ${spacing.xs}px`, fontFamily: fonts.mono, color: c.muted, fontSize: '0.72rem' }}>
+                <p style={{ margin: `0 0 ${spacing.xs}px`, fontFamily: fonts.mono, color: c.muted, fontSize: fontSize.xs }}>
                   {t('lobbyTimelineCumulativeTitle')}
                 </p>
                 <ResponsiveContainer width="100%" height={cumulativeChartHeight}>
@@ -1236,7 +1236,7 @@ export default function LobbyRegister() {
                       contentStyle={{
                         background: c.surface,
                         border: `1px solid ${c.border}`,
-                        borderRadius: 4,
+                        borderRadius: radius.sm,
                         fontFamily: fonts.body,
                       }}
                     />
@@ -1271,7 +1271,7 @@ export default function LobbyRegister() {
               htmlFor="lobby-search"
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.7rem',
+                fontSize: fontSize.micro,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
                 color: c.muted,
@@ -1292,12 +1292,12 @@ export default function LobbyRegister() {
               placeholder={t('lobbySearchPlaceholder')}
               style={{
                 minHeight: 44,
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 border: `1px solid ${c.inputBorder}`,
                 background: c.inputBg,
                 color: c.ink,
                 fontFamily: fonts.body,
-                fontSize: '0.95rem',
+                fontSize: fontSize.base,
                 padding: `0 ${spacing.md}px`,
               }}
             />
@@ -1313,7 +1313,7 @@ export default function LobbyRegister() {
                   htmlFor="lobby-foi"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.68rem',
+                    fontSize: fontSize.micro,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     color: c.muted,
@@ -1327,12 +1327,12 @@ export default function LobbyRegister() {
                   onChange={(e) => setSelectedFoi(e.target.value)}
                   style={{
                     minHeight: 44,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.inputBorder}`,
                     background: c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.92rem',
+                    fontSize: fontSize.base,
                     padding: `0 ${spacing.md}px`,
                   }}
                 >
@@ -1349,7 +1349,7 @@ export default function LobbyRegister() {
                   htmlFor="lobby-active-only"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.68rem',
+                    fontSize: fontSize.micro,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     color: c.muted,
@@ -1361,12 +1361,12 @@ export default function LobbyRegister() {
                   htmlFor="lobby-active-only"
                   style={{
                     minHeight: 44,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.inputBorder}`,
                     background: c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.92rem',
+                    fontSize: fontSize.base,
                     padding: `0 ${spacing.md}px`,
                     display: 'flex',
                     alignItems: 'center',
@@ -1397,7 +1397,7 @@ export default function LobbyRegister() {
                   htmlFor="lobby-min-expense"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.68rem',
+                    fontSize: fontSize.micro,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     color: c.muted,
@@ -1411,12 +1411,12 @@ export default function LobbyRegister() {
                   onChange={(e) => setMinExpense(Number(e.target.value))}
                   style={{
                     minHeight: 44,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.inputBorder}`,
                     background: c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.92rem',
+                    fontSize: fontSize.base,
                     padding: `0 ${spacing.md}px`,
                   }}
                 >
@@ -1433,7 +1433,7 @@ export default function LobbyRegister() {
                   htmlFor="lobby-city"
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.68rem',
+                    fontSize: fontSize.micro,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     color: c.muted,
@@ -1447,12 +1447,12 @@ export default function LobbyRegister() {
                   onChange={(e) => setSelectedCity(e.target.value)}
                   style={{
                     minHeight: 44,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     border: `1px solid ${c.inputBorder}`,
                     background: c.inputBg,
                     color: c.ink,
                     fontFamily: fonts.body,
-                    fontSize: '0.92rem',
+                    fontSize: fontSize.base,
                     padding: `0 ${spacing.md}px`,
                   }}
                 >
@@ -1472,12 +1472,12 @@ export default function LobbyRegister() {
               }}
               style={{
                 minHeight: 44,
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 border: `1px solid ${c.red}`,
                 background: c.red,
                 color: '#fff',
                 fontFamily: fonts.mono,
-                fontSize: '0.75rem',
+                fontSize: fontSize.xs,
                 cursor: 'pointer',
               }}
             >
@@ -1497,12 +1497,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 44,
-                  borderRadius: 8,
+                  borderRadius: radius.lg,
                   border: `1px solid ${c.border}`,
                   background: c.cardBg,
                   color: c.ink,
                   fontFamily: fonts.mono,
-                  fontSize: '0.75rem',
+                  fontSize: fontSize.xs,
                   cursor: 'pointer',
                 }}
               >
@@ -1516,7 +1516,7 @@ export default function LobbyRegister() {
               htmlFor="lobby-sort"
               style={{
                 fontFamily: fonts.mono,
-                fontSize: '0.7rem',
+                fontSize: fontSize.micro,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
                 color: c.muted,
@@ -1533,12 +1533,12 @@ export default function LobbyRegister() {
               }}
               style={{
                 minHeight: 44,
-                borderRadius: 8,
+                borderRadius: radius.lg,
                 border: `1px solid ${c.inputBorder}`,
                 background: c.inputBg,
                 color: c.ink,
                 fontFamily: fonts.body,
-                fontSize: '0.95rem',
+                fontSize: fontSize.base,
                 padding: `0 ${spacing.md}px`,
               }}
             >
@@ -1572,12 +1572,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 32,
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   border: `1px solid ${c.border}`,
                   background: c.bgAlt,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   padding: `0 ${spacing.md}px`,
                   cursor: 'pointer',
                 }}
@@ -1594,12 +1594,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 32,
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   border: `1px solid ${c.border}`,
                   background: c.bgAlt,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   padding: `0 ${spacing.md}px`,
                   cursor: 'pointer',
                 }}
@@ -1616,12 +1616,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 32,
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   border: `1px solid ${c.border}`,
                   background: c.bgAlt,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   padding: `0 ${spacing.md}px`,
                   cursor: 'pointer',
                 }}
@@ -1638,12 +1638,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 32,
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   border: `1px solid ${c.border}`,
                   background: c.bgAlt,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   padding: `0 ${spacing.md}px`,
                   cursor: 'pointer',
                 }}
@@ -1660,12 +1660,12 @@ export default function LobbyRegister() {
                 }}
                 style={{
                   minHeight: 32,
-                  borderRadius: 999,
+                  borderRadius: radius.pill,
                   border: `1px solid ${c.border}`,
                   background: c.bgAlt,
                   color: c.ink,
                   fontFamily: fonts.body,
-                  fontSize: '0.82rem',
+                  fontSize: fontSize.sm,
                   padding: `0 ${spacing.md}px`,
                   cursor: 'pointer',
                 }}
@@ -1678,7 +1678,7 @@ export default function LobbyRegister() {
         {listLoading ? (
           <LoadingSpinner />
         ) : listError ? (
-          <p style={{ fontFamily: fonts.body, fontSize: '0.95rem', color: c.muted }}>
+          <p style={{ fontFamily: fonts.body, fontSize: fontSize.base, color: c.muted }}>
             {t('dataLoadError')}
           </p>
         ) : !listData?.items?.length ? (
@@ -1710,7 +1710,7 @@ export default function LobbyRegister() {
                       <span
                         style={{
                           fontFamily: fonts.body,
-                          fontSize: '1rem',
+                          fontSize: fontSize.base,
                           fontWeight: 700,
                           color: c.ink,
                         }}
@@ -1725,7 +1725,7 @@ export default function LobbyRegister() {
                   }
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
-                    <p style={{ margin: 0, fontFamily: fonts.body, color: c.inkSoft, fontSize: '0.92rem' }}>
+                    <p style={{ margin: 0, fontFamily: fonts.body, color: c.inkSoft, fontSize: fontSize.base }}>
                       {[legalForm, item.city].filter(Boolean).join(' · ') || '—'}
                     </p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.sm }}>
@@ -1742,18 +1742,18 @@ export default function LobbyRegister() {
                       }}
                     >
                       <div>
-                        <div style={{ fontFamily: fonts.mono, color: c.muted, fontSize: '0.68rem' }}>
+                        <div style={{ fontFamily: fonts.mono, color: c.muted, fontSize: fontSize.micro }}>
                           {t('lobbyExpenses')}
                         </div>
-                        <div style={{ fontFamily: fonts.body, color: c.ink, fontSize: '0.95rem', fontWeight: 600 }}>
+                        <div style={{ fontFamily: fonts.body, color: c.ink, fontSize: fontSize.base, fontWeight: 600 }}>
                           {formatMoney(item.financial_expenses_euro)}
                         </div>
                       </div>
                       <div>
-                        <div style={{ fontFamily: fonts.mono, color: c.muted, fontSize: '0.68rem' }}>
+                        <div style={{ fontFamily: fonts.mono, color: c.muted, fontSize: fontSize.micro }}>
                           {t('lobbyFte')}
                         </div>
-                        <div style={{ fontFamily: fonts.body, color: c.ink, fontSize: '0.95rem', fontWeight: 600 }}>
+                        <div style={{ fontFamily: fonts.body, color: c.ink, fontSize: fontSize.base, fontWeight: 600 }}>
                           {item.employee_fte != null ? item.employee_fte.toLocaleString(lang === 'de' ? 'de-DE' : 'en-GB') : '—'}
                         </div>
                       </div>
@@ -1766,7 +1766,7 @@ export default function LobbyRegister() {
                           onKeyDown={(e) => e.stopPropagation()}
                           style={{
                             fontFamily: fonts.mono,
-                            fontSize: '0.75rem',
+                            fontSize: fontSize.xs,
                             color: c.red,
                             textDecoration: 'none',
                           }}
@@ -1781,7 +1781,7 @@ export default function LobbyRegister() {
             })}
 
             <Pagination current={page} total={totalPages} onChange={setPage} />
-            <p style={{ margin: 0, color: c.muted, fontFamily: fonts.body, fontSize: '0.88rem' }}>
+            <p style={{ margin: 0, color: c.muted, fontFamily: fonts.body, fontSize: fontSize.md }}>
               {lang === 'de'
                 ? `${(listData?.total ?? 0).toLocaleString('de-DE')} Organisationen gefunden`
                 : `${(listData?.total ?? 0).toLocaleString('en-GB')} organizations found`}
@@ -1836,12 +1836,12 @@ export default function LobbyRegister() {
                       zIndex: 2,
                       alignSelf: 'flex-end',
                       minHeight: 44,
-                      borderRadius: 8,
+                      borderRadius: radius.lg,
                       border: `1px solid ${c.border}`,
                       background: c.cardBg,
                       color: c.ink,
                       fontFamily: fonts.mono,
-                      fontSize: '0.75rem',
+                      fontSize: fontSize.xs,
                       padding: `0 ${spacing.md}px`,
                       cursor: 'pointer',
                     }}
@@ -1883,12 +1883,12 @@ export default function LobbyRegister() {
                           style={{
                             minHeight: 44,
                             padding: `0 ${spacing.md}px`,
-                            borderRadius: 8,
+                            borderRadius: radius.lg,
                             border: `1px solid ${active ? c.red : c.border}`,
                             background: active ? c.bgHover : c.bgAlt,
                             color: active ? c.red : c.muted,
                             fontFamily: fonts.mono,
-                            fontSize: '0.72rem',
+                            fontSize: fontSize.xs,
                             letterSpacing: '0.06em',
                             textTransform: 'uppercase',
                             cursor: 'pointer',
@@ -1934,7 +1934,7 @@ export default function LobbyRegister() {
                             key={`${project.id}-${project.project_number ?? ''}`}
                             style={{
                               border: `1px solid ${c.border}`,
-                              borderRadius: 8,
+                              borderRadius: radius.lg,
                               padding: spacing.md,
                               background: c.bgAlt,
                               display: 'flex',
@@ -1972,19 +1972,19 @@ export default function LobbyRegister() {
                                   alignSelf: 'flex-start',
                                   minHeight: 32,
                                   padding: `0 ${spacing.sm}px`,
-                                  borderRadius: 6,
+                                  borderRadius: radius.md,
                                   border: `1px solid ${c.border}`,
                                   background: c.cardBg,
                                   color: c.red,
                                   fontFamily: fonts.mono,
-                                  fontSize: '0.72rem',
+                                  fontSize: fontSize.xs,
                                   cursor: 'pointer',
                                 }}
                               >
                                 {isExpanded ? t('expandLess') : t('expandMore')}
                               </button>
                             ) : null}
-                            <div style={{ fontFamily: fonts.mono, fontSize: '0.74rem', color: c.muted }}>
+                            <div style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                               {t('lobbyProjectMinistry')}: {ministry || project.federal_ministry || '—'}
                             </div>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.md }}>
@@ -1993,7 +1993,7 @@ export default function LobbyRegister() {
                                   href={project.project_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: '0.75rem' }}
+                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: fontSize.xs }}
                                 >
                                   {t('lobbyProjectLinkProject')} →
                                 </a>
@@ -2003,7 +2003,7 @@ export default function LobbyRegister() {
                                   href={project.document_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: '0.75rem' }}
+                                  style={{ color: c.red, textDecoration: 'none', fontFamily: fonts.mono, fontSize: fontSize.xs }}
                                 >
                                   {t('lobbyProjectLinkDocument')} →
                                 </a>
@@ -2020,7 +2020,7 @@ export default function LobbyRegister() {
                         style={{
                           fontFamily: fonts.display,
                           fontWeight: 700,
-                          fontSize: '1rem',
+                          fontSize: fontSize.base,
                           color: c.ink,
                           margin: 0,
                           marginBottom: spacing.xs,
@@ -2035,7 +2035,7 @@ export default function LobbyRegister() {
                           style={{
                             fontFamily: fonts.body,
                             color: c.no,
-                            fontSize: '0.84rem',
+                            fontSize: fontSize.sm,
                             margin: 0,
                           }}
                         >
@@ -2047,7 +2047,7 @@ export default function LobbyRegister() {
                             style={{
                               fontFamily: fonts.body,
                               color: c.muted,
-                              fontSize: '0.82rem',
+                              fontSize: fontSize.sm,
                               marginTop: 0,
                               marginBottom: spacing.md,
                             }}
@@ -2075,7 +2075,7 @@ export default function LobbyRegister() {
                                       color: c.red,
                                       textDecoration: 'none',
                                       fontFamily: fonts.body,
-                                      fontSize: '0.9rem',
+                                      fontSize: fontSize.md,
                                     }}
                                   >
                                     <span style={{ fontWeight: 700 }}>
@@ -2086,12 +2086,12 @@ export default function LobbyRegister() {
                                         ({item.kuerzel})
                                       </span>
                                     ) : null}
-                                    <div style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.muted }}>
+                                    <div style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
                                       {item.projekt_count} {t('lobbyProjects')}
                                     </div>
                                   </Link>
                                 ) : (
-                                  <div style={{ fontFamily: fonts.body, fontSize: '0.9rem', color: c.ink }}>
+                                  <div style={{ fontFamily: fonts.body, fontSize: fontSize.md, color: c.ink }}>
                                     {item.titel_offiziell || item.name || item.kuerzel || '—'}
                                   </div>
                                 )}
@@ -2099,7 +2099,7 @@ export default function LobbyRegister() {
                             ))}
                           </ul>
                           {lobbyGesetze.items.length > 15 ? (
-                            <p style={{ fontFamily: fonts.body, color: c.muted, fontSize: '0.82rem', marginTop: spacing.sm }}>
+                            <p style={{ fontFamily: fonts.body, color: c.muted, fontSize: fontSize.sm, marginTop: spacing.sm }}>
                               {t('lobbyAffectedLawsMore').replace('{count}', String(lobbyGesetze.items.length - 15))}
                             </p>
                           ) : null}
@@ -2109,7 +2109,7 @@ export default function LobbyRegister() {
                           style={{
                             fontFamily: fonts.body,
                             color: c.muted,
-                            fontSize: '0.84rem',
+                            fontSize: fontSize.sm,
                             margin: 0,
                           }}
                         >

@@ -1,7 +1,7 @@
 import HBar from '../../../design-system/components/HBar'
 import SectionDivider from '../../../design-system/components/SectionDivider'
 import { useTheme } from '../../../design-system'
-import { fonts, spacing } from '../../../design-system/tokens'
+import { fonts, radius, spacing } from '../../../design-system/tokens'
 import { iso3ToFlagIso2 } from '../worldIso3ToIso2'
 import { normIso3 } from './helpers'
 import type {
@@ -84,7 +84,7 @@ export function TabVergleich({
             width={40}
             height={28}
             style={{
-              borderRadius: 4,
+              borderRadius: radius.sm,
               objectFit: 'cover',
               flexShrink: 0,
               border: `1px solid ${c.border}`,
@@ -95,7 +95,7 @@ export function TabVergleich({
             style={{
               width: 40,
               height: 28,
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.bgHover,
               flexShrink: 0,
             }}
@@ -129,7 +129,7 @@ export function TabVergleich({
                   textTransform: 'uppercase',
                   color: c.red,
                   border: `1px solid ${c.red}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   padding: '2px 6px',
                 }}
               >
@@ -159,7 +159,7 @@ export function TabVergleich({
             minHeight: 44,
             padding: 0,
             border: `1px solid ${c.border}`,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: 'transparent',
             color: c.muted,
             cursor: 'pointer',
@@ -182,7 +182,7 @@ export function TabVergleich({
           marginTop: spacing.lg,
           padding: spacing.md,
           border: `1px dashed ${c.border}`,
-          borderRadius: 8,
+          borderRadius: radius.lg,
         }}
       >
         <p
@@ -211,7 +211,7 @@ export function TabVergleich({
         minHeight: 44,
         padding: `${spacing.sm}px ${spacing.md}px`,
         border: `1px solid ${c.border}`,
-        borderRadius: 6,
+        borderRadius: radius.md,
         background: c.bg,
         color: c.ink,
         fontFamily: fonts.mono,

@@ -9,7 +9,7 @@ import {
   YAxis,
 } from 'recharts'
 import { useTheme } from '../../design-system'
-import { fonts } from '../../design-system/tokens'
+import { fonts, radius } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { toDisplayPercent } from './normalizeWahlen'
 import { MAIN_PARTIES, PARTY_LABELS, partyColorsForTheme } from './partyColors'
@@ -76,7 +76,7 @@ export function TimeSeriesChart({
             contentStyle={{
               background: c.cardBg,
               border: `1px solid ${c.border}`,
-              borderRadius: 8,
+              borderRadius: radius.lg,
               fontFamily: fonts.mono,
               fontSize: 12,
               color: c.ink,
@@ -88,7 +88,7 @@ export function TimeSeriesChart({
                   style={{
                     background: c.cardBg,
                     border: `1px solid ${c.border}`,
-                    borderRadius: 8,
+                    borderRadius: radius.lg,
                     padding: '8px 10px',
                     fontFamily: fonts.mono,
                     fontSize: 12,

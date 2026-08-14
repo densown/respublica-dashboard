@@ -1,5 +1,5 @@
 import { useTheme } from '../ThemeContext'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 
 export type MapProjectionMode = 'mercator' | 'globe'
 
@@ -33,7 +33,7 @@ export default function ProjectionToggle({
         gap: 4,
         padding: 3,
         border: `1px solid ${c.border}`,
-        borderRadius: 999,
+        borderRadius: radius.pill,
         background: c.bg,
         opacity: disabled ? 0.55 : 1,
       }}
@@ -52,7 +52,7 @@ export default function ProjectionToggle({
               minHeight: 38,
               padding: `0 ${spacing.sm}px`,
               border: `1px solid ${active ? c.red : 'transparent'}`,
-              borderRadius: 999,
+              borderRadius: radius.pill,
               background: active ? c.surface : 'transparent',
               color: active ? c.red : c.muted,
               fontFamily: fonts.mono,

@@ -1,4 +1,5 @@
 import { useTheme } from '../ThemeContext'
+import { radius } from '../tokens'
 
 export type ProgressSegment = {
   pct: number
@@ -17,7 +18,7 @@ export function ProgressBar({ segments }: ProgressBarProps) {
       style={{
         display: 'flex',
         height: 12,
-        borderRadius: 6,
+        borderRadius: radius.md,
         overflow: 'hidden',
         background: c.bgHover,
         border: `1px solid ${c.border}`,

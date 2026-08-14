@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { fonts, spacing } from '../tokens'
+import { fontSize, fonts, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { BADGE } from '../palettes'
 
@@ -31,11 +31,11 @@ export function Badge({ text, variant = 'default' }: BadgeProps) {
   const base = {
     display: 'inline-block',
     fontFamily: fonts.mono,
-    fontSize: '0.63rem',
+    fontSize: fontSize.micro,
     textTransform: 'uppercase' as const,
     letterSpacing: '0.08em',
     padding: `${spacing.xs}px ${spacing.sm}px`,
-    borderRadius: 3,
+    borderRadius: radius.xs,
     lineHeight: 1.2,
   }
 

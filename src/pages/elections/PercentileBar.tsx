@@ -1,5 +1,5 @@
 import { useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { interpolate, type I18nKey } from '../../design-system/i18n'
 
@@ -47,7 +47,7 @@ export function PercentileBar({
         style={{
           position: 'relative',
           height: 44,
-          borderRadius: 8,
+          borderRadius: radius.lg,
           background: gradient,
           border: `1px solid ${c.border}`,
         }}
@@ -61,7 +61,7 @@ export function PercentileBar({
             width: 3,
             marginLeft: -1.5,
             background: c.red,
-            borderRadius: 1,
+            borderRadius: radius.xs,
             pointerEvents: 'none',
           }}
         />
@@ -72,7 +72,7 @@ export function PercentileBar({
           justifyContent: 'space-between',
           marginTop: 8,
           fontFamily: fonts.mono,
-          fontSize: '0.75rem',
+          fontSize: fontSize.xs,
           color: c.muted,
         }}
       >
@@ -84,7 +84,7 @@ export function PercentileBar({
           textAlign: 'center',
           marginTop: spacing.sm,
           fontFamily: fonts.mono,
-          fontSize: '0.85rem',
+          fontSize: fontSize.md,
           color: c.text,
         }}
       >

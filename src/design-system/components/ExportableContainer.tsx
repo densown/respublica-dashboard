@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState, type MutableRefObject, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import type maplibregl from 'maplibre-gl'
-import { spacing, radius, motion } from '../tokens'
+import { fontSize, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { footerSourcesLineKey } from '../../data/sourcesCatalog'
 import { FORMAT_PRESETS, type ExportFormat } from '../export/exportFormats'
@@ -143,7 +143,7 @@ export function ExportableContainer({
             background: c.bgAlt,
             color: c.inkSoft,
             cursor: 'pointer',
-            fontSize: '0.85rem',
+            fontSize: fontSize.md,
             boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
             transition: `background ${motion.fast} ${motion.easing}`,
           }}

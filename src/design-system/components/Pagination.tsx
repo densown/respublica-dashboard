@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { fonts, spacing, radius, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type PaginationProps = {
@@ -64,7 +64,7 @@ export function Pagination({ current, total, onChange }: PaginationProps) {
       background: active ? c.bgHover : c.bgAlt,
       color: active ? c.red : c.inkSoft,
       fontFamily: fonts.mono,
-      fontSize: '0.75rem',
+      fontSize: fontSize.xs,
       cursor: 'pointer',
       transition: `border-color ${motion.fast} ${motion.easing}, color ${motion.fast} ${motion.easing}, background ${motion.fast} ${motion.easing}`,
     }),
@@ -106,7 +106,7 @@ export function Pagination({ current, total, onChange }: PaginationProps) {
                 padding: `0 ${spacing.xs ?? spacing.sm}px`,
                 color: c.inkSoft,
                 fontFamily: fonts.mono,
-                fontSize: '0.75rem',
+                fontSize: fontSize.xs,
                 userSelect: 'none',
               }}
             >

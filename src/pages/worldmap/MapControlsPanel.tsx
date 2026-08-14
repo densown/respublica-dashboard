@@ -3,7 +3,7 @@ import MonoLabel from '../../design-system/components/MonoLabel'
 import SectionDivider from '../../design-system/components/SectionDivider'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { WorldCategoryApi } from './worldTypes'
 
 const WORLD_CAT_I18N: Record<string, I18nKey> = {
@@ -60,12 +60,12 @@ export default function MapControlsPanel({
     () => ({
       minWidth: 44,
       minHeight: 44,
-      borderRadius: 8,
+      borderRadius: radius.lg,
       border: `1px solid ${c.border}`,
       background: c.cardBg,
       color: c.text,
       fontFamily: fonts.mono,
-      fontSize: '1rem',
+      fontSize: fontSize.base,
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',

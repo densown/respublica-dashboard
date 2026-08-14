@@ -1,5 +1,5 @@
 import { useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
 import { ON_DATA_DARK, ON_DATA_LIGHT } from '../../design-system/palettes'
@@ -75,12 +75,12 @@ export function PartyToggles({ lang, activeKeys, onChange }: PartyTogglesProps) 
             style={{
               minHeight: 36,
               padding: `0 ${spacing.md}px`,
-              borderRadius: 999,
+              borderRadius: radius.pill,
               border: on ? `2px solid ${bg}` : `1px solid ${c.border}`,
               background: on ? bg : 'transparent',
               color: on ? textOnPartyColor(bg) : c.text,
               fontFamily: fonts.mono,
-              fontSize: '0.78rem',
+              fontSize: fontSize.xs,
               fontWeight: on ? 600 : 400,
               cursor: 'pointer',
               boxSizing: 'border-box',

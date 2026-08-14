@@ -11,10 +11,9 @@ import type { ExpressionSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './worldGlMap.css'
 import { type MapProjectionMode, LoadingSpinner, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { dark, fontSize, fonts, light, radius, spacing } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
-import { light, dark } from '../../design-system/tokens'
 import {
   MAP_OUTLINE,
   MAP_OUTLINE_HOVER,
@@ -768,7 +767,7 @@ export function WorldGlMap({
               style={{
                 width: `${w}%`,
                 height: 9,
-                borderRadius: 5,
+                borderRadius: radius.sm,
                 background: c.subtle,
                 animationDelay: `${i * 0.09}s`,
               }}
@@ -782,7 +781,7 @@ export function WorldGlMap({
             gap: 12,
             fontFamily: fonts.body,
             color: c.muted,
-            fontSize: '0.9rem',
+            fontSize: fontSize.md,
           }}
         >
           <LoadingSpinner />
@@ -801,7 +800,7 @@ export function WorldGlMap({
         height: '100vh',
         zIndex: 9999,
         background: c.bg,
-        borderRadius: 0,
+        borderRadius: radius.xs,
         overflow: 'hidden' as const,
         display: 'flex' as const,
         flexDirection: 'column' as const,
@@ -815,7 +814,7 @@ export function WorldGlMap({
           height: '100%',
           minHeight: 0,
           flex: 1,
-          borderRadius: 0,
+          borderRadius: radius.xs,
           overflow: 'hidden' as const,
           border: 'none',
           boxShadow: 'none',
@@ -825,7 +824,7 @@ export function WorldGlMap({
           width: '100%',
           height: cardMapHeightPx,
           minHeight: mapViewportMinHeight,
-          borderRadius: 8,
+          borderRadius: radius.lg,
           overflow: 'hidden' as const,
           ...shellBase,
           boxShadow: isDark
@@ -933,7 +932,7 @@ export function WorldGlMap({
             background: `${c.cardBg}cc`,
             zIndex: 2,
             fontFamily: fonts.body,
-            fontSize: '0.95rem',
+            fontSize: fontSize.base,
             color: c.muted,
             lineHeight: 1.4,
             pointerEvents: 'none',

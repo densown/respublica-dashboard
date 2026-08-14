@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { DataTable, useTheme } from '../../design-system'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import type { I18nKey } from '../../design-system/i18n'
 import { PARTY_LABELS } from './partyColors'
@@ -179,12 +179,12 @@ export function DifferenceTable({
           style={{
             minHeight: 40,
             padding: '0 14px',
-            borderRadius: 8,
+            borderRadius: radius.lg,
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
             fontFamily: fonts.mono,
-            fontSize: '0.75rem',
+            fontSize: fontSize.xs,
             cursor: 'pointer',
           }}
         >

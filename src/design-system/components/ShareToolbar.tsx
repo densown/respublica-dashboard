@@ -1,5 +1,5 @@
 import { useCallback, useState, type CSSProperties } from 'react'
-import { fonts, spacing, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { SHARE_BRAND } from '../palettes'
 
@@ -52,11 +52,11 @@ export function ShareToolbar({ title, url }: ShareToolbarProps) {
     justifyContent: 'center',
     padding: `${spacing.sm}px ${spacing.md}px`,
     border: `1px solid ${c.border}`,
-    borderRadius: 4,
+    borderRadius: radius.sm,
     background: c.bgAlt,
     color: c.inkSoft,
     fontFamily: fonts.mono,
-    fontSize: '0.65rem',
+    fontSize: fontSize.micro,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
     cursor: 'pointer',
@@ -78,7 +78,7 @@ export function ShareToolbar({ title, url }: ShareToolbarProps) {
       <span
         style={{
           fontFamily: fonts.mono,
-          fontSize: '0.65rem',
+          fontSize: fontSize.micro,
           color: c.muted,
           letterSpacing: '0.08em',
           width: '100%',

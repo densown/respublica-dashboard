@@ -3,7 +3,7 @@ import SectionDivider from '../../../design-system/components/SectionDivider'
 import StatTile from '../../../design-system/components/StatTile'
 import { useTheme } from '../../../design-system'
 import { interpolate } from '../../../design-system/i18n'
-import { fonts, spacing } from '../../../design-system/tokens'
+import { fonts, radius, spacing } from '../../../design-system/tokens'
 import { fmtNumber } from '../worldConsoleHelpers'
 import type { WorldRankingRow } from '../worldTypes'
 import type { ConsoleTabLayoutDirection } from '../CountrySidebar'
@@ -96,7 +96,7 @@ export function GlobalView({
         marginTop: spacing.xl,
         padding: spacing.lg,
         border: `1px dashed ${c.border}`,
-        borderRadius: 8,
+        borderRadius: radius.lg,
         textAlign: 'center',
       }}
     >

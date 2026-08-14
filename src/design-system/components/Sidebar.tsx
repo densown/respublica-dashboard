@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { fonts, spacing, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { ShareCompact } from './ShareCompact'
 
@@ -75,7 +75,7 @@ export function Sidebar({
         display: 'flex',
         flexDirection: 'column',
         fontFamily: fonts.mono,
-        fontSize: '0.73rem',
+        fontSize: fontSize.xs,
         transition: `width 0.3s ${motion.easing}, min-width 0.3s ${motion.easing}`,
         boxShadow: c.shadow,
         overflow: 'hidden',
@@ -167,7 +167,7 @@ export function Sidebar({
                 key={`sec-${idx}`}
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.65rem',
+                  fontSize: fontSize.micro,
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
                   color: sectionColor,
@@ -235,12 +235,12 @@ export function Sidebar({
           style={{
             padding: `${spacing.sm}px ${spacing.md}px`,
             border: `1px solid rgba(255,255,255,0.15)`,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: 'transparent',
             color: c.sidebarText,
             cursor: 'pointer',
             fontFamily: fonts.mono,
-            fontSize: '0.73rem',
+            fontSize: fontSize.xs,
             transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
           }}
         >
@@ -252,12 +252,12 @@ export function Sidebar({
           style={{
             padding: `${spacing.sm}px ${spacing.md}px`,
             border: `1px solid rgba(255,255,255,0.15)`,
-            borderRadius: 4,
+            borderRadius: radius.sm,
             background: 'transparent',
             color: c.sidebarText,
             cursor: 'pointer',
             fontFamily: fonts.mono,
-            fontSize: '0.73rem',
+            fontSize: fontSize.xs,
           }}
         >
           {lang === 'de' ? 'EN' : 'DE'}
@@ -268,7 +268,7 @@ export function Sidebar({
         style={{
           padding: spacing.md,
           color: 'rgba(255,255,255,0.35)',
-          fontSize: '0.65rem',
+          fontSize: fontSize.micro,
         }}
       >
         Dashboard v0.1

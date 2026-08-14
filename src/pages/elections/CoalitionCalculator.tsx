@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import type { Lang } from '../../design-system/ThemeContext'
-import { fonts, radius, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
 import { coalitions, type Standing } from './pollMath'
 
@@ -60,7 +60,7 @@ export function CoalitionCalculator({ werte, lang, t }: CoalitionCalculatorProps
                   width: 14,
                   height: 26,
                   background: partyColors[p] ?? partyColors.other,
-                  borderRadius: 2,
+                  borderRadius: radius.xs,
                   marginRight: 2,
                 }}
               />
@@ -70,7 +70,7 @@ export function CoalitionCalculator({ werte, lang, t }: CoalitionCalculatorProps
           <span
             style={{
               fontFamily: fonts.body,
-              fontSize: '0.9rem',
+              fontSize: fontSize.md,
               color: c.ink,
               flex: 1,
               minWidth: 120,
@@ -82,13 +82,13 @@ export function CoalitionCalculator({ werte, lang, t }: CoalitionCalculatorProps
           <span
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.9rem',
+              fontSize: fontSize.md,
               fontWeight: 700,
               color: c.ink,
             }}
           >
             {k.anteil.toFixed(1).replace('.', lang === 'de' ? ',' : '.')}
-            <span style={{ fontSize: '0.7rem', fontWeight: 400 }}> %</span>
+            <span style={{ fontSize: fontSize.micro, fontWeight: 400 }}> %</span>
           </span>
         </div>
       ))}

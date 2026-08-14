@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fonts, spacing, motion } from '../tokens'
+import { fontSize, fonts, motion, radius, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import type { SidebarNavEntry } from './Sidebar'
 import { ShareCompact } from './ShareCompact'
@@ -66,7 +66,7 @@ export function MobileNav({
           style={{
             fontFamily: fonts.display,
             fontWeight: 900,
-            fontSize: '1rem',
+            fontSize: fontSize.base,
             color: c.ink,
             textDecoration: 'none',
           }}
@@ -80,11 +80,11 @@ export function MobileNav({
             style={{
               padding: `${spacing.xs}px ${spacing.sm}px`,
               border: `1px solid ${c.border}`,
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.bgAlt,
               color: c.inkSoft,
               fontFamily: fonts.mono,
-              fontSize: '0.7rem',
+              fontSize: fontSize.micro,
               cursor: 'pointer',
             }}
           >
@@ -96,11 +96,11 @@ export function MobileNav({
             style={{
               padding: `${spacing.xs}px ${spacing.sm}px`,
               border: `1px solid ${c.border}`,
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.bgAlt,
               color: c.inkSoft,
               fontFamily: fonts.mono,
-              fontSize: '0.7rem',
+              fontSize: fontSize.micro,
               cursor: 'pointer',
             }}
           >
@@ -114,10 +114,10 @@ export function MobileNav({
             style={{
               padding: spacing.sm,
               border: `1px solid ${c.border}`,
-              borderRadius: 4,
+              borderRadius: radius.sm,
               background: c.bgAlt,
               color: c.ink,
-              fontSize: '1.25rem',
+              fontSize: fontSize.xl,
               lineHeight: 1,
               cursor: 'pointer',
             }}
@@ -194,7 +194,7 @@ export function MobileNav({
                   marginBottom: spacing.lg,
                   color: c.red,
                   fontFamily: fonts.mono,
-                  fontSize: '0.75rem',
+                  fontSize: fontSize.xs,
                   textDecoration: 'none',
                 }}
               >
@@ -215,7 +215,7 @@ export function MobileNav({
                         key={`msec-${idx}`}
                         style={{
                           fontFamily: fonts.mono,
-                          fontSize: '0.65rem',
+                          fontSize: fontSize.micro,
                           textTransform: 'uppercase',
                           letterSpacing: '0.1em',
                           color: sectionColor,
@@ -246,7 +246,7 @@ export function MobileNav({
                         cursor: 'pointer',
                         textAlign: 'left',
                         fontFamily: fonts.mono,
-                        fontSize: '0.8rem',
+                        fontSize: fontSize.sm,
                         transition: `background 0.2s ${motion.easing}, border-color 0.2s ${motion.easing}`,
                       }}
                     >

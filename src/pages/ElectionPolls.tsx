@@ -403,7 +403,7 @@ function PollRowItem({
                 display: 'inline-block',
                 width: 7,
                 height: 7,
-                borderRadius: 2,
+                borderRadius: radius.xs,
                 marginRight: 5,
                 background: colors[x.p] ?? colors.other,
               }}

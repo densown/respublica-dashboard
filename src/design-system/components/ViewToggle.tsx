@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
-import { fonts, spacing } from '../tokens'
+import { fonts, radius, spacing } from '../tokens'
 
 export type TradeTimeseriesView = 'lines' | 'bars' | 'stacked'
 export type ViewToggleValue = TradeTimeseriesView | 'export' | 'import'
@@ -35,7 +35,7 @@ export default function ViewToggle({ value, onChange, options, style }: ViewTogg
         gap: 4,
         padding: 3,
         border: `1px solid ${c.border}`,
-        borderRadius: 8,
+        borderRadius: radius.lg,
         background: c.bg,
         ...style,
       }}
@@ -55,7 +55,7 @@ export default function ViewToggle({ value, onChange, options, style }: ViewTogg
               minHeight: 32,
               padding: `0 ${spacing.md}px`,
               border: `1px solid ${active ? c.red : 'transparent'}`,
-              borderRadius: 6,
+              borderRadius: radius.md,
               background: active ? c.surface : 'transparent',
               color: active ? c.red : c.muted,
               fontFamily: fonts.mono,

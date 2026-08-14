@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, spacing } from '../../design-system/tokens'
+import { fonts, radius, spacing } from '../../design-system/tokens'
 import type {
   ClimateResponse,
   CountrySelection,
@@ -445,7 +445,7 @@ export function CountrySidebar({
                   width: 28,
                   height: 28,
                   border: `1px solid ${c.border}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: 'transparent',
                   color: c.muted,
                   cursor: 'pointer',
@@ -469,7 +469,7 @@ export function CountrySidebar({
                   width: 28,
                   height: 28,
                   border: `1px solid ${c.border}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: 'transparent',
                   color: c.muted,
                   cursor: 'pointer',
@@ -493,7 +493,7 @@ export function CountrySidebar({
                   width: 28,
                   height: 28,
                   border: `1px solid ${c.border}`,
-                  borderRadius: 4,
+                  borderRadius: radius.sm,
                   background: 'transparent',
                   color: c.muted,
                   cursor: 'pointer',
@@ -565,7 +565,7 @@ export function CountrySidebar({
                           marginLeft: 4,
                           background: c.red,
                           color: '#fff',
-                          borderRadius: 999,
+                          borderRadius: radius.pill,
                           padding: '0 5px',
                           fontSize: 8,
                           display: 'inline-block',
