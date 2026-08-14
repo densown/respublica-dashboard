@@ -1,13 +1,22 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
+  Chip,
   EmptyState,
   LoadingSpinner,
-  SectionDivider,
+  PageHeader,
+  Section,
   ShareToolbar,
+  Toolbar,
   useTheme,
 } from '../design-system'
-import { fonts, motion, radius, spacing } from '../design-system/tokens'
+import {
+  fonts,
+  fontSize,
+  motion,
+  radius,
+  spacing,
+} from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { CoalitionCalculator } from './elections/CoalitionCalculator'
@@ -145,102 +154,57 @@ export default function ElectionPolls() {
       : ''
 
   const renderWahlPills = (gruppe: typeof wahlen) => (
-    <div style={{ display: 'flex', gap: spacing.xs, flexWrap: 'wrap' }}>
+    <Toolbar>
       {gruppe.map((w) => {
-        const active = w.slug === wahlSlug
         const label = lang === 'de' ? w.name_de : w.name_en
         // "Landtagswahl Sachsen-Anhalt 2026" -> "Sachsen-Anhalt 2026"
         const kurz = w.land ? `${w.land} ${(w.datum ?? '').slice(0, 4)}` : label
         return (
-          <button
+          <Chip
             key={w.slug}
-            type="button"
-            onClick={() => setParam('wahl', w.slug)}
+            label={kurz}
             title={label}
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: '0.72rem',
-              letterSpacing: '0.02em',
-              padding: '11px 13px',
-              minHeight: 44,
-              cursor: 'pointer',
-              borderRadius: radius.pill,
-              border: `1px solid ${active ? c.red : c.border}`,
-              background: active ? c.red : 'transparent',
-              color: active ? '#FFFFFF' : c.inkSoft,
-              fontWeight: active ? 700 : 400,
-            }}
-          >
-            {kurz}
-          </button>
+            active={w.slug === wahlSlug}
+            onClick={() => setParam('wahl', w.slug)}
+          />
         )
       })}
-    </div>
+    </Toolbar>
   )
 
   return (
     <div style={{ paddingBottom: spacing.xxl }}>
       <ElectionsSubNav />
 
-      {/* ---------- Editorialer Kopf ---------- */}
-      <header style={{ marginBottom: spacing.xl }}>
-        <div
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: '0.7rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: c.red,
-            marginBottom: spacing.sm,
-          }}
-        >
-          {t('electionPollsKicker')}
-        </div>
-        <h1
-          style={{
-            fontFamily: fonts.display,
-            fontSize: narrow ? '1.85rem' : '2.6rem',
-            lineHeight: 1.12,
-            color: c.ink,
-            margin: 0,
-            maxWidth: '22ch',
-          }}
-        >
-          {wahlName || t('electionPollsTitle')}
-        </h1>
-        {data && (
-          <p
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: '0.78rem',
-              color: c.muted,
-              marginTop: spacing.md,
-              marginBottom: 0,
-              lineHeight: 1.7,
-            }}
-          >
-            {data.wahl.datum && (
-              <>
-                {formatDate(data.wahl.datum, lang, true)}
-                {tage != null && tage >= 0 && (
-                  <span style={{ color: c.red, fontWeight: 700 }}>
-                    {' · '}
-                    {t('electionPollsDaysLeft').replace('{days}', String(tage))}
-                  </span>
-                )}
-                {' · '}
-              </>
-            )}
-            {umfragen.length} {t('electionPollsCount')}
-            {data.institute.length > 0 && (
-              <>
-                {' · '}
-                {data.institute.length} {t('electionPollsInstitutes')}
-              </>
-            )}
-          </p>
-        )}
-      </header>
+      <PageHeader
+        kicker={t('electionPollsKicker')}
+        title={wahlName || t('electionPollsTitle')}
+        meta={
+          data ? (
+            <>
+              {data.wahl.datum && (
+                <>
+                  {formatDate(data.wahl.datum, lang, true)}
+                  {tage != null && tage >= 0 && (
+                    <span style={{ color: c.red, fontWeight: 700 }}>
+                      {' · '}
+                      {t('electionPollsDaysLeft').replace('{days}', String(tage))}
+                    </span>
+                  )}
+                  {' · '}
+                </>
+              )}
+              {umfragen.length} {t('electionPollsCount')}
+              {data.institute.length > 0 && (
+                <>
+                  {' · '}
+                  {data.institute.length} {t('electionPollsInstitutes')}
+                </>
+              )}
+            </>
+          ) : undefined
+        }
+      />
 
       {/* ---------- Wahl-Auswahl ---------- */}
       {!listeLoading && (
@@ -251,7 +215,7 @@ export default function ElectionPolls() {
               <summary
                 style={{
                   fontFamily: fonts.mono,
-                  fontSize: '0.72rem',
+                  fontSize: fontSize.xs,
                   color: c.muted,
                   cursor: 'pointer',
                   padding: `${spacing.sm}px 0`,
@@ -290,46 +254,28 @@ export default function ElectionPolls() {
           ) : (
             <>
               {/* ---------- Aktueller Stand ---------- */}
-              <section style={{ marginBottom: spacing.xxl }}>
-                <SectionDivider label={t('electionPollsStanding')} />
+              <Section
+                title={t('electionPollsStanding')}
+                note={t('electionPollsStandingHint')
+                  .replace('{n}', String(Math.min(FENSTER, umfragen.length)))
+                  .replace('{date}', formatDate(neueste?.veroeffentlicht ?? null, lang))}
+              >
                 <PollStanding werte={werte} lang={lang} />
-                <p
-                  style={{
-                    fontFamily: fonts.body,
-                    fontSize: '0.82rem',
-                    color: c.muted,
-                    marginTop: spacing.md,
-                    marginBottom: 0,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {t('electionPollsStandingHint')
-                    .replace('{n}', String(Math.min(FENSTER, umfragen.length)))
-                    .replace('{date}', formatDate(neueste?.veroeffentlicht ?? null, lang))}
-                </p>
-              </section>
+              </Section>
 
               {/* ---------- Rechnerische Mehrheiten ---------- */}
-              <section style={{ marginBottom: spacing.xxl }}>
-                <SectionDivider label={t('electionPollsCoalitions')} />
+              <Section
+                title={t('electionPollsCoalitions')}
+                note={t('electionPollsCoalitionsHint')}
+              >
                 <CoalitionCalculator werte={werte} lang={lang} t={t} />
-                <p
-                  style={{
-                    fontFamily: fonts.body,
-                    fontSize: '0.82rem',
-                    color: c.muted,
-                    marginTop: spacing.md,
-                    marginBottom: 0,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {t('electionPollsCoalitionsHint')}
-                </p>
-              </section>
+              </Section>
 
               {/* ---------- Verlauf ---------- */}
-              <section style={{ marginBottom: spacing.xxl }}>
-                <SectionDivider label={t('electionPollsTrend')} />
+              <Section
+                title={t('electionPollsTrend')}
+                note={t('electionPollsThresholdHint')}
+              >
                 <PollTrendChart
                   data={umfragen}
                   parties={parteien}
@@ -337,58 +283,22 @@ export default function ElectionPolls() {
                   wahlDatum={data.wahl.datum}
                   height={narrow ? 300 : 400}
                 />
-                <p
-                  style={{
-                    fontFamily: fonts.body,
-                    fontSize: '0.82rem',
-                    color: c.muted,
-                    margin: 0,
-                    marginTop: spacing.sm,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {t('electionPollsThresholdHint')}
-                </p>
-              </section>
+              </Section>
 
               {/* ---------- Einzelne Umfragen ---------- */}
-              <section>
-                <SectionDivider label={t('electionPollsRecent')} />
-
+              <Section title={t('electionPollsRecent')}>
                 {data.institute.length > 1 && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: spacing.xs,
-                      flexWrap: 'wrap',
-                      marginBottom: spacing.lg,
-                    }}
-                  >
-                    {['', ...data.institute].map((inst) => {
-                      const active = inst === institut
-                      return (
-                        <button
-                          key={inst || 'all'}
-                          type="button"
-                          onClick={() => setParam('institut', inst || null)}
-                          style={{
-                            fontFamily: fonts.mono,
-                            fontSize: '0.7rem',
-                            padding: '11px 12px',
-                            minHeight: 44,
-                            cursor: 'pointer',
-                            borderRadius: radius.pill,
-                            border: `1px solid ${active ? c.ink : c.border}`,
-                            background: 'transparent',
-                            color: active ? c.ink : c.muted,
-                            fontWeight: active ? 700 : 400,
-                          }}
-                        >
-                          {inst || t('electionPollsAllInstitutes')}
-                        </button>
-                      )
-                    })}
-                  </div>
+                  <Toolbar label={t('electionPollsInstitute')}>
+                    {['', ...data.institute].map((inst) => (
+                      <Chip
+                        key={inst || 'all'}
+                        dense
+                        label={inst || t('electionPollsAllInstitutes')}
+                        active={inst === institut}
+                        onClick={() => setParam('institut', inst || null)}
+                      />
+                    ))}
+                  </Toolbar>
                 )}
 
                 <div style={{ display: 'grid', gap: 0 }}>
@@ -403,7 +313,7 @@ export default function ElectionPolls() {
                     />
                   ))}
                 </div>
-              </section>
+              </Section>
 
               {/* ---------- Teilen + Quelle ---------- */}
               <div style={{ marginTop: spacing.xxl }}>
@@ -448,7 +358,7 @@ function PollRowItem({
           justifyContent: 'space-between',
           gap: spacing.sm,
           fontFamily: fonts.mono,
-          fontSize: '0.72rem',
+          fontSize: fontSize.xs,
           color: c.muted,
           marginBottom: spacing.sm,
         }}
@@ -486,7 +396,7 @@ function PollRowItem({
         {sortiert.map((x) => (
           <span
             key={x.p}
-            style={{ fontFamily: fonts.mono, fontSize: '0.75rem', color: c.inkSoft }}
+            style={{ fontFamily: fonts.mono, fontSize: fontSize.sm, color: c.inkSoft }}
           >
             <span
               style={{

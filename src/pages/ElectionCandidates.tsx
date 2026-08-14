@@ -1,12 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
+  Chip,
   EmptyState,
   LoadingSpinner,
-  SectionDivider,
+  PageHeader,
+  Section,
+  Toolbar,
   useTheme,
 } from '../design-system'
-import { fonts, motion, radius, spacing } from '../design-system/tokens'
+import {
+  fonts,
+  fontSize,
+  motion,
+  radius,
+  spacing,
+} from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { ElectionsSubNav } from './elections/ElectionsSubNav'
@@ -240,7 +249,7 @@ export default function ElectionCandidates() {
   }
   const pfeilStil = (aus: boolean) => ({
     fontFamily: fonts.mono,
-    fontSize: '1rem',
+    fontSize: fontSize.base,
     lineHeight: 1,
     width: 40,
     minHeight: 44,
@@ -252,89 +261,38 @@ export default function ElectionCandidates() {
     opacity: aus ? 0.5 : 1,
   })
 
-  const chip = (aktiv: boolean) => ({
-    fontFamily: fonts.mono,
-    fontSize: '0.72rem',
-    padding: '11px 13px',
-    minHeight: 44,
-    cursor: 'pointer',
-    borderRadius: radius.pill,
-    border: `1px solid ${aktiv ? c.red : c.border}`,
-    background: aktiv ? c.red : 'transparent',
-    color: aktiv ? '#FFFFFF' : c.inkSoft,
-    fontWeight: aktiv ? 700 : 400,
-  })
-
   return (
     <div style={{ paddingBottom: spacing.xxl }}>
       <ElectionsSubNav />
 
-      <header style={{ marginBottom: spacing.xl }}>
-        <div
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: '0.7rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: c.red,
-            marginBottom: spacing.sm,
-          }}
-        >
-          {t('electionCandidatesKicker')}
-        </div>
-        <h1
-          style={{
-            fontFamily: fonts.display,
-            fontSize: narrow ? '1.85rem' : '2.6rem',
-            lineHeight: 1.12,
-            color: c.ink,
-            margin: 0,
-            maxWidth: '22ch',
-          }}
-        >
-          {wahlName || t('electionCandidatesTitle')}
-        </h1>
-        {data && data.gesamt > 0 && (
-          <p
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: '0.78rem',
-              color: c.muted,
-              marginTop: spacing.md,
-              marginBottom: 0,
-              lineHeight: 1.7,
-            }}
-          >
-            {formatDate(data.wahl.datum, lang)} · {data.gesamt}{' '}
-            {t('electionCandidatesCount')} · {data.parteien.length}{' '}
-            {t('electionCandidatesParties')} · {wahlkreise.length}{' '}
-            {t('electionCandidatesConstituencies')}
-          </p>
-        )}
-      </header>
+      <PageHeader
+        kicker={t('electionCandidatesKicker')}
+        title={wahlName || t('electionCandidatesTitle')}
+        meta={
+          data && data.gesamt > 0 ? (
+            <>
+              {formatDate(data.wahl.datum, lang)} · {data.gesamt}{' '}
+              {t('electionCandidatesCount')} · {data.parteien.length}{' '}
+              {t('electionCandidatesParties')} · {wahlkreise.length}{' '}
+              {t('electionCandidatesConstituencies')}
+            </>
+          ) : undefined
+        }
+      />
 
       {/* Wahl-Auswahl */}
       {!listeLoading && wahlen.length > 1 && (
-        <div
-          style={{
-            display: 'flex',
-            gap: spacing.xs,
-            flexWrap: 'wrap',
-            marginBottom: spacing.xl,
-          }}
-        >
+        <Toolbar label={t('electionCandidatesElection')}>
           {wahlen.map((w) => (
-            <button
+            <Chip
               key={w.slug}
-              type="button"
-              onClick={() => setParam('wahl', w.slug)}
+              label={w.land ?? (lang === 'de' ? w.name_de : w.name_en)}
               title={lang === 'de' ? w.name_de : w.name_en}
-              style={chip(w.slug === wahlSlug)}
-            >
-              {w.land ?? (lang === 'de' ? w.name_de : w.name_en)}
-            </button>
+              active={w.slug === wahlSlug}
+              onClick={() => setParam('wahl', w.slug)}
+            />
           ))}
-        </div>
+        </Toolbar>
       )}
 
       {ersteLadung && <LoadingSpinner />}
@@ -353,100 +311,47 @@ export default function ElectionCandidates() {
           aria-busy={laedtNach}
         >
           {/* Ansicht umschalten */}
-          <div
-            style={{
-              display: 'flex',
-              gap: spacing.xs,
-              marginBottom: spacing.lg,
-              flexWrap: 'wrap',
-            }}
-          >
+          <Toolbar label={t('electionCandidatesView')}>
             {(['wahlkreis', 'partei'] as const).map((a) => (
-              <button
+              <Chip
                 key={a}
-                type="button"
+                label={
+                  a === 'wahlkreis'
+                    ? t('electionCandidatesByConstituency')
+                    : t('electionCandidatesByParty')
+                }
+                active={ansicht === a}
                 onClick={() => setParam('ansicht', a === 'wahlkreis' ? null : a)}
-                style={chip(ansicht === a)}
-              >
-                {a === 'wahlkreis'
-                  ? t('electionCandidatesByConstituency')
-                  : t('electionCandidatesByParty')}
-              </button>
+              />
             ))}
-          </div>
+          </Toolbar>
 
           {ansicht === 'wahlkreis' ? (
             <>
-              <SectionDivider label={t('electionCandidatesConstituency')} />
-
-              {/* Einfaerbung waehlen: Dichte des Felds oder Antritt je Partei */}
               {geo && (
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: spacing.xs,
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    marginBottom: spacing.md,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: fonts.mono,
-                      fontSize: '0.68rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
-                      color: c.muted,
-                      marginRight: spacing.xs,
-                    }}
-                  >
-                    {t('electionCandidatesColorBy')}
-                  </span>
-                  <button
-                    type="button"
+                <Toolbar label={t('electionCandidatesColorBy')} tight>
+                  <Chip
+                    dense
+                    label={t('electionCandidatesColorDensity')}
+                    active={!farbePartei}
                     onClick={() => setParam('farbe', null)}
-                    style={{ ...chip(!farbePartei), fontSize: '0.68rem', padding: '9px 11px', minHeight: 38 }}
-                  >
-                    {t('electionCandidatesColorDensity')}
-                  </button>
-                  {(data.parteien ?? []).slice(0, 8).map((g) => {
-                    const aktivF = farbePartei === g.partei
-                    const farbe =
-                      partyColors[partyLabelToSlug(g.partei)] ?? partyColors.other
-                    return (
-                      <button
-                        key={g.partei}
-                        type="button"
-                        onClick={() => setParam('farbe', aktivF ? null : g.partei)}
-                        title={`${cleanPartyLabel(g.partei)} — ${g.anzahl}`}
-                        style={{
-                          ...chip(false),
-                          fontSize: '0.68rem',
-                          padding: '9px 11px',
-                          minHeight: 38,
-                          borderColor: aktivF ? farbe : c.border,
-                          borderWidth: aktivF ? 2 : 1,
-                          color: aktivF ? c.ink : c.muted,
-                          fontWeight: aktivF ? 700 : 400,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                        }}
-                      >
-                        <span
-                          style={{
-                            width: 9,
-                            height: 9,
-                            borderRadius: 2,
-                            background: farbe,
-                            flexShrink: 0,
-                          }}
-                        />
-                        {cleanPartyLabel(g.partei)}
-                      </button>
-                    )
-                  })}
-                </div>
+                  />
+                  {(data.parteien ?? []).slice(0, 8).map((g) => (
+                    <Chip
+                      key={g.partei}
+                      dense
+                      label={cleanPartyLabel(g.partei)}
+                      title={`${cleanPartyLabel(g.partei)} — ${g.anzahl}`}
+                      dot={
+                        partyColors[partyLabelToSlug(g.partei)] ?? partyColors.other
+                      }
+                      active={farbePartei === g.partei}
+                      onClick={() =>
+                        setParam('farbe', farbePartei === g.partei ? null : g.partei)
+                      }
+                    />
+                  ))}
+                </Toolbar>
               )}
 
               {/* Karte und Auswahl nebeneinander: das Land ist hoeher als breit,
@@ -473,7 +378,7 @@ export default function ElectionCandidates() {
                     <p
                       style={{
                         fontFamily: fonts.mono,
-                        fontSize: '0.68rem',
+                        fontSize: fontSize.micro,
                         color: c.muted,
                         marginTop: spacing.sm,
                         lineHeight: 1.6,
@@ -522,7 +427,7 @@ export default function ElectionCandidates() {
                   aria-label={t('electionCandidatesConstituency')}
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.8rem',
+                    fontSize: fontSize.sm,
                     padding: '10px 12px',
                     minHeight: 44,
                     flex: 1,
@@ -553,7 +458,7 @@ export default function ElectionCandidates() {
                 <span
                   style={{
                     fontFamily: fonts.mono,
-                    fontSize: '0.7rem',
+                    fontSize: fontSize.xs,
                     color: c.muted,
                     whiteSpace: 'nowrap',
                   }}
@@ -562,27 +467,11 @@ export default function ElectionCandidates() {
                 </span>
               </div>
 
-              <h2
-                style={{
-                  fontFamily: fonts.display,
-                  fontSize: '1.15rem',
-                  color: c.ink,
-                  margin: `0 0 ${spacing.md}px`,
-                }}
+              <Section
+                title={wahlkreise.find(([nr]) => nr === aktiverWk)?.[1] ?? '—'}
+                aside={`${imWahlkreis.length} ${t('electionCandidatesCount')}`}
+                last
               >
-                {wahlkreise.find(([nr]) => nr === aktiverWk)?.[1] ?? '—'}
-                <span
-                  style={{
-                    fontFamily: fonts.mono,
-                    fontSize: '0.78rem',
-                    fontWeight: 400,
-                    color: c.muted,
-                    marginLeft: spacing.sm,
-                  }}
-                >
-                  {imWahlkreis.length} {t('electionCandidatesCount')}
-                </span>
-              </h2>
 
               <div style={{ display: 'grid', gap: 0 }}>
                 {imWahlkreis.map((k) => (
@@ -597,51 +486,39 @@ export default function ElectionCandidates() {
                   />
                 ))}
               </div>
+              </Section>
                 </div>
               </div>
             </>
           ) : (
             <>
               {data.parteien.map((g) => (
-                <section key={g.partei} style={{ marginBottom: spacing.xl }}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: spacing.sm,
-                      marginBottom: spacing.sm,
-                    }}
-                  >
+                <Section
+                  key={g.partei}
+                  title={cleanPartyLabel(g.partei)}
+                  aside={
                     <span
                       style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: 3,
-                        background:
-                          partyColors[partyLabelToSlug(g.partei)] ?? partyColors.other,
-                        flexShrink: 0,
-                      }}
-                    />
-                    <h2
-                      style={{
-                        fontFamily: fonts.display,
-                        fontSize: '1.1rem',
-                        color: c.ink,
-                        margin: 0,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: spacing.sm,
                       }}
                     >
-                      {cleanPartyLabel(g.partei)}
-                    </h2>
-                    <span
-                      style={{
-                        fontFamily: fonts.mono,
-                        fontSize: '0.74rem',
-                        color: c.muted,
-                      }}
-                    >
+                      <span
+                        aria-hidden
+                        style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: radius.xs,
+                          background:
+                            partyColors[partyLabelToSlug(g.partei)] ??
+                            partyColors.other,
+                        }}
+                      />
                       {g.anzahl}
                     </span>
-                  </div>
+                  }
+                >
                   <div style={{ display: 'grid', gap: 0 }}>
                     {g.kandidaturen.map((k) => (
                       <CandidateRow
@@ -655,7 +532,7 @@ export default function ElectionCandidates() {
                       />
                     ))}
                   </div>
-                </section>
+                </Section>
               ))}
             </>
           )}
@@ -663,7 +540,7 @@ export default function ElectionCandidates() {
           <p
             style={{
               fontFamily: fonts.mono,
-              fontSize: '0.72rem',
+              fontSize: fontSize.xs,
               color: c.muted,
               marginTop: spacing.xl,
               lineHeight: 1.6,
@@ -723,7 +600,7 @@ function CandidateRow({
         />
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: fonts.body, fontSize: '0.95rem', color: c.ink }}>
+        <div style={{ fontFamily: fonts.body, fontSize: fontSize.base, color: c.ink }}>
           {profilUrl ? (
             <a
               href={profilUrl}
@@ -740,7 +617,7 @@ function CandidateRow({
         <div
           style={{
             fontFamily: fonts.mono,
-            fontSize: '0.72rem',
+            fontSize: fontSize.xs,
             color: c.muted,
             marginTop: 2,
           }}

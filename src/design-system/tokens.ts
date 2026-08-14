@@ -91,14 +91,34 @@ export const fonts = {
   mono: "'IBM Plex Mono', monospace",
 } as const
 
+/**
+ * Schriftgroessen. Siehe docs/DESIGN.md, Abschnitt 3.
+ *
+ * Neu geschnitten im August 2026: die alte Skala stand auf 0.625 / 0.8125 /
+ * 0.9375 rem und wurde in pages/ und components/ NULLMAL verwendet — dafuer
+ * 381 rohe rem-Angaben, die sich um 0.7, 0.75, 0.8, 0.85, 0.9 und 0.95
+ * gruppierten. Kein Token traf einen tatsaechlich gebrauchten Wert. Token,
+ * die man beim Schreiben umrechnen muss, benutzt niemand.
+ */
 export const fontSize = {
-  xs: '0.625rem',
-  sm: '0.6875rem',
-  md: '0.8125rem',
+  /** 11px — Mono-Label in Versalien, Legenden */
+  micro: '0.6875rem',
+  /** 12px — Metazeile, Fussnote, Quellenangabe */
+  xs: '0.75rem',
+  /** 13px — Tabellendaten, Chips, Hilfstext */
+  sm: '0.8125rem',
+  /** 14px — sekundaerer Fliesstext */
+  md: '0.875rem',
+  /** 15px — Fliesstext */
   base: '0.9375rem',
-  lg: '1.125rem',
-  xl: '1.5rem',
-  xxl: '2rem',
+  /** 17px — Vorspann, hervorgehobene Zahl */
+  lg: '1.0625rem',
+  /** 20px — Abschnittsueberschrift */
+  xl: '1.25rem',
+  /** 24px — Seitentitel auf dem Handy */
+  xxl: '1.5rem',
+  /** 36px — Seitentitel auf dem Desktop */
+  hero: '2.25rem',
 } as const
 
 export const fontWeight = {
@@ -114,7 +134,14 @@ export const lineHeight = {
   relaxed: 1.7,
 } as const
 
+/**
+ * Eckenradien. Die Werte decken den gemessenen Bedarf bereits ab (8 kommt
+ * 77x vor, 4 41x, 6 31x) — ergaenzt ist nur `xs` fuer die 2- und 3-Pixel-
+ * Faelle an Farbpunkten und Miniaturbalken.
+ */
 export const radius = {
+  /** 2px — Farbpunkte, Miniaturbalken */
+  xs: 2,
   sm: 4,
   md: 6,
   lg: 8,
