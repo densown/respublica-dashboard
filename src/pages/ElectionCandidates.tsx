@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   EmptyState,
@@ -10,6 +10,10 @@ import { fonts, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { ElectionsSubNav } from './elections/ElectionsSubNav'
+import {
+  ConstituencyMap,
+  type ConstituencyGeoJson,
+} from './elections/ConstituencyMap'
 import { cleanPartyLabel, partyLabelToSlug } from './elections/partyLabel'
 import { partyColorsForTheme } from './elections/partyColors'
 import type { WahlterminListResponse } from './elections/pollTypes'
@@ -103,6 +107,30 @@ export default function ElectionCandidates() {
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
   )
+
+  // Wahlkreisgeometrie liegt je Wahl unter public/data und wird ueber den Slug
+  // gefunden. Fehlt die Datei, faellt die Seite auf die Nummernliste zurueck —
+  // fuer die meisten Wahlen gibt es (noch) keine Geodaten.
+  const [geo, setGeo] = useState<ConstituencyGeoJson | null>(null)
+  useEffect(() => {
+    if (!wahlSlug) {
+      setGeo(null)
+      return
+    }
+    let abgebrochen = false
+    const url = `${import.meta.env.BASE_URL}data/wahlkreise-${wahlSlug}.geojson`
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (!abgebrochen) setGeo(j)
+      })
+      .catch(() => {
+        if (!abgebrochen) setGeo(null)
+      })
+    return () => {
+      abgebrochen = true
+    }
+  }, [wahlSlug])
 
   const ersteLadung = (loading || listeLoading) && !data
   const laedtNach = loading && Boolean(data)
@@ -272,6 +300,20 @@ export default function ElectionCandidates() {
           {ansicht === 'wahlkreis' ? (
             <>
               <SectionDivider label={t('electionCandidatesConstituency')} />
+
+              {geo && (
+                <div style={{ marginBottom: spacing.lg }}>
+                  <ConstituencyMap
+                    geo={geo}
+                    selected={aktiverWk}
+                    onSelect={(nr) => setParam('wk', String(nr))}
+                    ariaLabel={t('electionCandidatesMapLabel')}
+                  />
+                </div>
+              )}
+
+              {/* Nummernliste bleibt: als Rueckfallebene ohne Geodaten und
+                  weil eine Karte auf dem Handy fummelig zu treffen ist. */}
               <div
                 style={{
                   display: 'flex',
