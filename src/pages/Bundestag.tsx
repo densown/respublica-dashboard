@@ -25,6 +25,7 @@ import {
 } from '../components/bundestag/Hemicycle'
 import { RAW_SEAT_COUNT, RAW_SEATS } from '../data/bundestag-seats'
 import type { AbstimmungsDetailData } from '../components/bundestag/AbstimmungsDetail'
+import { useSeo } from '../hooks/useSeo'
 
 type AbgeordnetenApiRow = {
   id: number
@@ -126,6 +127,7 @@ export default function Bundestag() {
   const { pollId: pollIdParam } = useParams()
   const navigate = useNavigate()
   const { c, t, lang } = useTheme()
+  useSeo({ titel: "Namentliche Abstimmungen im Bundestag", beschreibung: "Wie jede und jeder Abgeordnete abgestimmt hat, nach Themenfeld — und wo sie von der eigenen Fraktion abweichen." })
 
   const [selectedPollId, setSelectedPollId] = useState<number | null>(null)
   const [animating, setAnimating] = useState(false)

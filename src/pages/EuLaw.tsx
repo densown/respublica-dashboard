@@ -31,6 +31,7 @@ import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { ON_DATA_LIGHT } from '../design-system/palettes'
+import { useSeo } from '../hooks/useSeo'
 
 const PAGE_SIZE = 20
 
@@ -97,6 +98,7 @@ function countByGericht(stats: EuUrteilStats | null, g: string): number {
 
 export default function EuLaw() {
   const { c, t } = useTheme()
+  useSeo({ titel: "EU-Recht: Verordnungen, Richtlinien, Rechtsprechung", beschreibung: "EU-Rechtsakte aus EUR-Lex mit Zusammenfassung, verknüpft mit deutschem Recht." })
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { id: routeId } = useParams()

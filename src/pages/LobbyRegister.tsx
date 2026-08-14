@@ -31,6 +31,7 @@ import { fontSize, fonts, motion, radius, spacing } from '../design-system/token
 import { CATEGORICAL } from '../design-system/palettes'
 import { useApi } from '../hooks/useApi'
 import { useSearchParamsState } from '../hooks/useSearchParamsState'
+import { useSeo } from '../hooks/useSeo'
 
 type LobbyListItem = {
   id: number
@@ -181,6 +182,7 @@ const CITY_COORDS: Record<string, [number, number]> = {
 
 export default function LobbyRegister() {
   const { t, c, lang, theme } = useTheme()
+  useSeo({ titel: "Lobbyregister: wer welches Gesetz beeinflusst", beschreibung: "Über 25.000 Verknüpfungen zwischen registrierten Interessenvertretern und konkreten Gesetzesvorhaben." })
   const [viewportWidth, setViewportWidth] = useState(
     typeof window === 'undefined' ? 1024 : window.innerWidth,
   )

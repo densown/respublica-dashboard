@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { PageHeader, useTheme } from '../design-system'
 import { fontSize, fonts, spacing } from '../design-system/tokens'
+import { useSeo } from '../hooks/useSeo'
 
 export default function NotFound() {
   const { t, c } = useTheme()
+  useSeo({ titel: 'Seite nicht gefunden', nichtIndexieren: true })
 
   return (
     <>

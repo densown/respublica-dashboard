@@ -6,6 +6,7 @@ import { interpolate } from '../design-system/i18n'
 import { useApi } from '../hooks/useApi'
 import { SOURCES_BY_PAGE, type SourceCatalogPage } from '../data/sourcesCatalog'
 import type { I18nKey } from '../design-system/i18n'
+import { useSeo } from '../hooks/useSeo'
 
 type WahlenStats = {
   total_records: number
@@ -182,6 +183,7 @@ function renderStaticSourcesBlock(
 
 export default function Sources() {
   const { c, t, lang } = useTheme()
+  useSeo({ titel: "Quellen und Lizenzen", beschreibung: "Alle Datenquellen von Res.Publica mit Lizenz und Aktualisierungsintervall." })
   const stats = useApi<WahlenStats>('/api/wahlen/stats')
   const worldSrc = useApi<WorldSourcesResponse>('/api/world/sources')
 

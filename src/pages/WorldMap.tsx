@@ -44,6 +44,7 @@ import {
   shortenWorldUnit,
 } from './worldmap/worldValueFormat'
 import { categoryAndUnitForIndicator } from './worldmap/worldIndicatorUtils'
+import { useSeo } from '../hooks/useSeo'
 
 function normIso(code: string): string {
   return code.trim().toUpperCase()
@@ -116,6 +117,7 @@ const LOWER_IS_BETTER_INDICATORS = new Set<string>([
 
 export default function WorldMap() {
   const { c, t, lang, theme } = useTheme()
+  useSeo({ titel: "Weltkarte: Länderdaten im Vergleich", beschreibung: "Weltbank-Daten für 261 Länder — Wirtschaft, Umwelt, Handel und Regierungsführung." })
   const isDark = theme === 'dark'
   const geoRef = useRef<WorldGeoJson | null>(null)
   const [geojson, setGeojson] = useState<WorldGeoJson | null>(null)

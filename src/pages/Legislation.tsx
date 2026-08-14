@@ -36,6 +36,7 @@ import {
 import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
+import { useSeo } from '../hooks/useSeo'
 
 const PAGE_SIZE = 20
 
@@ -119,6 +120,7 @@ function LegislationWelcome({
   statsError: string | null
 }) {
   const { c, t } = useTheme()
+  useSeo({ titel: "Gesetzesänderungen und Urteile", beschreibung: "Aktuelle Änderungen deutscher Gesetze mit Synopse und Zusammenfassung, dazu Urteile der Bundesgerichte." })
 
   const lawsVal =
     statsLoading || statsError

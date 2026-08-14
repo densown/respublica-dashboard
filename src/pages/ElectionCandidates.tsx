@@ -29,6 +29,7 @@ import {
 import { cleanPartyLabel, partyLabelToSlug } from './elections/partyLabel'
 import { partyColorsForTheme } from './elections/partyColors'
 import type { WahlterminListResponse } from './elections/pollTypes'
+import { useSeo } from '../hooks/useSeo'
 
 type Kandidatur = {
   aw_id: number
@@ -193,9 +194,11 @@ export default function ElectionCandidates() {
       : data.wahl.name_en
     : ''
 
-  useEffect(() => {
-    if (wahlName) document.title = `${t('electionCandidatesTitle')} — ${wahlName}`
-  }, [wahlName, t])
+  useSeo({
+    titel: wahlName ? `Kandidaturen: ${wahlName}` : 'Kandidaturen',
+    beschreibung:
+      'Wer bei der Wahl antritt — nach Wahlkreis und Partei, mit Spitzenkandidaturen.',
+  })
 
   // --- Einfaerbung der Karte ------------------------------------------------
   // Zwei Modi: Dichte des Bewerberfelds, oder wo eine bestimmte Partei einen

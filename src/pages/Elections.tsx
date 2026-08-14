@@ -15,6 +15,7 @@ import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
+import { useSeo } from '../hooks/useSeo'
 import type {
   ElectionType,
   KreiseGeoJson,
@@ -44,6 +45,7 @@ const MODE_TAB_KEYS = {
 
 export default function Elections() {
   const { c, t } = useTheme()
+  useSeo({ titel: "Wahlergebnisse in Deutschland seit 1990", beschreibung: "Ergebnisse aller Bundestags-, Landtags- und Kommunalwahlen seit 1990, nach Kreis und Bundesland." })
   const geoRef = useRef<KreiseGeoJson | null>(null)
   const [geojson, setGeojson] = useState<KreiseGeoJson | null>(null)
   const [geoErr, setGeoErr] = useState(false)

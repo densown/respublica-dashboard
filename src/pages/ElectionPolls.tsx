@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   Chip,
@@ -25,6 +25,7 @@ import { PollTrendChart } from './elections/PollTrendChart'
 import { SourceNote } from './elections/SourceNote'
 import { PARTY_LABELS, partyColorsForTheme } from './elections/partyColors'
 import { OTHER, standing } from './elections/pollMath'
+import { useSeo } from '../hooks/useSeo'
 import type {
   PollRow,
   PollsResponse,
@@ -142,9 +143,11 @@ export default function ElectionPolls() {
       : data.wahl.name_en
     : ''
 
-  useEffect(() => {
-    if (wahlName) document.title = `${t('electionPollsTitle')} — ${wahlName}`
-  }, [wahlName, t])
+  useSeo({
+    titel: wahlName ? `Umfragen: ${wahlName}` : 'Wahlumfragen',
+    beschreibung:
+      'Sonntagsfrage-Zeitreihen zu Bundes- und Landtagswahlen mit Koalitionsrechner. Quelle: dawum.de.',
+  })
 
   const letzteZehn = useMemo(() => [...umfragen].reverse().slice(0, 10), [umfragen])
   const shareUrl =

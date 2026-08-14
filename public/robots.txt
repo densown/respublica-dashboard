@@ -1,0 +1,9 @@
+# Res.Publica Dashboard
+User-agent: *
+Allow: /
+
+# Nicht indexieren: Schnittstelle und Verwaltung liefern keine Inhalte
+Disallow: /api/
+Disallow: /admin
+
+Sitemap: https://app.respublica.media/sitemap.xml

@@ -4,6 +4,7 @@ import { PageHeader, Section, useTheme } from '../design-system'
 import { fonts, fontSize, lineHeight, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
+import { useSeo } from '../hooks/useSeo'
 
 type GesetzeStats = { gesetze_count: number; aenderungen_count: number }
 type EuStats = { rechtsakte_count?: number; count?: number }
@@ -62,6 +63,7 @@ function datum(iso: string | null, lang: string): string {
  */
 export default function Overview() {
   const { c, t, lang } = useTheme()
+  useSeo({ titel: t('overviewHeroTitle'), beschreibung: "Gesetze, namentliche Abstimmungen, Lobbyregister, EU-Recht und Wahlen aus amtlichen Quellen — gesammelt, verknüpft und täglich aktualisiert." })
   const navigate = useNavigate()
   const narrow = useIsMobile()
 
