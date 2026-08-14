@@ -1,16 +1,17 @@
 import { useCallback, useState, type CSSProperties } from 'react'
 import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import { SHARE_BRAND } from '../palettes'
 
 export type ShareToolbarProps = {
   title: string
   url: string
 }
 
-const REDDIT = '#FF4500'
-const LINKEDIN = '#0A66C2'
-const WHATSAPP = '#25D366'
-const TELEGRAM = '#229ED9'
+const REDDIT = SHARE_BRAND.reddit
+const LINKEDIN = SHARE_BRAND.linkedin
+const WHATSAPP = SHARE_BRAND.whatsapp
+const TELEGRAM = SHARE_BRAND.telegram
 
 export function ShareToolbar({ title, url }: ShareToolbarProps) {
   const { c, t } = useTheme()

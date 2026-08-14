@@ -64,6 +64,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
     document.documentElement.dataset.theme = theme
+
+    // Token zusaetzlich als CSS-Variablen spiegeln. Stylesheets koennen die
+    // TypeScript-Token nicht importieren; ohne diese Bruecke muessten sie
+    // Farbwerte doppelt fuehren, und genau daraus entsteht Abweichung beim
+    // naechsten Umfaerben. Siehe docs/DESIGN.md, Abschnitt 4.
+    const palette = theme === 'dark' ? dark : light
+    const root = document.documentElement
+    for (const [schluessel, wert] of Object.entries(palette)) {
+      root.style.setProperty(`--rp-${schluessel}`, String(wert))
+    }
   }, [theme])
 
   useEffect(() => {

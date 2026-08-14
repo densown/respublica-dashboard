@@ -3,6 +3,7 @@ import { useTheme } from '../../../design-system'
 import { fonts, spacing } from '../../../design-system/tokens'
 import type { ClimateResponse, ClimateScenario } from '../worldTypes'
 import type { ConsoleTabLayoutDirection } from '../CountrySidebar'
+import { ON_DATA_DARK, ON_DATA_LIGHT } from '../../../design-system/palettes'
 
 // Lesbare Textfarbe (dunkel/hell) für einen beliebigen Hintergrund-Hex via
 // YIQ-Helligkeit: dunkler Text auf hellen Klassenfarben (Gelb, Hellgrün),
@@ -18,12 +19,12 @@ function koeppenTextColor(hexBg: string): string {
           .join('')
       : h
   const n = parseInt(full, 16)
-  if (Number.isNaN(n)) return '#0F0F0F'
+  if (Number.isNaN(n)) return ON_DATA_DARK
   const r = (n >> 16) & 255
   const g = (n >> 8) & 255
   const b = n & 255
   const yiq = (r * 299 + g * 587 + b * 114) / 1000
-  return yiq >= 140 ? '#0F0F0F' : '#FFFFFF'
+  return yiq >= 140 ? ON_DATA_DARK : ON_DATA_LIGHT
 }
 
 // Feste Szenario-Reihenfolge (Zeit-/Schwere-Progression) für beide Sektionen.

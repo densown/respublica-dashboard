@@ -11,14 +11,14 @@ import { useNavigate } from 'react-router-dom'
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
+import { EU_DOC_TYPE, EU_DOC_TYPE_FALLBACK } from '../../design-system/palettes'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuRechtDetail, EuRechtListItem } from './types'
+import { ON_DATA_LIGHT } from '../../design-system/palettes'
 
-const REG_COLOR = '#2563eb'
-const DIR_COLOR = '#16a34a'
-const DEC_COLOR = '#d97706'
+
 const PREVIEW_LEN = 200
 
 function trunc(s: string, max: number): string {
@@ -28,10 +28,10 @@ function trunc(s: string, max: number): string {
 }
 
 function typColors(typ: string): { bg: string; fg: string } {
-  if (typ === 'REG') return { bg: REG_COLOR, fg: '#FFFFFF' }
-  if (typ === 'DIR') return { bg: DIR_COLOR, fg: '#FFFFFF' }
-  if (typ === 'DEC') return { bg: DEC_COLOR, fg: '#FFFFFF' }
-  return { bg: '#6B7280', fg: '#FFFFFF' }
+  if (typ === 'REG') return { bg: EU_DOC_TYPE.REG, fg: ON_DATA_LIGHT }
+  if (typ === 'DIR') return { bg: EU_DOC_TYPE.DIR, fg: ON_DATA_LIGHT }
+  if (typ === 'DEC') return { bg: EU_DOC_TYPE.DEC, fg: ON_DATA_LIGHT }
+  return { bg: EU_DOC_TYPE_FALLBACK, fg: ON_DATA_LIGHT }
 }
 
 function typLabelI18n(

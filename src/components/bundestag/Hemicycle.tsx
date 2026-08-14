@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { RAW_SEATS } from '../../data/bundestag-seats'
 import { fonts, spacing } from '../../design-system/tokens'
 import { useTheme } from '../../design-system/ThemeContext'
+import { SSW } from '../../design-system/palettes'
 
 const VIEW_W = 800
 const VIEW_H = 410
@@ -61,7 +62,7 @@ type SeatDerived = {
 }
 
 const normalizeFraktion = (f: string): string => f.replace(/\u00AD/g, '').trim()
-const SSW_COLOR = '#003F8E'
+const SSW_COLOR = SSW
 const SSW_NAME = 'Stefan Seidler'
 
 function getEffektiveFraktion(abgeordneter: { name: string; fraktion: string }): string {
@@ -269,11 +270,11 @@ export function Hemicycle({
   animating,
   onSeatSelect,
 }: HemicycleProps) {
-  const { c, t, theme } = useTheme()
+  const { c, t } = useTheme()
   const [voteReveal, setVoteReveal] = useState(false)
   const [hoveredSeatId, setHoveredSeatId] = useState<number | null>(null)
 
-  const cduSeat = theme === 'dark' ? '#CCCCCC' : '#000000'
+  const cduSeat = c.seatCdu
 
   const { legendByKey } = useMemo(
     () => mergePartiesForLegend(sitzverteilung, cduSeat),

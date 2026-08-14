@@ -22,6 +22,7 @@ import {
 } from './partyColors'
 import type { MapRow } from './types'
 import type { ScatterRow } from './types'
+import { NEUTRAL_FALLBACK } from '../../design-system/palettes'
 
 function formatScatterPercent(n: number, lang: 'de' | 'en'): string {
   if (Number.isNaN(n)) return '—'
@@ -92,7 +93,7 @@ export function ScatterPlot({
       let legendKey: string
       if (colorMode === 'state') {
         legendKey = prefix
-        fill = STATE_COLORS[prefix] ?? '#888888'
+        fill = STATE_COLORS[prefix] ?? NEUTRAL_FALLBACK
       } else {
         const w = winnersByAgs?.get(r.ags)?.winning_party ?? 'other'
         legendKey = w
@@ -319,7 +320,7 @@ function ScatterColorLegend({
     colorMode === 'state'
       ? STATE_CODES_SORTED.map((code) => ({
           key: code,
-          color: STATE_COLORS[code] ?? '#888888',
+          color: STATE_COLORS[code] ?? NEUTRAL_FALLBACK,
           label: STATE_NAMES[code] ?? code,
         }))
       : SCATTER_PARTY_LEGEND_KEYS.map((key) => ({

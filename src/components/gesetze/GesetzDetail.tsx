@@ -32,13 +32,13 @@ export type LobbyLawResponse = {
 }
 
 function DiffSynopse({ diff }: { diff: string }) {
-  const { c, theme } = useTheme()
-  const isDark = theme === 'dark'
-  const greenBg = isDark ? '#1a3a2a' : '#e6ffec'
-  const greenFg = isDark ? '#7ee787' : '#1a7f37'
-  const redBg = isDark ? '#3d1f1f' : '#ffebe9'
-  const redFg = isDark ? '#ff7b72' : '#cf222e'
-  const hunkFg = isDark ? '#79c0ff' : '#0969da'
+  const { c } = useTheme()
+  // Farbwerte liegen als Token in beiden Paletten — siehe tokens.ts.
+  const greenBg = c.diffAddBg
+  const greenFg = c.diffAddFg
+  const redBg = c.diffDelBg
+  const redFg = c.diffDelFg
+  const hunkFg = c.diffHunkFg
 
   const lines = diff.split(/\r?\n/)
 

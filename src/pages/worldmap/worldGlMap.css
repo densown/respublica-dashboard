@@ -42,7 +42,7 @@
 }
 
 .world-gl-map__fs-btn:focus-visible {
-  outline: 2px solid #c8102e;
+  outline: 2px solid var(--rp-red);
   outline-offset: 1px;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .world-gl-map__close-fs:focus-visible {
-  outline: 2px solid #c8102e;
+  outline: 2px solid var(--rp-red);
   outline-offset: 1px;
 }
 
@@ -84,7 +84,7 @@
    beiden Themes klar als schwebendes Element lesbar bleibt. */
 .world-gl-popup .maplibregl-popup-content {
   background: rgba(20, 22, 28, 0.92);
-  color: #f4f4f5;
+  color: var(--rp-ink);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   padding: 9px 12px 11px;

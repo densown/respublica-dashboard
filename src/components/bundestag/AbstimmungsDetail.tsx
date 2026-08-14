@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Badge, ShareToolbar, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
+import { NEUTRAL_FALLBACK } from '../../design-system/palettes'
 
 export type AbstimmungsDetailData = {
   poll_id: number
@@ -98,7 +99,7 @@ export function labelColorFromSitzverteilung(
 ): string {
   const row = rows.find((r) => matchesSitzRow(apiPartei, r.partei))
   const farbe = row?.farbe
-  if (!farbe) return '#888888'
+  if (!farbe) return NEUTRAL_FALLBACK
   return farbe
 }
 
@@ -110,7 +111,7 @@ function labelColorForLegendDot(
   const base = labelColorFromSitzverteilung(apiPartei, rows)
   if (theme === 'dark') {
     const hex = base.replace('#', '').toLowerCase()
-    if (hex === '000000' || hex === '1a1a1a') return '#CCCCCC'
+    if (hex === '000000' || hex === '1a1a1a') return NEUTRAL_FALLBACK
   }
   return base
 }

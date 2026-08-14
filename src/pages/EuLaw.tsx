@@ -30,6 +30,7 @@ import { fonts, spacing, motion } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
+import { ON_DATA_LIGHT } from '../design-system/palettes'
 
 const PAGE_SIZE = 20
 
@@ -286,7 +287,7 @@ export default function EuLaw() {
       borderRadius: 999,
       border: `1px solid ${active ? c.red : c.border}`,
       background: active ? c.red : c.cardBg,
-      color: active ? '#FFFFFF' : c.muted,
+      color: active ? ON_DATA_LIGHT : c.muted,
       fontFamily: fonts.body,
       fontSize: '0.85rem',
       fontWeight: active ? 600 : 400,

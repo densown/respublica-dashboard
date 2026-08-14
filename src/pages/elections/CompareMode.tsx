@@ -36,6 +36,7 @@ import {
   resolveKreisDisplayName,
   toDisplayPercent,
 } from './normalizeWahlen'
+import { SERIES } from '../../design-system/palettes'
 import type {
   ElectionType,
   KreiseGeoJson,
@@ -54,7 +55,7 @@ const REGION_LINE_STYLES: {
   { strokeDasharray: '10 3 2 3', strokeWidth: 2 },
 ]
 
-const REGION_LINE_COLORS = ['#4E79A7', '#E15759', '#59A14F', '#EDC948'] as const
+const REGION_LINE_COLORS = SERIES
 
 const RADAR_FILLS = [
   'rgba(78, 121, 167, 0.35)',

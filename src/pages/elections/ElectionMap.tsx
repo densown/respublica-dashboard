@@ -132,7 +132,7 @@ export function ElectionMap({
             fill={fillForPath(p.ags)}
             fillOpacity={1}
             stroke={
-              isSel ? c.red : isHover ? (theme === 'dark' ? '#E8E4DC' : '#ffffff') : '#333'
+              isSel ? c.red : isHover ? c.ink : c.muted
             }
             strokeWidth={isSel || isHover ? 2 : 0.3}
             vectorEffect="non-scaling-stroke"
@@ -358,7 +358,7 @@ export function ElectionMapLegend({
           background:
             theme === 'dark'
               ? `linear-gradient(90deg, ${c.bgAlt} 0%, ${base} 100%)`
-              : `linear-gradient(90deg, #ffffff 0%, ${base} 100%)`,
+              : `linear-gradient(90deg, ${c.bgAlt} 0%, ${base} 100%)`,
         }}
       />
       <div

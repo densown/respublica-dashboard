@@ -2,6 +2,7 @@ import { useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
+import { ON_DATA_DARK, ON_DATA_LIGHT } from '../../design-system/palettes'
 
 /** Reihenfolge wie im UI-Prompt: CDU, SPD, Grüne, AfD, BSW, FDP, Linke */
 export const DISTRICT_CHART_PARTIES = [
@@ -24,12 +25,12 @@ type PartyTogglesProps = {
 
 function textOnPartyColor(hex: string): string {
   const h = hex.replace('#', '')
-  if (h.length !== 6) return '#0F0F0F'
+  if (h.length !== 6) return ON_DATA_DARK
   const r = parseInt(h.slice(0, 2), 16)
   const g = parseInt(h.slice(2, 4), 16)
   const b = parseInt(h.slice(4, 6), 16)
   const yiq = (r * 299 + g * 587 + b * 114) / 1000
-  return yiq >= 180 ? '#0F0F0F' : '#FFFFFF'
+  return yiq >= 180 ? ON_DATA_DARK : ON_DATA_LIGHT
 }
 
 export function PartyToggles({ lang, activeKeys, onChange }: PartyTogglesProps) {

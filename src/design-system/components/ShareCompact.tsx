@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react'
 import { fonts, spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import { SHARE_BRAND } from '../palettes'
 
-const REDDIT = '#FF4500'
-const WHATSAPP = '#25D366'
+const REDDIT = SHARE_BRAND.reddit
+const WHATSAPP = SHARE_BRAND.whatsapp
 
 export type ShareCompactProps = {
   title: string

@@ -10,13 +10,14 @@ import {
 import { Badge, DataCard, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
 import { fonts, spacing } from '../../design-system/tokens'
+import { EU_COURT } from '../../design-system/palettes'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuUrteilDetail, EuUrteilListItem } from './types'
+import { ON_DATA_LIGHT } from '../../design-system/palettes'
 
-const EUGH_COLOR = '#dc2626'
-const EUG_COLOR = '#2563eb'
+
 const PREVIEW_LEN = 220
 
 function trunc(s: string, max: number): string {
@@ -26,8 +27,8 @@ function trunc(s: string, max: number): string {
 }
 
 function courtColors(gericht: string): { bg: string; fg: string } {
-  if (gericht === 'EuG') return { bg: EUG_COLOR, fg: '#FFFFFF' }
-  return { bg: EUGH_COLOR, fg: '#FFFFFF' }
+  if (gericht === 'EuG') return { bg: EU_COURT.EuG, fg: ON_DATA_LIGHT }
+  return { bg: EU_COURT.EuGH, fg: ON_DATA_LIGHT }
 }
 
 function courtLabel(gericht: string, t: (k: I18nKey) => string): string {

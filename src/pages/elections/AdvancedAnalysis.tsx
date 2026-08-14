@@ -718,7 +718,7 @@ export function AdvancedAnalysis({
                           border: 'none',
                           padding: 0,
                           cursor: 'pointer',
-                          color: '#2E7D32',
+                          color: c.yes,
                           textAlign: 'left',
                           font: 'inherit',
                         }}
@@ -755,7 +755,7 @@ export function AdvancedAnalysis({
                           border: 'none',
                           padding: 0,
                           cursor: 'pointer',
-                          color: '#C62828',
+                          color: c.no,
                           textAlign: 'left',
                           font: 'inherit',
                         }}

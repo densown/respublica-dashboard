@@ -28,6 +28,7 @@ import {
   useTheme,
 } from '../design-system'
 import { fonts, spacing, motion } from '../design-system/tokens'
+import { CATEGORICAL } from '../design-system/palettes'
 import { useApi } from '../hooks/useApi'
 import { useSearchParamsState } from '../hooks/useSearchParamsState'
 
@@ -151,11 +152,7 @@ type LobbyByTimeResponse = {
 }
 
 const PAGE_SIZE = 50
-const TREEMAP_COLORS = [
-  '#C8102E', '#1a5276', '#1e8449', '#7d3c98', '#d35400',
-  '#2e86c1', '#a93226', '#117a65', '#6c3483', '#b7950b',
-  '#1a252f', '#784212', '#4a235a', '#1b4f72', '#0e6655',
-]
+const TREEMAP_COLORS = CATEGORICAL
 const MAP_STYLE_LIGHT = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 const MAP_STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 const TAB_TRANSITION = motion.easing
@@ -643,7 +640,7 @@ export default function LobbyRegister() {
         paint: {
           'circle-color': c.red,
           'circle-opacity': 0.7,
-          'circle-stroke-color': '#ffffff',
+          'circle-stroke-color': c.bgAlt,
           'circle-stroke-width': ['case', ['==', ['get', 'city'], selectedCity], 3, 1],
           'circle-radius': [
             'interpolate',
@@ -928,7 +925,7 @@ export default function LobbyRegister() {
                             x={8}
                             y={24}
                             style={{
-                              fill: '#ffffff',
+                              fill: c.bgAlt,
                               fontFamily: fonts.mono,
                               fontSize: 24,
                               fontWeight: 700,
@@ -942,7 +939,7 @@ export default function LobbyRegister() {
                               x={8}
                               y={44}
                               style={{
-                                fill: '#ffffff',
+                                fill: c.bgAlt,
                                 fontFamily: fonts.body,
                                 fontSize: 12,
                                 fontWeight: 700,
@@ -1110,7 +1107,7 @@ export default function LobbyRegister() {
                           width={Math.max(0, width)}
                           height={yScale.bandwidth()}
                           rx={4}
-                          fill={isActiveCity ? (theme === 'dark' ? '#ff5a6f' : '#8f0018') : c.red}
+                          fill={isActiveCity ? c.mapMarkerActive : c.red}
                           opacity={isActiveCity ? 1 : 0.9}
                           style={{ cursor: 'pointer' }}
                           onClick={() => {

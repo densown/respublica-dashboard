@@ -179,7 +179,7 @@ export function MapMode({
   setShowAdvanced,
   winnersByAgs,
 }: MapModeProps) {
-  const { c, t, lang, theme } = useTheme()
+  const { c, t, lang } = useTheme()
 
   const statCard = (title: string, body: string) => (
     <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: '0.8rem', color: c.muted }}>{title}</span>}>
@@ -328,9 +328,9 @@ export function MapMode({
                   fontSize: '0.82rem',
                   fontFamily: fonts.body,
                   lineHeight: 1.45,
-                  background: theme === 'dark' ? '#332B00' : '#FFF3CD',
-                  color: theme === 'dark' ? '#F5E6A3' : '#664D03',
-                  border: `1px solid ${theme === 'dark' ? '#5C4D1A' : '#E8D9A8'}`,
+                  background: c.noticeBg,
+                  color: c.noticeFg,
+                  border: `1px solid ${c.noticeBorder}`,
                 }}
               >
                 {sparseKreisBannerText(

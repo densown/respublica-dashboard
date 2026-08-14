@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { fonts, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import { BADGE } from '../palettes'
 
 export type BadgeVariant =
   | 'default'
@@ -18,11 +19,11 @@ export type BadgeProps = {
   variant?: BadgeVariant
 }
 
-const BLUE = '#1E40AF'
-const AMBER = '#C2410C'
-const PURPLE = '#6B21A8'
-const TEAL = '#0F766E'
-const GRAY = '#6B7280'
+const BLUE = BADGE.blue
+const AMBER = BADGE.amber
+const PURPLE = BADGE.purple
+const TEAL = BADGE.teal
+const GRAY = BADGE.gray
 
 export function Badge({ text, variant = 'default' }: BadgeProps) {
   const { c } = useTheme()

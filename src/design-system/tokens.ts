@@ -34,6 +34,39 @@ export const light = {
   navMobileBorder: '#E8E4DC',
   overlay: 'rgba(0,0,0,0.3)',
   shadow: '0 1px 3px rgba(0,0,0,0.06)',
+
+  // Diff-Ansicht (Gesetzesaenderungen). Waren in GesetzDetail.tsx als
+  // hell/dunkel-Paare inline verdrahtet — also bereits themenabhaengig
+  // gedacht, nur am falschen Ort.
+  diffAddBg: '#E6FFEC',
+  diffAddFg: '#1A7F37',
+  diffDelBg: '#FFEBE9',
+  diffDelFg: '#CF222E',
+  diffHunkFg: '#0969DA',
+
+  /** Hervorgehobener Kartenpunkt, wo c.red auf der Flaeche untergeht. */
+  mapMarkerActive: '#8F0018',
+
+  // Hinweiskasten (Hinweis, Einschraenkung) — gedaempftes Gelb.
+  noticeBg: '#FFF3CD',
+  noticeFg: '#664D03',
+  noticeBorder: '#E8D9A8',
+
+  /** Verlauf fuer Perzentil- und Verteilungsbalken. */
+  gradStart: '#E8E4DC',
+  gradEnd: '#9CA3AF',
+
+  /** Sitzfarbe CDU/CSU im Halbrund — schwarz geht im Dunkeln unter. */
+  seatCdu: '#000000',
+
+  /** Halbtransparente Flaeche fuer Diagramm-Tooltips. */
+  tooltipBg: '#FFFFFFEE',
+
+  // Weltkarte: Basisflaechen
+  mapLandNoData: '#E0E0E0',
+  mapWater: '#D7DDE6',
+  /** Kontur hinter Kartenbeschriftung, damit sie ueber Flaechen lesbar bleibt. */
+  mapLabelHalo: '#F5F0E8',
 } as const
 
 export const dark = {
@@ -70,6 +103,29 @@ export const dark = {
   navMobileBorder: '#2D2D2D',
   overlay: 'rgba(0,0,0,0.6)',
   shadow: '0 1px 3px rgba(0,0,0,0.3)',
+
+  diffAddBg: '#1A3A2A',
+  diffAddFg: '#7EE787',
+  diffDelBg: '#3D1F1F',
+  diffDelFg: '#FF7B72',
+  diffHunkFg: '#79C0FF',
+
+  mapMarkerActive: '#FF5A6F',
+
+  noticeBg: '#332B00',
+  noticeFg: '#F5E6A3',
+  noticeBorder: '#5C4D1A',
+
+  gradStart: '#3D3D3D',
+  gradEnd: '#8A8A8A',
+
+  seatCdu: '#CCCCCC',
+
+  tooltipBg: '#1A1A1AEE',
+
+  mapLandNoData: '#3A3A3A',
+  mapWater: '#13141F',
+  mapLabelHalo: '#1A1A2E',
 } as const
 
 export type ThemeColors = typeof light | typeof dark

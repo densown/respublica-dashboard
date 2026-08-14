@@ -25,7 +25,7 @@ export function PercentileBar({
   total,
   accentColor,
 }: PercentileBarProps) {
-  const { c, theme } = useTheme()
+  const { c } = useTheme()
   const sep = lang === 'de' ? ',' : '.'
   const fmt = (n: number) => n.toFixed(1).replace('.', sep)
 
@@ -35,8 +35,8 @@ export function PercentileBar({
       ? 50
       : Math.min(100, Math.max(0, ((value - min) / span) * 100))
 
-  const gradLeft = theme === 'dark' ? '#3D3D3D' : '#E8E4DC'
-  const gradRight = theme === 'dark' ? '#8A8A8A' : '#9CA3AF'
+  const gradLeft = c.gradStart
+  const gradRight = c.gradEnd
   const gradient = accentColor
     ? `linear-gradient(90deg, ${gradLeft} 0%, ${accentColor}40 50%, ${gradRight} 100%)`
     : `linear-gradient(90deg, ${gradLeft} 0%, ${gradRight} 100%)`

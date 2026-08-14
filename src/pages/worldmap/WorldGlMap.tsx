@@ -14,20 +14,27 @@ import { type MapProjectionMode, LoadingSpinner, useTheme } from '../../design-s
 import { fonts, spacing } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
+import { light, dark } from '../../design-system/tokens'
+import {
+  MAP_OUTLINE,
+  MAP_OUTLINE_HOVER,
+  ON_DATA_DARK,
+  ON_DATA_LIGHT,
+} from '../../design-system/palettes'
 
 const STYLE_LIGHT = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
 const STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json'
 
-const LAND_NODATA_LIGHT = '#e0e0e0'
-const LAND_NODATA_DARK = '#3a3a3a'
+const LAND_NODATA_LIGHT = light.mapLandNoData
+const LAND_NODATA_DARK = dark.mapLandNoData
 const GLOBE_BOUNDS: maplibregl.LngLatBoundsLike = [
   [-179.5, -80],
   [179.5, 85],
 ]
 
 // Wasserfarbe des lokalen Fallback-Styles (an CARTO positron/dark-matter angelehnt)
-const FALLBACK_WATER_DARK = '#13141f'
-const FALLBACK_WATER_LIGHT = '#d7dde6'
+const FALLBACK_WATER_DARK = dark.mapWater
+const FALLBACK_WATER_LIGHT = light.mapWater
 
 // Sekunden, nach denen ohne geladenen Basemap-Style auf den lokalen Fallback
 // umgeschaltet wird (langsames/blockiertes CDN ohne 'error'-Event).
@@ -288,8 +295,8 @@ export function WorldGlMap({
       ['==', ['upcase', ['get', 'iso3']], selectedKey],
       c.red,
       ['boolean', ['feature-state', 'hover'], false],
-      '#ffffff',
-      '#000000',
+      MAP_OUTLINE_HOVER,
+      MAP_OUTLINE,
     ],
     [selectedKey, c.red],
   )
@@ -393,8 +400,8 @@ export function WorldGlMap({
         'text-padding': 10,
       },
       paint: {
-        'text-color': isDark ? '#ffffff' : '#0F0F0F',
-        'text-halo-color': isDark ? '#1a1a2e' : '#F5F0E8',
+        'text-color': isDark ? ON_DATA_LIGHT : ON_DATA_DARK,
+        'text-halo-color': isDark ? dark.mapLabelHalo : light.mapLabelHalo,
         'text-halo-width': 1.5,
         'text-opacity': ['interpolate', ['linear'], ['zoom'], 1, 0.6, 3, 1],
       },
@@ -459,8 +466,8 @@ export function WorldGlMap({
       // Feste helle Textfarben: der Popup-Hintergrund ist in beiden Themes dunkel
       // (siehe .world-gl-popup in worldGlMap.css), damit über hell wie dunkel
       // eingefärbten Ländern genug Kontrast bleibt.
-      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:#f4f4f5;min-width:140px;">
-        <div style="font-weight:700;margin-bottom:4px;color:#ffffff;">${escHtml(name)}</div>
+      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:${isDark ? dark.ink : light.ink};min-width:140px;">
+        <div style="font-weight:700;margin-bottom:4px;color:${isDark ? dark.ink : light.ink};">${escHtml(name)}</div>
         <div style="font-family:${escHtml(fonts.mono)};font-size:12px;">${escHtml(line1)}</div>
         <div style="margin-top:6px;color:rgba(255,255,255,0.62);font-size:11px;">${escHtml(hint)}</div>
       </div>`
@@ -695,12 +702,12 @@ export function WorldGlMap({
     map.setPaintProperty(
       'country-labels',
       'text-color',
-      isDark ? '#ffffff' : '#0F0F0F',
+      isDark ? ON_DATA_LIGHT : ON_DATA_DARK,
     )
     map.setPaintProperty(
       'country-labels',
       'text-halo-color',
-      isDark ? '#1a1a2e' : '#F5F0E8',
+      isDark ? dark.mapLabelHalo : light.mapLabelHalo,
     )
   }, [isDark])
 

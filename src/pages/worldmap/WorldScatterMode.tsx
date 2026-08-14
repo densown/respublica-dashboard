@@ -112,7 +112,7 @@ export function WorldScatterMode({
   statsYears,
   onSelectCountry,
 }: WorldScatterModeProps) {
-  const { c, t, lang, theme } = useTheme()
+  const { c, t, lang } = useTheme()
   const L = lang as Lang
   const [hoveredIso, setHoveredIso] = useState<string | null>(null)
   const [hiddenRegions, setHiddenRegions] = useState<Set<string>>(
@@ -266,7 +266,7 @@ export function WorldScatterMode({
     hiddenRegions.size === regionLegend.length - 1
 
   const tooltipBg =
-    theme === 'dark' ? '#1A1A1Aee' : '#FFFFFFee'
+    c.tooltipBg
 
   return (
     <div style={{ marginTop: spacing.lg }}>
