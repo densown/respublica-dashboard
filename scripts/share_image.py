@@ -58,7 +58,24 @@ for t, farbe in teile:
 # Kurz gehalten, damit der Satz gross stehen kann: in der Reddit-Miniatur
 # von rund 140 Pixeln bleibt nur lesbar, was hier gross gesetzt ist.
 mitte('Politik,', playfair(128), 158)
-mitte('nachprüfbar', playfair(128), 300)
+
+# "nachprüfbar" als roter Stempel. Das Rot ist hier nicht Dekoration: ein
+# roter Stempel auf einem Dokument ist die Geste des Pruefens, Form und
+# Aussage sagen dasselbe. Zugleich bekommt die Karte einen Fokuspunkt —
+# ohne ihn ist sie im Feed ein beiges Rechteck.
+schrift = playfair(128)
+wort = 'nachprüfbar'
+y_text = 300
+# Block aus der tatsaechlichen Textausdehnung ableiten statt zu raten,
+# sonst sitzt die Schrift bei anderer Groesse schief im Feld.
+l, o, r, u = d.textbbox((0, y_text), wort, font=schrift)
+breite = r - l
+pad_x, pad_o, pad_u = 36, 20, 24
+d.rectangle(
+    [(B - breite) / 2 - pad_x, o - pad_o, (B + breite) / 2 + pad_x, u + pad_u],
+    fill=ROT,
+)
+mitte(wort, schrift, y_text, PAPIER)
 
 # --- Trennlinie --------------------------------------------------------
 d.line([(300, 470), (900, 470)], fill=RAND, width=2)
