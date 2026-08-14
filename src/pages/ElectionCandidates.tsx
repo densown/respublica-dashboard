@@ -48,6 +48,16 @@ type KandidaturenResponse = {
 
 type Ansicht = 'wahlkreis' | 'partei'
 
+/** Token-Farben liegen als Hex vor; fuer Flaechenabstufungen braucht es Alpha. */
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.replace('#', '')
+  const v =
+    h.length === 3
+      ? h.split('').map((x) => parseInt(x + x, 16))
+      : [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16))
+  return `rgba(${v[0]}, ${v[1]}, ${v[2]}, ${alpha})`
+}
+
 function formatDate(iso: string | null, lang: string): string {
   if (!iso) return '—'
   const d = new Date(`${iso}T00:00:00`)
@@ -173,6 +183,55 @@ export default function ElectionCandidates() {
   useEffect(() => {
     if (wahlName) document.title = `${t('electionCandidatesTitle')} — ${wahlName}`
   }, [wahlName, t])
+
+  // --- Einfaerbung der Karte ------------------------------------------------
+  // Zwei Modi: Dichte des Bewerberfelds, oder wo eine bestimmte Partei einen
+  // Direktkandidaten stellt. Beides kommt aus den Kandidaturen selbst — die
+  // Ergebnisse der Wahl 2021 liegen nur auf Kreisebene vor und waeren auf
+  // Wahlkreise umgelegt schlicht falsch.
+  const farbePartei = searchParams.get('farbe')
+
+  const proWahlkreis = useMemo(() => {
+    const m = new Map<number, { anzahl: number; parteien: Set<string> }>()
+    for (const k of alle) {
+      if (k.wahlkreis_nr == null) continue
+      let e = m.get(k.wahlkreis_nr)
+      if (!e) m.set(k.wahlkreis_nr, (e = { anzahl: 0, parteien: new Set() }))
+      e.anzahl += 1
+      e.parteien.add(k.partei)
+    }
+    return m
+  }, [alle])
+
+  const colorByNr = useMemo(() => {
+    const raus: Record<number, string> = {}
+    if (farbePartei) {
+      const farbe =
+        partyColors[partyLabelToSlug(farbePartei)] ?? partyColors.other
+      for (const [nr, e] of proWahlkreis) {
+        if (e.parteien.has(farbePartei)) raus[nr] = farbe
+      }
+      return raus
+    }
+    // Dichte: von wenig (blass) nach viel (kraeftig), neutral in c.ink statt
+    // in Rot — Rot ist im Designsystem der Akzent und keine Datenfarbe.
+    const werte = [...proWahlkreis.values()].map((e) => e.anzahl)
+    if (!werte.length) return raus
+    const min = Math.min(...werte)
+    const max = Math.max(...werte)
+    for (const [nr, e] of proWahlkreis) {
+      const t = max === min ? 0.5 : (e.anzahl - min) / (max - min)
+      raus[nr] = hexToRgba(c.ink, 0.08 + t * 0.34)
+    }
+    return raus
+  }, [proWahlkreis, farbePartei, partyColors, c.ink])
+
+  const dichteBereich = useMemo(() => {
+    const werte = [...proWahlkreis.values()].map((e) => e.anzahl)
+    return werte.length
+      ? { min: Math.min(...werte), max: Math.max(...werte) }
+      : null
+  }, [proWahlkreis])
 
   const chip = (aktiv: boolean) => ({
     fontFamily: fonts.mono,
@@ -301,17 +360,121 @@ export default function ElectionCandidates() {
             <>
               <SectionDivider label={t('electionCandidatesConstituency')} />
 
+              {/* Einfaerbung waehlen: Dichte des Felds oder Antritt je Partei */}
               {geo && (
-                <div style={{ marginBottom: spacing.lg }}>
-                  <ConstituencyMap
-                    geo={geo}
-                    selected={aktiverWk}
-                    onSelect={(nr) => setParam('wk', String(nr))}
-                    ariaLabel={t('electionCandidatesMapLabel')}
-                  />
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: spacing.xs,
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    marginBottom: spacing.md,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: fonts.mono,
+                      fontSize: '0.68rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      color: c.muted,
+                      marginRight: spacing.xs,
+                    }}
+                  >
+                    {t('electionCandidatesColorBy')}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setParam('farbe', null)}
+                    style={{ ...chip(!farbePartei), fontSize: '0.68rem', padding: '9px 11px', minHeight: 38 }}
+                  >
+                    {t('electionCandidatesColorDensity')}
+                  </button>
+                  {(data.parteien ?? []).slice(0, 8).map((g) => {
+                    const aktivF = farbePartei === g.partei
+                    const farbe =
+                      partyColors[partyLabelToSlug(g.partei)] ?? partyColors.other
+                    return (
+                      <button
+                        key={g.partei}
+                        type="button"
+                        onClick={() => setParam('farbe', aktivF ? null : g.partei)}
+                        title={`${cleanPartyLabel(g.partei)} — ${g.anzahl}`}
+                        style={{
+                          ...chip(false),
+                          fontSize: '0.68rem',
+                          padding: '9px 11px',
+                          minHeight: 38,
+                          borderColor: aktivF ? farbe : c.border,
+                          borderWidth: aktivF ? 2 : 1,
+                          color: aktivF ? c.ink : c.muted,
+                          fontWeight: aktivF ? 700 : 400,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 6,
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: 9,
+                            height: 9,
+                            borderRadius: 2,
+                            background: farbe,
+                            flexShrink: 0,
+                          }}
+                        />
+                        {cleanPartyLabel(g.partei)}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
 
+              {/* Karte und Auswahl nebeneinander: das Land ist hoeher als breit,
+                  untereinander schiebt die Karte die Liste aus dem Bild. */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: narrow ? '1fr' : '320px 1fr',
+                  gap: spacing.xl,
+                  alignItems: 'start',
+                  marginBottom: spacing.lg,
+                }}
+              >
+                {geo && (
+                  <div>
+                    <ConstituencyMap
+                      geo={geo}
+                      selected={aktiverWk}
+                      onSelect={(nr) => setParam('wk', String(nr))}
+                      colorByNr={colorByNr}
+                      ariaLabel={t('electionCandidatesMapLabel')}
+                      maxWidth={narrow ? 280 : 320}
+                    />
+                    <p
+                      style={{
+                        fontFamily: fonts.mono,
+                        fontSize: '0.68rem',
+                        color: c.muted,
+                        marginTop: spacing.sm,
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      {farbePartei
+                        ? t('electionCandidatesLegendParty').replace(
+                            '{partei}',
+                            cleanPartyLabel(farbePartei),
+                          )
+                        : dichteBereich
+                          ? t('electionCandidatesLegendDensity')
+                              .replace('{min}', String(dichteBereich.min))
+                              .replace('{max}', String(dichteBereich.max))
+                          : ''}
+                    </p>
+                  </div>
+                )}
+
+                <div>
               {/* Nummernliste bleibt: als Rueckfallebene ohne Geodaten und
                   weil eine Karte auf dem Handy fummelig zu treffen ist. */}
               <div
@@ -363,6 +526,8 @@ export default function ElectionCandidates() {
                     listLabel={t('electionCandidatesListPos')}
                   />
                 ))}
+              </div>
+                </div>
               </div>
             </>
           ) : (
