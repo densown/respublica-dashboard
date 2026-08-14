@@ -7,7 +7,7 @@ import {
   ShareToolbar,
   useTheme,
 } from '../design-system'
-import { fonts, radius, spacing } from '../design-system/tokens'
+import { fonts, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { CoalitionCalculator } from './elections/CoalitionCalculator'
@@ -61,7 +61,10 @@ export default function ElectionPolls() {
         if (key === 'wahl') next.delete('institut')
         return next
       },
-      { replace: false },
+      // Wahlwechsel als History-Eintrag (Zurueck fuehrt zur vorigen Wahl),
+      // der Institutsfilter nur als Verfeinerung — sonst braucht es fuenf
+      // Zurueck-Klicks, um die Seite wieder zu verlassen.
+      { replace: key !== 'wahl' },
     )
   }
 
@@ -111,6 +114,11 @@ export default function ElectionPolls() {
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
   )
+
+  // Erstes Laden = noch gar nichts anzuzeigen. Jedes spaetere Laden ist ein
+  // Nachladen, bei dem der bisherige Stand sichtbar bleiben soll.
+  const ersteLadung = (loading || listeLoading) && !data
+  const laedtNach = loading && Boolean(data)
 
   const umfragen = data?.umfragen ?? []
   const parteien = data?.parteien ?? []
@@ -257,11 +265,26 @@ export default function ElectionPolls() {
         </div>
       )}
 
-      {(loading || listeLoading) && <LoadingSpinner />}
-      {error && <EmptyState text={t('electionPollsError')} />}
+      {/*
+        Spinner nur beim allerersten Laden. Beim Wechsel von Wahl oder
+        Institut bleibt der bisherige Inhalt stehen und wird nur abgeblendet:
+        haengt man ihn aus, faellt die Seite auf Spinner-Hoehe zusammen, der
+        Browser springt nach oben und die Legenden-Auswahl im Chart geht
+        verloren, weil PollTrendChart seinen State beim Unmount vergisst.
+      */}
+      {ersteLadung && <LoadingSpinner />}
+      {error && !data && <EmptyState text={t('electionPollsError')} />}
 
-      {!loading && !error && data && (
-        <>
+      {data && (
+        <div
+          style={{
+            // Zurueckhaltend: die API antwortet meist in Millisekunden, ein
+            // starkes Abblenden wirkt dann wie ein Flackern statt wie Feedback.
+            opacity: laedtNach ? 0.6 : 1,
+            transition: `opacity ${motion.fast} ${motion.easing}`,
+          }}
+          aria-busy={laedtNach}
+        >
           {umfragen.length < 2 ? (
             <EmptyState text={t('electionPollsNoData')} />
           ) : (
@@ -390,7 +413,7 @@ export default function ElectionPolls() {
           )}
 
           <SourceNote quelle={data.quelle} />
-        </>
+        </div>
       )}
     </div>
   )
