@@ -35,6 +35,10 @@ Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponen
 
 ## Design System
 
+> **Verbindlich: [`docs/DESIGN.md`](docs/DESIGN.md).** Raster, Typo-Skala, Farbregeln,
+> Seitenaufbau, Bedienelemente, Handy, Ladezustände, Prüfliste vor dem Merge.
+> Vor jeder Frontend-Änderung lesen — auch mit Cursor.
+
 - Pfad: `src/design-system/`
 - Fonts: Playfair Display, Source Serif 4, IBM Plex Mono (Einbindung in `App.tsx` über Google Fonts)
 - Farben: Rot `#C8102E` (Light) / `#E8384F` (Dark), Tinte `#0F0F0F`, Papier `#F5F0E8` (siehe `tokens.ts`)
@@ -42,7 +46,9 @@ Unterverzeichnisse: `src/pages/elections/`, `src/pages/worldmap/` (Hilfskomponen
 - Token-System (`tokens.ts`): `spacing`, `fontSize`, `fontWeight`, `lineHeight`, `radius`, `elevation`, `elevationDark`, `motion` -- alle UI-Werte zentral, keine Magic Numbers in Komponenten
 - Accessibility: Focus-visible Ring (WCAG 2.4.7), `prefers-reduced-motion` Support, WCAG-konforme Kontrastwerte fuer muted/subtle Text
 - CSS Custom Properties in `index.css`: `--rp-red`, `--rp-border` (sync via `data-theme` auf `<html>`)
-- i18n: DE + EN (`src/design-system/i18n.ts`)
+- Datenfarben getrennt in `palettes.ts` (Kategorien, EU-Typen, Marken) — wechseln nicht mit dem Farbmodus
+- Primitive: `PageHeader`, `Section`, `Toolbar`, `Chip`, `DataTable` (wird auf dem Handy zur Karten-Liste)
+- i18n: DE + EN, modularisiert in `src/design-system/i18n/*.ts` je Domäne
 
 ## API
 
