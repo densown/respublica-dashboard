@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState, type CSSProperties } from 'react'
-import { useTheme } from '../../design-system'
+import { useCallback, useMemo, useState } from 'react'
+import { DataTable, useTheme } from '../../design-system'
 import { fonts } from '../../design-system/tokens'
 import { STATE_NAMES, statePrefixFromAgs } from './partyColors'
 import { resolveKreisDisplayName, toDisplayPercent } from './normalizeWahlen'
@@ -85,18 +85,9 @@ export function RankingTable({ rows, kreisNameByAgs, onRowClick }: RankingTableP
     URL.revokeObjectURL(a.href)
   }, [sorted, t])
 
-  const thBase: CSSProperties = {
-    textAlign: 'left',
-    padding: '12px 10px',
-    borderBottom: `1px solid ${c.border}`,
-    color: c.muted,
-    fontFamily: fonts.body,
-    fontSize: '0.75rem',
-    fontWeight: 600,
-    cursor: 'pointer',
-    minHeight: 44,
-    userSelect: 'none',
-  }
+
+  // Sortierpfeil am Spaltenkopf
+  const pfeil = (k: typeof sortKey) => (sortKey === k ? (sortDir === 'asc' ? ' ↑' : ' ↓') : '')
 
   return (
     <div>
@@ -119,66 +110,42 @@ export function RankingTable({ rows, kreisNameByAgs, onRowClick }: RankingTableP
           {t('exportCsv')}
         </button>
       </div>
-      <div style={{ overflowX: 'auto', border: `1px solid ${c.border}`, borderRadius: 8 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: fonts.body }}>
-          <thead>
-            <tr style={{ background: c.bgAlt }}>
-              <th style={thBase} onClick={() => toggleSort('rank')}>
-                {t('rank')}
-                {sortKey === 'rank' ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}
-              </th>
-              <th style={thBase} onClick={() => toggleSort('name')}>
-                {t('electionsDistrict')}
-                {sortKey === 'name' ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}
-              </th>
-              <th style={thBase} onClick={() => toggleSort('state')}>
-                {t('electionsBundesland')}
-                {sortKey === 'state' ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}
-              </th>
-              <th style={{ ...thBase, textAlign: 'right' }} onClick={() => toggleSort('value')}>
-                {t('electionsShare')}
-                {sortKey === 'value' ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((r) => (
-              <tr
-                key={r.ags}
-                onClick={() => onRowClick(r.ags)}
-                style={{
-                  cursor: 'pointer',
-                  borderBottom: `1px solid ${c.border}`,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = c.bgHover
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent'
-                }}
-              >
-                <td style={{ padding: '12px 10px', fontFamily: fonts.mono, fontSize: '0.85rem' }}>
-                  {r.rank}
-                </td>
-                <td style={{ padding: '12px 10px', fontSize: '0.9rem', color: c.ink }}>{r.kreisName}</td>
-                <td style={{ padding: '12px 10px', fontSize: '0.85rem', color: c.inkSoft }}>
-                  {r.stateName}
-                </td>
-                <td
-                  style={{
-                    padding: '12px 10px',
-                    textAlign: 'right',
-                    fontFamily: fonts.mono,
-                    fontSize: '0.85rem',
-                  }}
-                >
-                  {r.valuePct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={[
+          {
+            key: 'rank',
+            header: `${t('rank')}${pfeil('rank')}`,
+            mono: true,
+            onHeaderClick: () => toggleSort('rank'),
+            cell: (r: (typeof sorted)[number]) => r.rank,
+          },
+          {
+            key: 'kreis',
+            header: `${t('electionsDistrict')}${pfeil('name')}`,
+            primary: true,
+            onHeaderClick: () => toggleSort('name'),
+            cell: (r: (typeof sorted)[number]) => r.kreisName,
+          },
+          {
+            key: 'land',
+            header: `${t('electionsBundesland')}${pfeil('state')}`,
+            onHeaderClick: () => toggleSort('state'),
+            cell: (r: (typeof sorted)[number]) => r.stateName,
+          },
+          {
+            key: 'wert',
+            header: `${t('electionsShare')}${pfeil('value')}`,
+            align: 'right',
+            mono: true,
+            onHeaderClick: () => toggleSort('value'),
+            cell: (r: (typeof sorted)[number]) =>
+              `${r.valuePct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
+          },
+        ]}
+        rows={sorted}
+        rowKey={(r) => r.ags}
+        onRowClick={(r) => onRowClick(r.ags)}
+      />
     </div>
   )
 }

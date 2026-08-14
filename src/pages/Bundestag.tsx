@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Badge,
+  DataTable,
   ExportableContainer,
   LoadingSpinner,
   PageHeader,
@@ -651,48 +652,33 @@ export default function Bundestag() {
                   <p style={{ color: c.red, margin: 0 }}>{t('dataLoadError')}</p>
                 )}
                 {!loadingMemberVotes && !errMemberVotes && (
-                  <div style={{ overflowX: 'auto' }}>
-                    <table
-                      style={{
-                        width: '100%',
-                        borderCollapse: 'collapse',
-                        fontFamily: fonts.body,
-                        fontSize: '0.84rem',
-                      }}
-                    >
-                      <thead>
-                        <tr style={{ borderBottom: `1px solid ${c.border}` }}>
-                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
-                            {t('votes')}
-                          </th>
-                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
-                            {t('electionYear')}
-                          </th>
-                          <th style={{ textAlign: 'left', padding: `${spacing.xs}px 0` }}>
-                            {t('result')}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(memberVotes ?? []).map((row) => {
-                          const vote = voteVariant(row.vote)
-                          return (
-                            <tr key={`${row.poll_id}-${row.vote}`}>
-                              <td style={{ padding: `${spacing.xs}px 0`, color: c.ink }}>
-                                {row.poll_titel}
-                              </td>
-                              <td style={{ padding: `${spacing.xs}px 0`, color: c.muted }}>
-                                {row.poll_datum}
-                              </td>
-                              <td style={{ padding: `${spacing.xs}px 0` }}>
-                                <Badge text={vote.label} variant={vote.variant} />
-                              </td>
-                            </tr>
-                          )
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                  <DataTable
+                    columns={[
+                      {
+                        key: 'titel',
+                        header: t('votes'),
+                        primary: true,
+                        cell: (r: AbgeordnetenVoteRow) => r.poll_titel,
+                      },
+                      {
+                        key: 'datum',
+                        header: t('electionYear'),
+                        mono: true,
+                        cell: (r: AbgeordnetenVoteRow) => r.poll_datum,
+                      },
+                      {
+                        key: 'ergebnis',
+                        header: t('result'),
+                        cell: (r: AbgeordnetenVoteRow) => {
+                          const v = voteVariant(r.vote)
+                          return <Badge text={v.label} variant={v.variant} />
+                        },
+                      },
+                    ]}
+                    rows={memberVotes ?? []}
+                    rowKey={(r) => `${r.poll_id}-${r.vote}`}
+                    cardsFrom={3}
+                  />
                 )}
               </div>
             </div>

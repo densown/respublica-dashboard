@@ -31,6 +31,11 @@ export { MobileNav, type MobileNavProps } from './components/MobileNav'
 export { PageHeader, type PageHeaderProps } from './components/PageHeader'
 export { Section, type SectionProps } from './components/Section'
 export { Chip, type ChipProps } from './components/Chip'
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+} from './components/DataTable'
 export { Toolbar, type ToolbarProps } from './components/Toolbar'
 export { Pagination, type PaginationProps } from './components/Pagination'
 export { ProgressBar, type ProgressBarProps, type ProgressSegment } from './components/ProgressBar'

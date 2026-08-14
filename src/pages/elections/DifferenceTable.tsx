@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useTheme } from '../../design-system'
+import { DataTable, useTheme } from '../../design-system'
 import { fonts, spacing } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import type { I18nKey } from '../../design-system/i18n'
@@ -15,7 +15,6 @@ type DifferenceTableProps = {
   matrix: number[][]
 }
 
-const TD_TH_PAD = '6px 10px'
 
 /** Tabellenkopf: >15 Zeichen kürzen; „Regionalverband …“ → „Reg. …“ */
 function shortHeaderName(name: string): string {
@@ -27,15 +26,6 @@ function shortHeaderName(name: string): string {
 }
 
 /** Spanne: grün bei kleiner Streuung, rot bei großer (Pp). */
-function spanColor(
-  span: number,
-  c: { yes: string; no: string; inkSoft: string },
-): string {
-  if (!Number.isFinite(span)) return c.inkSoft
-  if (span <= 5) return c.yes
-  if (span >= 20) return c.no
-  return c.inkSoft
-}
 
 export function DifferenceTable({
   lang,
@@ -172,19 +162,7 @@ export function DifferenceTable({
     URL.revokeObjectURL(a.href)
   }, [lang, t, regionLabels, rows, mode2, modeMulti])
 
-  const thBase = {
-    padding: TD_TH_PAD,
-    borderBottom: `2px solid ${c.border}`,
-    color: c.muted,
-    fontSize: '0.8rem' as const,
-    whiteSpace: 'nowrap' as const,
-  }
 
-  const tdBase = {
-    padding: TD_TH_PAD,
-    fontSize: '0.8rem' as const,
-    whiteSpace: 'nowrap' as const,
-  }
 
   return (
     <div
@@ -213,158 +191,66 @@ export function DifferenceTable({
           {t('exportCsv')}
         </button>
       </div>
-      <table
-        style={{
-          minWidth: 800,
-          width: '100%',
-          borderCollapse: 'collapse',
-          fontFamily: fonts.mono,
-          fontSize: '0.8rem',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <thead>
-          <tr>
-            <th
-              style={{
-                ...thBase,
-                textAlign: 'left',
-              }}
-            >
-              {t('partyLabel')}
-            </th>
-            {regionLabels.map((name) => (
-              <th
-                key={name}
-                title={name}
-                style={{
-                  ...thBase,
-                  textAlign: 'right',
-                }}
-              >
-                {shortHeaderName(name)}
-              </th>
-            ))}
-            {mode2 ? (
-              <th
-                style={{
-                  ...thBase,
-                  textAlign: 'right',
-                }}
-              >
-                {t('compareDiffShortHeader')}
-              </th>
-            ) : null}
-            {modeMulti ? (
-              <>
-                <th style={{ ...thBase, textAlign: 'right' }}>
-                  {t('compareColAvg')}
-                </th>
-                <th style={{ ...thBase, textAlign: 'right' }}>
-                  {t('compareColMin')}
-                </th>
-                <th style={{ ...thBase, textAlign: 'right' }}>
-                  {t('compareColMax')}
-                </th>
-                <th style={{ ...thBase, textAlign: 'right' }}>
-                  {t('compareColSpan')}
-                </th>
-              </>
-            ) : null}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.key} style={{ borderBottom: `1px solid ${c.border}` }}>
-              <td style={{ ...tdBase, color: c.ink, textAlign: 'left' }}>
-                {r.label}
-              </td>
-              {r.cells.map((v, i) => (
-                <td
-                  key={i}
-                  style={{ ...tdBase, textAlign: 'right', color: c.ink }}
-                >
-                  {v != null && Number.isFinite(v) ? fmt(v) : '—'}
-                </td>
-              ))}
-              {mode2 ? (
-                <td
-                  style={{
-                    ...tdBase,
-                    textAlign: 'right',
-                    color:
-                      r.diff == null || !Number.isFinite(r.diff)
-                        ? c.muted
-                        : r.diff >= 0
-                          ? c.yes
-                          : c.no,
-                  }}
-                >
-                  {r.diff != null && Number.isFinite(r.diff) ? (
-                    <span style={{ whiteSpace: 'nowrap' }}>
-                      {r.diff >= 0 ? '+' : ''}
-                      {r.diff.toFixed(1).replace('.', sep)} Pp
-                    </span>
-                  ) : (
-                    '—'
-                  )}
-                </td>
-              ) : null}
-              {modeMulti ? (
-                <>
-                  <td
-                    style={{
-                      ...tdBase,
-                      textAlign: 'right',
-                      color: c.ink,
-                    }}
-                  >
-                    {r.avg != null && Number.isFinite(r.avg) ? fmt(r.avg) : '—'}
-                  </td>
-                  <td
-                    title={r.minEntry ? r.minEntry.label : undefined}
-                    style={{
-                      ...tdBase,
-                      textAlign: 'right',
-                      color: c.ink,
-                    }}
-                  >
-                    {r.minEntry ? fmt(r.minEntry.v) : '—'}
-                  </td>
-                  <td
-                    title={r.maxEntry ? r.maxEntry.label : undefined}
-                    style={{
-                      ...tdBase,
-                      textAlign: 'right',
-                      color: c.ink,
-                    }}
-                  >
-                    {r.maxEntry ? fmt(r.maxEntry.v) : '—'}
-                  </td>
-                  <td
-                    style={{
-                      ...tdBase,
-                      textAlign: 'right',
-                      color:
-                        r.span == null || !Number.isFinite(r.span)
-                          ? c.muted
-                          : spanColor(r.span, c),
-                    }}
-                  >
-                    {r.span != null && Number.isFinite(r.span) ? (
-                      <span style={{ whiteSpace: 'nowrap' }}>
-                        {r.span.toFixed(1).replace('.', sep)} Pp
-                      </span>
-                    ) : (
-                      '—'
-                    )}
-                  </td>
-                </>
-              ) : null}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/*
+        Spalten werden zur Laufzeit gebaut: je Region eine, plus je nach
+        Vergleichsmodus Differenz oder die vier Kennzahlen. Bei bis zu acht
+        Spalten ist die Karten-Darstellung auf dem Handy nicht Kosmetik,
+        sondern der Unterschied zwischen lesbar und unlesbar.
+      */}
+      <DataTable
+        columns={[
+          {
+            key: 'partei',
+            header: t('partyLabel'),
+            primary: true,
+            cell: (r: (typeof rows)[number]) => r.label,
+          },
+          ...regionLabels.map((name, i) => ({
+            key: `region-${i}`,
+            header: shortHeaderName(name),
+            align: 'right' as const,
+            mono: true,
+            cell: (r: (typeof rows)[number]) => {
+              const v = r.cells[i]
+              return v != null && Number.isFinite(v) ? fmt(v) : '—'
+            },
+          })),
+          ...(mode2
+            ? [
+                {
+                  key: 'diff',
+                  header: t('compareDiffShortHeader'),
+                  align: 'right' as const,
+                  mono: true,
+                  cell: (r: (typeof rows)[number]) =>
+                    r.diff != null && Number.isFinite(r.diff) ? fmt(r.diff) : '—',
+                },
+              ]
+            : []),
+          ...(modeMulti
+            ? ([
+                ['avg', t('compareColAvg'), (r: (typeof rows)[number]) => r.avg],
+                ['min', t('compareColMin'), (r: (typeof rows)[number]) => r.minEntry?.v ?? null],
+                ['max', t('compareColMax'), (r: (typeof rows)[number]) => r.maxEntry?.v ?? null],
+                ['span', t('compareColSpan'), (r: (typeof rows)[number]) => r.span],
+              ] as const).map(([key, header, hole]) => ({
+                key,
+                header,
+                align: 'right' as const,
+                mono: true,
+                // Auf dem Handy nur Mittelwert und Spanne — Min und Max
+                // blaehen die Karte auf, ohne die Aussage zu tragen.
+                hideOnMobile: key === 'min' || key === 'max',
+                cell: (r: (typeof rows)[number]) => {
+                  const v = hole(r)
+                  return v != null && Number.isFinite(v) ? fmt(v) : '—'
+                },
+              }))
+            : []),
+        ]}
+        rows={rows}
+        rowKey={(r) => r.key}
+      />
     </div>
   )
 }
