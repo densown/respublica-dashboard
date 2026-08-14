@@ -15,6 +15,10 @@ import {
 } from '../components/bundestag/AbstimmungsDetail'
 import { AbstimmungsListe } from '../components/bundestag/AbstimmungsListe'
 import {
+  MemberTopicProfile,
+  type MemberTopicProfileData,
+} from '../components/bundestag/MemberTopicProfile'
+import {
   Hemicycle,
   type SitzverteilungRow,
 } from '../components/bundestag/Hemicycle'
@@ -120,7 +124,7 @@ function getNachname(row: AbgeordnetenApiRow): string {
 export default function Bundestag() {
   const { pollId: pollIdParam } = useParams()
   const navigate = useNavigate()
-  const { c, t } = useTheme()
+  const { c, t, lang } = useTheme()
 
   const [selectedPollId, setSelectedPollId] = useState<number | null>(null)
   const [animating, setAnimating] = useState(false)
@@ -270,6 +274,13 @@ export default function Bundestag() {
     loading: loadingMemberVotes,
     error: errMemberVotes,
   } = useApi<AbgeordnetenVoteRow[]>(memberVotesEndpoint)
+
+  const memberTopicsEndpoint =
+    selectedAbgeordneter != null
+      ? `/api/abgeordnete/${selectedAbgeordneter.aw_id}/themen`
+      : ''
+  const { data: memberTopics } =
+    useApi<MemberTopicProfileData>(memberTopicsEndpoint)
 
   const individualVotesByMandateId = useMemo(() => {
     const map = new Map<number, 'yes' | 'no' | 'abstain' | 'no_show'>()
@@ -609,6 +620,22 @@ export default function Bundestag() {
                   )}
                 </div>
               </div>
+              {/*
+                Themenprofil vor der Abstimmungsliste: die Liste sagt, wie oft
+                jemand mit Ja gestimmt hat, das Profil sagt wozu — und wo die
+                Person von der eigenen Fraktion abgewichen ist.
+              */}
+              <div style={{ marginBottom: spacing.xl }}>
+                <MemberTopicProfile
+                  data={memberTopics}
+                  lang={lang}
+                  title={t('memberTopicsTitle')}
+                  deviationLabel={t('memberDeviations')}
+                  deviationHint={t('memberDeviationsHint')}
+                  emptyText={t('memberTopicsEmpty')}
+                />
+              </div>
+
               <div>
                 <h4
                   style={{
