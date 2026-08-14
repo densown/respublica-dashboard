@@ -21,8 +21,6 @@ import type {
   WahlterminListResponse,
 } from './elections/pollTypes'
 
-const DEFAULT_WAHL = 'ltw-sachsen-anhalt-2026'
-
 function daysUntil(iso: string | null): number | null {
   if (!iso) return null
   const target = new Date(`${iso}T00:00:00`).getTime()
@@ -58,8 +56,6 @@ export default function ElectionPolls() {
   const narrow = useIsMobile()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // URL-State statt useState: ein geteilter Link muss dieselbe Wahl zeigen.
-  const wahlSlug = searchParams.get('wahl') || DEFAULT_WAHL
   const institut = searchParams.get('institut') || ''
 
   const setParam = (key: string, value: string | null) => {
@@ -79,7 +75,33 @@ export default function ElectionPolls() {
   const { data: liste, loading: listeLoading } =
     useApi<WahlterminListResponse>('/api/wahltermine')
 
+  // Kommende Wahlen zuerst — innerhalb davon der naechste Termin oben, denn
+  // das ist die Wahl, um die es gerade geht. Abgeschlossene absteigend,
+  // Termine ohne Datum jeweils ans Ende ihrer Gruppe.
+  const wahlen = useMemo(() => {
+    const all = liste?.wahltermine ?? []
+    const rank = (s: string) => (s === 'kommend' ? 0 : s === 'laufend' ? 1 : 2)
+    return [...all].sort((a, b) => {
+      const byStatus = rank(a.status) - rank(b.status)
+      if (byStatus !== 0) return byStatus
+      if (!a.datum) return 1
+      if (!b.datum) return -1
+      return a.status === 'abgeschlossen'
+        ? b.datum.localeCompare(a.datum)
+        : a.datum.localeCompare(b.datum)
+    })
+  }, [liste])
+
+  // Ohne ?wahl= die naechste anstehende Wahl zeigen. Bewusst aus den Daten
+  // abgeleitet statt fest verdrahtet — ein fixer Slug waere nach dem
+  // jeweiligen Wahltag veraltet.
+  const wahlSlug =
+    searchParams.get('wahl') ||
+    wahlen.find((w) => w.status === 'kommend' && w.datum)?.slug ||
+    ''
+
   const endpoint = useMemo(() => {
+    if (!wahlSlug) return ''
     const base = `/api/wahltermine/${encodeURIComponent(wahlSlug)}/umfragen`
     return institut ? `${base}?institut=${encodeURIComponent(institut)}` : base
   }, [wahlSlug, institut])
@@ -90,15 +112,6 @@ export default function ElectionPolls() {
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
   )
-
-  // Kommende Wahlen zuerst, danach die abgeschlossenen
-  const wahlen = useMemo(() => {
-    const all = liste?.wahltermine ?? []
-    const rank = (s: string) => (s === 'kommend' ? 0 : s === 'laufend' ? 1 : 2)
-    return [...all].sort(
-      (a, b) => rank(a.status) - rank(b.status) || (b.datum ?? '').localeCompare(a.datum ?? ''),
-    )
-  }, [liste])
 
   const umfragen = data?.umfragen ?? []
   const parteien = data?.parteien ?? []
@@ -131,7 +144,6 @@ export default function ElectionPolls() {
           marginBottom: spacing.lg,
         }}
       >
-        {listeLoading && <LoadingSpinner />}
         {wahlen.map((w) => {
           const active = w.slug === wahlSlug
           return (
@@ -160,7 +172,7 @@ export default function ElectionPolls() {
         })}
       </div>
 
-      {loading && <LoadingSpinner />}
+      {(loading || listeLoading) && <LoadingSpinner />}
       {error && <EmptyState text={t('electionPollsError')} />}
 
       {!loading && !error && data && (
