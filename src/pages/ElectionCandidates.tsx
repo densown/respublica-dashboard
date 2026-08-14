@@ -23,6 +23,10 @@ import {
   ConstituencyMap,
   type ConstituencyGeoJson,
 } from './elections/ConstituencyMap'
+import {
+  TopCandidates,
+  type Spitzenkandidatur,
+} from './elections/TopCandidates'
 import { cleanPartyLabel, partyLabelToSlug } from './elections/partyLabel'
 import { partyColorsForTheme } from './elections/partyColors'
 import type { WahlterminListResponse } from './elections/pollTypes'
@@ -44,6 +48,7 @@ type ParteiGruppe = {
 }
 
 type KandidaturenResponse = {
+  spitzenkandidaturen: Spitzenkandidatur[]
   wahl: {
     slug: string
     name_de: string
@@ -310,6 +315,23 @@ export default function ElectionCandidates() {
           }}
           aria-busy={laedtNach}
         >
+          {/*
+            Spitzenkandidaturen zuerst: das ist die Frage, mit der die meisten
+            auf diese Seite kommen. Die Wahlkreis- und Parteiansicht darunter
+            beantwortet dann die genauere.
+          */}
+          {data.spitzenkandidaturen?.length > 0 && (
+            <Section
+              title={t('electionCandidatesTop')}
+              note={t('electionCandidatesTopHint')}
+            >
+              <TopCandidates
+                kandidaturen={data.spitzenkandidaturen}
+                constituencyLabel={t('electionCandidatesConstituency')}
+              />
+            </Section>
+          )}
+
           {/* Ansicht umschalten */}
           <Toolbar label={t('electionCandidatesView')}>
             {(['wahlkreis', 'partei'] as const).map((a) => (
