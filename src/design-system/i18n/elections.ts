@@ -76,6 +76,29 @@ export const de = {
   electionPollsCoalitionsHint:
     "Anteile der Parteien über der 5-%-Hürde, auf 100 normiert. Eine Näherung: die tatsächliche Sitzverteilung hängt vom Zuteilungsverfahren des jeweiligen Landes ab. Aufgeführt sind alle rechnerischen Mehrheiten, unabhängig davon, ob sie politisch angestrebt werden.",
   electionPollsNoCoalition: "Keine Zweier- oder Dreierkoalition erreicht eine Mehrheit.",
+  electionResultKicker: "Wahlergebnis",
+  electionResultTitle: "Amtliches Ergebnis",
+  electionResultHint:
+    "Zweitstimmen (Landesstimmen) und Sitze. Der senkrechte Strich markiert die 5-%-Hürde. Sitzzahl per Maus: Aufteilung in Direkt- und Listenmandate.",
+  electionResultPreliminary: "vorläufig",
+  electionResultFinal: "endgültig",
+  electionResultAsOf: "Stand",
+  electionResultTurnout: "Wahlbeteiligung",
+  electionResultSeats: "Sitze",
+  electionResultSeatsShort: "Sitze",
+  electionResultDirect: "Direktmandate",
+  electionResultList: "Listenmandate",
+  electionResultMajority: "Mehrheit",
+  electionResultComparison: "Umfragen und Ergebnis",
+  electionResultComparisonHint:
+    "Verglichen wird das Mittel der letzten {n} Umfragen vor der Wahl — genau der Wert, der hier vor dem Wahltag als aktueller Stand stand. Balken nach rechts: die Partei schnitt besser ab als erwartet, nach links: schlechter.",
+  electionResultThresholdMiss: "Hürde falsch",
+  electionResultSeatMajorities: "Mehrheiten im neuen Parlament",
+  electionResultSeatMajoritiesHint:
+    "Gezählte Sitze, keine Näherung: absolute Mehrheit bei {majority} von {total} Sitzen. Die kleine Zahl ist der Abstand zur Mehrheit. Aufgeführt sind alle arithmetischen Mehrheiten, unabhängig davon, ob sie politisch angestrebt werden.",
+  electionResultSource: "Ergebnis",
+  electionResultPreliminaryNote:
+    "Vorläufiges amtliches Ergebnis. Das endgültige Ergebnis stellt der Wahlausschuss später fest; einzelne Werte können sich noch verschieben.",
 } as const
 
 export const en = {
@@ -154,4 +177,27 @@ export const en = {
   electionPollsCoalitionsHint:
     "Shares of parties above the 5% threshold, normalised to 100. An approximation: actual seat counts depend on each state's allocation method. All arithmetic majorities are listed, regardless of whether they are politically sought.",
   electionPollsNoCoalition: "No two- or three-party coalition reaches a majority.",
+  electionResultKicker: "Election result",
+  electionResultTitle: "Official result",
+  electionResultHint:
+    "Party-list votes and seats. The vertical line marks the 5% threshold. Hover a seat count for the split between constituency and list seats.",
+  electionResultPreliminary: "preliminary",
+  electionResultFinal: "final",
+  electionResultAsOf: "As of",
+  electionResultTurnout: "Turnout",
+  electionResultSeats: "seats",
+  electionResultSeatsShort: "seats",
+  electionResultDirect: "constituency seats",
+  electionResultList: "list seats",
+  electionResultMajority: "majority",
+  electionResultComparison: "Polls and result",
+  electionResultComparisonHint:
+    "Compared against the average of the last {n} polls before the election — exactly the figure shown here as the current standing before election day. Bars to the right: the party did better than expected, to the left: worse.",
+  electionResultThresholdMiss: "threshold missed",
+  electionResultSeatMajorities: "Majorities in the new parliament",
+  electionResultSeatMajoritiesHint:
+    "Counted seats, not an approximation: an absolute majority takes {majority} of {total} seats. The small number is the margin above the majority. All arithmetic majorities are listed, regardless of whether they are politically sought.",
+  electionResultSource: "Result",
+  electionResultPreliminaryNote:
+    "Preliminary official result. The final result is certified later by the electoral committee; individual figures may still shift.",
 } as const

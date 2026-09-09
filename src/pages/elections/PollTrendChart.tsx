@@ -13,7 +13,7 @@ import { useTheme } from '../../design-system'
 import { fonts, radius } from '../../design-system/tokens'
 import type { Lang } from '../../design-system/ThemeContext'
 import { PARTY_LABELS, partyColorsForTheme } from './partyColors'
-import type { PollRow } from './pollTypes'
+import type { Ergebnis, PollRow } from './pollTypes'
 
 type PollTrendChartProps = {
   data: PollRow[]
@@ -21,6 +21,12 @@ type PollTrendChartProps = {
   lang: Lang
   /** Wahltag — wird als senkrechte Markierung eingezeichnet, wenn im Zeitraum. */
   wahlDatum?: string | null
+  /**
+   * Amtliches Ergebnis. Liegt es vor, endet jede Linie am Wahltag auf dem
+   * tatsaechlichen Wert statt an der letzten Umfrage — erst dadurch wird im
+   * Verlauf sichtbar, wo die Umfragen danebenlagen.
+   */
+  ergebnis?: Ergebnis | null
   height?: number
 }
 
@@ -56,33 +62,60 @@ export function PollTrendChart({
   parties,
   lang,
   wahlDatum,
+  ergebnis,
   height = 360,
 }: PollTrendChartProps) {
-  const { c, theme } = useTheme()
+  const { c, t, theme } = useTheme()
   const partyColors = useMemo(
     () => partyColorsForTheme(theme === 'dark'),
     [theme],
   )
   const [hidden, setHidden] = useState<Record<string, boolean>>({})
 
+  /**
+   * Das Ergebnis als zusaetzlicher Punkt am Wahltag.
+   *
+   * Bewusst als normale Datenzeile angehaengt statt als eigene Chart-Ebene:
+   * so verlaengert sich jede Partei-Linie bis zum tatsaechlichen Wert, und die
+   * Luecke zwischen letzter Umfrage und Ergebnis wird als Steigung sichtbar.
+   * Eine separate Ebene haette den Punkt danebengesetzt, ohne ihn anzubinden.
+   */
+  const reihe = useMemo(() => {
+    if (!ergebnis || !wahlDatum) return data
+    const zeile: PollRow = {
+      dawum_survey_id: -1,
+      institut: t('electionResultTitle'),
+      auftraggeber: null,
+      erhebung_start: null,
+      erhebung_ende: null,
+      veroeffentlicht: wahlDatum,
+      befragte: null,
+      methode: null,
+    }
+    for (const p of ergebnis.parteien) zeile[p.kuerzel] = p.prozent
+    return [...data, zeile]
+  }, [data, ergebnis, wahlDatum, t])
+
+  const letzterIndex = reihe.length - 1
+
   const maxY = useMemo(() => {
     let m = 5
-    for (const row of data) {
+    for (const row of reihe) {
       for (const p of parties) {
         const v = row[p]
         if (typeof v === 'number' && Number.isFinite(v)) m = Math.max(m, v)
       }
     }
     return Math.min(60, Math.ceil(m / 5) * 5 + 5)
-  }, [data, parties])
+  }, [reihe, parties])
 
   // Wahltag nur markieren, wenn er im dargestellten Zeitraum liegt — sonst
   // staucht recharts die Achse auf einen Punkt am Rand zusammen.
   const wahltagImZeitraum = useMemo(() => {
-    if (!wahlDatum || !data.length) return false
-    const letzte = data[data.length - 1]?.veroeffentlicht
+    if (!wahlDatum || !reihe.length) return false
+    const letzte = reihe[reihe.length - 1]?.veroeffentlicht
     return typeof letzte === 'string' && wahlDatum <= letzte
-  }, [wahlDatum, data])
+  }, [wahlDatum, reihe])
 
   const toggle = (key: string) => {
     setHidden((h) => ({ ...h, [key]: !h[key] }))
@@ -91,7 +124,7 @@ export function PollTrendChart({
   return (
     <div style={{ width: '100%', minHeight: 320 }}>
       <ResponsiveContainer width="100%" height={height}>
-        <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+        <LineChart data={reihe} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
           <XAxis
             dataKey="veroeffentlicht"
             tickFormatter={(v) => shortMonth(String(v), lang)}
@@ -170,7 +203,36 @@ export function PollTrendChart({
               name={PARTY_LABELS[p]?.[lang] ?? p}
               stroke={partyColors[p] ?? partyColors.other}
               strokeWidth={2}
-              dot={false}
+              // Punkte nur am Ergebnis: bei ueber 30 Umfragen wuerde ein Dot je
+              // Messpunkt die Linien zulaufen lassen. Der Wahltag ist der eine
+              // Punkt, der kein Schaetzwert ist, und wird deshalb markiert.
+              dot={(props) => {
+                const { key, ...rest } = props as {
+                  key?: string
+                  cx?: number
+                  cy?: number
+                  index?: number
+                }
+                if (
+                  !ergebnis ||
+                  rest.index !== letzterIndex ||
+                  rest.cx == null ||
+                  rest.cy == null
+                ) {
+                  return <g key={key} />
+                }
+                return (
+                  <circle
+                    key={key}
+                    cx={rest.cx}
+                    cy={rest.cy}
+                    r={3.5}
+                    fill={partyColors[p] ?? partyColors.other}
+                    stroke={c.bg}
+                    strokeWidth={1.5}
+                  />
+                )
+              }}
               connectNulls
               hide={hidden[p]}
               isAnimationActive={false}

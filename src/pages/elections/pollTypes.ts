@@ -41,10 +41,34 @@ export type WahlterminListResponse = {
   quelle: Quelle
 }
 
+/** Ergebnis einer Partei. `sitze*` sind null, wenn sie nicht eingezogen ist. */
+export type ErgebnisPartei = {
+  kuerzel: string
+  prozent: number
+  stimmen: number | null
+  sitze: number | null
+  sitze_direkt: number | null
+  sitze_liste: number | null
+}
+
+/**
+ * Amtliches Ergebnis. Null, solange die Wahl aussteht oder noch nichts
+ * erfasst ist — das unterscheidet auf der Seite den Umfrage- vom Wahlabendmodus.
+ */
+export type Ergebnis = {
+  status: 'vorlaeufig' | 'endgueltig'
+  stand: string | null
+  wahlbeteiligung: number | null
+  sitze_gesamt: number | null
+  quelle: { name: string | null; url: string | null }
+  parteien: ErgebnisPartei[]
+}
+
 export type PollsResponse = {
   wahl: Omit<Wahltermin, 'umfragen' | 'letzte_umfrage'>
   parteien: string[]
   institute: string[]
   umfragen: PollRow[]
+  ergebnis: Ergebnis | null
   quelle: Quelle
 }

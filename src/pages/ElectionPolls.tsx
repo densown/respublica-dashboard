@@ -20,11 +20,19 @@ import {
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { CoalitionCalculator } from './elections/CoalitionCalculator'
+import { ElectionResult } from './elections/ElectionResult'
 import { PollStanding } from './elections/PollStanding'
 import { PollTrendChart } from './elections/PollTrendChart'
+import { PollVsResult } from './elections/PollVsResult'
+import { SeatCoalitions } from './elections/SeatCoalitions'
 import { SourceNote } from './elections/SourceNote'
 import { PARTY_LABELS, partyColorsForTheme } from './elections/partyColors'
 import { OTHER, standing } from './elections/pollMath'
+import {
+  abweichungen,
+  mehrheitsschwelle,
+  sitzKoalitionen,
+} from './elections/resultMath'
 import { useSeo } from '../hooks/useSeo'
 import type {
   PollRow,
@@ -137,6 +145,20 @@ export default function ElectionPolls() {
     () => standing(umfragen, parteien, FENSTER),
     [umfragen, parteien],
   )
+
+  // Liegt ein Ergebnis vor, kippt die Seite in den Wahlabendmodus: das
+  // Ergebnis tritt an die Stelle des Umfragestands, und die Umfragen werden
+  // vom Hauptinhalt zum Vergleichsmassstab.
+  const ergebnis = data?.ergebnis ?? null
+  const abw = useMemo(
+    () => (ergebnis ? abweichungen(ergebnis, werte) : []),
+    [ergebnis, werte],
+  )
+  const sitzKoalis = useMemo(
+    () => (ergebnis ? sitzKoalitionen(ergebnis) : []),
+    [ergebnis],
+  )
+
   const wahlName = data?.wahl
     ? lang === 'de'
       ? data.wahl.name_de
@@ -144,9 +166,12 @@ export default function ElectionPolls() {
     : ''
 
   useSeo({
-    titel: wahlName ? `Umfragen: ${wahlName}` : 'Wahlumfragen',
-    beschreibung:
-      'Sonntagsfrage-Zeitreihen zu Bundes- und Landtagswahlen mit Koalitionsrechner. Quelle: dawum.de.',
+    titel: wahlName
+      ? `${ergebnis ? t('electionResultKicker') : t('electionPollsKicker')}: ${wahlName}`
+      : 'Wahlumfragen',
+    beschreibung: ergebnis
+      ? 'Amtliches Wahlergebnis mit Sitzverteilung, Vergleich zu den letzten Umfragen und rechnerischen Mehrheiten.'
+      : 'Sonntagsfrage-Zeitreihen zu Bundes- und Landtagswahlen mit Koalitionsrechner. Quelle: dawum.de.',
   })
 
   const letzteZehn = useMemo(() => [...umfragen].reverse().slice(0, 10), [umfragen])
@@ -178,7 +203,7 @@ export default function ElectionPolls() {
     <div style={{ paddingBottom: spacing.xxl }}>
 
       <PageHeader
-        kicker={t('electionPollsKicker')}
+        kicker={ergebnis ? t('electionResultKicker') : t('electionPollsKicker')}
         title={wahlName || t('electionPollsTitle')}
         meta={
           data ? (
@@ -192,6 +217,33 @@ export default function ElectionPolls() {
                       {t('electionPollsDaysLeft').replace('{days}', String(tage))}
                     </span>
                   )}
+                  {' · '}
+                </>
+              )}
+              {/* Beim Ergebnis stehen Wahlbeteiligung und Vorlaeufigkeit
+                  vorn — beides gehoert zur Einordnung der Zahlen darunter. */}
+              {ergebnis && (
+                <>
+                  {ergebnis.wahlbeteiligung != null && (
+                    <>
+                      {t('electionResultTurnout')}{' '}
+                      {ergebnis.wahlbeteiligung
+                        .toFixed(1)
+                        .replace('.', lang === 'de' ? ',' : '.')}
+                      {' % · '}
+                    </>
+                  )}
+                  <span
+                    style={{
+                      color:
+                        ergebnis.status === 'vorlaeufig' ? c.red : undefined,
+                      fontWeight: ergebnis.status === 'vorlaeufig' ? 700 : 400,
+                    }}
+                  >
+                    {ergebnis.status === 'vorlaeufig'
+                      ? t('electionResultPreliminary')
+                      : t('electionResultFinal')}
+                  </span>
                   {' · '}
                 </>
               )}
@@ -250,27 +302,92 @@ export default function ElectionPolls() {
           }}
           aria-busy={laedtNach}
         >
-          {umfragen.length < 2 ? (
-            <EmptyState text={t('electionPollsNoData')} />
-          ) : (
+          {/*
+            Wahlabendmodus: liegt ein Ergebnis vor, steht es oben und ersetzt
+            den Umfragestand. Bewusst ausserhalb der Umfrage-Bedingung unten —
+            ein Ergebnis ist auch dann zu zeigen, wenn zu einer Wahl kaum
+            Umfragen vorliegen.
+          */}
+          {ergebnis && (
             <>
-              {/* ---------- Aktueller Stand ---------- */}
-              <Section
-                title={t('electionPollsStanding')}
-                note={t('electionPollsStandingHint')
-                  .replace('{n}', String(Math.min(FENSTER, umfragen.length)))
-                  .replace('{date}', formatDate(neueste?.veroeffentlicht ?? null, lang))}
-              >
-                <PollStanding werte={werte} lang={lang} />
+              <Section title={t('electionResultTitle')} note={t('electionResultHint')}>
+                <ElectionResult ergebnis={ergebnis} lang={lang} />
+                {ergebnis.status === 'vorlaeufig' && (
+                  <p
+                    style={{
+                      fontFamily: fonts.mono,
+                      fontSize: fontSize.xs,
+                      lineHeight: 1.6,
+                      color: c.muted,
+                      margin: 0,
+                      marginTop: spacing.md,
+                    }}
+                  >
+                    {t('electionResultPreliminaryNote')}
+                  </p>
+                )}
               </Section>
 
-              {/* ---------- Rechnerische Mehrheiten ---------- */}
+              {/* Nur mit Umfragen im Bestand: ohne Vergleichswert bliebe eine
+                  Tabelle aus Gedankenstrichen stehen. */}
+              {abw.some((a) => a.delta != null) && (
+                <Section
+                  title={t('electionResultComparison')}
+                  note={t('electionResultComparisonHint').replace(
+                    '{n}',
+                    String(Math.min(FENSTER, umfragen.length)),
+                  )}
+                >
+                  <PollVsResult werte={abw} lang={lang} t={t} />
+                </Section>
+              )}
+
               <Section
-                title={t('electionPollsCoalitions')}
-                note={t('electionPollsCoalitionsHint')}
+                title={t('electionResultSeatMajorities')}
+                note={t('electionResultSeatMajoritiesHint')
+                  .replace('{majority}', String(mehrheitsschwelle(ergebnis) ?? '—'))
+                  .replace('{total}', String(ergebnis.sitze_gesamt ?? '—'))}
               >
-                <CoalitionCalculator werte={werte} lang={lang} t={t} />
+                <SeatCoalitions
+                  koalitionen={sitzKoalis}
+                  mehrheit={mehrheitsschwelle(ergebnis)}
+                  lang={lang}
+                  t={t}
+                />
               </Section>
+            </>
+          )}
+
+          {umfragen.length < 2 ? (
+            !ergebnis && <EmptyState text={t('electionPollsNoData')} />
+          ) : (
+            <>
+              {/* ---------- Aktueller Stand ----------
+                  Nach der Wahl entfaellt er: der Umfragestand ist dann keine
+                  Prognose mehr, sondern steht als Vergleichswert oben im
+                  Abschnitt "Umfragen und Ergebnis". */}
+              {!ergebnis && (
+                <>
+                  <Section
+                    title={t('electionPollsStanding')}
+                    note={t('electionPollsStandingHint')
+                      .replace('{n}', String(Math.min(FENSTER, umfragen.length)))
+                      .replace('{date}', formatDate(neueste?.veroeffentlicht ?? null, lang))}
+                  >
+                    <PollStanding werte={werte} lang={lang} />
+                  </Section>
+
+                  {/* ---------- Rechnerische Mehrheiten ----------
+                      Die genaeherte Variante nur vor der Wahl; danach stehen
+                      oben die gezaehlten Sitze. */}
+                  <Section
+                    title={t('electionPollsCoalitions')}
+                    note={t('electionPollsCoalitionsHint')}
+                  >
+                    <CoalitionCalculator werte={werte} lang={lang} t={t} />
+                  </Section>
+                </>
+              )}
 
               {/* ---------- Verlauf ---------- */}
               <Section
@@ -282,6 +399,7 @@ export default function ElectionPolls() {
                   parties={parteien}
                   lang={lang}
                   wahlDatum={data.wahl.datum}
+                  ergebnis={ergebnis}
                   height={narrow ? 300 : 400}
                 />
               </Section>
@@ -315,12 +433,54 @@ export default function ElectionPolls() {
                   ))}
                 </div>
               </Section>
-
-              {/* ---------- Teilen + Quelle ---------- */}
-              <div style={{ marginTop: spacing.xxl }}>
-                <ShareToolbar title={`${t('electionPollsKicker')}: ${wahlName}`} url={shareUrl} />
-              </div>
             </>
+          )}
+
+          {/* ---------- Teilen + Quellen ----------
+              Ausserhalb der Umfrage-Bedingung: eine Wahl mit Ergebnis, aber
+              ohne nennenswerte Umfragen ist genauso teilenswert. */}
+          <div style={{ marginTop: spacing.xxl }}>
+            <ShareToolbar
+              title={`${ergebnis ? t('electionResultKicker') : t('electionPollsKicker')}: ${wahlName}`}
+              url={shareUrl}
+            />
+          </div>
+
+          {/* Ergebnisquelle getrennt ausgewiesen: sie kommt von der jeweiligen
+              Landeswahlleitung, nicht von dawum. Beide Angaben nebeneinander
+              stehen zu lassen, waere irrefuehrend. */}
+          {ergebnis?.quelle.name && (
+            <p
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: fontSize.xs,
+                lineHeight: 1.6,
+                color: c.muted,
+                margin: 0,
+                marginTop: spacing.lg,
+              }}
+            >
+              {t('electionResultSource')}:{' '}
+              {ergebnis.quelle.url ? (
+                <a
+                  href={ergebnis.quelle.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: c.inkSoft }}
+                >
+                  {ergebnis.quelle.name}
+                </a>
+              ) : (
+                ergebnis.quelle.name
+              )}
+              {ergebnis.stand && (
+                <>
+                  {' · '}
+                  {t('electionResultAsOf')}{' '}
+                  {formatDate(ergebnis.stand.slice(0, 10), lang)}
+                </>
+              )}
+            </p>
           )}
 
           <SourceNote quelle={data.quelle} />
