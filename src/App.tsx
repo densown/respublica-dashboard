@@ -18,6 +18,7 @@ const Elections = lazy(() => import('./pages/Elections'))
 const ElectionPolls = lazy(() => import('./pages/ElectionPolls'))
 const ElectionCandidates = lazy(() => import('./pages/ElectionCandidates'))
 const Bundestag = lazy(() => import('./pages/Bundestag'))
+const Versammlungen = lazy(() => import('./pages/Versammlungen'))
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="koalitionsvertrag" element={<Coalition />} />
             <Route path="demokratie-index" element={<Navigate to="/demokratie" replace />} />
             <Route path="demokratie" element={<DemocracyIndex />} />
+            <Route path="versammlungen" element={<Versammlungen />} />
             <Route path="weltkarte" element={<WorldMap />} />
             <Route path="eu-parlament" element={<EuParliament />} />
             <Route path="lobbyregister" element={<LobbyRegister />} />

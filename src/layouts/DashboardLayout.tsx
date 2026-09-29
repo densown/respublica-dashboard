@@ -13,6 +13,7 @@ const ROUTE_PREFIX: Record<string, string> = {
   'eu-recht': 'euLaw',
   koalition: 'coalition',
   demokratie: 'democracy',
+  versammlungen: 'versammlungen',
   weltkarte: 'worldmap',
   'eu-parlament': 'euParl',
   lobbyregister: 'lobby',
@@ -28,6 +29,7 @@ const MODULE_PATH: Record<string, string> = {
   euLaw: '/eu-recht',
   coalition: '/koalition',
   democracy: '/demokratie',
+  versammlungen: '/versammlungen',
   worldmap: '/weltkarte',
   euParl: '/eu-parlament',
   lobby: '/lobbyregister',
@@ -111,7 +113,13 @@ export default function DashboardLayout() {
     // die Zeile:
     //   { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') }
     //
-    // Alle drei Routen bleiben erreichbar, damit vorhandene Links nicht
+    // Ebenso der Demonstrations-Tracker unter /versammlungen (Beta, bislang
+    // nur Berlin, /api/versammlungen*). Zum Veroeffentlichen unter
+    // sectionGermany:
+    //   { kind: 'link' as const, id: 'versammlungen', icon: '◎', label: t('versammlungenNav') }
+    // (Schluessel versammlungenNav dann in i18n/versammlungen.ts anlegen)
+    //
+    // Alle Routen bleiben erreichbar, damit vorhandene Links nicht
     // brechen.
     //
     // "Tools" ist entfallen: der Abschnitt enthielt Weltdaten, deutsche Daten

@@ -10,14 +10,19 @@ export type FilterOption = {
 export type FilterDef = {
   label: string
   options: FilterOption[]
+  /** Kontrollierter Wert. Ohne `value` bleibt das Feld unkontrolliert (alter Stand). */
+  value?: string
+  onChange?: (value: string) => void
 }
 
 export type FilterToolbarProps = {
   placeholder?: string
   filters: FilterDef[]
+  /** Kontrolliertes Suchfeld. `false` blendet es aus. */
+  search?: { value: string; onChange: (value: string) => void } | false
 }
 
-export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
+export function FilterToolbar({ placeholder, filters, search }: FilterToolbarProps) {
   const { c, t } = useTheme()
 
   const selectArrowDataUrl = useMemo(() => {
@@ -35,11 +40,15 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
         marginBottom: spacing.xl,
       }}
     >
+      {search !== false && (
       <input
         type="search"
         placeholder={placeholder ?? t('search')}
+        aria-label={placeholder ?? t('search')}
+        {...(search ? { value: search.value, onChange: (e) => search.onChange(e.target.value) } : {})}
         style={{
           flex: 2,
+          minHeight: 44,
           minWidth: 160,
           padding: `${spacing.md}px ${spacing.lg}px`,
           border: `1px solid ${c.inputBorder}`,
@@ -58,6 +67,7 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
           e.target.style.borderColor = c.inputBorder
         }}
       />
+      )}
       {filters.map((f) => (
         <label
           key={f.label}
@@ -81,7 +91,9 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
             {f.label}
           </span>
           <select
-            defaultValue={f.options[0]?.value ?? ''}
+            {...(f.value !== undefined
+              ? { value: f.value, onChange: (e) => f.onChange?.(e.target.value) }
+              : { defaultValue: f.options[0]?.value ?? '' })}
             style={{
               padding: `${spacing.md}px ${spacing.xl}px ${spacing.md}px ${spacing.md}px`,
               border: `1px solid ${c.inputBorder}`,
@@ -91,6 +103,7 @@ export function FilterToolbar({ placeholder, filters }: FilterToolbarProps) {
               fontFamily: fonts.body,
               fontSize: fontSize.md,
               appearance: 'none',
+              minHeight: 44,
               WebkitAppearance: 'none',
               backgroundImage: selectArrowDataUrl,
               backgroundRepeat: 'no-repeat',
