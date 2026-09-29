@@ -1,5 +1,6 @@
 import type { BadgeVariant } from '../../design-system'
 
+/** Rechtsgebiet-Filter der Gesetzesliste; die Zuordnung aus dem Kuerzel macht die API (bereich=...). */
 export type RechtGebietFilter =
   | 'all'
   | 'zivil'
@@ -14,28 +15,6 @@ export function normalizeKuerzelCode(k: string): string {
     .trim()
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, '')
-}
-
-/** Heuristik aus Kürzel (Bundesrecht-Katalog), wie vereinbart. */
-export function rechtGebietFromKuerzel(kuerzel: string): RechtGebietFilter {
-  const u = normalizeKuerzelCode(kuerzel)
-  if (!u) return 'bundes'
-
-  const zivil = new Set(['BGB', 'ZPO', 'HGB', 'INSO', 'FAMFG', 'WEG'])
-  if (zivil.has(u)) return 'zivil'
-
-  const straf = new Set(['STGB', 'STPO', 'JGG', 'BTMG'])
-  if (straf.has(u)) return 'straf'
-
-  if (u.startsWith('SGB')) return 'sozial'
-
-  const verf = new Set(['GG', 'BVERFGG'])
-  if (verf.has(u)) return 'verfassung'
-
-  const steuerArbeit = new Set(['ESTG', 'AO', 'ARBGG', 'BETRVG'])
-  if (steuerArbeit.has(u)) return 'steuer_arbeit'
-
-  return 'bundes'
 }
 
 export function courtBadgeVariant(gericht: string): BadgeVariant {

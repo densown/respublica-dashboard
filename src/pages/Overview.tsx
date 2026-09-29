@@ -69,7 +69,9 @@ export default function Overview() {
 
   const { data: gStats } = useApi<GesetzeStats>('/api/gesetze/stats')
   const { data: euStats } = useApi<EuStats>('/api/eu-recht/stats')
-  const { data: gesetze } = useApi<GesetzRow[]>('/api/gesetze?limit=6')
+  const { data: gesetze } = useApi<{ items: GesetzRow[] }>(
+    '/api/gesetze/liste?filter=mit_zusammenfassung&limit=3',
+  )
   const { data: wahlen } = useApi<WahlterminListe>('/api/wahltermine?status=kommend')
 
   /** Die naechste Wahl mit Datum — der zeitliche Aufhaenger der Seite. */
@@ -82,7 +84,7 @@ export default function Overview() {
 
   /** Nur Aenderungen mit Zusammenfassung — ein Aktenzeichen erklaert nichts. */
   const letzte = useMemo(
-    () => (gesetze ?? []).filter((g) => g.zusammenfassung && g.name).slice(0, 3),
+    () => (gesetze?.items ?? []).filter((g) => g.zusammenfassung && g.name).slice(0, 3),
     [gesetze],
   )
 

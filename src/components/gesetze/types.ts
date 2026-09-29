@@ -22,6 +22,14 @@ export type Gesetz = {
   diff?: string | null
 }
 
+/** GET /api/gesetze/liste: eine Seite der Aenderungsliste */
+export type GesetzeListResponse = {
+  total: number
+  limit: number
+  offset: number
+  items: Gesetz[]
+}
+
 export type Urteil = {
   id: number
   doc_id: string
