@@ -1,0 +1,15 @@
+[Unit]
+Description=Res.Publica Dashboard: main bauen und deployen, wenn CI gruen
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=HOME=/root
+# PATH muss node und npm enthalten (bei nvm den Pfad dort eintragen).
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=-/etc/respublica/autodeploy.env
+# Build mit niedriger Prioritaet, damit API und WordPress nicht leiden.
+Nice=10
+IOSchedulingClass=idle
+ExecStart=/root/apps/dashboard/deploy/autodeploy.sh

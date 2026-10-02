@@ -32,7 +32,7 @@ const normalizeFraktion = (f: string): string => f.replace(/\u00AD/g, '').trim()
 
 /** Kürzt API-Parteilabel für die Ansicht */
 export function shortFraktionName(apiPartei: string): string {
-  let s = normalizeFraktion(apiPartei).replace(BUNDESTAG_WP_SUFFIX, '').trim()
+  const s = normalizeFraktion(apiPartei).replace(BUNDESTAG_WP_SUFFIX, '').trim()
   const l = s.toLowerCase()
   if (
     (l.includes('bündnis') || l.includes('b90')) &&

@@ -3,3 +3,5 @@ dist
 .env
 *.local
 deploy.log
+dist.next
+dist.prev

@@ -17,6 +17,5 @@ jobs:
       - run: npm ci
       # Harte Gates: TypeScript-Typecheck + Production-Build (tsc -b && vite build)
       - run: npm run build
-      # Lint vorerst informativ (3 vorbestehende Fehler) -> blockt CI nicht
+      # Lint ist hartes Gate: Fehler blockieren, Warnungen nicht
       - run: npm run lint
-        continue-on-error: true
