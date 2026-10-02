@@ -36,6 +36,22 @@ export default function LineChart({
   const chartWrapRef = useRef<HTMLDivElement>(null)
   const [hover, setHover] = useState<number | null>(null)
 
+  // Hooks vor dem fruehen Return, sonst wechselt die Hook-Reihenfolge,
+  // wenn data zwischen leer und gefuellt wechselt.
+  const lastIdx = (data?.length ?? 0) - 1
+  const updateHoverFromClientX = useCallback(
+    (clientX: number) => {
+      const wrap = chartWrapRef.current
+      if (!wrap) return
+      const rect = wrap.getBoundingClientRect()
+      if (rect.width <= 0) return
+      const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width))
+      const i = Math.round(ratio * lastIdx)
+      setHover(i)
+    },
+    [lastIdx],
+  )
+
   if (!data || data.length < 2) return null
   const vals = data.map((d) => d.v)
   const years = data.map((d) => d.y)
@@ -51,20 +67,6 @@ export default function LineChart({
   const firstY = years[0],
     lastY = years[years.length - 1]
 
-  const lastIdx = data.length - 1
-
-  const updateHoverFromClientX = useCallback(
-    (clientX: number) => {
-      const wrap = chartWrapRef.current
-      if (!wrap) return
-      const rect = wrap.getBoundingClientRect()
-      if (rect.width <= 0) return
-      const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width))
-      const i = Math.round(ratio * lastIdx)
-      setHover(i)
-    },
-    [lastIdx],
-  )
 
   const hoverPoint = hover != null ? data[hover] : null
 
