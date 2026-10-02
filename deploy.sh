@@ -1,11 +1,9 @@
 #!/bin/bash
+# Manueller Deploy: dasselbe wie der Timer, also nur gruene Commits, Build
+# nach dist.next und Tausch erst nach erfolgreichem Build.
+# Einrichtung des Timers: deploy/README.md
 set -e
-cd /root/apps/dashboard
-echo "$(date): Starting deploy..." >> deploy.log
-git pull origin main
-npm ci --production=false
-npm run build
-echo "$(date): Deploy complete." >> deploy.log
+exec /root/apps/dashboard/deploy/autodeploy.sh "$@"
 
 # === WICHTIG ===
 # Dashboard-Source: /root/apps/dashboard/ (DIESES Verzeichnis)
