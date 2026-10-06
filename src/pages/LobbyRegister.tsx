@@ -575,13 +575,24 @@ export default function LobbyRegister() {
   )
   const xTicks = useMemo(() => xScale.ticks(5), [xScale])
   const timeData = useMemo(() => byTimeData?.items ?? [], [byTimeData])
-  const monthlyChartHeight = isMobile ? 200 : 300
-  const cumulativeChartHeight = isMobile ? 180 : 250
+  const monthlyChartHeight = isMobile ? 260 : 300
+  const cumulativeChartHeight = isMobile ? 220 : 260
+  // Explizite Ticks statt interval={0} mit leeren Labels: Desktop Jan + Jul, Mobil nur Jan
+  const timelineTicks = useMemo(
+    () =>
+      timeData
+        .map((item) => item.month)
+        .filter((month) => {
+          const monthNum = Number(month.split('-')[1])
+          return isMobile ? monthNum === 1 : monthNum === 1 || monthNum === 7
+        }),
+    [timeData, isMobile],
+  )
+  const timelineAxisWidth = isMobile ? 48 : 56
   const formatTimelineTick = (val: string): string => {
     const [year, month] = val.split('-')
     if (!year || !month) return val
-    const monthNum = Number(month)
-    if (monthNum % 6 !== 1) return ''
+    if (isMobile) return year
     return `${month === '01' ? 'Jan' : 'Jul'} ${year.slice(2)}`
   }
   const formatTooltipNumber = (value: unknown): string => {
@@ -1176,18 +1187,22 @@ export default function LobbyRegister() {
                   {t('lobbyTimelineMonthlyTitle')}
                 </p>
                 <ResponsiveContainer width="100%" height={monthlyChartHeight}>
-                  <BarChart data={timeData} margin={{ top: 20, right: 30, bottom: 60, left: 60 }}>
+                  <BarChart data={timeData} margin={{ top: spacing.sm, right: spacing.sm, bottom: 0, left: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
                     <XAxis
                       dataKey="month"
+                      ticks={timelineTicks}
                       tickFormatter={formatTimelineTick}
-                      angle={-45}
-                      textAnchor="end"
                       interval={0}
-                      height={60}
+                      height={24}
+                      tickLine={false}
                       tick={{ fontSize: 11, fill: c.muted, fontFamily: fonts.mono }}
                     />
-                    <YAxis tick={{ fontSize: 11, fill: c.muted, fontFamily: fonts.mono }} />
+                    <YAxis
+                      width={timelineAxisWidth}
+                      tickFormatter={(val: number) => val.toLocaleString('de-DE')}
+                      tick={{ fontSize: 11, fill: c.muted, fontFamily: fonts.mono }}
+                    />
                     <Tooltip
                       formatter={(value) => [
                         formatTooltipNumber(value),
@@ -1202,7 +1217,7 @@ export default function LobbyRegister() {
                       }}
                     />
                     <ReferenceLine x="2022-02" stroke={c.red} strokeDasharray="4 4">
-                      <Label value="↑ Pflichtregistrierung" position="top" fontSize={10} fill={c.red} />
+                      <Label value="↑ Pflichtregistrierung" position="insideTopLeft" fontSize={10} fill={c.red} />
                     </ReferenceLine>
                     <Bar dataKey="count" fill={c.red} radius={[2, 2, 0, 0]} />
                   </BarChart>
@@ -1214,18 +1229,19 @@ export default function LobbyRegister() {
                   {t('lobbyTimelineCumulativeTitle')}
                 </p>
                 <ResponsiveContainer width="100%" height={cumulativeChartHeight}>
-                  <AreaChart data={timeData} margin={{ top: 10, right: 30, bottom: 60, left: 60 }}>
+                  <AreaChart data={timeData} margin={{ top: spacing.sm, right: spacing.sm, bottom: 0, left: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={c.border} />
                     <XAxis
                       dataKey="month"
+                      ticks={timelineTicks}
                       tickFormatter={formatTimelineTick}
-                      angle={-45}
-                      textAnchor="end"
                       interval={0}
-                      height={60}
+                      height={24}
+                      tickLine={false}
                       tick={{ fontSize: 11, fill: c.muted, fontFamily: fonts.mono }}
                     />
                     <YAxis
+                      width={timelineAxisWidth}
                       tickFormatter={(val: number) => val.toLocaleString('de-DE')}
                       tick={{ fontSize: 11, fill: c.muted, fontFamily: fonts.mono }}
                     />
@@ -1249,7 +1265,7 @@ export default function LobbyRegister() {
                       fill={c.red}
                       fillOpacity={0.15}
                       strokeWidth={2}
-                      dot={{ r: 2, fill: c.red }}
+                      dot={isMobile ? false : { r: 2, fill: c.red }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
