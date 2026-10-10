@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { RAW_SEATS } from '../../data/bundestag-seats'
 import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useTheme } from '../../design-system/ThemeContext'
@@ -7,6 +7,8 @@ import { SSW } from '../../design-system/palettes'
 const VIEW_W = 800
 const VIEW_H = 410
 const SEAT_R = 5.8
+/** Fangradius fuer Klicks in SVG-Einheiten, etwa zwei Sitzabstaende. */
+const TAP_RADIUS = 16
 const FRACT_ANIM_MS = 350
 
 export type SitzverteilungRow = {
@@ -370,6 +372,33 @@ export function Hemicycle({
     return () => window.cancelAnimationFrame(id)
   }, [abstimmung])
 
+  // Treffer per naechstem Sitz statt per Kreis: auf dem Handy ist ein Sitz
+  // knapp 5 px gross und mit dem Finger praktisch nicht zu treffen. Der Klick
+  // nimmt den naechsten belegten Sitz im Umkreis von TAP_RADIUS.
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const handleSvgClick = useCallback(
+    (e: ReactMouseEvent<SVGSVGElement>) => {
+      const svg = svgRef.current
+      const ctm = svg?.getScreenCTM()
+      if (!svg || !ctm || !onSeatSelect) return
+      const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse())
+      let best: number | null = null
+      let bestDist = TAP_RADIUS * TAP_RADIUS
+      for (const s of seatDerived) {
+        if (!abgeordnete?.has(s.seatId)) continue
+        const dx = s.cx - pt.x
+        const dy = s.cy - pt.y
+        const d = dx * dx + dy * dy
+        if (d <= bestDist) {
+          bestDist = d
+          best = s.seatId
+        }
+      }
+      if (best != null) onSeatSelect(best)
+    },
+    [seatDerived, abgeordnete, onSeatSelect],
+  )
+
   const showVoteFill = Boolean(abstimmung && voteReveal)
   const hoveredSeat = hoveredSeatId != null ? seatRender[hoveredSeatId] : null
   const hoveredAbg = hoveredSeatId != null ? abgeordnete?.get(hoveredSeatId) : null
@@ -377,6 +406,8 @@ export function Hemicycle({
   return (
     <div style={{ position: 'relative' }}>
       <svg
+        ref={svgRef}
+        onClick={handleSvgClick}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         role="img"
         style={{
@@ -441,9 +472,6 @@ export function Hemicycle({
               fill={fill}
               onMouseEnter={() => setHoveredSeatId(s.seatId)}
               onMouseLeave={() => setHoveredSeatId((prev) => (prev === s.seatId ? null : prev))}
-              onClick={() => {
-                if (abgeordnete?.has(s.seatId)) onSeatSelect?.(s.seatId)
-              }}
               style={{
                 transition: abstimmung ? 'fill 0.4s ease' : 'fill 0.2s ease',
                 transitionDelay: abstimmung ? `${s.delay}ms` : '0ms',

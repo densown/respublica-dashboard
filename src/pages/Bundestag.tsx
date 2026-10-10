@@ -16,6 +16,10 @@ import {
 } from '../components/bundestag/AbstimmungsDetail'
 import { AbstimmungsListe } from '../components/bundestag/AbstimmungsListe'
 import {
+  AbgeordnetenStimmen,
+  type AbgeordneterInfo,
+} from '../components/bundestag/AbgeordnetenStimmen'
+import {
   MemberTopicProfile,
   type MemberTopicProfileData,
 } from '../components/bundestag/MemberTopicProfile'
@@ -131,7 +135,9 @@ export default function Bundestag() {
 
   const [selectedPollId, setSelectedPollId] = useState<number | null>(null)
   const [animating, setAnimating] = useState(false)
-  const [selectedSeatId, setSelectedSeatId] = useState<number | null>(null)
+  // Auswahl ueber aw_id statt Sitznummer: so oeffnen Halbrund und Liste
+  // dasselbe Profil.
+  const [selectedAwId, setSelectedAwId] = useState<number | null>(null)
 
   const { data: sitzverteilung, loading: loadingSitz, error: errSitz } =
     useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
@@ -261,12 +267,36 @@ export default function Bundestag() {
     return map
   }, [abgeordnete])
 
+  const abgeordneteByAwId = useMemo(() => {
+    const map = new Map<number, AbgeordnetenSeatRow & AbgeordneterInfo>()
+    for (const a of abgeordnete ?? []) {
+      map.set(a.aw_id, {
+        id: a.id,
+        aw_id: a.aw_id,
+        name: a.name,
+        fraktion: shortFraktionName(a.fraktion),
+        wahlkreis: a.wahlkreis,
+        foto_url: a.foto_url ?? null,
+        profil_url: a.profil_url ?? null,
+      })
+    }
+    return map
+  }, [abgeordnete])
+
+  const handleSeatSelect = useCallback(
+    (seatId: number) => {
+      const abg = abgeordneteBySeatId.get(seatId)
+      if (abg) setSelectedAwId(abg.aw_id)
+    },
+    [abgeordneteBySeatId],
+  )
+
   const selectedAbgeordneter = useMemo(
     () =>
-      selectedSeatId != null
-        ? (abgeordneteBySeatId.get(selectedSeatId) ?? null)
+      selectedAwId != null
+        ? (abgeordneteByAwId.get(selectedAwId) ?? null)
         : null,
-    [abgeordneteBySeatId, selectedSeatId],
+    [abgeordneteByAwId, selectedAwId],
   )
   const memberVotesEndpoint =
     selectedAbgeordneter != null
@@ -427,7 +457,7 @@ export default function Bundestag() {
               individuelleVotes={individualVotesByMandateId}
               abgeordnete={abgeordneteBySeatId}
               animating={animating}
-              onSeatSelect={setSelectedSeatId}
+              onSeatSelect={handleSeatSelect}
             />
           </div>
           </ExportableContainer>
@@ -497,13 +527,36 @@ export default function Bundestag() {
               </p>
             )}
           </div>
+
+          {selectedPollId != null && pollVotesResponse && (
+            <div
+              style={{
+                background: c.cardBg,
+                border: `1px solid ${c.cardBorder}`,
+                borderRadius: radius.lg,
+                padding: spacing.xl,
+                boxShadow: c.shadow,
+              }}
+            >
+              <AbgeordnetenStimmen
+                key={selectedPollId}
+                votes={pollVotesResponse.votes}
+                abgeordnete={abgeordneteByAwId}
+                sitzverteilung={sitz.map((r) => ({
+                  partei: r.partei,
+                  farbe: r.farbe,
+                }))}
+                onSelect={setSelectedAwId}
+              />
+            </div>
+          )}
         </div>
       )}
       {selectedAbgeordneter && (
         <div
           role="dialog"
           aria-modal="true"
-          onClick={() => setSelectedSeatId(null)}
+          onClick={() => setSelectedAwId(null)}
           style={{
             position: 'fixed',
             inset: 0,
@@ -531,7 +584,7 @@ export default function Bundestag() {
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button
                 type="button"
-                onClick={() => setSelectedSeatId(null)}
+                onClick={() => setSelectedAwId(null)}
                 style={{
                   border: `1px solid ${c.border}`,
                   borderRadius: radius.sm,
