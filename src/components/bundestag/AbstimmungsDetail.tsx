@@ -103,7 +103,7 @@ export function labelColorFromSitzverteilung(
   return farbe
 }
 
-function labelColorForLegendDot(
+export function labelColorForLegendDot(
   apiPartei: string,
   rows: { partei: string; farbe: string }[],
   theme: 'light' | 'dark',
