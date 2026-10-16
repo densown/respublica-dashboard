@@ -5,7 +5,9 @@
 # deployt nur, wenn die GitHub-CI fuer genau diesen Commit gruen ist. Gebaut
 # wird nach dist.next; erst wenn der Build vollstaendig ist, wird dist
 # ausgetauscht. Ein abgebrochener Build laesst die laufende Seite unberuehrt.
-# Die vorige Fassung bleibt als dist.prev liegen.
+# Die vorige Fassung bleibt als dist.prev liegen. Jede ausgelieferte Fassung
+# kommt ausserdem ins Archiv releases/ (die letzten KEEP_RELEASES, Standard 8);
+# zurueck auf eine davon geht es mit deploy/rollback.sh.
 #
 # Konfiguration ueber Umgebung (systemd: /etc/respublica/autodeploy.env):
 #   DEPLOY_ALERT_URL  Ping-URL, z. B. healthchecks.io. Erfolg pingt die URL,
@@ -13,6 +15,7 @@
 #   GITHUB_TOKEN      optional, nur gegen das API-Limit (60 Abfragen/Stunde)
 #   HEALTH_URL        oeffentliche Adresse, die nach dem Tausch 200 liefern muss
 #                     (leer gesetzt: keine Pruefung)
+#   KEEP_RELEASES     wie viele Versionen das Archiv behaelt (Standard 8)
 set -euo pipefail
 
 REPO_SLUG=densown/respublica-dashboard
@@ -23,6 +26,11 @@ STATE_DIR=${STATE_DIR:-/var/lib/respublica-autodeploy}
 LOG=${LOG:-$APP_DIR/deploy.log}
 DEPLOY_ALERT_URL=${DEPLOY_ALERT_URL:-}
 GITHUB_API=${GITHUB_API:-https://api.github.com}
+RELEASES=${RELEASES:-$APP_DIR/releases}
+KEEP_RELEASES=${KEEP_RELEASES:-8}
+
+# dist_ok, archivieren, archiv_anlegen, aufraeumen
+source "$(dirname "$(readlink -f "$0")")/versionen.sh"
 
 mkdir -p "$STATE_DIR"
 BLOCKED_FILE=$STATE_DIR/dashboard.blocked
@@ -101,15 +109,6 @@ esac
 
 CHANGED=$(git diff --name-only "$CUR" "$NEW")
 
-# Prueft, ob index.html da ist und jede dort verlinkte Datei unter /assets existiert.
-dist_ok() {
-  local dir=$1 f
-  [ -s "$dir/index.html" ] || return 1
-  for f in $(grep -oE '/assets/[^"'"'"' )]+' "$dir/index.html" | sort -u); do
-    [ -s "$dir$f" ] || return 1
-  done
-}
-
 build() {
   if grep -qx 'package-lock.json' <<< "$CHANGED" || [ ! -d node_modules ]; then
     log "npm ci"
@@ -126,6 +125,7 @@ swap_in() {
   mv dist.next dist
 }
 
+archiv_anlegen || log "Archiv releases/ konnte nicht angelegt werden"
 log "Deploy ${CUR:0:7} -> ${NEW:0:7}"
 git merge -q --ff-only "$NEW"
 if ! build; then
@@ -139,6 +139,7 @@ swap_in
 if [ -z "$HEALTH_URL" ] || curl -fsS -m 15 -o /dev/null "$HEALTH_URL"; then
   rm -f "$BLOCKED_FILE" "$LAST_FILE"
   log "OK, ${NEW:0:7} ist live"
+  { archivieren dist "$NEW" && aufraeumen; } || log "Archivieren von ${NEW:0:7} fehlgeschlagen, Seite laeuft trotzdem"
   ping_ok
   exit 0
 fi
