@@ -257,12 +257,12 @@ export function DistrictAnalysis({
   const { data: mapTurnoutRows } = useApi<MapRowFromApi[]>(mapTurnoutEp)
 
   const nationalAvgTurnout = useMemo(() => {
-    if (!mapTurnoutRows?.length) return 0
-    let s = 0
-    for (const r of mapTurnoutRows) {
-      s += toDisplayPercent(r.turnout)
-    }
-    return s / mapTurnoutRows.length
+    // Kreise ohne Wahlbeteiligung zaehlen nicht als 0 %
+    const values = (mapTurnoutRows ?? [])
+      .filter((r) => r.turnout != null)
+      .map((r) => toDisplayPercent(r.turnout))
+    if (!values.length) return 0
+    return values.reduce((s, v) => s + v, 0) / values.length
   }, [mapTurnoutRows])
 
   const rankingEp =

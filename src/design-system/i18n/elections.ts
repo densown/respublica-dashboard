@@ -2,6 +2,7 @@
 
 export const de = {
   electionsTitle: "Wahlen",
+  electionsMapNoData: "Keine Daten",
   electionsSubtitle: "Ergebnisse aller deutschen Wahlen seit 1990.",
   electionsDistrict: "Kreis",
   electionsBundesland: "Bundesland",
@@ -103,6 +104,7 @@ export const de = {
 
 export const en = {
   electionsTitle: "Elections",
+  electionsMapNoData: "No data",
   electionsSubtitle: "Results of all German elections since 1990.",
   electionsDistrict: "District",
   electionsBundesland: "State",

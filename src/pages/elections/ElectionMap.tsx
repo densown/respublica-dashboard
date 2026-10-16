@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import { useTheme } from '../../design-system'
 import { fontSize, fonts, radius } from '../../design-system/tokens'
 import { mapFillColor } from './mapColors'
@@ -40,8 +40,9 @@ function normAgs(ags: string): string {
   return ags.replace(/\s/g, '')
 }
 
-function formatPct(n: number | undefined, lang: Lang): string {
-  if (n === undefined || Number.isNaN(n)) return '—'
+/** null, wenn kein Wert vorliegt */
+function formatPct(n: number | undefined, lang: Lang): string | null {
+  if (n === undefined || Number.isNaN(n)) return null
   const sep = lang === 'de' ? ',' : '.'
   const v = toDisplayPercent(n)
   return `${v.toFixed(1).replace('.', sep)} %`
@@ -73,10 +74,13 @@ export function ElectionMap({
   const vbW = mapBuild?.width ?? MAP_VIEW_W
   const vbH = mapBuild?.height ?? MAP_VIEW_H
 
+  // Schraffur fuer Kreise ohne Wert; useId liefert ":r0:", Doppelpunkte stoeren in url(#...)
+  const lueckeId = `luecke-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
+
   const fillForPath = useCallback(
     (ags: string) => {
       const row = dataByAgs.get(normAgs(ags))
-      return mapFillColor({
+      const fill = mapFillColor({
         metric,
         value: row?.value,
         turnout: row?.turnout,
@@ -85,8 +89,9 @@ export function ElectionMap({
         turnoutMax,
         partyColors,
       })
+      return fill ?? `url(#${lueckeId})`
     },
-    [dataByAgs, metric, turnoutMin, turnoutMax, partyColors],
+    [dataByAgs, metric, turnoutMin, turnoutMax, partyColors, lueckeId],
   )
 
   const onMove = useCallback(
@@ -94,20 +99,22 @@ export function ElectionMap({
       const key = normAgs(ags)
       const row = dataByAgs.get(key)
       const name = resolveKreisDisplayName(ags, kreisNameByAgs, row?.ags_name)
+      const noData = t('electionsMapNoData')
+      const winner = row?.winning_party
+        ? PARTY_LABELS[row.winning_party]?.[lang] ?? row.winning_party
+        : null
       let line1 = ''
       if (metric === 'winning_party') {
-        const w = row?.winning_party ?? 'other'
-        const label = PARTY_LABELS[w]?.[lang] ?? w
-        line1 = `${t('winningParty')}: ${label}`
+        line1 = `${t('winningParty')}: ${winner ?? noData}`
       } else if (metric === 'turnout') {
-        line1 = `${t('turnout')}: ${formatPct(row?.turnout, lang)}`
+        line1 = `${t('turnout')}: ${formatPct(row?.turnout, lang) ?? noData}`
       } else {
         const pl = PARTY_LABELS[metric]?.[lang] ?? metric
-        line1 = `${pl}: ${formatPct(row?.value, lang)}`
+        line1 = `${pl}: ${formatPct(row?.value, lang) ?? noData}`
       }
-      const ww = row?.winning_party ?? 'other'
-      const wlab = PARTY_LABELS[ww]?.[lang] ?? ww
-      const winnerLine = `${t('winningParty')}: ${wlab}`
+      // Bei der Karte nach Wahlsieger stuende der Sieger sonst doppelt da
+      const winnerLine =
+        winner && metric !== 'winning_party' ? `${t('winningParty')}: ${winner}` : ''
       setTip({
         x: e.clientX + 12,
         y: e.clientY + 12,
@@ -190,7 +197,6 @@ export function ElectionMap({
       )}
       <svg
         width="100%"
-        height="auto"
         viewBox={`0 0 ${vbW} ${vbH}`}
         preserveAspectRatio="xMidYMid meet"
         role="img"
@@ -198,6 +204,7 @@ export function ElectionMap({
         style={{
           maxWidth: '100%',
           maxHeight: '65vh',
+          height: 'auto',
           display: 'block',
           aspectRatio: `${vbW} / ${vbH}`,
           boxSizing: 'border-box',
@@ -206,6 +213,18 @@ export function ElectionMap({
           border: `1px solid ${c.border}`,
         }}
       >
+        <defs>
+          <pattern
+            id={lueckeId}
+            width={8}
+            height={8}
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <rect width={8} height={8} fill={c.cardBg} />
+            <line x1={0} y1={0} x2={0} y2={8} stroke={c.muted} strokeWidth={1.5} strokeOpacity={0.6} />
+          </pattern>
+        </defs>
         <g>{svgInner}</g>
       </svg>
       {tip && (
@@ -232,18 +251,41 @@ export function ElectionMap({
           <div style={{ color: c.inkSoft, fontFamily: fonts.mono, fontSize: fontSize.sm }}>
             {tip.line1}
           </div>
-          <div
-            style={{
-              marginTop: 6,
-              color: c.muted,
-              fontFamily: fonts.mono,
-              fontSize: fontSize.xs,
-            }}
-          >
-            {tip.winnerLine}
-          </div>
+          {tip.winnerLine && (
+            <div
+              style={{
+                marginTop: 6,
+                color: c.muted,
+                fontFamily: fonts.mono,
+                fontSize: fontSize.xs,
+              }}
+            >
+              {tip.winnerLine}
+            </div>
+          )}
         </div>
       )}
+    </div>
+  )
+}
+
+/** Legendeneintrag fuer die Schraffur der Kreise ohne Wert */
+function NoDataLegendItem() {
+  const { c, t } = useTheme()
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span
+        aria-hidden
+        style={{
+          width: 14,
+          height: 14,
+          flexShrink: 0,
+          borderRadius: radius.xs,
+          background: `repeating-linear-gradient(45deg, ${c.cardBg} 0 3px, ${c.muted}99 3px 4.5px)`,
+          border: `1px solid ${c.border}`,
+        }}
+      />
+      <span>{t('electionsMapNoData')}</span>
     </div>
   )
 }
@@ -295,6 +337,7 @@ export function ElectionMapLegend({
             <span>{PARTY_LABELS[k]?.[lang] ?? k}</span>
           </div>
         ))}
+        <NoDataLegendItem />
       </div>
     )
   }
@@ -338,6 +381,9 @@ export function ElectionMapLegend({
             <span key={s}>{fmt(turnoutMin + s * (turnoutMax - turnoutMin))}</span>
           ))}
         </div>
+        <div style={{ marginTop: 8, color: c.inkSoft }}>
+          <NoDataLegendItem />
+        </div>
       </div>
     )
   }
@@ -374,6 +420,9 @@ export function ElectionMapLegend({
         <span>0 %</span>
         <span>20 %</span>
         <span>40 %+</span>
+      </div>
+      <div style={{ marginTop: 8, color: c.inkSoft }}>
+        <NoDataLegendItem />
       </div>
     </div>
   )

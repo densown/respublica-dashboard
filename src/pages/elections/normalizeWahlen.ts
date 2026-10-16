@@ -47,20 +47,21 @@ export function resolveKreisDisplayName(
   return base
 }
 
-/** Rohzeile von GET /api/wahlen/map */
+/** Rohzeile von GET /api/wahlen/map (null: kein Wert fuer diesen Kreis) */
 export type MapRowFromApi = {
   ags: string
   ags_name?: string | null
-  value: number
-  winning_party: string
-  turnout: number
+  value: number | null
+  winning_party: string | null
+  turnout: number | null
 }
 
+/** value und turnout sind NaN, wenn fuer den Kreis kein Wert vorliegt. */
 export type MapRow = {
   ags: string
   ags_name: string
   value: number
-  winning_party: string
+  winning_party: string | null
   turnout: number
 }
 
@@ -80,7 +81,8 @@ export function normalizeMapRow(
   return {
     ...r,
     ags_name,
-    turnout: toDisplayPercent(r.turnout),
-    value: toDisplayPercent(r.value),
+    // Eine Luecke ist kein Wert von 0 %: null bleibt als NaN erkennbar
+    turnout: r.turnout == null ? Number.NaN : toDisplayPercent(r.turnout),
+    value: r.value == null ? Number.NaN : toDisplayPercent(r.value),
   }
 }

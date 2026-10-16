@@ -154,35 +154,34 @@ export default function Elections() {
   const winnersByAgs = dataByAgs
 
   const turnoutStats = useMemo(() => {
-    if (!normalizedRows.length) {
+    // Nur Kreise mit Wahlbeteiligung: eine Luecke (NaN) ist keine 0 %
+    const withTurnout = normalizedRows.filter((r) => Number.isFinite(r.turnout))
+    const n = normalizedRows.length
+    if (!withTurnout.length) {
       return {
-        avg: 0,
-        hi: { name: '-', v: 0 },
-        lo: { name: '-', v: 100 },
-        n: 0,
+        avg: Number.NaN,
+        hi: { name: '-', v: Number.NaN },
+        lo: { name: '-', v: Number.NaN },
+        n,
         minT: 0,
         maxT: 100,
       }
     }
     let sum = 0
-    let hi = { name: normalizedRows[0]!.ags_name, v: normalizedRows[0]!.turnout }
-    let lo = { name: normalizedRows[0]!.ags_name, v: normalizedRows[0]!.turnout }
-    let minT = normalizedRows[0]!.turnout
-    let maxT = normalizedRows[0]!.turnout
-    for (const r of normalizedRows) {
+    let hi = { name: withTurnout[0]!.ags_name, v: withTurnout[0]!.turnout }
+    let lo = hi
+    for (const r of withTurnout) {
       sum += r.turnout
       if (r.turnout > hi.v) hi = { name: r.ags_name, v: r.turnout }
       if (r.turnout < lo.v) lo = { name: r.ags_name, v: r.turnout }
-      minT = Math.min(minT, r.turnout)
-      maxT = Math.max(maxT, r.turnout)
     }
     return {
-      avg: sum / normalizedRows.length,
+      avg: sum / withTurnout.length,
       hi,
       lo,
-      n: normalizedRows.length,
-      minT,
-      maxT,
+      n,
+      minT: lo.v,
+      maxT: hi.v,
     }
   }, [normalizedRows])
 

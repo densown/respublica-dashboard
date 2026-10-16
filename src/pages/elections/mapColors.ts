@@ -2,7 +2,6 @@ import { interpolateRgb } from 'd3-interpolate'
 import {
   CHANGE_SCALE_NEG,
   CHANGE_SCALE_POS,
-  MAIN_PARTIES,
   PARTY_COLORS_LIGHT,
   TURNOUT_SCALE,
 } from './partyColors'
@@ -56,16 +55,20 @@ export function changeColor(
   return interpolateRgb(themeNeutral, full)(u) ?? themeNeutral
 }
 
+/**
+ * Fuellfarbe eines Kreises, oder null, wenn fuer die gewaehlte Groesse kein
+ * Wert vorliegt. Eine Luecke ist kein Wert von 0 % und kein Sieg der Sonstigen.
+ */
 export function mapFillColor(args: {
   metric: string
   value?: number
   turnout?: number
-  winningParty?: string
+  winningParty?: string | null
   turnoutMin: number
   turnoutMax: number
   /** Light/Dark: CDU/CSU etc. */
   partyColors?: Record<string, string>
-}): string {
+}): string | null {
   const {
     metric,
     value,
@@ -76,14 +79,13 @@ export function mapFillColor(args: {
     partyColors = PARTY_COLORS_LIGHT,
   } = args
   if (metric === 'winning_party') {
-    const w = winningParty ?? 'other'
-    return partyColors[w] ?? partyColors.other ?? PARTY_COLORS_LIGHT.other
+    if (!winningParty) return null
+    return partyColors[winningParty] ?? partyColors.other ?? PARTY_COLORS_LIGHT.other
   }
   if (metric === 'turnout') {
-    return turnoutColor(turnout ?? 0, turnoutMin, turnoutMax)
+    if (turnout == null || Number.isNaN(turnout)) return null
+    return turnoutColor(turnout, turnoutMin, turnoutMax)
   }
-  if (MAIN_PARTIES.includes(metric as (typeof MAIN_PARTIES)[number])) {
-    return partyShareColor(metric, value ?? 0, partyColors)
-  }
-  return partyShareColor(metric, value ?? 0, partyColors)
+  if (value == null || Number.isNaN(value)) return null
+  return partyShareColor(metric, value, partyColors)
 }

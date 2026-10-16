@@ -69,7 +69,7 @@ export default function Overview() {
 
   const { data: gStats } = useApi<GesetzeStats>('/api/gesetze/stats')
   const { data: euStats } = useApi<EuStats>('/api/eu-recht/stats')
-  const { data: gesetze } = useApi<GesetzRow[]>('/api/gesetze?limit=6')
+  const { data: gesetze } = useApi<GesetzRow[]>('/api/gesetze?limit=3&zusammenfassung=1')
   const { data: wahlen } = useApi<WahlterminListe>('/api/wahltermine?status=kommend')
 
   /** Die naechste Wahl mit Datum — der zeitliche Aufhaenger der Seite. */
