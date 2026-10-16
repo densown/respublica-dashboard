@@ -5,3 +5,4 @@ dist
 deploy.log
 dist.next
 dist.prev
+releases/
