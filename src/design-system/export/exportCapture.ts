@@ -4,6 +4,12 @@ import type maplibregl from 'maplibre-gl'
 export type CaptureOptions = {
   pixelRatio: number
   backgroundColor: string
+  /**
+   * Bilder und Schriften neu laden statt aus dem Browser-Cache. Standard an;
+   * das Teilbild zur Abstimmung schaltet es ab, weil es beim Hinscrollen
+   * vorab gerechnet wird und sonst jedes Mal die Schriften neu holt.
+   */
+  cacheBust?: boolean
 }
 
 export async function captureElement(
@@ -13,7 +19,7 @@ export async function captureElement(
   return toPng(el, {
     pixelRatio: opts.pixelRatio,
     backgroundColor: opts.backgroundColor,
-    cacheBust: true,
+    cacheBust: opts.cacheBust ?? true,
     filter: (node: HTMLElement) => {
       if (node.dataset?.exportIgnore === 'true') return false
       return true

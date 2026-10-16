@@ -10,10 +10,15 @@ export const light = {
   subtle: '#71767D',
   red: '#C8102E',
   redHover: '#A30D24',
-  yes: '#2D7D46',
-  no: '#B91C1C',
-  abstain: '#94A3B8',
+  // Stimmfarben wie auf den Abstimmungskarten fuer Instagram: Ja gedecktes
+  // Gruen, Nein Weinrot, Enthaltung Senf. Das Grau fuer Enthaltung war von
+  // "nicht abgestimmt" kaum zu unterscheiden.
+  yes: '#2F6B4F',
+  no: '#B3122B',
+  abstain: '#D49A2A',
   absent: '#D1D5DB',
+  /** Schraffur fuer "nicht abgestimmt" in Stimmbalken. */
+  hatch: '#D9D1C3',
   border: '#E8E4DC',
   borderHover: '#D0CBC2',
   badgeBg: '#1A1A1A',
@@ -80,10 +85,11 @@ export const dark = {
   subtle: '#6B6B6B',
   red: '#E8384F',
   redHover: '#FF4D63',
-  yes: '#3DA85A',
+  yes: '#3E8A63',
   no: '#E53E3E',
-  abstain: '#718096',
+  abstain: '#D9A43A',
   absent: '#4A5568',
+  hatch: '#4A453D',
   border: '#2D2D2D',
   borderHover: '#404040',
   badgeBg: '#E8E4DC',

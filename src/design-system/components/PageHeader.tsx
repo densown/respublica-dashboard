@@ -5,11 +5,17 @@ import { useTheme } from '../ThemeContext'
 export type PageHeaderProps = {
   title: string
   subtitle?: string
-  /** Kurze Einordnung ueber dem Titel, in Versalien. Etwa "Sonntagsfrage". */
+  /**
+   * Kurze Einordnung ueber dem Titel, kursiv wie auf den Abstimmungskarten.
+   * Etwa "Sonntagsfrage" oder "Namentliche Abstimmung, 8. Oktober 2026".
+   */
   kicker?: string
   /** Metazeile unter dem Titel: Datum, Anzahl, Stand. Mono, gedaempft. */
   meta?: ReactNode
 }
+
+/** Titel, hinter die kein roter Schlusspunkt mehr passt. */
+const ENDET_MIT_ZEICHEN = /[.!?:)\]"“”»]$/
 
 /**
  * Seitenkopf. Jede Seite benutzt diese Komponente — kein eigenes <h1>.
@@ -27,11 +33,13 @@ export function PageHeader({ title, subtitle, kicker, meta }: PageHeaderProps) {
       {kicker && (
         <div
           style={{
-            fontFamily: fonts.mono,
-            fontSize: fontSize.micro,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: c.red,
+            // Frueher Mono in roten Versalien. Kursiv in der Textschrift liest
+            // sich wie eine Zeitungszeile und nicht wie ein Etikett.
+            fontFamily: fonts.body,
+            fontStyle: 'italic',
+            fontSize: fontSize.base,
+            lineHeight: lineHeight.normal,
+            color: c.inkSoft,
             marginBottom: spacing.sm,
           }}
         >
@@ -52,9 +60,12 @@ export function PageHeader({ title, subtitle, kicker, meta }: PageHeaderProps) {
         }}
       >
         {title}
-        <span style={{ color: c.red }} aria-hidden>
-          .
-        </span>
+        {/* Kein Punkt hinter Fragezeichen oder Klammer, etwa bei Abstimmungstiteln */}
+        {!ENDET_MIT_ZEICHEN.test(title) && (
+          <span style={{ color: c.red }} aria-hidden>
+            .
+          </span>
+        )}
       </h1>
 
       {subtitle && (

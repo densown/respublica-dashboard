@@ -118,6 +118,12 @@ Kontext.
 Für Flächenabstufungen (Choroplethen, Dichten) wird ein Token mit Alpha
 hinterlegt, nicht ein neuer Farbwert erfunden.
 
+**Stimmfarben** kommen von den Abstimmungskarten für Instagram: Ja
+gedecktes Grün (`c.yes`), Nein Weinrot (`c.no`), Enthaltung Senf
+(`c.abstain`), nicht abgestimmt als Schraffur (`c.hatch`, über
+`stimmFlaeche()` aus `palettes.ts`). Die Schrift auf einer Stimmfläche
+wählt `textAuf()` nach Kontrast, nicht nach Gefühl.
+
 ### Dunkelmodus
 
 Nicht invertieren, sondern umschichten. Der Dunkelmodus ist eine eigene
@@ -130,6 +136,14 @@ Palette mit eigenen Kontrasten:
 - Ränder werden im Dunkeln heller, nicht dunkler.
 - **Prüfen heißt umschalten.** Jede neue Ansicht wird in beiden Modi
   angesehen, bevor sie eingecheckt wird.
+
+### Teilbilder
+
+Bilder zum Teilen (etwa `AbstimmungsBild.tsx`, 1080 × 1350) haben feste
+Pixelmaße. Dort sind Schriftgrößen und Abstände Pixel statt rem-Token,
+und die Farben kommen immer aus der hellen Palette: ein geteiltes Bild ist
+Papier und Tinte, auch wenn die Seite gerade dunkel ist. Quelle und Link
+zur Seite stehen im Bild.
 
 ---
 
@@ -152,6 +166,17 @@ erweitert.
 
 **Eine Sorte Abschnittsüberschrift.** `Section` mit `title`. Nicht mal
 `SectionDivider`, mal `<h2>`, mal `<h3>`, mal ein Mono-Label.
+
+**Nummerierte Abschnitte** (`Section` mit `number`) für Seiten, die einen
+Gegenstand Schritt für Schritt erklären, etwa eine Abstimmung: Linie in
+Tinte oben, rote Ziffer in Playfair, Titel in Source Serif halbfett. So
+sehen auch die Abstimmungskarten für Instagram aus, damit Seite und
+geteiltes Bild zusammengehören. Auf einer Seite entweder alle Abschnitte
+nummeriert oder keiner.
+
+**Kicker** über dem Titel stehen kursiv in der Textschrift, etwa
+„Namentliche Abstimmung, 8. Oktober 2026“. Rote Mono-Versalien sahen nach
+Etikett aus, nicht nach Zeitung.
 
 ---
 
