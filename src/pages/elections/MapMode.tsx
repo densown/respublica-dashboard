@@ -181,6 +181,11 @@ export function MapMode({
 }: MapModeProps) {
   const { c, t, lang } = useTheme()
 
+  const turnoutPct = (v: number) =>
+    Number.isFinite(v)
+      ? `${v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`
+      : t('electionsMapNoData')
+
   const statCard = (title: string, body: string) => (
     <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: fontSize.sm, color: c.muted }}>{title}</span>}>
       <div
@@ -386,17 +391,18 @@ export function MapMode({
               maxWidth: '100%',
             }}
           >
-            {statCard(
-              t('avgTurnout'),
-              `${turnoutStats.avg.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
-            )}
+            {statCard(t('avgTurnout'), turnoutPct(turnoutStats.avg))}
             {statCard(
               t('highestTurnout'),
-              `${turnoutStats.hi.name} · ${turnoutStats.hi.v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
+              Number.isFinite(turnoutStats.hi.v)
+                ? `${turnoutStats.hi.name} · ${turnoutPct(turnoutStats.hi.v)}`
+                : t('electionsMapNoData'),
             )}
             {statCard(
               t('lowestTurnout'),
-              `${turnoutStats.lo.name} · ${turnoutStats.lo.v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`,
+              Number.isFinite(turnoutStats.lo.v)
+                ? `${turnoutStats.lo.name} · ${turnoutPct(turnoutStats.lo.v)}`
+                : t('electionsMapNoData'),
             )}
             {statCard(t('counties'), String(turnoutStats.n))}
           </div>
