@@ -128,6 +128,8 @@ type LobbyByFieldItem = {
 
 type LobbyByFieldResponse = {
   items: LobbyByFieldItem[]
+  /** Summe aller aktiven Organisationen, jede einmal gezaehlt (fehlt bei aelterer API) */
+  total_expenses?: number | null
 }
 
 type LobbyByCityItem = {
@@ -431,10 +433,8 @@ export default function LobbyRegister() {
   const tooltipY = hoveredTile
     ? Math.min(hoveredTile.y + 15, treemapContainerHeight - tooltipHeight - 10)
     : 0
-  const totalTreemapExpenses = useMemo(
-    () => byFieldItems.reduce((sum, item) => sum + (item.total_expenses ?? 0), 0),
-    [byFieldItems],
-  )
+  // Nicht die Summe der Kacheln: Wer in mehreren Gebieten taetig ist, steckt in jeder davon
+  const totalLobbyExpenses = byFieldData?.total_expenses ?? null
 
   const listAnchorId = 'lobbyregister-list-start'
 
@@ -505,7 +505,8 @@ export default function LobbyRegister() {
   }
 
   function formatAverageMoney(value: number | null): string {
-    return formatMoney(value)
+    // Auf ganze Euro, sonst zeigt toLocaleString drei Nachkommastellen
+    return formatMoney(value == null ? null : Math.round(value))
   }
 
   const getMinistry = (lm: unknown): string => {
@@ -781,9 +782,11 @@ export default function LobbyRegister() {
             <h3 style={{ margin: 0, fontFamily: fonts.display, color: c.ink }}>
               {t('lobbyTreemapTitle')}
             </h3>
-            <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: fontSize.md }}>
-              {t('lobbyTreemapTotalAll')}: {formatMoney(totalTreemapExpenses)}
-            </p>
+            {totalLobbyExpenses != null && (
+              <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: fontSize.md }}>
+                {t('lobbyTreemapTotalAll')}: {formatMoney(totalLobbyExpenses)}
+              </p>
+            )}
             <p style={{ margin: 0, fontFamily: fonts.body, color: c.muted, fontSize: fontSize.base }}>
               {t('lobbyTreemapSubtitle')}
             </p>
