@@ -18,8 +18,9 @@ import { AbstimmungsBild } from '../components/bundestag/AbstimmungsBild'
 import { FraktionsStimmen } from '../components/bundestag/FraktionsStimmen'
 import { Hemicycle, type SitzverteilungRow } from '../components/bundestag/Hemicycle'
 import {
+  anzeigeTitel,
+  ergebnisWort,
   ergebnisZeile,
-  istAngenommen,
   stimmenKurz,
   vorspann,
 } from '../components/bundestag/abstimmungText'
@@ -126,7 +127,7 @@ export default function Abstimmung() {
   const dek = data ? vorspann(data, t, lang) : ''
 
   useSeo({
-    titel: data?.poll_titel ?? t('votes'),
+    titel: data ? anzeigeTitel(data.poll_titel) : t('votes'),
     beschreibung: dek || undefined,
     pfad: gueltig ? `/bundestag/${id}` : undefined,
   })
@@ -200,7 +201,7 @@ export default function Abstimmung() {
       }}
     >
       {zurueck}
-      <PageHeader kicker={kicker} title={data.poll_titel} subtitle={dek} />
+      <PageHeader kicker={kicker} title={anzeigeTitel(data.poll_titel)} subtitle={dek} />
 
       {absaetze.length > 0 && (
         <Section number={naechste()} title={t('votePageWhat')}>
@@ -255,7 +256,7 @@ export default function Abstimmung() {
 
       <Section
         number={naechste()}
-        title={istAngenommen(data) ? t('accepted') : t('rejected')}
+        title={ergebnisWort(data, t)}
         note={ergebnisZeile(ergebnis, t)}
       >
         <VoteBar

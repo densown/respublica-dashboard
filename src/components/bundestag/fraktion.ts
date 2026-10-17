@@ -28,7 +28,8 @@ export type AbstimmungsDetailData = {
   /**
    * Ab API-Migration 019: Einleitungstext von abgeordnetenwatch (Absaetze
    * durch Leerzeile), die Links daraus, die Seite der Abstimmung und das
-   * Ergebnis laut Schlusssatz (null, wenn der Satz es nicht eindeutig sagt).
+   * Ergebnis (mehr Ja als Nein, der Text nur bei qualifizierter Mehrheit;
+   * null ohne Angabe).
    */
   intro?: string | null
   links?: QuellenLink[]

@@ -6,10 +6,12 @@ import { captureElement } from '../../design-system/export/exportCapture'
 import { buildFilename, downloadBlob } from '../../design-system/export/exportDownload'
 import {
   abweichlerNotiz,
+  anzeigeTitel,
+  ergebnisWort,
   ergebnisZeile,
-  istAngenommen,
   kurzfassung,
   stimmenKurz,
+  ueberBeschlussempfehlung,
 } from './abstimmungText'
 import {
   fraktionsFlaeche,
@@ -56,7 +58,7 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
   ref,
 ) {
   const { ergebnis } = data
-  const angenommen = istAngenommen(data)
+  const titel = anzeigeTitel(data.poll_titel)
   const zeilen = nachGroesse(data.fraktionen)
   const worum = kurzfassung(data.intro)
   // Ohne Einleitung rutschen die Abschnitte eine Nummer vor
@@ -114,13 +116,13 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
           marginTop: 28,
           fontFamily: fonts.display,
           fontWeight: 900,
-          fontSize: titelPx(data.poll_titel),
+          fontSize: titelPx(titel),
           lineHeight: 1.04,
           letterSpacing: -1.2,
           maxWidth: 900,
         }}
       >
-        {data.poll_titel}
+        {titel}
       </div>
 
       {worum && (
@@ -130,7 +132,7 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
         </>
       )}
 
-      {abschnitt(angenommen ? t('accepted') : t('rejected'))}
+      {abschnitt(ergebnisWort(data, t))}
       <VoteBar
         ja={ergebnis.ja_gesamt}
         nein={ergebnis.nein_gesamt}
@@ -152,6 +154,8 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
         )}
       />
       <div style={{ marginTop: 10, fontSize: 20, color: K.inkSoft }}>
+        {/* Das Bild wird ohne Seite geteilt, also steht hier, wofuer Ja stand */}
+        {ueberBeschlussempfehlung(data.poll_titel) && `${t('votePageDekRecommendation')} `}
         {ergebnisZeile(ergebnis, t)}
       </div>
 
@@ -359,7 +363,7 @@ export function AbstimmungsBild({ data, abweichler, kicker }: AbstimmungsBildPro
     try {
       await navigator.share({
         files: [new File([blob], dateiname, { type: 'image/png' })],
-        title: data.poll_titel,
+        title: anzeigeTitel(data.poll_titel),
         text: `https://${LINK_BASIS}/bundestag/${data.poll_id}`,
       })
     } catch (err) {
