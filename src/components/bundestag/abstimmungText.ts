@@ -54,11 +54,14 @@ export function anzeigeTitel(titel: string): string {
 
 /** "Angenommen", "Abgelehnt" oder bei Beschlussempfehlungen "Beschlussempfehlung angenommen". */
 export function ergebnisWort(d: AbstimmungsDetailData, t: Uebersetzen): string {
-  const ja = istAngenommen(d)
   if (ueberBeschlussempfehlung(d.poll_titel)) {
+    // Die Empfehlung braucht die einfache Mehrheit. Direkt aus den Stimmen,
+    // denn aeltere Importe melden in angenommen das Schicksal des Antrags
+    // (6451: abgelehnt bei 445 zu 138).
+    const ja = d.ergebnis.ja_gesamt > d.ergebnis.nein_gesamt
     return t(ja ? 'votePageRecommendationAccepted' : 'votePageRecommendationRejected')
   }
-  return t(ja ? 'accepted' : 'rejected')
+  return t(istAngenommen(d) ? 'accepted' : 'rejected')
 }
 
 function linieVon(f: FraktionsErgebnis): Stimme | null {
