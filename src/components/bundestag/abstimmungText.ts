@@ -24,13 +24,41 @@ const GESPALTEN_MINDESTENS = 5
 const NAMEN_BIS = 3
 
 /**
- * Ob der Antrag durchkam. Die API liest das aus dem Schlusssatz des
- * Einleitungstexts, nicht aus field_accepted von abgeordnetenwatch (das Feld
- * stimmt nicht immer: 6724, 132 zu 445, dort als angenommen gefuehrt). Sagt
- * der Satz es nicht eindeutig, zaehlt Ja gegen Nein.
+ * Ob angenommen ist, worueber abgestimmt wurde. Die API rechnet Ja gegen
+ * Nein und nimmt den Text der Quelle nur bei verfehlter qualifizierter
+ * Mehrheit, nie field_accepted von abgeordnetenwatch (das Feld stimmt nicht
+ * immer: 6724, 132 zu 445, dort als angenommen gefuehrt). Ohne Angabe der
+ * API zaehlt hier Ja gegen Nein.
  */
 export function istAngenommen(d: AbstimmungsDetailData): boolean {
   return d.angenommen ?? d.ergebnis.ja_gesamt > d.ergebnis.nein_gesamt
+}
+
+const ZUSATZ_BESCHLUSSEMPFEHLUNG = /\s*\(Beschlussempfehlung\)\s*$/i
+
+/**
+ * Ob namentlich ueber eine Beschlussempfehlung abgestimmt wurde. Ja und Nein
+ * gelten dann der Empfehlung des Ausschusses, nicht dem Antrag: Bei 6451
+ * stimmten 445 mit Ja, und damit war der Antrag abgelehnt. abgeordnetenwatch
+ * kennzeichnet diese Abstimmungen im Titel, als Zusatz "(Beschlussempfehlung)"
+ * oder vorne ("Beschlussempfehlung zu erstem Antrag: ...").
+ */
+export function ueberBeschlussempfehlung(titel: string): boolean {
+  return ZUSATZ_BESCHLUSSEMPFEHLUNG.test(titel) || /^\s*Beschlussempfehlung\b/i.test(titel)
+}
+
+/** Titel ohne den Zusatz "(Beschlussempfehlung)"; das Ergebnis sagt es dann. */
+export function anzeigeTitel(titel: string): string {
+  return titel.replace(ZUSATZ_BESCHLUSSEMPFEHLUNG, '')
+}
+
+/** "Angenommen", "Abgelehnt" oder bei Beschlussempfehlungen "Beschlussempfehlung angenommen". */
+export function ergebnisWort(d: AbstimmungsDetailData, t: Uebersetzen): string {
+  const ja = istAngenommen(d)
+  if (ueberBeschlussempfehlung(d.poll_titel)) {
+    return t(ja ? 'votePageRecommendationAccepted' : 'votePageRecommendationRejected')
+  }
+  return t(ja ? 'accepted' : 'rejected')
 }
 
 function linieVon(f: FraktionsErgebnis): Stimme | null {
@@ -71,10 +99,11 @@ function zahl(n: number, lang: 'de' | 'en'): string {
 export function vorspann(d: AbstimmungsDetailData, t: Uebersetzen, lang: 'de' | 'en'): string {
   const saetze = [
     t('votePageDekResult')
-      .replace('{ergebnis}', istAngenommen(d) ? t('accepted') : t('rejected'))
+      .replace('{ergebnis}', ergebnisWort(d, t))
       .replace('{ja}', zahl(d.ergebnis.ja_gesamt, lang))
       .replace('{nein}', zahl(d.ergebnis.nein_gesamt, lang)),
   ]
+  if (ueberBeschlussempfehlung(d.poll_titel)) saetze.push(t('votePageDekRecommendation'))
 
   const mitLinie = nachGroesse(d.fraktionen).filter((f) =>
     hatFraktionslinie(shortFraktionName(f.partei)),
