@@ -18,6 +18,35 @@ export const PARTY_COLORS_DARK: Record<string, string> = {
   cdu_csu: '#8899AA',
 }
 
+/**
+ * Parteifarben als Schrift, etwa Fraktionsnamen neben einem Stimmbalken.
+ * Die Flaechenfarben oben erreichen auf Papier als Schrift teils keine 4,5:1
+ * (AfD-Blau 2,8:1), deshalb hier abgedunkelt, im Dunkelmodus aufgehellt.
+ */
+export const PARTY_TEXT_LIGHT: Record<string, string> = {
+  cdu_csu: '#151515',
+  spd: '#C2000D',
+  gruene: '#2F6E1C',
+  linke_pds: '#A82866',
+  afd: '#00719F',
+  ssw: '#003F8E',
+  other: '#66625A',
+}
+
+export const PARTY_TEXT_DARK: Record<string, string> = {
+  cdu_csu: '#C9CFD8',
+  spd: '#FF5A64',
+  gruene: '#6DBB4E',
+  linke_pds: '#E06AA0',
+  afd: '#3DB8EC',
+  ssw: '#7FA6E0',
+  other: '#A39E95',
+}
+
+export function partyTextColorsForTheme(isDark: boolean): Record<string, string> {
+  return isDark ? PARTY_TEXT_DARK : PARTY_TEXT_LIGHT
+}
+
 /** @deprecated Verwende `partyColorsForTheme` oder PARTY_COLORS_LIGHT */
 export const PARTY_COLORS = PARTY_COLORS_LIGHT
 

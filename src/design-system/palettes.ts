@@ -14,6 +14,8 @@
  * kommt sie hierher.
  */
 
+import type { ThemeColors } from './tokens'
+
 /**
  * Kategoriale Reihe fuer Mengen ohne eigene Farblogik — Branchen im
  * Lobbyregister, Gruppierungen in Diagrammen.
@@ -82,6 +84,45 @@ export const SHARE_BRAND = {
  */
 export const ON_DATA_LIGHT = '#FFFFFF'
 export const ON_DATA_DARK = '#0F0F0F'
+
+function luminanz(hex: string): number {
+  const h = hex.replace('#', '')
+  const kanal = (i: number) => {
+    const v = Number.parseInt(h.slice(i, i + 2), 16) / 255
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * kanal(0) + 0.7152 * kanal(2) + 0.0722 * kanal(4)
+}
+
+/**
+ * Schrift auf einer Datenfarbe: hell oder dunkel, je nachdem, was mehr
+ * Kontrast gibt. Fuer Zahlen in Balken, deren Farbe mit dem Farbmodus
+ * wechselt (Senf fuer Enthaltung traegt keine weisse Schrift).
+ */
+export function textAuf(hex: string): string {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return ON_DATA_LIGHT
+  const l = luminanz(hex)
+  const gegenHell = 1.05 / (l + 0.05)
+  const gegenDunkel = (l + 0.05) / (luminanz(ON_DATA_DARK) + 0.05)
+  return gegenHell >= gegenDunkel ? ON_DATA_LIGHT : ON_DATA_DARK
+}
+
+export type StimmArt = 'ja' | 'nein' | 'enthalten' | 'abwesend'
+
+export type StimmFarben = Pick<ThemeColors, 'yes' | 'no' | 'abstain' | 'hatch' | 'muted'>
+
+/**
+ * Flaeche einer Stimmart: Farbe fuer Ja, Nein, Enthaltung, Schraffur fuer
+ * "nicht abgestimmt". Dieselbe Flaeche steht im Balken, in der Legende und
+ * neben jedem Namen in der Liste. Die Farben selbst sind Oberflaechen-Token
+ * (c.yes, c.no ...), weil sie mit dem Farbmodus wechseln.
+ */
+export function stimmFlaeche(art: StimmArt, c: StimmFarben): string {
+  if (art === 'ja') return c.yes
+  if (art === 'nein') return c.no
+  if (art === 'enthalten') return c.abstain
+  return `repeating-linear-gradient(135deg, ${c.hatch} 0 2px, transparent 2px 7px)`
+}
 
 /** Wenn eine Kategorie keine eigene Farbe hat. Bewusst unauffaellig. */
 export const NEUTRAL_FALLBACK = '#888888'

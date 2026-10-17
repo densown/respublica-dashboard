@@ -9,6 +9,7 @@ import { de as lobbyDe, en as lobbyEn } from './i18n/lobby'
 import { de as electionsDe, en as electionsEn } from './i18n/elections'
 import { de as sourcesDe, en as sourcesEn } from './i18n/sources'
 import { de as versammlungenDe, en as versammlungenEn } from './i18n/versammlungen'
+import { de as bundestagDe, en as bundestagEn } from './i18n/bundestag'
 
 export const de = {
   ...commonDe,
@@ -20,6 +21,7 @@ export const de = {
   ...electionsDe,
   ...sourcesDe,
   ...versammlungenDe,
+  ...bundestagDe,
 } as const
 
 export const en = {
@@ -32,6 +34,7 @@ export const en = {
   ...electionsEn,
   ...sourcesEn,
   ...versammlungenEn,
+  ...bundestagEn,
 } as const
 
 export type I18nKey = keyof typeof de

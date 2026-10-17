@@ -1,57 +1,27 @@
 import { useMemo, useState, type CSSProperties } from 'react'
-import { Badge, Chip, EmptyState, useTheme } from '../../design-system'
+import { Chip, EmptyState, useTheme } from '../../design-system'
 import { fontSize, fonts, lineHeight, radius, spacing } from '../../design-system/tokens'
-import { labelColorForLegendDot, shortFraktionName } from './AbstimmungsDetail'
+import { stimmFlaeche } from '../../design-system/palettes'
+import { StimmMarke } from './AbgeordnetenProfil'
+import { fraktionsFlaeche, OHNE_FRAKTION } from './fraktion'
+import { STIMMEN, type Stimme, type StimmEintrag } from './stimmen'
 
 /**
  * Durchsuchbare Liste aller Abgeordneten einer namentlichen Abstimmung.
  *
- * Das Halbrund zeigt das Bild, diese Liste beantwortet die Frage, mit der die
+ * Die Balken zeigen das Bild, diese Liste beantwortet die Frage, mit der die
  * meisten kommen: Wie hat meine Abgeordnete, mein Abgeordneter gestimmt? Und:
  * Wer ist von der eigenen Fraktion abgewichen?
  */
 
-export type Stimme = 'yes' | 'no' | 'abstain' | 'no_show'
-
-export type StimmenZeile = {
-  mandate_id: number
-  vote: string
-  abgeordneter_name: string
-}
-
-export type AbgeordneterInfo = {
-  aw_id: number
-  name: string
-  fraktion: string
-  wahlkreis: string
-}
-
-type Eintrag = {
-  awId: number
-  name: string
-  nachname: string
-  fraktion: string
-  wahlkreis: string
-  stimme: Stimme
-  abweichung: boolean
-}
-
-const STIMMEN: Stimme[] = ['yes', 'no', 'abstain', 'no_show']
 const SEITE = 40
-const SSW_NAME = 'Stefan Seidler'
 
-function normalizeStimme(raw: string): Stimme {
-  const v = raw.trim().toLowerCase()
-  if (v === 'yes') return 'yes'
-  if (v === 'no') return 'no'
-  if (v === 'abstain' || v === 'abstention') return 'abstain'
-  return 'no_show'
-}
-
-function nachnameAus(name: string): string {
-  const parts = name.trim().replace(/\s+/g, ' ').split(' ')
-  return parts[parts.length - 1] ?? name
-}
+const STIMM_ART = {
+  yes: 'ja',
+  no: 'nein',
+  abstain: 'enthalten',
+  no_show: 'abwesend',
+} as const
 
 function fuerSuche(s: string): string {
   return s
@@ -77,77 +47,34 @@ function chipLeiste(abstandUnten: number): CSSProperties {
   }
 }
 
-/** Fraktionen ohne gemeinsame Linie: dort gibt es keine Abweichung. */
-function hatFraktionslinie(fraktion: string): boolean {
-  return fraktion !== 'Fraktionslos' && fraktion !== 'SSW'
-}
-
 export interface AbgeordnetenStimmenProps {
-  votes: StimmenZeile[]
-  abgeordnete: Map<number, AbgeordneterInfo>
-  sitzverteilung: { partei: string; farbe: string }[]
+  /** Aus stimmEintraege(), dieselben Eintraege wie fuer die Notizen am Balken. */
+  eintraege: StimmEintrag[]
   onSelect: (awId: number) => void
+  /**
+   * Fraktionsfilter von aussen setzen, etwa per Tipp auf einen
+   * Fraktionsbalken. Ohne diese Props filtert die Liste fuer sich.
+   */
+  fraktion?: string | null
+  onFraktionChange?: (fraktion: string | null) => void
 }
 
 export function AbgeordnetenStimmen({
-  votes,
-  abgeordnete,
-  sitzverteilung,
+  eintraege,
   onSelect,
+  fraktion,
+  onFraktionChange,
 }: AbgeordnetenStimmenProps) {
   const { c, t, theme } = useTheme()
+  const dunkel = theme === 'dark'
   const [suche, setSuche] = useState('')
   const [stimmeFilter, setStimmeFilter] = useState<Stimme | null>(null)
-  const [fraktionFilter, setFraktionFilter] = useState<string | null>(null)
+  const [eigeneFraktion, setEigeneFraktion] = useState<string | null>(null)
   const [nurAbweichler, setNurAbweichler] = useState(false)
   const [sichtbar, setSichtbar] = useState(SEITE)
 
-  const eintraege = useMemo<Eintrag[]>(() => {
-    const basis = votes.map((v) => {
-      const info = abgeordnete.get(v.mandate_id)
-      const name = info?.name ?? v.abgeordneter_name
-      const fraktion =
-        name.trim() === SSW_NAME
-          ? 'SSW'
-          : info
-            ? shortFraktionName(info.fraktion)
-            : '–'
-      return {
-        awId: v.mandate_id,
-        name,
-        nachname: nachnameAus(name),
-        fraktion,
-        wahlkreis: info?.wahlkreis ?? '',
-        stimme: normalizeStimme(v.vote),
-        abweichung: false,
-      }
-    })
-
-    // Mehrheit je Fraktion unter den abgegebenen Stimmen. Nichtteilnahme ist
-    // keine inhaltliche Abweichung, wie im Themenprofil der Abgeordneten.
-    const zaehler = new Map<string, Record<Stimme, number>>()
-    for (const e of basis) {
-      if (e.stimme === 'no_show') continue
-      const z = zaehler.get(e.fraktion) ?? { yes: 0, no: 0, abstain: 0, no_show: 0 }
-      z[e.stimme] += 1
-      zaehler.set(e.fraktion, z)
-    }
-    const mehrheit = new Map<string, Stimme>()
-    for (const [fraktion, z] of zaehler) {
-      const top = (['yes', 'no', 'abstain'] as Stimme[]).sort((a, b) => z[b] - z[a])[0]
-      mehrheit.set(fraktion, top)
-    }
-
-    return basis
-      .map((e) => ({
-        ...e,
-        abweichung:
-          e.stimme !== 'no_show' &&
-          hatFraktionslinie(e.fraktion) &&
-          mehrheit.get(e.fraktion) !== e.stimme,
-      }))
-      .sort((a, b) => a.nachname.localeCompare(b.nachname, 'de', { sensitivity: 'base' }))
-  }, [votes, abgeordnete])
+  const fraktionFilter = fraktion !== undefined ? fraktion : eigeneFraktion
+  const setFraktionFilter = onFraktionChange ?? setEigeneFraktion
 
   const fraktionen = useMemo(() => {
     const zahl = new Map<string, number>()
@@ -161,10 +88,7 @@ export function AbgeordnetenStimmen({
     return z
   }, [eintraege])
 
-  const zahlAbweichler = useMemo(
-    () => eintraege.filter((e) => e.abweichung).length,
-    [eintraege],
-  )
+  const zahlAbweichler = useMemo(() => eintraege.filter((e) => e.abweichung).length, [eintraege])
 
   const gefiltert = useMemo(() => {
     const q = fuerSuche(suche.trim())
@@ -183,38 +107,20 @@ export function AbgeordnetenStimmen({
     abstain: t('abstain'),
     no_show: t('absentL'),
   }
-  const stimmeBadge: Record<Stimme, 'yes' | 'no' | 'muted' | 'gray'> = {
-    yes: 'yes',
-    no: 'no',
-    abstain: 'muted',
-    no_show: 'gray',
-  }
 
-  const farbe = (fraktion: string) =>
-    labelColorForLegendDot(fraktion, sitzverteilung, theme === 'dark' ? 'dark' : 'light')
+  const fraktionsName = (f: string) => (f === OHNE_FRAKTION ? t('memberListNoGroup') : f)
 
   const zuruecksetzen = (fn: () => void) => {
     fn()
     setSichtbar(SEITE)
   }
 
-  if (votes.length === 0) {
+  if (eintraege.length === 0) {
     return <EmptyState text={t('memberListEmpty')} />
   }
 
   return (
     <div>
-      <h2
-        style={{
-          margin: `0 0 ${spacing.xs}px`,
-          fontFamily: fonts.display,
-          fontSize: fontSize.xl,
-          lineHeight: lineHeight.tight,
-          color: c.ink,
-        }}
-      >
-        {t('memberListTitle')}
-      </h2>
       <p
         style={{
           margin: `0 0 ${spacing.lg}px`,
@@ -250,23 +156,25 @@ export function AbgeordnetenStimmen({
         }}
       />
 
-      <div
-        role="group"
-        aria-label={t('memberListFilterVote')}
-        style={chipLeiste(spacing.sm)}
-      >
+      <div role="group" aria-label={t('memberListFilterVote')} style={chipLeiste(spacing.sm)}>
         <Chip
           dense
           label={`${t('memberListAll')} ${eintraege.length}`}
-          active={stimmeFilter == null}
-          onClick={() => zuruecksetzen(() => setStimmeFilter(null))}
+          active={stimmeFilter == null && !nurAbweichler}
+          onClick={() =>
+            zuruecksetzen(() => {
+              setStimmeFilter(null)
+              setNurAbweichler(false)
+            })
+          }
         />
         {STIMMEN.filter((s) => zahlJeStimme[s] > 0).map((s) => (
           <Chip
             key={s}
             dense
             label={`${stimmeLabel[s]} ${zahlJeStimme[s]}`}
-            dot={s === 'yes' ? c.yes : s === 'no' ? c.no : s === 'abstain' ? c.abstain : c.absent}
+            // Chip kennt nur Farbpunkte; fuer "nicht abgestimmt" die Schraffurfarbe
+            dot={s === 'no_show' ? c.hatch : stimmFlaeche(STIMM_ART[s], c)}
             active={stimmeFilter === s}
             onClick={() => zuruecksetzen(() => setStimmeFilter(stimmeFilter === s ? null : s))}
           />
@@ -281,17 +189,13 @@ export function AbgeordnetenStimmen({
         )}
       </div>
 
-      <div
-        role="group"
-        aria-label={t('memberListFilterParty')}
-        style={chipLeiste(spacing.lg)}
-      >
+      <div role="group" aria-label={t('memberListFilterParty')} style={chipLeiste(spacing.lg)}>
         {fraktionen.map(([f, n]) => (
           <Chip
             key={f}
             dense
-            label={`${f} ${n}`}
-            dot={farbe(f)}
+            label={`${fraktionsName(f)} ${n}`}
+            dot={fraktionsFlaeche(f, dunkel)}
             active={fraktionFilter === f}
             onClick={() => zuruecksetzen(() => setFraktionFilter(fraktionFilter === f ? null : f))}
           />
@@ -340,8 +244,7 @@ export function AbgeordnetenStimmen({
                   style={{
                     alignSelf: 'stretch',
                     width: 4,
-                    borderRadius: radius.xs,
-                    background: farbe(e.fraktion),
+                    background: fraktionsFlaeche(e.fraktion, dunkel),
                     flexShrink: 0,
                   }}
                 />
@@ -369,23 +272,35 @@ export function AbgeordnetenStimmen({
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {e.fraktion}
+                    {fraktionsName(e.fraktion)}
                     {e.wahlkreis ? `, ${e.wahlkreis}` : ''}
                   </span>
                 </span>
-                {e.abweichung && (
-                  <span
-                    style={{
-                      fontFamily: fonts.mono,
-                      fontSize: fontSize.micro,
-                      color: c.red,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {t('memberListDeviates')}
-                  </span>
-                )}
-                <Badge text={stimmeLabel[e.stimme]} variant={stimmeBadge[e.stimme]} />
+                <span
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    gap: spacing.xs,
+                    flexShrink: 0,
+                  }}
+                >
+                  <StimmMarke stimme={e.stimme} />
+                  {e.abweichung && (
+                    <span
+                      style={{
+                        fontFamily: fonts.body,
+                        fontStyle: 'italic',
+                        fontWeight: 600,
+                        fontSize: fontSize.xs,
+                        color: c.red,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {t('memberListDeviates')}
+                    </span>
+                  )}
+                </span>
               </button>
             </li>
           ))}

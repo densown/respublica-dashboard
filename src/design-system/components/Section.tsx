@@ -12,6 +12,12 @@ export type SectionProps = {
   children: ReactNode
   /** Letzter Abschnitt einer Seite: kein Abstand nach unten. */
   last?: boolean
+  /**
+   * Laufende Nummer fuer Seiten, die einen Gegenstand Schritt fuer Schritt
+   * erklaeren, etwa die Abstimmungsseite. Dann sieht der Kopf aus wie auf den
+   * Abstimmungskarten fuer Instagram: Linie in Tinte oben, rote Ziffer.
+   */
+  number?: number
   style?: CSSProperties
 }
 
@@ -23,7 +29,7 @@ export type SectionProps = {
  * Hauptgrund dafuer war, dass Seiten nicht wie ein Stueck wirkten.
  * Siehe docs/DESIGN.md, Abschnitt 5.
  */
-export function Section({ title, aside, note, children, last, style }: SectionProps) {
+export function Section({ title, aside, note, children, last, number, style }: SectionProps) {
   const { c } = useTheme()
 
   return (
@@ -42,20 +48,40 @@ export function Section({ title, aside, note, children, last, style }: SectionPr
             gap: spacing.md,
             flexWrap: 'wrap',
             marginBottom: spacing.lg,
-            paddingBottom: spacing.sm,
-            borderBottom: `1px solid ${c.border}`,
+            ...(number != null
+              ? { paddingTop: spacing.md, borderTop: `2px solid ${c.ink}` }
+              : { paddingBottom: spacing.sm, borderBottom: `1px solid ${c.border}` }),
           }}
         >
           {title && (
             <h2
               style={{
-                fontFamily: fonts.display,
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: spacing.md,
+                // Nummerierte Abschnitte setzen den Titel wie die Karten in
+                // Source Serif halbfett; die Ziffer traegt die Display-Schrift.
+                fontFamily: number != null ? fonts.body : fonts.display,
+                fontWeight: number != null ? 600 : undefined,
                 fontSize: fontSize.xl,
                 lineHeight: lineHeight.tight,
                 color: c.ink,
                 margin: 0,
               }}
             >
+              {number != null && (
+                <span
+                  aria-hidden
+                  style={{
+                    fontFamily: fonts.display,
+                    fontWeight: 900,
+                    fontSize: fontSize.xxl,
+                    color: c.red,
+                  }}
+                >
+                  {number}
+                </span>
+              )}
               {title}
             </h2>
           )}

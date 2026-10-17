@@ -1,196 +1,151 @@
-import { useCallback, useMemo, useState } from 'react'
-import { fontSize, fonts, motion, radius, spacing } from '../tokens'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { fontSize, fonts, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
+import { stimmFlaeche, textAuf, type StimmArt, type StimmFarben } from '../palettes'
+
 
 export type VoteBarProps = {
-  label: string
-  labelColor?: string
   ja: number
   nein: number
   enthalten: number
   abwesend: number
-  /** Standard: grauer Track. outline = transparent mit Rand */
-  trackVariant?: 'default' | 'outline'
-  /** Stimmfarben im Balken (überschreibt Theme) */
-  segmentColors?: {
-    ja: string
-    nein: string
-    enthalten: string
-    abwesend: string
-  }
+  /** Hoehe in Pixel. */
+  height?: number
   /**
-   * Ausklapp-Bereich unter dem Balken:
-   * all = alle vier Zahlen (Default),
-   * secondary = nur Enthalten/Abwesend
+   * Was in den Segmenten steht: nur die Zahl (Fraktionszeilen), Zahl und
+   * Wort (Gesamtergebnis) oder nichts. Ein Segment bekommt seine Zahl nur,
+   * wenn sie hineinpasst.
    */
-  expandedDetails?: 'all' | 'secondary'
+  beschriftung?: 'zahl' | 'wort' | 'keine'
+  /** Kurzform fuer Screenreader, etwa "527 Ja, 18 Nein, 23 Enthaltungen". */
+  ariaLabel: string
+  /**
+   * Feste Farben statt der des aktuellen Modus. Das Teilbild zur Abstimmung
+   * ist immer Papier und Tinte, auch wenn die Seite dunkel ist.
+   */
+  farben?: StimmFarben
+  /** Beim ersten Zeichnen von links einlaufen lassen. */
+  animiert?: boolean
+  /**
+   * Schriftgroesse in Pixel statt Token. Nur fuer das Teilbild, das feste
+   * 1080 Pixel breit ist und in dem die Seitengroessen winzig waeren.
+   */
+  schriftPx?: number
+  style?: CSSProperties
 }
 
+/** Breite einer Ziffer in IBM Plex Mono, bezogen auf die Schriftgroesse. */
+const ZEICHENBREITE = 0.6
+const INNENABSTAND = 10
+
+/**
+ * Stimmbalken im Stil der Abstimmungskarten: ein durchgehender Balken pro
+ * Gruppe, Ja, Nein und Enthaltung als Flaechen, nicht abgestimmt schraffiert.
+ * Keine runden Ecken, keine graue Spur dahinter.
+ *
+ * Die Breite wird gemessen, damit eine Zahl nur dort steht, wo sie Platz hat.
+ * Ein Prozent-Schwellwert waere auf dem Handy zu knapp und auf dem Desktop
+ * zu grosszuegig.
+ */
 export function VoteBar({
-  label,
-  labelColor,
   ja,
   nein,
   enthalten,
   abwesend,
-  trackVariant = 'default',
-  segmentColors,
-  expandedDetails = 'all',
+  height = 28,
+  beschriftung = 'zahl',
+  ariaLabel,
+  farben,
+  animiert = true,
+  schriftPx,
+  style,
 }: VoteBarProps) {
-  const { c, t } = useTheme()
-  const [open, setOpen] = useState(false)
+  const theme = useTheme()
+  const { t } = theme
+  const c = farben ?? theme.c
+  const ref = useRef<HTMLDivElement>(null)
+  const [breite, setBreite] = useState(0)
+  // Beim ersten Zeichnen von links einlaufen lassen, danach nur noch Wechsel
+  const [gezeigt, setGezeigt] = useState(!animiert)
 
-  const total = ja + nein + enthalten + abwesend
-  const pct = useMemo(() => {
-    if (total <= 0) return { ja: 0, nein: 0, enthalten: 0, abwesend: 0 }
-    return {
-      ja: (ja / total) * 100,
-      nein: (nein / total) * 100,
-      enthalten: (enthalten / total) * 100,
-      abwesend: (abwesend / total) * 100,
-    }
-  }, [ja, nein, enthalten, abwesend, total])
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    setBreite(el.getBoundingClientRect().width)
+    if (typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver((eintraege) => {
+      const w = eintraege[0]?.contentRect.width
+      if (w != null) setBreite(w)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
-  const toggle = useCallback(() => setOpen((v) => !v), [])
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setGezeigt(true))
+    return () => window.cancelAnimationFrame(id)
+  }, [])
 
-  const lc = labelColor ?? c.ink
-  const colJa = segmentColors?.ja ?? c.yes
-  const colNein = segmentColors?.nein ?? c.no
-  const colEnthalten = segmentColors?.enthalten ?? c.abstain
-  const colAbwesend = segmentColors?.abwesend ?? c.absent
+  const gesamt = ja + nein + enthalten + abwesend
+  const pxSchrift = schriftPx ?? (beschriftung === 'wort' ? 13 : 12)
+  const schrift = schriftPx ? `${schriftPx}px` : beschriftung === 'wort' ? fontSize.sm : fontSize.xs
 
-  const trackBg =
-    trackVariant === 'outline' ? 'transparent' : c.bgHover
-  const trackBorder =
-    trackVariant === 'outline' ? `1px solid ${c.border}` : undefined
+  const wort: Record<StimmArt, string> = {
+    ja: t('yes'),
+    nein: t('no'),
+    enthalten: t('voteAbstainShort'),
+    abwesend: '',
+  }
+
+  const segmente: { art: StimmArt; n: number }[] = [
+    { art: 'ja', n: ja },
+    { art: 'nein', n: nein },
+    { art: 'enthalten', n: enthalten },
+    { art: 'abwesend', n: abwesend },
+  ]
 
   return (
-    <div style={{ marginBottom: spacing.md }}>
-      <button
-        type="button"
-        onClick={toggle}
-        style={{
-          width: '100%',
-          border: 'none',
-          background: 'transparent',
-          padding: 0,
-          cursor: 'pointer',
-          textAlign: 'left',
-        }}
-        aria-expanded={open}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: spacing.md,
-            marginBottom: spacing.xs,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: fonts.body,
-              fontWeight: 600,
-              fontSize: fontSize.md,
-              color: lc,
-            }}
-          >
-            {label}
-          </span>
-          <span
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: fontSize.micro,
-              color: c.muted,
-              flexShrink: 0,
-              textAlign: 'right',
-            }}
-          >
-            {ja} {t('yes')} / {nein} {t('no')}
-          </span>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            height: 10,
-            borderRadius: radius.sm,
-            overflow: 'hidden',
-            background: trackBg,
-            border: trackBorder,
-            boxSizing: 'border-box',
-          }}
-        >
-          <div
-            style={{
-              width: `${pct.ja}%`,
-              background: colJa,
-              transition: `width 0.45s ${motion.easing}`,
-            }}
-          />
-          <div
-            style={{
-              width: `${pct.nein}%`,
-              background: colNein,
-              transition: `width 0.45s ${motion.easing}`,
-            }}
-          />
-          <div
-            style={{
-              width: `${pct.enthalten}%`,
-              background: colEnthalten,
-              transition: `width 0.45s ${motion.easing}`,
-            }}
-          />
-          <div
-            style={{
-              width: `${pct.abwesend}%`,
-              background: colAbwesend,
-              transition: `width 0.45s ${motion.easing}`,
-            }}
-          />
-        </div>
-      </button>
-      {open && (
-        <div
-          style={{
-            marginTop: spacing.sm,
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-            gap: spacing.sm,
-            fontFamily: fonts.mono,
-            fontSize: fontSize.micro,
-            color: c.muted,
-          }}
-        >
-          {expandedDetails === 'all' ? (
-            <>
-              <span>
-                {t('yes')}: {ja}
-              </span>
-              <span>
-                {t('no')}: {nein}
-              </span>
-              <span>
-                {t('abstained')}: {enthalten}
-              </span>
-              <span>
-                {t('absentL')}: {abwesend}
-              </span>
-            </>
-          ) : (
-            <>
-              <span>
-                {t('abstained')}: {enthalten}
-              </span>
-              <span>
-                {t('absentL')}: {abwesend}
-              </span>
-            </>
-          )}
-        </div>
-      )}
+    <div
+      ref={ref}
+      role="img"
+      aria-label={ariaLabel}
+      style={{ display: 'flex', width: '100%', height, ...style }}
+    >
+      {gesamt > 0 &&
+        segmente.map(({ art, n }) => {
+          if (n <= 0) return null
+          const anteil = n / gesamt
+          const text =
+            art === 'abwesend' || beschriftung === 'keine'
+              ? ''
+              : beschriftung === 'wort'
+                ? `${n} ${wort[art]}`
+                : String(n)
+          const passt = text.length * pxSchrift * ZEICHENBREITE + INNENABSTAND <= anteil * breite
+          const flaeche = stimmFlaeche(art, c)
+          return (
+            <span
+              key={art}
+              style={{
+                width: gezeigt ? `${anteil * 100}%` : 0,
+                flexShrink: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                background: flaeche,
+                color: art === 'abwesend' ? c.muted : textAuf(flaeche),
+                fontFamily: fonts.mono,
+                fontWeight: 500,
+                fontSize: schrift,
+                transition: animiert ? `width 0.6s ${motion.easing}` : undefined,
+              }}
+            >
+              {passt ? text : null}
+            </span>
+          )
+        })}
     </div>
   )
 }
