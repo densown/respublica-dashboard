@@ -26,12 +26,22 @@ export type AbstimmungsDetailData = {
   }
   fraktionen: FraktionsErgebnis[]
   /**
-   * Noch nicht in der API. Vorgesehen: Einleitungstext und Ergebnis von
-   * abgeordnetenwatch (field_intro, field_accepted) und Link zur Quelle.
+   * Ab API-Migration 019: Einleitungstext von abgeordnetenwatch (Absaetze
+   * durch Leerzeile), die Links daraus, die Seite der Abstimmung und das
+   * Ergebnis laut Schlusssatz (null, wenn der Satz es nicht eindeutig sagt).
    */
   intro?: string | null
+  links?: QuellenLink[]
   angenommen?: boolean | null
   quelle_url?: string | null
+}
+
+/** Link aus dem Einleitungstext, meist eine Drucksache als PDF. */
+export type QuellenLink = {
+  titel: string
+  url: string
+  /** "Drucksache 21/1234" oder "Plenarprotokoll 21/34", sonst null */
+  dokument: string | null
 }
 
 export type FraktionsErgebnis = {

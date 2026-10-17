@@ -23,12 +23,8 @@ import {
   stimmenKurz,
   vorspann,
 } from '../components/bundestag/abstimmungText'
-import type { AbstimmungsDetailData } from '../components/bundestag/fraktion'
-import {
-  nachAwId,
-  sitzeZuordnen,
-  type AbgeordnetenApiRow,
-} from '../components/bundestag/sitzplaetze'
+import type { AbstimmungsDetailData, QuellenLink } from '../components/bundestag/fraktion'
+import { abstimmungsSitze, type AbgeordnetenApiRow } from '../components/bundestag/sitzplaetze'
 import {
   abweichlerJeFraktion,
   stimmEintraege,
@@ -40,6 +36,17 @@ import {
  * sonst steht auf dem Handy das Ergebnis erst nach zwei Bildschirmen Text.
  */
 const ABSAETZE_SICHTBAR = 1
+
+const AW_ALLE_ABSTIMMUNGEN = 'https://www.abgeordnetenwatch.de/bundestag/21/abstimmungen'
+const BT_ABSTIMMUNGEN = 'https://www.bundestag.de/parlament/plenum/abstimmung/liste'
+
+/** "Gesetzentwurf, Drucksache 21/1234 (PDF)" */
+function quellenTitel(l: QuellenLink): string {
+  const teile = [l.titel]
+  if (l.dokument && l.dokument !== l.titel) teile.push(l.dokument)
+  const pdf = /\.pdf($|[?#])/i.test(l.url) ? ' (PDF)' : ''
+  return teile.join(', ') + pdf
+}
 
 function datumLang(iso: string, lang: 'de' | 'en'): string {
   const d = new Date(`${iso}T00:00:00Z`)
@@ -71,14 +78,17 @@ export default function Abstimmung() {
   const { data: stimmen, loading: ladeStimmen } = useApi<{ votes: StimmenZeile[] }>(
     gueltig ? `/api/bundestag/poll-votes/${id}` : '',
   )
-  const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete')
+  // alle=1: auch wer inzwischen ausgeschieden ist, fuer aeltere Abstimmungen
+  const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete?alle=1')
   const { data: sitzverteilung } = useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
 
-  const nachId = useMemo(() => nachAwId(abgeordnete ?? []), [abgeordnete])
-  const sitze = useMemo(() => sitzeZuordnen(abgeordnete ?? []), [abgeordnete])
+  const { sitze, personen } = useMemo(
+    () => abstimmungsSitze(stimmen?.votes ?? [], abgeordnete ?? []),
+    [stimmen, abgeordnete],
+  )
   const eintraege = useMemo(
-    () => stimmEintraege(stimmen?.votes ?? [], nachId),
-    [stimmen, nachId],
+    () => stimmEintraege(stimmen?.votes ?? [], personen),
+    [stimmen, personen],
   )
   const abweichler = useMemo(() => abweichlerJeFraktion(eintraege), [eintraege])
   const einzelStimmen = useMemo(
@@ -87,7 +97,7 @@ export default function Abstimmung() {
   )
 
   const [profilId, setProfilId] = useState<number | null>(null)
-  const profil = profilId != null ? (nachId.get(profilId) ?? null) : null
+  const profil = profilId != null ? (personen.get(profilId) ?? null) : null
   const schliessen = useCallback(() => setProfilId(null), [])
 
   const [listeFraktion, setListeFraktion] = useState<string | null>(null)
@@ -338,28 +348,23 @@ export default function Abstimmung() {
             color: c.inkSoft,
           }}
         >
-          <li>
-            {t('votePageSourceAw')}:{' '}
-            <a
-              href={data.quelle_url ?? 'https://www.abgeordnetenwatch.de/bundestag/21/abstimmungen'}
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: c.ink, wordBreak: 'break-all' }}
-            >
-              {data.quelle_url ?? 'https://www.abgeordnetenwatch.de/bundestag/21/abstimmungen'}
-            </a>
-          </li>
-          <li>
-            {t('votePageSourceBt')}:{' '}
-            <a
-              href="https://www.bundestag.de/parlament/plenum/abstimmung/liste"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: c.ink, wordBreak: 'break-all' }}
-            >
-              https://www.bundestag.de/parlament/plenum/abstimmung/liste
-            </a>
-          </li>
+          {[
+            ...(data.links ?? []).map((l) => ({ titel: quellenTitel(l), url: l.url })),
+            { titel: t('votePageSourceAw'), url: data.quelle_url ?? AW_ALLE_ABSTIMMUNGEN },
+            { titel: t('votePageSourceBt'), url: BT_ABSTIMMUNGEN },
+          ].map((q) => (
+            <li key={q.url}>
+              {q.titel}:{' '}
+              <a
+                href={q.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: c.ink, wordBreak: 'break-all' }}
+              >
+                {q.url}
+              </a>
+            </li>
+          ))}
         </ul>
       </Section>
     </div>

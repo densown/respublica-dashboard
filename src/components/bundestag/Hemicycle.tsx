@@ -459,9 +459,9 @@ export function Hemicycle({
               : null
           const title =
             abg != null
-              ? `${abg.name} (${effektiveFraktion ?? abg.fraktion})\nWahlkreis: ${abg.wahlkreis}${
-                  abstimmung && s.voteLabel ? `\nStimme: ${s.voteLabel}` : ''
-                }`
+              ? `${abg.name} (${effektiveFraktion ?? abg.fraktion})${
+                  abg.wahlkreis ? `\nWahlkreis: ${abg.wahlkreis}` : ''
+                }${abstimmung && s.voteLabel ? `\nStimme: ${s.voteLabel}` : ''}`
               : s.partei
           return (
             <circle

@@ -1,5 +1,6 @@
 import { RAW_SEATS } from '../../data/bundestag-seats'
 import { ohneWahlperiode, shortFraktionName } from './fraktion'
+import type { StimmenZeile } from './stimmen'
 
 /**
  * Wer sitzt wo im Halbrund. Die Sitzdaten kennen nur Fraktionen, die API nur
@@ -18,6 +19,10 @@ export type AbgeordnetenApiRow = {
   foto_url: string | null
   profil_url: string | null
   nachname?: string
+  /** Mandatsbeginn, nur bei Nachrueckern gesetzt (API ab Migration 019) */
+  mandat_von?: string | null
+  /** Mandatsende, nur bei Ausgeschiedenen gesetzt */
+  mandat_bis?: string | null
 }
 
 /** Abgeordnete, wie Halbrund, Liste und Profil sie anzeigen. */
@@ -153,3 +158,40 @@ export function nachAwId(abgeordnete: AbgeordnetenApiRow[]): Map<number, SitzAbg
   for (const a of abgeordnete) map.set(a.aw_id, alsAnzeige(a))
   return map
 }
+
+/** Heute im Amt: ohne Mandatsende oder mit einem Ende ab heute. */
+export function imAmt(a: AbgeordnetenApiRow, heute = new Date().toISOString().slice(0, 10)): boolean {
+  return !a.mandat_bis || a.mandat_bis >= heute
+}
+
+/**
+ * Sitze und Personen fuer eine einzelne Abstimmung: wer damals abgestimmt hat,
+ * mit der Fraktion von damals. So sitzen Nachruecker und spaeter
+ * Ausgeschiedene dort, wo sie an dem Tag sassen. Wahlkreis, Foto und Profil
+ * kommen aus /api/abgeordnete?alle=1. Ohne Einzelstimmen (neue Abstimmung,
+ * Stimmen noch nicht geladen) gilt die heutige Besetzung.
+ */
+export function abstimmungsSitze(
+  votes: StimmenZeile[],
+  abgeordnete: AbgeordnetenApiRow[],
+): { sitze: Map<number, SitzAbgeordneter>; personen: Map<number, SitzAbgeordneter> } {
+  if (!votes.length) {
+    return { sitze: sitzeZuordnen(abgeordnete.filter((a) => imAmt(a))), personen: nachAwId(abgeordnete) }
+  }
+  const info = new Map(abgeordnete.map((a) => [a.aw_id, a] as const))
+  const zeilen: AbgeordnetenApiRow[] = votes.map((v) => {
+    const a = info.get(v.mandate_id)
+    return {
+      id: a?.id ?? v.mandate_id,
+      aw_id: v.mandate_id,
+      name: a?.name ?? v.abgeordneter_name,
+      fraktion: v.fraction_label || a?.fraktion || '',
+      wahlkreis: a?.wahlkreis ?? '',
+      foto_url: a?.foto_url ?? null,
+      profil_url: a?.profil_url ?? null,
+      nachname: a?.nachname,
+    }
+  })
+  return { sitze: sitzeZuordnen(zeilen), personen: nachAwId(zeilen) }
+}
+

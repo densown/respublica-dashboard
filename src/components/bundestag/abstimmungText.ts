@@ -24,9 +24,10 @@ const GESPALTEN_MINDESTENS = 5
 const NAMEN_BIS = 3
 
 /**
- * Ob der Antrag durchkam. abgeordnetenwatch fuehrt dafuer ein eigenes Feld,
- * das aber nicht verlaesslich ist (Abstimmung 6724: 132 zu 445, dort als
- * angenommen gefuehrt). Ohne geprueften Wert der API zaehlt Ja gegen Nein.
+ * Ob der Antrag durchkam. Die API liest das aus dem Schlusssatz des
+ * Einleitungstexts, nicht aus field_accepted von abgeordnetenwatch (das Feld
+ * stimmt nicht immer: 6724, 132 zu 445, dort als angenommen gefuehrt). Sagt
+ * der Satz es nicht eindeutig, zaehlt Ja gegen Nein.
  */
 export function istAngenommen(d: AbstimmungsDetailData): boolean {
   return d.angenommen ?? d.ergebnis.ja_gesamt > d.ergebnis.nein_gesamt

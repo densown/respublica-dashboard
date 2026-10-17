@@ -18,9 +18,9 @@ export type StimmenZeile = {
   vote: string
   abgeordneter_name: string
   /**
-   * Fraktion zum Zeitpunkt der Abstimmung. Liefert die API noch nicht; bis
-   * dahin kommt die Fraktion aus /api/abgeordnete, und wer dort fehlt
-   * (Nachruecker), steht ohne Fraktion da.
+   * Fraktion zum Zeitpunkt der Abstimmung (API ab Migration 019). Fehlt sie,
+   * kommt die Fraktion aus /api/abgeordnete, und wer dort fehlt, steht ohne
+   * Fraktion da.
    */
   fraction_label?: string | null
 }
