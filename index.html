@@ -46,6 +46,27 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Ohne JavaScript bleibt #root leer. Abrufe ohne Browser (Suchmaschinen,
+         KI-Assistenten, Linkvorschauen) sahen bisher eine leere Seite und
+         schlossen daraus, es gebe hier nichts. Dieser Block nennt die Bereiche. -->
+    <noscript>
+      <main style="max-width: 40rem; margin: 2rem auto; padding: 0 1rem; font-family: Georgia, serif; line-height: 1.6">
+        <h1>Res.Publica · Politische Daten nachprüfbar</h1>
+        <p>
+          Diese Anwendung braucht JavaScript. Sie sammelt Daten aus amtlichen
+          Quellen und wird täglich aktualisiert. Bereiche:
+        </p>
+        <ul>
+          <li><a href="/bundestag">Namentliche Abstimmungen und Abgeordnete im Bundestag</a></li>
+          <li><a href="/gesetze">Gesetzesänderungen und Urteile</a></li>
+          <li><a href="/lobbyregister">Lobbyregister</a></li>
+          <li><a href="/eu-recht">EU-Recht</a></li>
+          <li><a href="/wahlen">Wahlen und Umfragen</a></li>
+          <li><a href="/quellen">Quellen</a></li>
+        </ul>
+        <p>Magazin: <a href="https://respublica.media/">respublica.media</a></p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

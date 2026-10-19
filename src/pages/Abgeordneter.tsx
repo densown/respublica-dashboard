@@ -152,10 +152,14 @@ export default function Abgeordneter() {
     return saetze.join(' ')
   }, [person, bilanz, ohneLinie, zahlAbweichungen, t])
 
+  const nichtDa = !gueltig || profil.error === 'HTTP 404'
+
   useSeo({
     titel: person ? person.name : t('profileBack'),
     beschreibung: dek || undefined,
     pfad: gueltig ? `/bundestag/abgeordnete/${id}` : undefined,
+    // Unbekannte Nummer: Seite bleibt erreichbar, aber nicht im Suchindex
+    nichtIndexieren: nichtDa,
   })
 
   const zurueck = (
@@ -179,7 +183,6 @@ export default function Abgeordneter() {
   )
 
   if (!gueltig || (profil.error && !profil.data)) {
-    const nichtDa = !gueltig || profil.error === 'HTTP 404'
     return (
       <>
         {zurueck}

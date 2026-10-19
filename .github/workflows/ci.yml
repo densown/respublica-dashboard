@@ -19,3 +19,5 @@ jobs:
       - run: npm run build
       # Lint ist hartes Gate: Fehler blockieren, Warnungen nicht
       - run: npm run lint
+      # nginx-Regeln (deploy/nginx/app-routen.conf) passen zu App-Routen und sitemap.xml
+      - run: node deploy/nginx/routen-pruefen.mjs

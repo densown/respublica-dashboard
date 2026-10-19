@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AlteAdresse } from './components/AlteAdresse'
 import { LoadingSpinner, ThemeProvider } from './design-system'
 import DashboardLayout from './layouts/DashboardLayout'
 import Admin from './pages/Admin'
@@ -37,6 +38,17 @@ export default function App() {
             <Route path="bundestag" element={<Bundestag />} />
             <Route path="bundestag/:pollId" element={<Abstimmung />} />
             <Route path="bundestag/abgeordnete/:awId" element={<Abgeordneter />} />
+            {/* Alte Adressen, vor dem Umbau im Oktober 2026 */}
+            <Route path="abstimmungen" element={<Navigate to="/bundestag" replace />} />
+            <Route path="abstimmungen/:pollId" element={<AlteAdresse ziel="/bundestag/:pollId" />} />
+            <Route
+              path="abgeordnete"
+              element={<Navigate to="/bundestag?ansicht=abgeordnete" replace />}
+            />
+            <Route
+              path="abgeordnete/:awId"
+              element={<AlteAdresse ziel="/bundestag/abgeordnete/:awId" />}
+            />
             <Route path="gesetze" element={<Legislation />} />
             <Route path="gesetze/:id" element={<Legislation />} />
             <Route path="gesetzgebung" element={<Legislation />} />
