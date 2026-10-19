@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Prueft nach dem Einspielen von app-routen.conf, ob der Server richtig
 # antwortet: Seiten 200, alte Adressen 301 an die richtige Stelle,
-# Unbekanntes 404 mit der App als Inhalt, Dateien und API unberuehrt.
+# Unbekanntes 404 mit der App als Inhalt, Dateien und API unberuehrt,
+# Sicherheits-Header und Cache-Regeln wie vorher.
 #
 #   deploy/nginx/pruefen.sh                         # gegen app.respublica.media
 #   deploy/nginx/pruefen.sh http://127.0.0.1:8080   # gegen einen anderen Server
@@ -59,12 +60,36 @@ else
   fehler=1
 fi
 
+# Kopfzeilen: Sicherheits-Header ueberall, index.html nie aus dem Cache,
+# Skripte weiter mit langem Cache (Regex-Location im server-Block)
+kopf() {
+  local pfad=$1 name=$2 muster=$3
+  if curl -s -o /dev/null -m 15 -D - "$BASIS$pfad" | grep -i "^$name:" | grep -qi -- "$muster"; then
+    echo "ok     $pfad $name enthaelt $muster"
+  else
+    echo "FEHLER $pfad: $name ohne $muster"
+    fehler=1
+  fi
+}
+for p in / /bundestag /bundestag/1 /gibtsnicht; do
+  kopf "$p" cache-control no-store
+  kopf "$p" x-frame-options sameorigin
+done
+kopf /abstimmungen x-frame-options sameorigin
+kopf /robots.txt x-frame-options sameorigin
+
 # Dateien und API
 for p in /robots.txt /sitemap.xml /share-og-v3.png /manifest.webmanifest /api/bundestag/sitzverteilung; do
   pruefe "$p" 200
 done
 skript=$(curl -s -m 15 "$BASIS/" | grep -o '/assets/[^"]*\.js' | head -1)
-if [ -n "$skript" ]; then pruefe "$skript" 200; else echo "FEHLER kein Skript in index.html"; fehler=1; fi
+if [ -n "$skript" ]; then
+  pruefe "$skript" 200
+  kopf "$skript" cache-control immutable
+else
+  echo "FEHLER kein Skript in index.html"
+  fehler=1
+fi
 
 if [ "$fehler" = 0 ]; then echo "Alles in Ordnung."; else echo "Mindestens eine Pruefung fehlgeschlagen."; fi
 exit "$fehler"
