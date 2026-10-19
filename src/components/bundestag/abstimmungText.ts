@@ -108,14 +108,10 @@ export function vorspann(d: AbstimmungsDetailData, t: Uebersetzen, lang: 'de' | 
   ]
   if (ueberBeschlussempfehlung(d.poll_titel)) saetze.push(t('votePageDekRecommendation'))
 
+  const { lager, gespalten } = lagerDerFraktionen(d.fraktionen)
   const mitLinie = nachGroesse(d.fraktionen).filter((f) =>
     hatFraktionslinie(shortFraktionName(f.partei)),
   )
-  const lager: Record<'yes' | 'no' | 'abstain', string[]> = { yes: [], no: [], abstain: [] }
-  for (const f of mitLinie) {
-    const linie = linieVon(f)
-    if (linie && linie !== 'no_show') lager[linie].push(shortFraktionName(f.partei))
-  }
   const besetzt = (['yes', 'no', 'abstain'] as const).filter((s) => lager[s].length > 0)
 
   if (besetzt.length === 1 && mitLinie.length > 1) {
@@ -130,7 +126,6 @@ export function vorspann(d: AbstimmungsDetailData, t: Uebersetzen, lang: 'de' | 
       saetze.push(t('votePageDekAbstain').replace('{liste}', aufzaehlen(lager.abstain, t)))
   }
 
-  const gespalten = mitLinie.filter(istGespalten).map((f) => shortFraktionName(f.partei))
   if (gespalten.length === 1) {
     saetze.push(t('votePageDekSplitOne').replace('{fraktion}', gespalten[0]))
   } else if (gespalten.length > 1) {
@@ -221,4 +216,45 @@ export function kurzfassung(intro: string | null | undefined, max = 240): string
     out += s
   }
   return out.trim() || null
+}
+
+/**
+ * Kurztext in der Sprache der Seite. Fehlt der englische, steht keiner da:
+ * ein deutscher Satz auf der englischen Seite waere schlechter als keiner.
+ */
+export function kurztextFuer(
+  d: { kurztext?: string | null; kurztext_en?: string | null },
+  lang: 'de' | 'en',
+): string | null {
+  return (lang === 'en' ? d.kurztext_en : d.kurztext)?.trim() || null
+}
+
+/** Datum lang, etwa "8. Oktober 2026" oder "8 October 2026". */
+export function datumLang(iso: string, lang: 'de' | 'en', mitWochentag = false): string {
+  const d = new Date(`${iso}T00:00:00Z`)
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', {
+    weekday: mitWochentag ? 'long' : undefined,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
+/**
+ * Wie die Fraktionen mehrheitlich stimmten, ohne Fraktionslose: je Stimme die
+ * Fraktionen nach Groesse, dazu die deutlich gespaltenen.
+ */
+export function lagerDerFraktionen(fraktionen: FraktionsErgebnis[]): {
+  lager: Record<'yes' | 'no' | 'abstain', string[]>
+  gespalten: string[]
+} {
+  const mitLinie = nachGroesse(fraktionen).filter((f) => hatFraktionslinie(shortFraktionName(f.partei)))
+  const lager: Record<'yes' | 'no' | 'abstain', string[]> = { yes: [], no: [], abstain: [] }
+  for (const f of mitLinie) {
+    const linie = linieVon(f)
+    if (linie && linie !== 'no_show') lager[linie].push(shortFraktionName(f.partei))
+  }
+  return { lager, gespalten: mitLinie.filter(istGespalten).map((f) => shortFraktionName(f.partei)) }
 }

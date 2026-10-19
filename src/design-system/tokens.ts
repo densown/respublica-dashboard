@@ -235,3 +235,12 @@ export const breakpoints = {
   tablet: 1024,
   wide: 1280,
 } as const
+
+/**
+ * Hoechstbreite fuer Inhalte, die man von oben nach unten liest. `liste`
+ * fuer Karten- und Namenslisten: auf einem breiten Bildschirm sonst 1500 px
+ * lange Zeilen mit dem Pfeil am anderen Ende. Fliesstext bleibt bei 68ch.
+ */
+export const measure = {
+  liste: 760,
+} as const

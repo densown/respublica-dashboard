@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { Badge, useTheme } from '../../design-system'
-import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
+import { EmptyState, useTheme, VoteBar } from '../../design-system'
+import { fontSize, fonts, lineHeight, measure, spacing } from '../../design-system/tokens'
+import { stimmenKurz } from './abstimmungText'
 
 export type MemberTopicRow = {
   slug: string
@@ -23,137 +24,94 @@ export type MemberTopicTotals = {
   abweichungen: number
 }
 
+/** Antwort von /api/abgeordnete/:awId/themen */
 export type MemberTopicProfileData = {
+  /** Die Person selbst; mandat_von und mandat_bis ab API-Migration 019 */
+  abgeordnete?: {
+    aw_id: number
+    name: string
+    fraktion: string
+    wahlkreis: string | null
+    foto_url: string | null
+    profil_url: string | null
+    mandat_von?: string | null
+    mandat_bis?: string | null
+  }
   gesamt: MemberTopicTotals
   themen: MemberTopicRow[]
 }
 
-type Props = {
-  data: MemberTopicProfileData | null
-  lang: 'de' | 'en'
-  title: string
-  deviationLabel: string
-  deviationHint: string
-  emptyText: string
-}
-
 /**
- * Abstimmungsverhalten einer oder eines Abgeordneten nach Themenfeld.
- *
- * Zeigt je Thema ein gestapeltes Band aus Ja/Nein/Enthaltung/Nichtteilnahme.
- * Interessant ist weniger die Bilanz als die Abweichung von der eigenen
- * Fraktion — die bekommt deshalb ein eigenes Badge statt einer Spalte.
+ * Abstimmungsverhalten einer oder eines Abgeordneten nach Themenfeld: je
+ * Thema ein Stimmbalken wie auf der Abstimmungsseite, rechts die Zahl der
+ * Abstimmungen und in Rot, wie oft die Person dort anders gestimmt hat als
+ * die eigene Fraktion. Die Abweichung ist die eigentliche Nachricht.
  */
-export function MemberTopicProfile({
-  data,
-  lang,
-  title,
-  deviationLabel,
-  deviationHint,
-  emptyText,
-}: Props) {
-  const { c } = useTheme()
+export function MemberTopicProfile({ data }: { data: MemberTopicProfileData | null }) {
+  const { c, t, lang } = useTheme()
 
   const themen = useMemo(
     () => [...(data?.themen ?? [])].sort((a, b) => b.abstimmungen - a.abstimmungen),
     [data],
   )
 
-  if (!data || !themen.length) {
-    return <p style={{ color: c.muted, fontFamily: fonts.body, margin: 0 }}>{emptyText}</p>
-  }
-
-  const segmente = (t: MemberTopicRow) => [
-    { n: t.ja, farbe: c.yes },
-    { n: t.nein, farbe: c.no },
-    { n: t.enthalten, farbe: c.abstain },
-    { n: t.abwesend, farbe: c.absent },
-  ].filter((s) => s.n > 0)
+  if (!data || !themen.length) return <EmptyState text={t('memberTopicsEmpty')} />
 
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'baseline',
-          justifyContent: 'space-between',
-          gap: spacing.sm,
-          flexWrap: 'wrap',
-          marginBottom: spacing.sm,
-        }}
-      >
-        <h4 style={{ margin: 0, fontFamily: fonts.display, color: c.ink }}>{title}</h4>
-        {data.gesamt.abweichungen > 0 && (
-          <Badge
-            text={`${data.gesamt.abweichungen} ${deviationLabel}`}
-            variant="amber"
-          />
-        )}
-      </div>
-
-      <div style={{ display: 'grid', gap: spacing.sm }}>
-        {themen.map((t) => {
-          const segs = segmente(t)
-          return (
-            <div key={t.slug}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: spacing.sm,
-                  fontFamily: fonts.body,
-                  fontSize: fontSize.sm,
-                  color: c.ink,
-                  marginBottom: 3,
-                }}
-              >
-                <span>{lang === 'de' ? t.name_de : t.name_en}</span>
-                <span
-                  style={{
-                    fontFamily: fonts.mono,
-                    fontSize: fontSize.xs,
-                    color: t.abweichungen > 0 ? c.red : c.muted,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {t.abweichungen > 0 && `${t.abweichungen}× ↯ · `}
-                  {t.abstimmungen}
+    <ul
+      style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: spacing.md, maxWidth: measure.liste }}
+    >
+      {themen.map((th) => (
+        <li key={th.slug}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+              gap: spacing.sm,
+              marginBottom: spacing.xs,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: fonts.body,
+                fontSize: fontSize.md,
+                lineHeight: lineHeight.tight,
+                color: c.ink,
+              }}
+            >
+              {lang === 'de' ? th.name_de : th.name_en}
+            </span>
+            <span
+              style={{
+                display: 'inline-flex',
+                gap: spacing.sm,
+                fontFamily: fonts.mono,
+                fontSize: fontSize.xs,
+                color: c.muted,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {th.abweichungen > 0 && (
+                <span style={{ color: c.red }}>
+                  {t('profileTopicDeviations').replace('{n}', String(th.abweichungen))}
                 </span>
-              </div>
-              <div
-                title={`${t.ja} / ${t.nein} / ${t.enthalten} / ${t.abwesend}`}
-                style={{
-                  display: 'flex',
-                  height: 8,
-                  borderRadius: radius.sm,
-                  overflow: 'hidden',
-                  background: c.bgAlt,
-                }}
-              >
-                {segs.map((s, i) => (
-                  <div
-                    key={i}
-                    style={{ width: `${(s.n / t.abstimmungen) * 100}%`, background: s.farbe }}
-                  />
-                ))}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      <p
-        style={{
-          fontFamily: fonts.body,
-          fontSize: fontSize.xs,
-          color: c.muted,
-          margin: 0,
-          marginTop: spacing.md,
-          lineHeight: 1.6,
-        }}
-      >
-        {deviationHint}
-      </p>
-    </div>
+              )}
+              {th.abstimmungen}
+            </span>
+          </div>
+          <VoteBar
+            ja={th.ja}
+            nein={th.nein}
+            enthalten={th.enthalten}
+            abwesend={th.abwesend}
+            height={12}
+            beschriftung="keine"
+            animiert={false}
+            ariaLabel={stimmenKurz(th, t)}
+          />
+        </li>
+      ))}
+    </ul>
   )
 }

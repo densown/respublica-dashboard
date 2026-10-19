@@ -648,21 +648,6 @@ export function Hemicycle({
             </>
           )}
         </div>
-        {!abstimmung && (
-          <p
-            style={{
-              marginTop: spacing.md,
-              marginBottom: 0,
-              fontFamily: fonts.body,
-              fontSize: fontSize.xs,
-              color: c.subtle,
-              textAlign: 'center',
-              lineHeight: 1.4,
-            }}
-          >
-            {t('hemicycleVoteHint')}
-          </p>
-        )}
       </div>
     </div>
   )

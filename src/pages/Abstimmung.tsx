@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   Chip,
   LoadingSpinner,
@@ -12,15 +12,16 @@ import { fontSize, fonts, lineHeight, motion, spacing } from '../design-system/t
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
-import { AbgeordnetenProfil } from '../components/bundestag/AbgeordnetenProfil'
 import { AbgeordnetenStimmen } from '../components/bundestag/AbgeordnetenStimmen'
 import { AbstimmungsBild } from '../components/bundestag/AbstimmungsBild'
 import { FraktionsStimmen } from '../components/bundestag/FraktionsStimmen'
 import { Hemicycle, type SitzverteilungRow } from '../components/bundestag/Hemicycle'
 import {
   anzeigeTitel,
+  datumLang,
   ergebnisWort,
   ergebnisZeile,
+  kurztextFuer,
   stimmenKurz,
   vorspann,
 } from '../components/bundestag/abstimmungText'
@@ -35,6 +36,7 @@ import {
 /**
  * Absaetze der Einleitung, die ohne Aufklappen zu sehen sind. Einer reicht:
  * sonst steht auf dem Handy das Ergebnis erst nach zwei Bildschirmen Text.
+ * Gibt es einen Kurztext, steht er vorn und die Einleitung ganz dahinter.
  */
 const ABSAETZE_SICHTBAR = 1
 
@@ -49,17 +51,6 @@ function quellenTitel(l: QuellenLink): string {
   return teile.join(', ') + pdf
 }
 
-function datumLang(iso: string, lang: 'de' | 'en'): string {
-  const d = new Date(`${iso}T00:00:00Z`)
-  if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  })
-}
-
 /**
  * Eine namentliche Abstimmung auf eigener Seite, aufgebaut wie die
  * Abstimmungskarten fuer Instagram: Worum es ging, Ergebnis, Fraktionen,
@@ -72,6 +63,7 @@ export default function Abstimmung() {
   const gueltig = Number.isFinite(id) && id > 0
   const { c, t, lang } = useTheme()
   const isMobile = useIsMobile()
+  const navigate = useNavigate()
 
   const { data, loading, error } = useApi<AbstimmungsDetailData>(
     gueltig ? `/api/bundestag/abstimmungen/${id}` : '',
@@ -97,9 +89,10 @@ export default function Abstimmung() {
     [eintraege],
   )
 
-  const [profilId, setProfilId] = useState<number | null>(null)
-  const profil = profilId != null ? (personen.get(profilId) ?? null) : null
-  const schliessen = useCallback(() => setProfilId(null), [])
+  const zumProfil = useCallback(
+    (awId: number) => navigate(`/bundestag/abgeordnete/${awId}`),
+    [navigate],
+  )
 
   const [listeFraktion, setListeFraktion] = useState<string | null>(null)
   const [ganzerText, setGanzerText] = useState(false)
@@ -109,7 +102,6 @@ export default function Abstimmung() {
   useEffect(() => {
     setListeFraktion(null)
     setGanzerText(false)
-    setProfilId(null)
   }, [id])
 
   // Halbrund nach dem Laden einer Abstimmung einmal durchlaufen lassen
@@ -185,14 +177,15 @@ export default function Abstimmung() {
     .split(/\n\s*\n/)
     .map((a) => a.trim())
     .filter(Boolean)
-  const gezeigt = ganzerText ? absaetze : absaetze.slice(0, ABSAETZE_SICHTBAR)
+  const kurztext = kurztextFuer(data, lang)
+  const sichtbarOhneKlick = kurztext ? 0 : ABSAETZE_SICHTBAR
+  const gezeigt = ganzerText ? absaetze : absaetze.slice(0, sichtbarOhneKlick)
   const nachladen = loading
 
   let nummer = 0
   const naechste = () => (nummer += 1)
 
   return (
-    <>
     <div
       style={{
         // Wechsel zu einer anderen Abstimmung: alten Inhalt stehen lassen
@@ -206,6 +199,33 @@ export default function Abstimmung() {
       {absaetze.length > 0 && (
         <Section number={naechste()} title={t('votePageWhat')}>
           <div style={{ maxWidth: '68ch' }}>
+            {kurztext && (
+              <div style={{ marginBottom: spacing.md }}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: fonts.body,
+                    fontSize: fontSize.lg,
+                    lineHeight: lineHeight.normal,
+                    color: c.ink,
+                  }}
+                >
+                  {kurztext}
+                </p>
+                <div
+                  style={{
+                    marginTop: spacing.xs,
+                    fontFamily: fonts.mono,
+                    fontSize: fontSize.micro,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    color: c.muted,
+                  }}
+                >
+                  {t('bundestagAuto')}
+                </div>
+              </div>
+            )}
             {gezeigt.map((a, i) => (
               <p
                 key={i}
@@ -228,7 +248,7 @@ export default function Abstimmung() {
                 gap: spacing.md,
               }}
             >
-              {absaetze.length > ABSAETZE_SICHTBAR && (
+              {absaetze.length > sichtbarOhneKlick && (
                 <Chip
                   dense
                   label={ganzerText ? t('votePageWhatLess') : t('votePageWhatMore')}
@@ -300,7 +320,7 @@ export default function Abstimmung() {
             animating={halbrundLaeuft}
             onSeatSelect={(sitz) => {
               const abg = sitze.get(sitz)
-              if (abg) setProfilId(abg.aw_id)
+              if (abg) zumProfil(abg.aw_id)
             }}
           />
         </Section>
@@ -326,7 +346,7 @@ export default function Abstimmung() {
             <AbgeordnetenStimmen
               key={data.poll_id}
               eintraege={eintraege}
-              onSelect={setProfilId}
+              onSelect={zumProfil}
               fraktion={listeFraktion}
               onFraktionChange={setListeFraktion}
             />
@@ -369,8 +389,5 @@ export default function Abstimmung() {
         </ul>
       </Section>
     </div>
-
-    {profil && <AbgeordnetenProfil abgeordneter={profil} onClose={schliessen} />}
-    </>
   )
 }

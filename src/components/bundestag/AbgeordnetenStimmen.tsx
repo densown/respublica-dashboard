@@ -2,9 +2,9 @@ import { useMemo, useState, type CSSProperties } from 'react'
 import { Chip, EmptyState, useTheme } from '../../design-system'
 import { fontSize, fonts, lineHeight, radius, spacing } from '../../design-system/tokens'
 import { stimmFlaeche } from '../../design-system/palettes'
-import { StimmMarke } from './AbgeordnetenProfil'
-import { fraktionsFlaeche, OHNE_FRAKTION } from './fraktion'
-import { STIMMEN, type Stimme, type StimmEintrag } from './stimmen'
+import { StimmMarke } from './StimmMarke'
+import { fraktionsFlaeche, OHNE_FRAKTION, wahlkreisKurz } from './fraktion'
+import { fuerSuche, STIMMEN, type Stimme, type StimmEintrag } from './stimmen'
 
 /**
  * Durchsuchbare Liste aller Abgeordneten einer namentlichen Abstimmung.
@@ -22,14 +22,6 @@ const STIMM_ART = {
   abstain: 'enthalten',
   no_show: 'abwesend',
 } as const
-
-function fuerSuche(s: string): string {
-  return s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/ß/g, 'ss')
-}
 
 /**
  * Chip-Reihe, die auf dem Handy waagerecht in sich scrollt statt in vier
@@ -273,7 +265,7 @@ export function AbgeordnetenStimmen({
                     }}
                   >
                     {fraktionsName(e.fraktion)}
-                    {e.wahlkreis ? `, ${e.wahlkreis}` : ''}
+                    {e.wahlkreis ? `, ${wahlkreisKurz(e.wahlkreis)}` : ''}
                   </span>
                 </span>
                 <span

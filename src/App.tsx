@@ -19,6 +19,7 @@ const ElectionPolls = lazy(() => import('./pages/ElectionPolls'))
 const ElectionCandidates = lazy(() => import('./pages/ElectionCandidates'))
 const Bundestag = lazy(() => import('./pages/Bundestag'))
 const Abstimmung = lazy(() => import('./pages/Abstimmung'))
+const Abgeordneter = lazy(() => import('./pages/Abgeordneter'))
 const Versammlungen = lazy(() => import('./pages/Versammlungen'))
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="quellen" element={<Sources />} />
             <Route path="bundestag" element={<Bundestag />} />
             <Route path="bundestag/:pollId" element={<Abstimmung />} />
+            <Route path="bundestag/abgeordnete/:awId" element={<Abgeordneter />} />
             <Route path="gesetze" element={<Legislation />} />
             <Route path="gesetze/:id" element={<Legislation />} />
             <Route path="gesetzgebung" element={<Legislation />} />

@@ -52,6 +52,15 @@ export function normalizeStimme(raw: string): Stimme {
   return 'no_show'
 }
 
+/** Fuer die Suche: klein, ohne Akzente, ß als ss. "Özoğuz" findet man mit "ozoguz". */
+export function fuerSuche(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ß/g, 'ss')
+}
+
 export function nachnameAus(name: string): string {
   const parts = name.trim().replace(/\s+/g, ' ').split(' ')
   return parts[parts.length - 1] ?? name
