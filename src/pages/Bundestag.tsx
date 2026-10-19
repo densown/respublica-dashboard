@@ -1,184 +1,158 @@
-import { useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useCallback, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ExportableContainer,
   LoadingSpinner,
   PageHeader,
+  Section,
   useTheme,
+  ViewToggle,
 } from '../design-system'
-import { fontSize, fonts, radius, spacing } from '../design-system/tokens'
+import { fontSize, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useSeo } from '../hooks/useSeo'
+import { AbgeordnetenListe } from '../components/bundestag/AbgeordnetenListe'
 import { AbstimmungsListe } from '../components/bundestag/AbstimmungsListe'
-import { AbgeordnetenProfil } from '../components/bundestag/AbgeordnetenProfil'
-import {
-  Hemicycle,
-  type SitzverteilungRow,
-} from '../components/bundestag/Hemicycle'
+import { datumLang } from '../components/bundestag/abstimmungText'
+import type { AbstimmungsListenEintrag } from '../components/bundestag/fraktion'
+import { Hemicycle, type SitzverteilungRow } from '../components/bundestag/Hemicycle'
 import {
   nachAwId,
   sitzeZuordnen,
   type AbgeordnetenApiRow,
 } from '../components/bundestag/sitzplaetze'
 import { RAW_SEAT_COUNT } from '../data/bundestag-seats'
-import { useSeo } from '../hooks/useSeo'
+
+type Ansicht = 'abstimmungen' | 'abgeordnete'
 
 /**
- * Bundestag: Sitzverteilung und Liste der namentlichen Abstimmungen. Jede
- * Abstimmung hat ihre eigene Seite unter /bundestag/:pollId (Abstimmung.tsx).
+ * Bundestag: alle namentlichen Abstimmungen als Karten oder alle
+ * Abgeordneten mit Suche. Die Ansicht steht in der Adresse
+ * (?ansicht=abgeordnete), damit Zurueck aus einem Profil wieder in der Liste
+ * landet. Jede Abstimmung hat ihre Seite unter /bundestag/:pollId, jede
+ * Person ihr Profil unter /bundestag/abgeordnete/:awId.
+ * Konzept: projekte/app-redesign/tabs/bundestag.md im Brain.
  */
 export default function Bundestag() {
   const navigate = useNavigate()
-  const { c, t } = useTheme()
-  useSeo({ titel: "Namentliche Abstimmungen im Bundestag", beschreibung: "Wie jede und jeder Abgeordnete abgestimmt hat, nach Themenfeld — und wo sie von der eigenen Fraktion abweichen." })
+  const { c, t, lang } = useTheme()
+  const [params, setParams] = useSearchParams()
+  const ansicht: Ansicht = params.get('ansicht') === 'abgeordnete' ? 'abgeordnete' : 'abstimmungen'
 
-  // Auswahl ueber aw_id statt Sitznummer: so oeffnen Halbrund und Liste
-  // dasselbe Profil.
-  const [selectedAwId, setSelectedAwId] = useState<number | null>(null)
-
-  const { data: sitzverteilung, loading: loadingSitz, error: errSitz } =
-    useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
-  const { data: abstimmungen, loading: loadingList, error: errList } = useApi<
-    { poll_id: number; poll_titel: string; poll_datum: string }[]
-  >('/api/bundestag/abstimmungen')
-
-  const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete')
-
-  const handleSelect = useCallback(
-    (pollId: number) => {
-      navigate(`/bundestag/${pollId}`)
+  const setAnsicht = useCallback(
+    (next: Ansicht) => {
+      setParams(
+        (prev) => {
+          const neu = new URLSearchParams(prev)
+          if (next === 'abgeordnete') neu.set('ansicht', next)
+          else neu.delete('ansicht')
+          return neu
+        },
+        { replace: true },
+      )
     },
-    [navigate],
+    [setParams],
   )
 
-  const loading = loadingSitz || loadingList
-  const error = errSitz || errList
+  useSeo({
+    titel: ansicht === 'abgeordnete' ? 'Abgeordnete im Bundestag' : 'Namentliche Abstimmungen im Bundestag',
+    beschreibung:
+      'Wie jede und jeder Abgeordnete im Bundestag abgestimmt hat, mit Ergebnis, Fraktionen und allen Einzelstimmen, und wo sie von der eigenen Fraktion abweichen.',
+    pfad: ansicht === 'abgeordnete' ? '/bundestag?ansicht=abgeordnete' : '/bundestag',
+  })
 
-  const sitz = sitzverteilung ?? []
-  const list = abstimmungen ?? []
+  const liste = useApi<AbstimmungsListenEintrag[]>(
+    ansicht === 'abstimmungen' ? '/api/bundestag/abstimmungen' : '',
+  )
+  const personen = useApi<AbgeordnetenApiRow[]>(ansicht === 'abgeordnete' ? '/api/abgeordnete' : '')
+  const sitzverteilung = useApi<SitzverteilungRow[]>(
+    ansicht === 'abgeordnete' ? '/api/bundestag/sitzverteilung' : '',
+  )
 
-  const abgeordneteBySeatId = useMemo(() => sitzeZuordnen(abgeordnete ?? []), [abgeordnete])
-  const abgeordneteByAwId = useMemo(() => nachAwId(abgeordnete ?? []), [abgeordnete])
+  const sitze = useMemo(() => sitzeZuordnen(personen.data ?? []), [personen.data])
+  const alle = useMemo(() => [...nachAwId(personen.data ?? []).values()], [personen.data])
 
-  const handleSeatSelect = useCallback(
-    (seatId: number) => {
-      const abg = abgeordneteBySeatId.get(seatId)
-      if (abg) setSelectedAwId(abg.aw_id)
+  const zumProfil = useCallback(
+    (sitz: number) => {
+      const abg = sitze.get(sitz)
+      if (abg) navigate(`/bundestag/abgeordnete/${abg.aw_id}`)
     },
-    [abgeordneteBySeatId],
+    [sitze, navigate],
   )
 
-  const selectedAbgeordneter = useMemo(
-    () =>
-      selectedAwId != null
-        ? (abgeordneteByAwId.get(selectedAwId) ?? null)
-        : null,
-    [abgeordneteByAwId, selectedAwId],
+  const abstimmungen = liste.data ?? []
+  const dek =
+    ansicht === 'abstimmungen'
+      ? abstimmungen.length > 0
+        ? t('bundestagDekVotes')
+            .replace('{n}', String(abstimmungen.length))
+            .replace('{datum}', datumLang(abstimmungen[0].poll_datum, lang))
+        : undefined
+      : alle.length > 0
+        ? t('bundestagDekMembers').replace('{n}', String(alle.length))
+        : undefined
+
+  const fehler = (
+    <p style={{ fontFamily: fonts.body, fontSize: fontSize.base, color: c.inkSoft, margin: 0 }}>
+      {t('dataLoadError')}
+    </p>
   )
-  const closeProfil = useCallback(() => setSelectedAwId(null), [])
 
   return (
     <>
-      <PageHeader title="Bundestag" subtitle={t('bundestagSubtitle')} />
+      <PageHeader kicker={t('bundestagKicker')} title="Bundestag" subtitle={dek} />
 
-      {loading && (
-        <div style={{ marginBottom: spacing.xl }}>
-          <LoadingSpinner />
-        </div>
+      <ViewToggle<Ansicht>
+        value={ansicht}
+        onChange={setAnsicht}
+        ariaLabel={t('bundestagViewLabel')}
+        options={[
+          { value: 'abstimmungen', label: t('bundestagViewVotes') },
+          { value: 'abgeordnete', label: t('bundestagViewMembers') },
+        ]}
+        style={{ marginBottom: spacing.xl }}
+      />
+
+      {ansicht === 'abstimmungen' && (
+        <Section last>
+          {liste.loading && !liste.data ? (
+            <LoadingSpinner />
+          ) : liste.error && !liste.data ? (
+            fehler
+          ) : (
+            <AbstimmungsListe abstimmungen={abstimmungen} />
+          )}
+        </Section>
       )}
 
-      {error && (
-        <p
-          style={{
-            fontFamily: fonts.body,
-            color: c.red,
-            marginBottom: spacing.lg,
-          }}
-        >
-          {t('dataLoadError')}
-        </p>
-      )}
-
-      {!loading && !error && sitz.length > 0 && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr)',
-            gap: spacing.xl,
-            marginBottom: spacing.xl,
-          }}
-        >
-          <ExportableContainer title={t('seatDistribution')}>
-          <div
-            style={{
-              background: c.cardBg,
-              border: `1px solid ${c.cardBorder}`,
-              borderRadius: radius.lg,
-              padding: spacing.xl,
-              boxShadow: c.shadow,
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'baseline',
-                gap: spacing.md,
-                marginBottom: spacing.lg,
-              }}
+      {ansicht === 'abgeordnete' && (
+        <>
+          {sitzverteilung.data && sitzverteilung.data.length > 0 && personen.data && (
+            <Section
+              title={t('seatDistribution')}
+              aside={`${RAW_SEAT_COUNT} ${t('seats')}`}
+              note={t('bundestagSeatsNote')}
             >
-              <h2
-                style={{
-                  margin: 0,
-                  fontFamily: fonts.display,
-                  fontSize: fontSize.lg,
-                  fontWeight: 700,
-                  color: c.ink,
-                }}
-              >
-                {t('seatDistribution')}
-              </h2>
-              <span
-                style={{
-                  fontFamily: fonts.mono,
-                  fontSize: fontSize.md,
-                  color: c.muted,
-                }}
-              >
-                {RAW_SEAT_COUNT} {t('seats')}
-              </span>
-            </div>
-            <Hemicycle
-              sitzverteilung={sitz}
-              abgeordnete={abgeordneteBySeatId}
-              onSeatSelect={handleSeatSelect}
-            />
-          </div>
-          </ExportableContainer>
+              <ExportableContainer title={t('seatDistribution')}>
+                <Hemicycle
+                  sitzverteilung={sitzverteilung.data}
+                  abgeordnete={sitze}
+                  onSeatSelect={zumProfil}
+                />
+              </ExportableContainer>
+            </Section>
+          )}
 
-          <div
-            style={{
-              background: c.cardBg,
-              border: `1px solid ${c.cardBorder}`,
-              borderRadius: radius.lg,
-              padding: spacing.xl,
-              boxShadow: c.shadow,
-            }}
-          >
-            {list.length > 0 ? (
-              <AbstimmungsListe
-                abstimmungen={list}
-                onSelect={handleSelect}
-              />
+          <Section title={t('bundestagMembersTitle')} last>
+            {personen.loading && !personen.data ? (
+              <LoadingSpinner />
+            ) : personen.error && !personen.data ? (
+              fehler
             ) : (
-              <p style={{ fontFamily: fonts.body, color: c.muted }}>
-                {t('emptyStateDemo')}
-              </p>
+              <AbgeordnetenListe abgeordnete={alle} />
             )}
-          </div>
-        </div>
-      )}
-      {selectedAbgeordneter && (
-        <AbgeordnetenProfil abgeordneter={selectedAbgeordneter} onClose={closeProfil} />
+          </Section>
+        </>
       )}
     </>
   )

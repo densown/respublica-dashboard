@@ -1,5 +1,5 @@
 export { ThemeProvider, useTheme } from './ThemeContext'
-export { spacing, fonts, breakpoints, fontSize, fontWeight, lineHeight, radius, elevation, elevationDark, motion } from './tokens'
+export { spacing, fonts, breakpoints, fontSize, fontWeight, lineHeight, radius, elevation, elevationDark, motion, measure } from './tokens'
 export { default as CompareBar } from './components/CompareBar'
 export { default as HBar } from './components/HBar'
 export { default as InfoToggle } from './components/InfoToggle'
@@ -51,5 +51,10 @@ export {
 } from './components/Sidebar'
 export { StatWidget, type StatWidgetProps } from './components/StatWidget'
 export { VoteBar, type VoteBarProps } from './components/VoteBar'
+export {
+  default as ViewToggle,
+  type ViewToggleOption,
+  type ViewToggleProps,
+} from './components/ViewToggle'
 export { stimmFlaeche, type StimmArt, type StimmFarben } from './palettes'
 export { ExportableContainer, type ExportableContainerProps } from './components/ExportableContainer'

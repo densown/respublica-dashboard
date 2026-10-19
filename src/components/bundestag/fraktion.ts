@@ -35,7 +35,22 @@ export type AbstimmungsDetailData = {
   links?: QuellenLink[]
   angenommen?: boolean | null
   quelle_url?: string | null
+  /**
+   * Ab API-Migration 020: zwei Saetze, automatisch aus Titel und Einleitung
+   * geschrieben (scripts/kurztexte_abstimmungen.py). Ohne Freigabe, deshalb
+   * steht ueberall "automatisch zusammengefasst" daneben. null, solange
+   * keiner zur aktuellen Einleitung passt.
+   */
+  kurztext?: string | null
+  kurztext_en?: string | null
 }
+
+/**
+ * Eintrag aus /api/bundestag/abstimmungen. Ergebnis, Fraktionen und
+ * Kurztexte liefert die API erst ab Migration 020; davor nur Titel und Datum.
+ */
+export type AbstimmungsListenEintrag = Pick<AbstimmungsDetailData, 'poll_id' | 'poll_titel' | 'poll_datum'> &
+  Partial<Pick<AbstimmungsDetailData, 'ergebnis' | 'fraktionen' | 'angenommen' | 'kurztext' | 'kurztext_en'>>
 
 /** Link aus dem Einleitungstext, meist eine Drucksache als PDF. */
 export type QuellenLink = {
@@ -62,6 +77,26 @@ const normalizeFraktion = (f: string): string => f.replace(/­/g, '').trim()
  */
 export function ohneWahlperiode(s: string | null | undefined): string {
   return (s ?? '').replace(BUNDESTAG_WP_SUFFIX, '').trim()
+}
+
+/**
+ * Name und Nummer des Wahlkreises getrennt: "92 - Köln I" wird
+ * { nummer: "92", name: "Köln I" }. Die Seiten zeigen "Köln I (92)"; der
+ * Bindestrich der Quelle liest sich wie ein Gedankenstrich. null ohne
+ * Wahlkreis.
+ */
+export function wahlkreisTeile(s: string | null | undefined): { nummer: string | null; name: string } | null {
+  const ohne = ohneWahlperiode(s)
+  if (!ohne) return null
+  const m = /^(\d+)\s*-\s*(.+)$/.exec(ohne)
+  return m ? { nummer: m[1], name: m[2].trim() } : { nummer: null, name: ohne }
+}
+
+/** "Köln I (92)" oder der Name, wie er kommt. */
+export function wahlkreisKurz(s: string | null | undefined): string {
+  const w = wahlkreisTeile(s)
+  if (!w) return ''
+  return w.nummer ? `${w.name} (${w.nummer})` : w.name
 }
 
 /** Kürzt API-Parteilabel für die Ansicht */

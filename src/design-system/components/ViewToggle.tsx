@@ -1,19 +1,21 @@
 import type { CSSProperties } from 'react'
 import { useTheme } from '../ThemeContext'
-import { fonts, radius, spacing } from '../tokens'
+import { fonts, fontSize, radius, spacing } from '../tokens'
 
 export type TradeTimeseriesView = 'lines' | 'bars' | 'stacked'
 export type ViewToggleValue = TradeTimeseriesView | 'export' | 'import'
 
-export type ViewToggleOption = {
-  value: ViewToggleValue
+export type ViewToggleOption<T extends string = ViewToggleValue> = {
+  value: T
   label: string
 }
 
-export type ViewToggleProps = {
-  value: ViewToggleValue
-  onChange: (next: ViewToggleValue) => void
-  options?: ViewToggleOption[]
+export type ViewToggleProps<T extends string = ViewToggleValue> = {
+  value: T
+  onChange: (next: T) => void
+  options?: ViewToggleOption<T>[]
+  /** Wofuer der Umschalter ist, fuer Screenreader. */
+  ariaLabel?: string
   style?: CSSProperties
 }
 
@@ -23,16 +25,27 @@ const DEFAULT_OPTIONS: ViewToggleOption[] = [
   { value: 'stacked', label: 'Stacked' },
 ]
 
-export default function ViewToggle({ value, onChange, options, style }: ViewToggleProps) {
+/**
+ * Umschalter zwischen Ansichten, die sich ausschliessen (docs/DESIGN.md,
+ * Abschnitt 6). Urspruenglich nur fuer die Handelsdaten gebaut; seit der
+ * Bundestag-Uebersicht mit beliebigen Werten und 44 px Touch-Ziel.
+ */
+export default function ViewToggle<T extends string = ViewToggleValue>({
+  value,
+  onChange,
+  options,
+  ariaLabel,
+  style,
+}: ViewToggleProps<T>) {
   const { c } = useTheme()
-  const opts = options && options.length ? options : DEFAULT_OPTIONS
+  const opts = options && options.length ? options : (DEFAULT_OPTIONS as ViewToggleOption<string>[] as ViewToggleOption<T>[])
 
   return (
     <div
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 4,
+        gap: spacing.xs,
         padding: 3,
         border: `1px solid ${c.border}`,
         borderRadius: radius.lg,
@@ -40,7 +53,7 @@ export default function ViewToggle({ value, onChange, options, style }: ViewTogg
         ...style,
       }}
       role="tablist"
-      aria-label="trade view toggle"
+      aria-label={ariaLabel}
     >
       {opts.map((opt) => {
         const active = opt.value === value
@@ -49,17 +62,19 @@ export default function ViewToggle({ value, onChange, options, style }: ViewTogg
             key={opt.value}
             type="button"
             role="tab"
+            className="rp-chip"
             aria-selected={active}
             onClick={() => onChange(opt.value)}
             style={{
-              minHeight: 32,
+              minHeight: 44,
               padding: `0 ${spacing.md}px`,
               border: `1px solid ${active ? c.red : 'transparent'}`,
               borderRadius: radius.md,
               background: active ? c.surface : 'transparent',
               color: active ? c.red : c.muted,
               fontFamily: fonts.mono,
-              fontSize: 10,
+              fontSize: fontSize.micro,
+              fontWeight: active ? 600 : 400,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               cursor: 'pointer',

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Chip, useTheme, VoteBar } from '../../design-system'
 import { fontSize, fonts, light, lineHeight, spacing } from '../../design-system/tokens'
 import type { I18nKey } from '../../design-system/i18n'
@@ -10,6 +10,7 @@ import {
   ergebnisWort,
   ergebnisZeile,
   kurzfassung,
+  kurztextFuer,
   stimmenKurz,
   ueberBeschlussempfehlung,
 } from './abstimmungText'
@@ -50,26 +51,53 @@ type KarteProps = {
   abweichler: Map<string, StimmEintrag[]>
   kicker: string
   t: (key: I18nKey) => string
+  lang: 'de' | 'en'
 }
 
 /** Das Bild selbst, in voller Groesse. Die Seite zeigt es verkleinert. */
 export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function AbstimmungsKarte(
-  { data, abweichler, kicker, t },
+  { data, abweichler, kicker, t, lang },
   ref,
 ) {
   const { ergebnis } = data
   const titel = anzeigeTitel(data.poll_titel)
   const zeilen = nachGroesse(data.fraktionen)
-  const worum = kurzfassung(data.intro)
+  // Der Kurztext ist fuer genau diese Stelle geschrieben. Ohne ihn die
+  // ersten Saetze der Einleitung, wie bisher, aber nur auf Deutsch.
+  const kurztext = kurztextFuer(data, lang)
+  const worum = kurztext ?? (lang === 'de' ? kurzfassung(data.intro) : null)
+
+  // Passt der Inhalt nicht auf 1080 x 1350, rueckt die Karte enger zusammen,
+  // statt unten Quelle und Link abzuschneiden. Gemessen wird nach dem
+  // Zeichnen und noch einmal, wenn die Schriften geladen sind.
+  const [eng, setEng] = useState(false)
+  const innen = useRef<HTMLDivElement | null>(null)
+  const setzeRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      innen.current = el
+      if (typeof ref === 'function') ref(el)
+      else if (ref) ref.current = el
+    },
+    [ref],
+  )
+  useLayoutEffect(() => setEng(false), [data.poll_id, lang])
+  useLayoutEffect(() => {
+    const pruefen = () => {
+      const el = innen.current
+      if (el && el.scrollHeight > el.clientHeight + 1) setEng(true)
+    }
+    pruefen()
+    void document.fonts?.ready.then(pruefen)
+  })
   // Ohne Einleitung rutschen die Abschnitte eine Nummer vor
   let nummer = 0
-  const abschnitt = (titel: string) => {
+  const abschnitt = (titel: string, zusatz?: string) => {
     nummer += 1
     return (
       <div
         style={{
-          marginTop: 22,
-          marginBottom: 14,
+          marginTop: eng ? 14 : 22,
+          marginBottom: eng ? 8 : 14,
           paddingTop: 12,
           borderTop: `2px solid ${K.ink}`,
           display: 'flex',
@@ -83,13 +111,28 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
           {nummer}
         </span>
         {titel}
+        {zusatz && (
+          <span
+            style={{
+              marginLeft: 'auto',
+              fontFamily: fonts.mono,
+              fontSize: 16,
+              fontWeight: 400,
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              color: K.muted,
+            }}
+          >
+            {zusatz}
+          </span>
+        )}
       </div>
     )
   }
 
   return (
     <div
-      ref={ref}
+      ref={setzeRef}
       style={{
         width: BREITE,
         height: HOEHE,
@@ -127,8 +170,8 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
 
       {worum && (
         <>
-          {abschnitt(t('votePageWhat'))}
-          <div style={{ fontSize: 25, lineHeight: 1.4 }}>{worum}</div>
+          {abschnitt(t('votePageWhat'), kurztext ? t('bundestagAuto') : undefined)}
+          <div style={{ fontSize: eng ? 23 : 25, lineHeight: eng ? 1.35 : 1.4 }}>{worum}</div>
         </>
       )}
 
@@ -153,7 +196,7 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
           t,
         )}
       />
-      <div style={{ marginTop: 10, fontSize: 20, color: K.inkSoft }}>
+      <div style={{ marginTop: eng ? 6 : 10, fontSize: 20, color: K.inkSoft }}>
         {/* Das Bild wird ohne Seite geteilt, also steht hier, wofuer Ja stand */}
         {ueberBeschlussempfehlung(data.poll_titel) && `${t('votePageDekRecommendation')} `}
         {ergebnisZeile(ergebnis, t)}
@@ -166,7 +209,7 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
           // Eine Zeile bei 21 px auf 634 px Breite, etwa 62 Zeichen
           const notiz = abweichlerNotiz(f, abweichler.get(kurz), t, 62)
           return (
-            <div key={f.partei} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: 12 }}>
+            <div key={f.partei} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: eng ? 6 : 12 }}>
               <div
                 style={{
                   width: 278,
@@ -405,7 +448,7 @@ export function AbstimmungsBild({ data, abweichler, kicker }: AbstimmungsBildPro
             transformOrigin: 'top left',
           }}
         >
-          <AbstimmungsKarte ref={karteRef} data={data} abweichler={abweichler} kicker={kicker} t={t} />
+          <AbstimmungsKarte ref={karteRef} data={data} abweichler={abweichler} kicker={kicker} t={t} lang={lang} />
         </div>
       </div>
 
