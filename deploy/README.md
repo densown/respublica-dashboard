@@ -16,3 +16,7 @@ deploy/rollback.sh 77507db    # auf eine bestimmte Version (Name oder Commit)
 ```
 
 Der Timer laesst die Version danach stehen und liefert erst den naechsten neuen Commit auf main wieder aus. Mehr, auch zur API: [respublica-api/deploy/README.md](https://github.com/densown/respublica-api/blob/main/deploy/README.md#zurueck-auf-eine-fruehere-version).
+
+## nginx
+
+Welche Pfade der Server als Seite, Weiterleitung oder 404 ausliefert, steht in [nginx/app-routen.conf](nginx/app-routen.conf). Die Datei wird nicht automatisch eingespielt, Anleitung in [nginx/README.md](nginx/README.md).

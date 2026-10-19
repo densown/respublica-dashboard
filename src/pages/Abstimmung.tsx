@@ -118,10 +118,14 @@ export default function Abstimmung() {
   const kicker = t('votePageKicker').replace('{datum}', datum)
   const dek = data ? vorspann(data, t, lang) : ''
 
+  const nichtDa = !gueltig || error === 'HTTP 404'
+
   useSeo({
     titel: data ? anzeigeTitel(data.poll_titel) : t('votes'),
     beschreibung: dek || undefined,
     pfad: gueltig ? `/bundestag/${id}` : undefined,
+    // Unbekannte Nummer: Seite bleibt erreichbar, aber nicht im Suchindex
+    nichtIndexieren: nichtDa,
   })
 
   const zurFraktion = useCallback((kurzname: string) => {
@@ -151,7 +155,6 @@ export default function Abstimmung() {
   )
 
   if (!gueltig || (error && !data)) {
-    const nichtDa = !gueltig || error === 'HTTP 404'
     return (
       <>
         {zurueck}
