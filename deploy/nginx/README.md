@@ -9,7 +9,7 @@
 | `/abgeordnete`, `/abgeordnete/<nr>` | 301 nach `/bundestag?ansicht=abgeordnete` bzw. `/bundestag/abgeordnete/<nr>` |
 | `/demokratie-index` | 301 nach `/demokratie` |
 | Dateien aus `dist` (Skripte, Bilder, `robots.txt`, `sitemap.xml`, `data/`) | 200 |
-| alles andere | 404, als Inhalt die App mit ihrer Fehlerseite |
+| alles andere | 404, als Inhalt die App mit ihrer Fehlerseite, nicht im Cache |
 
 Vorher lieferte jeder Pfad index.html mit Status 200. Wer ohne JavaScript
 abruft (Suchmaschinen, KI-Assistenten), sah unter jeder Adresse dieselbe
@@ -20,25 +20,34 @@ eingespielt ist. Der automatische Deploy fasst nginx nicht an.
 
 ## Einspielen (einmalig, als root)
 
+Das Snippet setzt den server-Block voraus, wie er im Oktober 2026 auf dem
+Server steht: `snippets/security-headers.conf` (alle Header mit `always`),
+`location = /index.html` mit `no-store`, die Regex-Location fuer Skripte und
+Bilder, `^~ /data/`, `= /manifest.webmanifest` und `/api/`. Weicht der Block
+davon ab, erst abgleichen.
+
 ```bash
-# 1. Server-Block finden und sichern
-grep -rln "app.respublica.media" /etc/nginx/sites-enabled/
-DATEI=/etc/nginx/sites-available/<datei aus Schritt 1>
+# 1. Datei finden und sichern. sites-enabled enthaelt einen Symlink,
+#    grep -r folgt ihm nicht, deshalb mit Stern.
+grep -l "app.respublica.media" /etc/nginx/sites-enabled/*
+DATEI=/etc/nginx/sites-available/app.respublica.media
 mkdir -p /root/backups/nginx
-cp "$DATEI" /root/backups/nginx/$(basename "$DATEI").bak-$(date +%F)
+cp "$DATEI" /root/backups/nginx/app.respublica.media.bak-$(date +%F)
 
 # 2. Regeln an ihren Platz kopieren
 cp /root/apps/dashboard/deploy/nginx/app-routen.conf /etc/nginx/snippets/respublica-app-routen.conf
 
-# 3. Im server-Block mit "listen 443" fuer app.respublica.media den bisherigen
-#    Block   location / { try_files $uri $uri/ /index.html; }   ersetzen durch
+# 3. Im server-Block mit "listen 443" nur diesen Block
+#        location / {
+#            try_files $uri $uri/ /index.html;
+#            include snippets/security-headers.conf;
+#        }
+#    ersetzen durch
 #        include snippets/respublica-app-routen.conf;
-#    root, location /api/ und Zertifikatszeilen bleiben stehen.
-#    Gibt es dort schon "location = /", weitere Weiterleitungen oder
-#    error_page, vorher abgleichen.
+#    Alle anderen Locations bleiben stehen, besonders location = /index.html.
 
 # 4. Pruefen und neu laden
-nginx -t && systemctl reload nginx
+/usr/sbin/nginx -t && systemctl reload nginx
 
 # 5. Antworten pruefen, alles muss "ok" sein
 /root/apps/dashboard/deploy/nginx/pruefen.sh
@@ -47,8 +56,8 @@ nginx -t && systemctl reload nginx
 Zurueck, falls etwas nicht stimmt:
 
 ```bash
-cp /root/backups/nginx/<datei>.bak-<datum> "$DATEI"
-nginx -t && systemctl reload nginx
+cp /root/backups/nginx/app.respublica.media.bak-<datum> /etc/nginx/sites-available/app.respublica.media
+/usr/sbin/nginx -t && systemctl reload nginx
 ```
 
 ## Neue Route in der App
@@ -64,7 +73,8 @@ auf dem Server die alte Liste aktiv.
 ## Lokal testen
 
 `pruefen.sh` nimmt eine andere Adresse als Argument. Mit einem nginx im
-Container, der `dist/` ausliefert und `app-routen.conf` einbindet:
+Container, der den server-Block von oben nachbaut, `dist/` ausliefert und
+`app-routen.conf` an Stelle von `location /` einbindet:
 
 ```bash
 npm run build
