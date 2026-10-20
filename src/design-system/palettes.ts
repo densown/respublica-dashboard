@@ -109,7 +109,7 @@ export function textAuf(hex: string): string {
 
 export type StimmArt = 'ja' | 'nein' | 'enthalten' | 'abwesend'
 
-export type StimmFarben = Pick<ThemeColors, 'yes' | 'no' | 'abstain' | 'hatch' | 'muted'>
+export type StimmFarben = Pick<ThemeColors, 'yes' | 'no' | 'abstain' | 'hatch' | 'muted' | 'ink'>
 
 /**
  * Flaeche einer Stimmart: Farbe fuer Ja, Nein, Enthaltung, Schraffur fuer

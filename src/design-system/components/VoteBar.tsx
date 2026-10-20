@@ -181,7 +181,8 @@ export function VoteBar({
             alignItems: 'center',
             paddingLeft: INNENABSTAND / 2,
             whiteSpace: 'nowrap',
-            color: c.muted,
+            // Tinte, nicht Grau: auf Papier liest sich Grau als Nebensache
+            color: c.ink,
             fontFamily: fonts.mono,
             fontWeight: 500,
             fontSize: schrift,
