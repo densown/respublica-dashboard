@@ -4,6 +4,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { abweichlerNotiz, stimmenKurz } from './abstimmungText'
 import {
   fraktionsFlaeche,
+  fraktionsGroesse,
   fraktionsSchrift,
   nachGroesse,
   shortFraktionName,
@@ -22,13 +23,16 @@ export interface FraktionsStimmenProps {
 /**
  * Eine Zeile je Fraktion wie auf den Abstimmungskarten: Name in Parteifarbe
  * mit Farbstreifen, durchgehender Balken, darunter rot, wer abgewichen ist.
- * Groesste Fraktion oben, Fraktionslose zuletzt.
+ * Groesste Fraktion oben, Fraktionslose zuletzt. Alle Balken haben denselben
+ * Massstab: die groesste Fraktion fuellt die Breite, jede Stimme ist in jeder
+ * Zeile gleich breit.
  */
 export function FraktionsStimmen({ fraktionen, abweichler, onFraktion }: FraktionsStimmenProps) {
   const { c, t, theme } = useTheme()
   const dunkel = theme === 'dark'
   const isMobile = useIsMobile()
   const zeilen = nachGroesse(fraktionen)
+  const groesste = Math.max(0, ...zeilen.map(fraktionsGroesse))
 
   return (
     <div role="list">
@@ -98,6 +102,7 @@ export function FraktionsStimmen({ fraktionen, abweichler, onFraktion }: Fraktio
                   enthalten={f.enthalten}
                   abwesend={f.abwesend}
                   height={32}
+                  bezug={groesste}
                   ariaLabel={kurzfassung}
                 />
                 {notiz && (

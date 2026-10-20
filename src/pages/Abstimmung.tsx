@@ -304,7 +304,7 @@ export default function Abstimmung() {
       <Section
         number={naechste()}
         title={t('votePageGroups')}
-        note={`${t('votePageGroupsNote')} ${t('votePageGroupsTap')}`}
+        note={`${t('votePageGroupsScale')} ${t('votePageGroupsNote')} ${t('votePageGroupsTap')}`}
       >
         <FraktionsStimmen
           fraktionen={data.fraktionen}
