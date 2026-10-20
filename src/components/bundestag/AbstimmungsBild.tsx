@@ -16,6 +16,7 @@ import {
 } from './abstimmungText'
 import {
   fraktionsFlaeche,
+  fraktionsGroesse,
   fraktionsSchrift,
   nachGroesse,
   shortFraktionName,
@@ -45,6 +46,8 @@ function titelPx(titel: string): number {
   if (n <= 110) return 52
   return 46
 }
+// Kleiner wird der Titel nicht, auch wenn ein Wort dann noch uebersteht
+const TITEL_MIN_PX = 40
 
 type KarteProps = {
   data: AbstimmungsDetailData
@@ -62,6 +65,8 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
   const { ergebnis } = data
   const titel = anzeigeTitel(data.poll_titel)
   const zeilen = nachGroesse(data.fraktionen)
+  // Ein Massstab fuer alle Fraktionszeilen, wie auf der Seite
+  const groesste = Math.max(0, ...zeilen.map(fraktionsGroesse))
   // Der Kurztext ist fuer genau diese Stelle geschrieben. Ohne ihn die
   // ersten Saetze der Einleitung, wie bisher, aber nur auf Deutsch.
   const kurztext = kurztextFuer(data, lang)
@@ -71,6 +76,11 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
   // statt unten Quelle und Link abzuschneiden. Gemessen wird nach dem
   // Zeichnen und noch einmal, wenn die Schriften geladen sind.
   const [eng, setEng] = useState(false)
+  // Lange Woerter wie "Brennstoffemissionshandelsgesetzes" trennt der
+  // Browser, wo er Deutsch trennen kann. Kann er es nicht, ragt das Wort
+  // ueber den Rand, und der Titel wird schrittweise kleiner.
+  const [titelGroesse, setTitelGroesse] = useState(() => titelPx(titel))
+  const titelRef = useRef<HTMLDivElement>(null)
   const innen = useRef<HTMLDivElement | null>(null)
   const setzeRef = useCallback(
     (el: HTMLDivElement | null) => {
@@ -80,9 +90,17 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
     },
     [ref],
   )
-  useLayoutEffect(() => setEng(false), [data.poll_id, lang])
+  useLayoutEffect(() => {
+    setEng(false)
+    setTitelGroesse(titelPx(titel))
+  }, [data.poll_id, lang, titel])
   useLayoutEffect(() => {
     const pruefen = () => {
+      const kopf = titelRef.current
+      if (kopf && kopf.scrollWidth > kopf.clientWidth + 1) {
+        setTitelGroesse((g) => Math.max(TITEL_MIN_PX, g - 4))
+        return
+      }
       const el = innen.current
       if (el && el.scrollHeight > el.clientHeight + 1) setEng(true)
     }
@@ -155,14 +173,19 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
       </div>
 
       <div
+        ref={titelRef}
+        // Der Titel kommt immer deutsch von abgeordnetenwatch, auch im englischen Bild
+        lang="de"
         style={{
           marginTop: 28,
           fontFamily: fonts.display,
           fontWeight: 900,
-          fontSize: titelPx(titel),
+          fontSize: titelGroesse,
           lineHeight: 1.04,
           letterSpacing: -1.2,
           maxWidth: 900,
+          hyphens: 'auto',
+          WebkitHyphens: 'auto',
         }}
       >
         {titel}
@@ -237,6 +260,7 @@ export const AbstimmungsKarte = forwardRef<HTMLDivElement, KarteProps>(function 
                   enthalten={f.enthalten}
                   abwesend={f.abwesend}
                   height={44}
+                  bezug={groesste}
                   schriftPx={19}
                   farben={K}
                   animiert={false}

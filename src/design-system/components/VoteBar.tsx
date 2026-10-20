@@ -17,6 +17,14 @@ export type VoteBarProps = {
    * wenn sie hineinpasst.
    */
   beschriftung?: 'zahl' | 'wort' | 'keine'
+  /**
+   * Stimmenzahl, die der vollen Breite entspricht. Ohne Angabe fuellt jeder
+   * Balken die Breite und zeigt nur Anteile innerhalb der Gruppe; dann wirkt
+   * AfD mit 133 von 150 kuerzer als SPD mit 108 von 120. Mit der Groesse der
+   * groessten Fraktion ist jede Stimme in allen Zeilen gleich breit, und eine
+   * kleine Fraktion hat einen kurzen Balken.
+   */
+  bezug?: number
   /** Kurzform fuer Screenreader, etwa "527 Ja, 18 Nein, 23 Enthaltungen". */
   ariaLabel: string
   /**
@@ -54,6 +62,7 @@ export function VoteBar({
   abwesend,
   height = 28,
   beschriftung = 'zahl',
+  bezug,
   ariaLabel,
   farben,
   animiert = true,
@@ -87,8 +96,12 @@ export function VoteBar({
   }, [])
 
   const gesamt = ja + nein + enthalten + abwesend
+  const basis = Math.max(gesamt, bezug ?? 0)
   const pxSchrift = schriftPx ?? (beschriftung === 'wort' ? 13 : 12)
   const schrift = schriftPx ? `${schriftPx}px` : beschriftung === 'wort' ? fontSize.sm : fontSize.xs
+
+  const passtIn = (text: string, platz: number) =>
+    text.length * pxSchrift * ZEICHENBREITE + INNENABSTAND <= platz
 
   const wort: Record<StimmArt, string> = {
     ja: t('yes'),
@@ -97,12 +110,36 @@ export function VoteBar({
     abwesend: '',
   }
 
-  const segmente: { art: StimmArt; n: number }[] = [
-    { art: 'ja', n: ja },
-    { art: 'nein', n: nein },
-    { art: 'enthalten', n: enthalten },
-    { art: 'abwesend', n: abwesend },
-  ]
+  const segmente = (
+    [
+      { art: 'ja', n: ja },
+      { art: 'nein', n: nein },
+      { art: 'enthalten', n: enthalten },
+      { art: 'abwesend', n: abwesend },
+    ] as { art: StimmArt; n: number }[]
+  )
+    .filter(({ n }) => n > 0)
+    .map(({ art, n }) => {
+      const anteil = n / basis
+      const text =
+        art === 'abwesend' || beschriftung === 'keine'
+          ? ''
+          : beschriftung === 'wort'
+            ? `${n} ${wort[art]}`
+            : String(n)
+      return { art, n, anteil, text, passt: passtIn(text, anteil * breite) }
+    })
+
+  // Kurzer Balken ohne eine einzige Zahl darin, etwa drei Fraktionslose:
+  // die Stimmen stehen rechts daneben im freien Platz.
+  const daneben =
+    bezug != null && beschriftung !== 'keine' && !segmente.some((s) => s.text && s.passt)
+      ? segmente
+          .filter((s) => s.art !== 'abwesend')
+          .map((s) => `${s.n} ${wort[s.art]}`)
+          .join(', ')
+      : ''
+  const zeigeDaneben = daneben !== '' && passtIn(daneben, (1 - gesamt / basis) * breite)
 
   return (
     <div
@@ -112,16 +149,7 @@ export function VoteBar({
       style={{ display: 'flex', width: '100%', height, ...style }}
     >
       {gesamt > 0 &&
-        segmente.map(({ art, n }) => {
-          if (n <= 0) return null
-          const anteil = n / gesamt
-          const text =
-            art === 'abwesend' || beschriftung === 'keine'
-              ? ''
-              : beschriftung === 'wort'
-                ? `${n} ${wort[art]}`
-                : String(n)
-          const passt = text.length * pxSchrift * ZEICHENBREITE + INNENABSTAND <= anteil * breite
+        segmente.map(({ art, anteil, text, passt }) => {
           const flaeche = stimmFlaeche(art, c)
           return (
             <span
@@ -146,6 +174,22 @@ export function VoteBar({
             </span>
           )
         })}
+      {zeigeDaneben && gezeigt && (
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: INNENABSTAND / 2,
+            whiteSpace: 'nowrap',
+            color: c.muted,
+            fontFamily: fonts.mono,
+            fontWeight: 500,
+            fontSize: schrift,
+          }}
+        >
+          {daneben}
+        </span>
+      )}
     </div>
   )
 }

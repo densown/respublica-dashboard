@@ -234,15 +234,19 @@ export function hatFraktionslinie(kurzname: string): boolean {
   return kurzname !== 'Fraktionslos' && kurzname !== 'SSW' && kurzname !== OHNE_FRAKTION
 }
 
+/** Mitglieder einer Fraktion bei dieser Abstimmung, abwesende eingeschlossen. */
+export function fraktionsGroesse(f: FraktionsErgebnis): number {
+  return f.ja + f.nein + f.enthalten + f.abwesend
+}
+
 /**
  * Nach Groesse, wie im Plenarprotokoll und auf den Abstimmungskarten:
  * groesste Fraktion oben, Fraktionslose zuletzt.
  */
 export function nachGroesse<T extends FraktionsErgebnis>(fraktionen: T[]): T[] {
-  const groesse = (f: FraktionsErgebnis) => f.ja + f.nein + f.enthalten + f.abwesend
   return [...fraktionen].sort((a, b) => {
     const la = hatFraktionslinie(shortFraktionName(a.partei)) ? 0 : 1
     const lb = hatFraktionslinie(shortFraktionName(b.partei)) ? 0 : 1
-    return la - lb || groesse(b) - groesse(a)
+    return la - lb || fraktionsGroesse(b) - fraktionsGroesse(a)
   })
 }
