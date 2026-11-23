@@ -1,6 +1,6 @@
 import { RAW_SEATS } from '../../data/bundestag-seats'
 import { ohneWahlperiode, shortFraktionName } from './fraktion'
-import type { StimmenZeile } from './stimmen'
+import { normalizeStimme, type Stimme, type StimmenZeile } from './stimmen'
 
 /**
  * Wer sitzt wo im Halbrund. Die Sitzdaten kennen nur Fraktionen, die API nur
@@ -105,8 +105,29 @@ function alsAnzeige(a: AbgeordnetenApiRow): SitzAbgeordneter {
   }
 }
 
-/** Sitznummer im Halbrund zu Abgeordneten. */
-export function sitzeZuordnen(abgeordnete: AbgeordnetenApiRow[]): Map<number, SitzAbgeordneter> {
+/** Mitte des Halbrunds in den Koordinaten der Sitzdaten. */
+const MITTE_X = 402
+const MITTE_Y = 388
+
+/** Reihenfolge im Block einer Fraktion: Ja, Nein, Enthalten, nicht abgegeben. */
+const STIMM_RANG: Record<Stimme, number> = { yes: 0, no: 1, abstain: 2, no_show: 3 }
+
+/** Winkel eines Sitzes, von links (gross) nach rechts (klein). */
+function sitzWinkel(seatId: number): number {
+  const [x, y] = RAW_SEATS[seatId]
+  return Math.atan2(MITTE_Y - y, x - MITTE_X)
+}
+
+/**
+ * Sitznummer im Halbrund zu Abgeordneten. Mit `rang` (abgeordnetenwatch-ID zu
+ * Rang) sitzt jede Fraktion nach Rang geordnet in Keilen von links nach
+ * rechts: so stehen bei einer Abstimmung die Ja-Stimmen einer Fraktion
+ * beieinander und Abweichler fallen als eigener Streifen auf.
+ */
+export function sitzeZuordnen(
+  abgeordnete: AbgeordnetenApiRow[],
+  rang?: Map<number, number>,
+): Map<number, SitzAbgeordneter> {
   const map = new Map<number, SitzAbgeordneter>()
 
   const seatsByKategorie = Object.fromEntries(KATEGORIEN.map((k) => [k, [] as number[]])) as Record<
@@ -116,6 +137,15 @@ export function sitzeZuordnen(abgeordnete: AbgeordnetenApiRow[]): Map<number, Si
   for (let seatId = 0; seatId < RAW_SEATS.length; seatId++) {
     const rawLabel = normalizeFraktion(RAW_SEATS[seatId][2])
     seatsByKategorie[apiFraktionToRawKategorie(canonicalKey(rawLabel))].push(seatId)
+  }
+  if (rang) {
+    for (const k of KATEGORIEN) {
+      seatsByKategorie[k].sort((a, b) => {
+        const d = sitzWinkel(b) - sitzWinkel(a)
+        if (Math.abs(d) > 1e-6) return d
+        return RAW_SEATS[a][1] - RAW_SEATS[b][1]
+      })
+    }
   }
   const offsetByKategorie = Object.fromEntries(KATEGORIEN.map((k) => [k, 0])) as Record<
     RawKategorie,
@@ -139,9 +169,11 @@ export function sitzeZuordnen(abgeordnete: AbgeordnetenApiRow[]): Map<number, Si
     const start = offsetByKategorie[k]
     if (start >= seatIndices.length) continue
 
-    const abgListSorted = [...abgListRaw].sort((a, b) =>
-      getNachname(a).localeCompare(getNachname(b), 'de', { sensitivity: 'base' }),
-    )
+    const abgListSorted = [...abgListRaw].sort((a, b) => {
+      const r = (rang?.get(a.aw_id) ?? 0) - (rang?.get(b.aw_id) ?? 0)
+      if (r !== 0) return r
+      return getNachname(a).localeCompare(getNachname(b), 'de', { sensitivity: 'base' })
+    })
     const take = Math.min(seatIndices.length - start, abgListSorted.length)
     for (let i = 0; i < take; i++) {
       map.set(seatIndices[start + i], alsAnzeige(abgListSorted[i]))
@@ -167,7 +199,9 @@ export function imAmt(a: AbgeordnetenApiRow, heute = new Date().toISOString().sl
 /**
  * Sitze und Personen fuer eine einzelne Abstimmung: wer damals abgestimmt hat,
  * mit der Fraktion von damals. So sitzen Nachruecker und spaeter
- * Ausgeschiedene dort, wo sie an dem Tag sassen. Wahlkreis, Foto und Profil
+ * Ausgeschiedene dort, wo sie an dem Tag sassen. Innerhalb der Fraktion
+ * sitzen sie nach Stimme geordnet (Ja, Nein, Enthalten, nicht abgegeben),
+ * damit das Bild auf einen Blick lesbar ist. Wahlkreis, Foto und Profil
  * kommen aus /api/abgeordnete?alle=1. Ohne Einzelstimmen (neue Abstimmung,
  * Stimmen noch nicht geladen) gilt die heutige Besetzung.
  */
@@ -192,6 +226,9 @@ export function abstimmungsSitze(
       nachname: a?.nachname,
     }
   })
-  return { sitze: sitzeZuordnen(zeilen), personen: nachAwId(zeilen) }
+  const rang = new Map(
+    votes.map((v) => [v.mandate_id, STIMM_RANG[normalizeStimme(v.vote)]] as const),
+  )
+  return { sitze: sitzeZuordnen(zeilen, rang), personen: nachAwId(zeilen) }
 }
 
