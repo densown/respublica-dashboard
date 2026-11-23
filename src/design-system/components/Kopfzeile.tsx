@@ -67,6 +67,43 @@ export function Kopfzeile({
     </Link>
   )
 
+  // Unterpunkte des aktiven Ressorts. Auch in der schmalen Fassung: ohne sie
+  // waren Wahlergebnisse, Abgeordnete und Urteile auf dem Handy nicht erreichbar.
+  const unternav = kinder.length > 0 && (
+    <nav
+      aria-label={t('navUnternavigation')}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: spacing.lg,
+        borderBottom: `1px solid ${c.border}`,
+      }}
+    >
+      {kinder.map((k) => {
+        const istAktiv = k.id === aktivesKind
+        return (
+          <Link
+            key={k.id}
+            to={k.path}
+            aria-current={istAktiv ? 'page' : undefined}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              minHeight: schmal ? 44 : 40,
+              fontFamily: fonts.body,
+              fontStyle: 'italic',
+              fontSize: fontSize.md,
+              color: istAktiv ? c.red : c.muted,
+              textDecoration: 'none',
+            }}
+          >
+            {k.label}
+          </Link>
+        )
+      })}
+    </nav>
+  )
+
   if (schmal) {
     return (
       <header style={{ flexShrink: 0, background: c.bg }}>
@@ -100,6 +137,7 @@ export function Kopfzeile({
           liegt auf dem iPhone die Adressleiste von Safari und ueberdeckte sie.
         */}
         {ressorts.length > 0 && <TabLeiste ziele={ressorts} aktiv={aktivesRessort ?? ''} />}
+        {unternav}
       </header>
     )
   }
@@ -214,40 +252,7 @@ export function Kopfzeile({
           </div>
         </div>
 
-        {kinder.length > 0 && (
-          <nav
-            aria-label={t('navUnternavigation')}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: spacing.lg,
-              borderBottom: `1px solid ${c.border}`,
-            }}
-          >
-            {kinder.map((k) => {
-              const istAktiv = k.id === aktivesKind
-              return (
-                <Link
-                  key={k.id}
-                  to={k.path}
-                  aria-current={istAktiv ? 'page' : undefined}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    minHeight: 40,
-                    fontFamily: fonts.body,
-                    fontStyle: 'italic',
-                    fontSize: fontSize.md,
-                    color: istAktiv ? c.red : c.muted,
-                    textDecoration: 'none',
-                  }}
-                >
-                  {k.label}
-                </Link>
-              )
-            })}
-          </nav>
-        )}
+        {unternav}
       </div>
     </header>
   )
