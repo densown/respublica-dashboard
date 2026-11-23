@@ -16,6 +16,7 @@ import {
   PageHeader,
   Pagination,
   StatWidget,
+  ViewToggle,
   useTheme,
 } from '../design-system'
 import type { I18nKey } from '../design-system/i18n'
@@ -549,34 +550,6 @@ export default function Legislation() {
     [c],
   )
 
-  const tabBtn = (tab: 'gesetze' | 'urteile', label: string) => {
-    const active = mainTab === tab
-    return (
-      <button
-        key={tab}
-        type="button"
-        role="tab"
-        aria-selected={active}
-        onClick={() =>
-          tab === 'gesetze' ? navigate('/gesetze') : setTabUrteile()
-        }
-        style={{
-          padding: `${spacing.md}px ${spacing.lg}px`,
-          borderRadius: radius.md,
-          border: `1px solid ${active ? c.red : c.border}`,
-          background: active ? c.bgHover : c.bgAlt,
-          color: active ? c.red : c.muted,
-          fontFamily: fonts.mono,
-          fontSize: fontSize.xs,
-          cursor: 'pointer',
-          transition: `border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
-        }}
-      >
-        {label}
-      </button>
-    )
-  }
-
   const listPanel = (
     <aside
       style={{
@@ -778,12 +751,11 @@ export default function Legislation() {
               listStyle: 'none',
               margin: 0,
               padding: `0 0 ${spacing.lg}px`,
-              overflowY: 'auto',
+              // Auf dem Handy rollt die Seite, nicht ein Kasten in der Seite
+              overflowY: isMobile ? 'visible' : 'auto',
               flex: 1,
-              minHeight: isMobile ? 280 : 0,
-              maxHeight: isMobile
-                ? 'min(55vh, 420px)'
-                : 'calc(100vh - 280px)',
+              minHeight: 0,
+              maxHeight: isMobile ? 'none' : 'calc(100vh - 280px)',
             }}
           >
             {!filteredGesetze.length ? (
@@ -1213,7 +1185,7 @@ export default function Legislation() {
   )
 
   const mobileListDetailTabs =
-    isMobile && mainTab === 'gesetze' ? (
+    isMobile && mainTab === 'gesetze' && (hasValidId || mobileTab === 'detail') ? (
       <div
         style={{
           display: 'flex',
@@ -1271,20 +1243,19 @@ export default function Legislation() {
         title={t('legislation')}
         subtitle={t('legislationPageSubtitle')}
       />
-      <nav
-        role="tablist"
-        aria-label={t('legislationTabsAria')}
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: spacing.sm,
-          padding: `0 ${spacing.xl}px ${spacing.md}px`,
-          borderBottom: `1px solid ${c.border}`,
-        }}
-      >
-        {tabBtn('gesetze', t('legislationTabChanges'))}
-        {tabBtn('urteile', t('legislationTabCaseLaw'))}
-      </nav>
+      {/* Am Desktop steht der Wechsel in der Kopfzeile */}
+      {isMobile && (
+        <ViewToggle
+          value={mainTab}
+          onChange={(tab) => (tab === 'gesetze' ? navigate('/gesetze') : setTabUrteile())}
+          ariaLabel={t('legislationTabsAria')}
+          options={[
+            { value: 'gesetze', label: t('legislationTabChanges') },
+            { value: 'urteile', label: t('legislationTabCaseLaw') },
+          ]}
+          style={{ marginBottom: spacing.md }}
+        />
+      )}
 
       {mainTab === 'gesetze' ? (
         <>

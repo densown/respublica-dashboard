@@ -561,7 +561,7 @@ export default function Overview() {
         {t('titelZahlAus').replace('{fraktion}', zahl.antwort.fraktion_name ?? '')}{' '}
         <Fundstelle href={zahl.antwort.pdf_url}>BT-Drs. {zahl.antwort.dokumentnummer}</Fundstelle>
       </p>
-      {weiter('/bundestag/kleine-anfragen', t('titelZahlMehr'))}
+      {weiter('/kleine-anfragen', t('titelZahlMehr'))}
     </section>
   )
 

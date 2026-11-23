@@ -1,6 +1,7 @@
 // i18n-Messages: Geruest (Kopfzeile, Leiste unten, Seite "Mehr", Fuss)
 
 export const de = {
+  notFoundStamp: "Unzustellbar",
   navStart: "Start",
   navGesetze: "Gesetze",
   navLobbyKurz: "Lobby",
@@ -37,6 +38,7 @@ export const de = {
 } as const
 
 export const en = {
+  notFoundStamp: "Return to sender",
   navStart: "Home",
   navGesetze: "Laws",
   navLobbyKurz: "Lobby",

@@ -11,7 +11,7 @@ import { StimmMarke } from '../bundestag/StimmMarke'
 import { normalizeStimme, type Stimme, type StimmenZeile } from '../bundestag/stimmen'
 
 /** Alle Abgeordneten, die im Wahlkreis angetreten sind und im Bundestag sitzen. */
-export function abgeordneteImWahlkreis(alle: AbgeordnetenApiRow[], ort: MeinOrt): AbgeordnetenApiRow[] {
+function abgeordneteImWahlkreis(alle: AbgeordnetenApiRow[], ort: MeinOrt): AbgeordnetenApiRow[] {
   return alle.filter((a) => wahlkreisTeile(a.wahlkreis)?.name === ort.name)
 }
 

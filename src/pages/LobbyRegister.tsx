@@ -733,8 +733,8 @@ export default function LobbyRegister() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
-          gap: spacing.md,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))',
+          gap: spacing.lg,
           marginBottom: spacing.xl,
         }}
       >
@@ -747,8 +747,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : (statsData?.total ?? '-')
           }
-          sub={t('lobbyStatTotalSub')}
-          icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('lobbyStatActive')}
@@ -759,8 +757,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : (statsData?.active ?? '-')
           }
-          sub={t('lobbyStatActiveSub')}
-          icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('lobbyStatAvgExpenses')}
@@ -771,8 +767,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : formatAverageMoney(statsData?.avg_ausgaben ?? null)
           }
-          sub={t('lobbyStatAvgExpensesSub')}
-          icon={<span aria-hidden>◇</span>}
         />
       </div>
 
