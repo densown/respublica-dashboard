@@ -73,18 +73,19 @@ export function Chip({
         display: 'inline-flex',
         alignItems: 'center',
         gap: spacing.sm,
-        fontFamily: fonts.mono,
-        fontSize: dense ? fontSize.micro : fontSize.sm,
-        letterSpacing: '0.02em',
+        fontFamily: fonts.body,
+        fontSize: dense ? fontSize.sm : fontSize.md,
         // Waagerecht knapper, senkrecht nie unter 44 px — Zeigegenauigkeit
         // ist keine Frage des Geraets.
         padding: dense ? `0 ${spacing.md}px` : `0 ${spacing.lg}px`,
         minHeight: 44,
-        borderRadius: radius.pill,
-        border: `1px solid ${active ? c.red : c.border}`,
-        background: active ? c.red : 'transparent',
-        color: active ? c.badgeText : c.inkSoft,
-        fontWeight: active ? 700 : 400,
+        // Aktiv in Tinte statt in Rot: Rot bleibt Akzent, keine Flaeche
+        // (docs/DESIGN.md, Abschnitt 1).
+        borderRadius: radius.sm,
+        border: `1px solid ${active ? c.ink : c.borderHover}`,
+        background: active ? c.ink : 'transparent',
+        color: active ? c.bg : c.inkSoft,
+        fontWeight: active ? 600 : 400,
         cursor: disabled ? 'default' : 'pointer',
         opacity: disabled ? 0.5 : 1,
         whiteSpace: 'nowrap',

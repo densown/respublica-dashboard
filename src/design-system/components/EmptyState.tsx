@@ -22,16 +22,12 @@ export function EmptyState({ text, action }: EmptyStateProps) {
         color: c.muted,
       }}
     >
-      <span
-        aria-hidden
-        style={{
-          fontSize: fontSize.hero,
-          lineHeight: 1,
-          color: c.subtle,
-        }}
-      >
-        ◌
-      </span>
+      {/* Leeres Blatt mit Eselsohr statt eines Unicode-Kreises */}
+      <svg aria-hidden width="44" height="52" viewBox="0 0 44 52" fill="none" stroke={c.subtle} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round">
+        <path d="M4 2h26l10 10v38H4z" />
+        <path d="M30 2v10h10" />
+        <path d="M11 22h22M11 29h22M11 36h13" strokeDasharray="1 4" />
+      </svg>
       <p
         style={{
           fontFamily: fonts.body,

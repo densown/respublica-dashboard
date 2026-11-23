@@ -50,3 +50,8 @@ export {
 export { stimmFlaeche, type StimmArt, type StimmFarben } from './palettes'
 export { ExportableContainer, type ExportableContainerProps } from './components/ExportableContainer'
 export { Piktogramm, type PiktogrammName, type PiktogrammProps } from './components/Piktogramm'
+export { Stempel, type StempelArt, type StempelProps } from './components/Stempel'
+export { Fundstelle, type FundstelleProps } from './components/Fundstelle'
+export { Platzhalter, type PlatzhalterProps } from './components/Platzhalter'
+export { Erklaerung, type ErklaerungProps } from './components/Erklaerung'
+export { MehrWerkzeuge, type MehrWerkzeugeProps } from './components/MehrWerkzeuge'
