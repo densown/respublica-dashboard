@@ -30,6 +30,8 @@ export function TabUebersicht({
   lowerIsBetter,
   mapYear,
   layoutDirection,
+  formatValue,
+  countryName,
 }: {
   countryDetail: WorldCountryDetail | null
   selectedRow: WorldMapRow | null
@@ -38,6 +40,10 @@ export function TabUebersicht({
   lowerIsBetter: boolean
   mapYear: number
   layoutDirection: ConsoleTabLayoutDirection
+  /** Wert mit Einheit wie in der Legende */
+  formatValue?: (v: number | null | undefined) => string
+  /** Laendername in der Sprache der Oberflaeche */
+  countryName?: string
 }) {
   const { c, t, lang } = useTheme()
   const locale = lang === 'de' ? 'de-DE' : 'en-US'
@@ -66,25 +72,21 @@ export function TabUebersicht({
       label: t('worldConsoleStatPopulation'),
       value: popLatest ? fmtPopulation(popLatest.value, locale) : '—',
       sub: popLatest ? `${mapYear}` : '',
-      icon: '⬡',
     },
     {
       label: t('worldConsoleStatGdpPc'),
       value: gdpPcLatest ? `$ ${fmtNumber(gdpPcLatest.value, 0, locale)}` : '—',
       sub: gdpPcLatest ? `Weltbank ${gdpPcLatest.year}` : '',
-      icon: '◆',
     },
     {
       label: t('worldConsoleStatLife'),
       value: lifeLatest ? `${fmtNumber(lifeLatest.value, 1, locale)} J.` : '—',
       sub: lifeLatest ? `${lifeLatest.year}` : '',
-      icon: '◈',
     },
     {
       label: t('worldConsoleStatDemocracy'),
       value: ldiLatest ? fmtNumber(ldiLatest.value, 2, locale) : '—',
       sub: ldiLatest ? `V-Dem LDI ${ldiLatest.year}` : '',
-      icon: '◉',
     },
   ]
 
@@ -105,10 +107,14 @@ export function TabUebersicht({
           letterSpacing: '-0.02em',
         }}
       >
-        {activeLatest ? fmtNumber(activeLatest.value, 2, locale) : '—'}
+        {activeLatest
+          ? formatValue
+            ? formatValue(activeLatest.value)
+            : fmtNumber(activeLatest.value, 2, locale)
+          : '—'}
       </div>
       <div style={{ fontFamily: fonts.body, fontSize: 12, color: c.muted, marginTop: spacing.xs }}>
-        {activeIndicator?.code} · {activeLatest?.year ?? '—'}
+        {activeLatest?.year ?? '—'}
       </div>
       {activeSpark.length >= 2 && (
         <div style={{ marginTop: spacing.md }}>
@@ -139,7 +145,7 @@ export function TabUebersicht({
           }}
         >
           {interpolate(t('worldConsolePercentileCountryLine'), {
-            country: countryDetail?.country_name || t('worldConsoleMapHintTitle'),
+            country: countryName || countryDetail?.country_name || t('worldConsoleMapHintTitle'),
             pct: String(Math.round(lowerIsBetter ? 100 - percentile : percentile)),
           })}{' '}
           <InfoToggle text={t('worldConsolePercentileExplainer')} />
