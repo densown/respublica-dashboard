@@ -1,194 +1,130 @@
-import { useCallback, useMemo, useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-
-const WORLD_MAP_PATH = '/weltkarte'
+import { useMemo } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { fonts, spacing, motion } from '../design-system/tokens'
-import { LegalFooter, MobileNav, Sidebar, useTheme } from '../design-system'
+import { LegalFooter, useTheme } from '../design-system'
+import { Kopfzeile, type NavZiel } from '../design-system/components/Kopfzeile'
+import { TabLeiste, type TabZiel } from '../design-system/components/TabLeiste'
 import type { I18nKey } from '../design-system/i18n'
 import { useIsMobile } from '../hooks/useMediaQuery'
 
-const ROUTE_PREFIX: Record<string, string> = {
+const WORLD_MAP_PATH = '/weltkarte'
+
+/**
+ * Erstes Pfadsegment -> Ressort. Auf dem Handy gibt es fuenf Ressorts
+ * (Start, Bundestag, Wahlen, Gesetze, Mehr), auf dem Desktop steht das
+ * Lobbyregister zusaetzlich als eigenes Wort in der Kopfzeile.
+ */
+const RESSORT: Record<string, string> = {
   bundestag: 'bundestag',
-  gesetze: 'legislation',
-  'eu-recht': 'euLaw',
-  koalition: 'coalition',
-  demokratie: 'democracy',
-  versammlungen: 'versammlungen',
-  // Kleine Anfragen haengen als Unterpunkt am Bundestag
   'kleine-anfragen': 'bundestag',
-  weltkarte: 'worldmap',
-  'eu-parlament': 'euParl',
+  wahlen: 'wahlen',
+  gesetze: 'gesetze',
+  gesetzgebung: 'gesetze',
+  'eu-recht': 'gesetze',
   lobbyregister: 'lobby',
-  wahlen: 'elections',
-  quellen: 'sources',
-  admin: 'admin',
+  mehr: 'mehr',
+  demokratie: 'mehr',
+  versammlungen: 'mehr',
+  weltkarte: 'mehr',
+  quellen: 'mehr',
 }
 
-const MODULE_PATH: Record<string, string> = {
-  overview: '/',
-  bundestag: '/bundestag',
-  legislation: '/gesetze',
-  euLaw: '/eu-recht',
-  coalition: '/koalition',
-  democracy: '/demokratie',
-  versammlungen: '/versammlungen',
-  kleineAnfragen: '/kleine-anfragen',
-  worldmap: '/weltkarte',
-  euParl: '/eu-parlament',
-  lobby: '/lobbyregister',
-  elections: '/wahlen',
-  sources: '/quellen',
-  admin: '/admin',
+function ressortAusPfad(pathname: string): string {
+  if (pathname === '/' || pathname === '') return 'start'
+  const erstes = pathname.split('/').filter(Boolean)[0]
+  return RESSORT[erstes] ?? 'start'
 }
 
 /**
- * Unterreiter je Modul. Alle Ziele sind ueber die URL adressierbar — entweder
- * als eigene Route (Wahlen) oder ueber ?tab= (Gesetzgebung, EU-Recht). Reiter,
- * die nur in React-State leben, gehoeren nicht hierher: sie waeren nicht
- * verlinkbar und der Eintrag koennte seinen Zustand nicht anzeigen.
+ * Welcher Unterpunkt ist aktiv? Das haengt am Zusammenspiel von Pfad und
+ * Query und ist deshalb hier verortet, nicht in der Kopfzeile.
  */
-const SUB_NAV: Record<string, { id: string; labelKey: string; path: string }[]> = {
-  bundestag: [
-    { id: 'bundestag.votes', labelKey: 'navBtAbstimmungen', path: '/bundestag' },
-    { id: 'bundestag.members', labelKey: 'navBtAbgeordnete', path: '/bundestag?ansicht=abgeordnete' },
-    { id: 'bundestag.questions', labelKey: 'kaNav', path: '/kleine-anfragen' },
-  ],
-  elections: [
-    { id: 'elections.results', labelKey: 'electionPollsNavResults', path: '/wahlen' },
-    { id: 'elections.polls', labelKey: 'electionPollsNavPolls', path: '/wahlen/umfragen' },
-    { id: 'elections.candidates', labelKey: 'electionPollsNavCandidates', path: '/wahlen/kandidaturen' },
-  ],
-  legislation: [
-    { id: 'legislation.laws', labelKey: 'navLaws', path: '/gesetze' },
-    { id: 'legislation.rulings', labelKey: 'navRulings', path: '/gesetze?tab=urteile' },
-  ],
-  euLaw: [
-    { id: 'euLaw.acts', labelKey: 'navEuActs', path: '/eu-recht' },
-    { id: 'euLaw.caselaw', labelKey: 'navEuCaseLaw', path: '/eu-recht?tab=case-law' },
-  ],
-}
-
-/**
- * Welcher Unterreiter ist aktiv? Das haengt am Zusammenspiel von Pfad und
- * Query und ist deshalb hier verortet, nicht in der Sidebar.
- */
-function activeChildFromLocation(pathname: string, search: string): string | undefined {
-  const tab = new URLSearchParams(search).get('tab')
+function unterpunktAusOrt(pathname: string, search: string): string | undefined {
+  const params = new URLSearchParams(search)
   if (pathname.startsWith('/kleine-anfragen')) return 'bundestag.questions'
   if (pathname.startsWith('/bundestag')) {
-    const ansicht = new URLSearchParams(search).get('ansicht')
-    return ansicht === 'abgeordnete' || pathname.startsWith('/bundestag/abgeordnete')
+    return params.get('ansicht') === 'abgeordnete' || pathname.startsWith('/bundestag/abgeordnete')
       ? 'bundestag.members'
       : 'bundestag.votes'
   }
   if (pathname.startsWith('/wahlen')) {
-    if (pathname.startsWith('/wahlen/umfragen')) return 'elections.polls'
-    if (pathname.startsWith('/wahlen/kandidaturen')) return 'elections.candidates'
-    return 'elections.results'
+    return pathname.startsWith('/wahlen/umfragen') ? 'wahlen.polls' : 'wahlen.results'
   }
+  if (pathname.startsWith('/eu-recht')) return 'gesetze.eu'
   if (pathname.startsWith('/gesetze') || pathname.startsWith('/gesetzgebung')) {
-    return tab === 'urteile' ? 'legislation.rulings' : 'legislation.laws'
-  }
-  if (pathname.startsWith('/eu-recht')) {
-    return tab === 'case-law' ? 'euLaw.caselaw' : 'euLaw.acts'
+    return params.get('tab') === 'urteile' ? 'gesetze.rulings' : 'gesetze.laws'
   }
   return undefined
 }
 
-function activeModuleFromPath(pathname: string): string {
-  if (pathname === '/' || pathname === '') return 'overview'
-  const first = pathname.split('/').filter(Boolean)[0]
-  return ROUTE_PREFIX[first] ?? 'overview'
-}
-
-const showAdminInNav = import.meta.env.VITE_SHOW_ADMIN_NAV === 'true'
-
 export default function DashboardLayout() {
   const { c, t } = useTheme()
   const location = useLocation()
-  const navigate = useNavigate()
   const isMobile = useIsMobile()
-  const [collapsed, setCollapsed] = useState(false)
 
-  const activeModule = activeModuleFromPath(location.pathname)
-  const activeChild = activeChildFromLocation(location.pathname, location.search)
+  const aktiv = ressortAusPfad(location.pathname)
+  const aktivesKind = unterpunktAusOrt(location.pathname, location.search)
   const isWorldMapPage = location.pathname === WORLD_MAP_PATH
 
-  const navEntries = useMemo(() => {
-    // Nicht aufgefuehrt, aus zwei verschiedenen Gruenden:
-    //
-    // Koalitionsvertrag und EU-Parlament sind Platzhalterseiten mit einem
-    // einzigen Satz. Eintraege ins Leere fuehren zu lassen laesst die ganze
-    // App unfertig wirken.
-    //
-    // Der Demokratie-Index unter /demokratie ist dagegen fertig — Streifen,
-    // Handschriften und Handelsspiegel auf den Weltbank-Daten, versorgt von
-    // /api/governance/*. Er ist bewusst noch nicht verlinkt, weil die
-    // Einordnung ins Gesamtangebot offen ist. Zum Veroeffentlichen genuegt
-    // die Zeile:
-    //   { kind: 'link' as const, id: 'democracy', icon: '◈', label: t('democracyIndex') }
-    //
-    // Ebenso der Demonstrations-Tracker unter /versammlungen (Beta, bislang
-    // nur Berlin, /api/versammlungen*). Zum Veroeffentlichen unter
-    // sectionGermany:
-    //   { kind: 'link' as const, id: 'versammlungen', icon: '◎', label: t('versammlungenNav') }
-    // (Schluessel versammlungenNav dann in i18n/versammlungen.ts anlegen)
-    //
-    // Alle Routen bleiben erreichbar, damit vorhandene Links nicht
-    // brechen.
-    //
-    // "Tools" ist entfallen: der Abschnitt enthielt Weltdaten, deutsche Daten
-    // und eine Meta-Seite nebeneinander. Das war keine Kategorie, sondern ein
-    // Restehaufen. Das Lobbyregister steht jetzt bei den uebrigen deutschen
-    // Quellen, die Quellenseite als Meta-Eintrag ohne Abschnitt am Ende.
-    const entries = [
-      { kind: 'link' as const, id: 'overview', icon: '◉', label: t('overview') },
-      { kind: 'link' as const, id: 'worldmap', icon: '⊕', label: t('worldMap') },
-      { kind: 'section' as const, label: t('sectionGermany') },
-      { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
-      { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },
-      { kind: 'link' as const, id: 'legislation', icon: '§', label: t('legislation') },
-      { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
-      { kind: 'section' as const, label: t('sectionEurope') },
-      { kind: 'link' as const, id: 'euLaw', icon: '★', label: t('euLaw') },
-      { kind: 'section' as const, label: t('sectionAbout') },
-      { kind: 'link' as const, id: 'sources', icon: '◆', label: t('navSources') },
+  const ziele = useMemo<NavZiel[]>(() => {
+    const k = (id: string, labelKey: I18nKey, path: string) => ({ id, label: t(labelKey), path })
+    return [
+      { id: 'start', label: t('navStart'), path: '/' },
+      {
+        id: 'bundestag',
+        label: t('bundestag'),
+        path: '/bundestag',
+        kinder: [
+          k('bundestag.votes', 'navBtAbstimmungen', '/bundestag'),
+          k('bundestag.members', 'navBtAbgeordnete', '/bundestag?ansicht=abgeordnete'),
+          k('bundestag.questions', 'kaNav', '/kleine-anfragen'),
+        ],
+      },
+      {
+        id: 'wahlen',
+        label: t('navElections'),
+        path: '/wahlen/umfragen',
+        kinder: [
+          k('wahlen.polls', 'electionPollsNavPolls', '/wahlen/umfragen'),
+          k('wahlen.results', 'electionPollsNavResults', '/wahlen'),
+        ],
+      },
+      {
+        id: 'gesetze',
+        label: t('navGesetze'),
+        path: '/gesetze',
+        kinder: [
+          k('gesetze.laws', 'navLaws', '/gesetze'),
+          k('gesetze.rulings', 'navRulings', '/gesetze?tab=urteile'),
+          k('gesetze.eu', 'navEuFilter', '/eu-recht'),
+        ],
+      },
+      { id: 'lobby', label: t('lobby'), path: '/lobbyregister' },
+      { id: 'mehr', label: t('navMehr'), path: '/mehr' },
     ]
-    if (showAdminInNav) {
-      entries.push({ kind: 'link' as const, id: 'admin', icon: '⚙', label: t('admin') })
-    }
-    return entries.map((e) =>
-      e.kind === 'link' && SUB_NAV[e.id]
-        ? {
-            ...e,
-            children: SUB_NAV[e.id].map((k) => ({
-              id: k.id,
-              label: t(k.labelKey as I18nKey),
-              path: k.path,
-            })),
-          }
-        : e,
-    )
   }, [t])
 
-  const handleModuleSelect = useCallback((moduleId: string) => {
-    const path = MODULE_PATH[moduleId] ?? '/'
-    navigate(path)
-  }, [navigate])
-
-  const onToggleSidebar = useCallback(() => setCollapsed((v) => !v), [])
-
-  const shareUrl =
-    typeof window !== 'undefined' ? window.location.href : 'https://app.respublica.media'
-  const shareTitle = 'Res.Publica Dashboard'
+  const tabs = useMemo<TabZiel[]>(
+    () => [
+      { id: 'start', label: t('navStart'), path: '/', icon: 'start' },
+      { id: 'bundestag', label: t('bundestag'), path: '/bundestag', icon: 'bundestag' },
+      { id: 'wahlen', label: t('navElections'), path: '/wahlen/umfragen', icon: 'wahlen' },
+      { id: 'gesetze', label: t('navGesetze'), path: '/gesetze', icon: 'gesetze' },
+      { id: 'mehr', label: t('navMehr'), path: '/mehr', icon: 'mehr' },
+    ],
+    [t],
+  )
 
   const mainPad = isMobile ? spacing.lg : spacing.xl
+  // Auf dem Handy gehoert das Lobbyregister zu "Mehr"
+  const aktiverTab = aktiv === 'lobby' ? 'mehr' : aktiv
 
   return (
     <div
       style={{
         display: 'flex',
-        height: '100vh',
+        flexDirection: 'column',
+        height: '100dvh',
         minHeight: '100vh',
         fontFamily: fonts.body,
         background: c.bg,
@@ -198,68 +134,40 @@ export default function DashboardLayout() {
           `background ${motion.slow} ${motion.easing}, color ${motion.slow} ${motion.easing}`,
       }}
     >
-      {!isMobile && (
-        <Sidebar
-          entries={navEntries}
-          active={activeModule}
-          activeChild={activeChild}
-          onSelectChild={(pfad: string) => navigate(pfad)}
-          onSelect={handleModuleSelect}
-          collapsed={collapsed}
-          onToggle={onToggleSidebar}
-          shareTitle={shareTitle}
-          shareUrl={shareUrl}
-        />
-      )}
+      <Kopfzeile ziele={ziele} aktiv={aktiv} aktivesKind={aktivesKind} schmal={isMobile} />
+
+      {/* Eigener Scrollbereich: Kopfzeile und Leiste bleiben stehen. */}
       <div
+        id="rp-scroll"
         style={{
           flex: 1,
+          minHeight: 0,
+          overflowY: isWorldMapPage ? 'hidden' : 'auto',
+          WebkitOverflowScrolling: 'touch',
           display: 'flex',
           flexDirection: 'column',
-          minWidth: 0,
-          minHeight: 0,
-          height: '100%',
         }}
       >
-        {isMobile && (
-          <MobileNav
-            entries={navEntries}
-            activeChild={activeChild}
-            onSelectChild={(pfad: string) => navigate(pfad)}
-            active={activeModule}
-            onSelect={handleModuleSelect}
-            shareTitle={shareTitle}
-            shareUrl={shareUrl}
-          />
-        )}
-        <div
+        <main
           style={{
-            flex: 1,
-            minHeight: 0,
-            overflowY: isWorldMapPage ? 'hidden' : 'auto',
-            WebkitOverflowScrolling: 'touch',
+            maxWidth: isWorldMapPage ? 'none' : 1280,
+            margin: '0 auto',
+            width: '100%',
+            padding: isWorldMapPage ? 0 : mainPad,
+            paddingBottom: 0,
+            // Kurze Seiten: der Fuss steht am Fensterende, nicht mitten im Bild
+            flex: '1 0 auto',
+            minHeight: isWorldMapPage ? 0 : undefined,
             display: isWorldMapPage ? 'flex' : 'block',
             flexDirection: isWorldMapPage ? 'column' : undefined,
           }}
         >
-          <div
-            style={{
-              maxWidth: isWorldMapPage ? 'none' : 1280,
-              margin: '0 auto',
-              width: '100%',
-              padding: isWorldMapPage ? 0 : mainPad,
-              paddingBottom: 0,
-              flex: isWorldMapPage ? 1 : undefined,
-              minHeight: isWorldMapPage ? 0 : undefined,
-              display: isWorldMapPage ? 'flex' : 'block',
-              flexDirection: isWorldMapPage ? 'column' : undefined,
-            }}
-          >
-            <Outlet />
-          </div>
-          {!isWorldMapPage && <LegalFooter />}
-        </div>
+          <Outlet />
+        </main>
+        {!isWorldMapPage && <LegalFooter />}
       </div>
+
+      {isMobile && <TabLeiste ziele={tabs} aktiv={aktiverTab} />}
     </div>
   )
 }

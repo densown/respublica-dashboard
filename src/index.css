@@ -52,3 +52,12 @@ body {
 .rp-skeleton-bar {
   animation: rp-skeleton-pulse 1.35s ease-in-out infinite;
 }
+
+/* Geruest: Rueckmeldung beim Antippen. Inline-Styles koennen :active und
+   :hover nicht ausdruecken. */
+.rp-navwort:hover { color: var(--rp-ink) !important; }
+.rp-tab:active { transform: scale(0.94); }
+.rp-zeile .rp-pfeil { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+.rp-zeile:hover .rp-pfeil { transform: translateX(4px); }
+.rp-zeile:active .rp-pfeil { transform: translateX(8px); }
+.rp-zeile:active { opacity: 0.7; }

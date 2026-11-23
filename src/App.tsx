@@ -7,6 +7,7 @@ import Admin from './pages/Admin'
 import Coalition from './pages/Coalition'
 import DemocracyIndex from './pages/DemocracyIndex'
 import EuParliament from './pages/EuParliament'
+import Mehr from './pages/Mehr'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
 import Sources from './pages/Sources'
@@ -65,6 +66,7 @@ export default function App() {
             <Route path="weltkarte" element={<WorldMap />} />
             <Route path="eu-parlament" element={<EuParliament />} />
             <Route path="lobbyregister" element={<LobbyRegister />} />
+            <Route path="mehr" element={<Mehr />} />
             <Route path="admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Route>
