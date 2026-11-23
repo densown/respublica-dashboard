@@ -5,7 +5,9 @@ import {
   EmptyState,
   LoadingSpinner,
   PageHeader,
+  Piktogramm,
   Section,
+  StatWidget,
   useTheme,
   VoteBar,
 } from '../design-system'
@@ -16,11 +18,14 @@ import { AntwortKarte } from './kleineAnfragen/AntwortKarte'
 import type { ListeResponse } from './kleineAnfragen/types'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { useEigeneStimmen, useMeinOrt } from '../hooks/useMeins'
 import { anzeigeTitel, datumLang, ergebnisZeile, stimmenKurz } from '../components/bundestag/abstimmungText'
 import {
+  fraktionsFlaeche,
   hatFraktionslinie,
   shortFraktionName,
   wahlkreisKurz,
+  wahlkreisTeile,
 } from '../components/bundestag/fraktion'
 import { MemberTopicProfile, type MemberTopicProfileData } from '../components/bundestag/MemberTopicProfile'
 import { fotoDateiseite } from '../components/bundestag/foto'
@@ -69,7 +74,7 @@ export default function Abgeordneter() {
   const { awId } = useParams()
   const id = Number.parseInt(awId ?? '', 10)
   const gueltig = Number.isFinite(id) && id > 0
-  const { c, t, lang } = useTheme()
+  const { c, t, lang, theme } = useTheme()
   const isMobile = useIsMobile()
 
   const profil = useApi<MemberTopicProfileData>(gueltig ? `/api/abgeordnete/${id}/themen` : '')
@@ -155,6 +160,21 @@ export default function Abgeordneter() {
     return saetze.join(' ')
   }, [person, bilanz, ohneLinie, zahlAbweichungen, t])
 
+  // Vergleich mit den eigenen Stimmen aus "Wie haettest du gestimmt?"
+  const { stimmen: eigene } = useEigeneStimmen()
+  const [ort] = useMeinOrt()
+  const wieDu = useMemo(() => {
+    let gleich = 0
+    let gesamt = 0
+    for (const z of zeilen) {
+      const meine = eigene[String(z.pollId)]
+      if (!meine || z.stimme === 'no_show') continue
+      gesamt += 1
+      if (meine === z.stimme) gleich += 1
+    }
+    return { gleich, gesamt }
+  }, [zeilen, eigene])
+
   const nichtDa = !gueltig || profil.error === 'HTTP 404'
 
   useSeo({
@@ -180,7 +200,7 @@ export default function Abgeordneter() {
         textDecoration: 'none',
       }}
     >
-      <span aria-hidden>←</span>
+      <Piktogramm name="zurueck" size={16} />
       {t('profileBack')}
     </Link>
   )
@@ -228,9 +248,6 @@ export default function Abgeordneter() {
   // wuerde ihn nur wiederholen
   const zeigeAbweichungen = !ohneLinie && mitFraktionsStimme && abweichungen.length > 0
 
-  let nummer = 0
-  const naechste = () => (nummer += 1)
-
   return (
     <div
       style={{
@@ -248,7 +265,16 @@ export default function Abgeordneter() {
           columnGap: spacing.xl,
         }}
       >
-        <div style={{ marginBottom: spacing.lg }}>
+        <div
+          style={{
+            marginBottom: spacing.lg,
+            padding: 3,
+            borderRadius: '50%',
+            // Ring in der Farbe der Fraktion
+            border: `3px solid ${ohneLinie ? c.border : fraktionsFlaeche(fraktion, theme === 'dark')}`,
+            lineHeight: 0,
+          }}
+        >
           <Portraet
             name={person.name}
             fotoUrl={person.foto_url}
@@ -262,8 +288,36 @@ export default function Abgeordneter() {
       </div>
 
       {bilanz && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+            gap: spacing.lg,
+            maxWidth: 720,
+            marginBottom: spacing.xxl,
+          }}
+        >
+          <StatWidget
+            fluid
+            label={t('profileFactTurnout')}
+            value={`${Math.round(((bilanz.ja + bilanz.nein + bilanz.enthalten) / Math.max(1, bilanz.ja + bilanz.nein + bilanz.enthalten + bilanz.abwesend)) * 100)} %`}
+          />
+          {!ohneLinie && <StatWidget fluid label={t('profileFactDeviations')} value={zahlAbweichungen} />}
+          {wieDu.gesamt > 0 && (
+            <StatWidget
+              fluid
+              label={t('profileFactLikeYou')}
+              value={t('bilanzVon').replace('{a}', String(wieDu.gleich)).replace('{b}', String(wieDu.gesamt))}
+            />
+          )}
+          {ort && wahlkreisTeile(person.wahlkreis)?.name === ort.name && (
+            <StatWidget fluid label={t('profileFactYours')} value={ort.name} />
+          )}
+        </div>
+      )}
+
+      {bilanz && (
         <Section
-          number={naechste()}
           title={t('profileBalance')}
           note={ergebnisZeile(
             {
@@ -288,7 +342,7 @@ export default function Abgeordneter() {
       )}
 
       {zeigeAbweichungen && (
-        <Section number={naechste()} title={t('profileDeviations')} note={t('profileDeviationsNote')}>
+        <Section title={t('profileDeviations')} note={t('profileDeviationsNote')}>
           <ul
             style={{
               listStyle: 'none',
@@ -361,13 +415,12 @@ export default function Abgeordneter() {
         </Section>
       )}
 
-      <Section number={naechste()} title={t('profileTopics')} note={t('profileTopicsNote')}>
+      <Section title={t('profileTopics')} note={t('profileTopicsNote')}>
         <MemberTopicProfile data={profil.data} />
       </Section>
 
       {anfragen.data && anfragen.data.total > 0 && (
         <Section
-          number={naechste()}
           title={t('kaProfilTitel').replace('{n}', String(anfragen.data.total))}
           note={t('kaProfilNote')}
         >
@@ -388,7 +441,7 @@ export default function Abgeordneter() {
       )}
 
       <Section
-        number={naechste()}
+       
         title={t('profileVotesTitle').replace('{n}', String(zeilen.length))}
       >
         {stimmen.loading && !stimmen.data ? (
@@ -572,7 +625,7 @@ export default function Abgeordneter() {
         )}
       </Section>
 
-      <Section number={naechste()} title={t('votePageSources')} last>
+      <Section title={t('votePageSources')} last>
         <ul
           style={{
             margin: 0,

@@ -8,15 +8,13 @@ import {
   useState,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, DataCard, useTheme } from '../../design-system'
+import { Badge, DataCard, useTheme, Fundstelle } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
-import { EU_DOC_TYPE, EU_DOC_TYPE_FALLBACK } from '../../design-system/palettes'
+import { fontSize, fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuRechtDetail, EuRechtListItem } from './types'
-import { ON_DATA_LIGHT } from '../../design-system/palettes'
 
 
 const PREVIEW_LEN = 200
@@ -25,13 +23,6 @@ function trunc(s: string, max: number): string {
   const t = s.trim()
   if (t.length <= max) return t
   return `${t.slice(0, Math.max(0, max - 1))}…`
-}
-
-function typColors(typ: string): { bg: string; fg: string } {
-  if (typ === 'REG') return { bg: EU_DOC_TYPE.REG, fg: ON_DATA_LIGHT }
-  if (typ === 'DIR') return { bg: EU_DOC_TYPE.DIR, fg: ON_DATA_LIGHT }
-  if (typ === 'DEC') return { bg: EU_DOC_TYPE.DEC, fg: ON_DATA_LIGHT }
-  return { bg: EU_DOC_TYPE_FALLBACK, fg: ON_DATA_LIGHT }
 }
 
 function typLabelI18n(
@@ -103,7 +94,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
       : (item.zusammenfassung_en ?? '').trim()
   const preview = summaryFull ? trunc(summaryFull, PREVIEW_LEN) : ''
 
-  const tc = typColors(String(item.typ))
   const typBadgeText =
     lang === 'de' && item.typ_label?.trim()
       ? item.typ_label.trim()
@@ -147,31 +137,11 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
-        <span
-          style={{
-            display: 'inline-block',
-            alignSelf: 'flex-start',
-            fontFamily: fonts.mono,
-            fontSize: fontSize.micro,
-            padding: `${spacing.xs}px ${spacing.sm}px`,
-            borderRadius: radius.xs,
-            background: tc.bg,
-            color: tc.fg,
-            lineHeight: 1.2,
-          }}
-        >
+        {/* Art des Rechtsakts als Zeile ueber dem Titel, Nummer als Fundstelle */}
+        <span style={{ fontFamily: fonts.body, fontStyle: 'italic', fontSize: fontSize.sm, color: c.red, lineHeight: 1.2 }}>
           {typBadgeText}
         </span>
-        <p
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: fontSize.xs,
-            color: c.muted,
-            margin: 0,
-          }}
-        >
-          {item.celex}
-        </p>
+        <Fundstelle href={item.eurlex_url} title="EUR-Lex">CELEX {item.celex}</Fundstelle>
       </div>
       {item.datum ? (
         <time

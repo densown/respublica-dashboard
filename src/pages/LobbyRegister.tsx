@@ -18,6 +18,7 @@ import {
 } from 'recharts'
 import {
   Badge,
+  Chip,
   DataCard,
   EmptyState,
   ExportableContainer,
@@ -30,6 +31,7 @@ import {
 import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
 import { CATEGORICAL } from '../design-system/palettes'
 import { useApi } from '../hooks/useApi'
+import { MehrOderWeniger } from '../components/spiele/MehrOderWeniger'
 import { useSearchParamsState } from '../hooks/useSearchParamsState'
 import { useSeo } from '../hooks/useSeo'
 
@@ -204,6 +206,7 @@ export default function LobbyRegister() {
   const [hoveredTile, setHoveredTile] = useState<{ code: string; x: number; y: number } | null>(null)
   const [geoTab, setGeoTab] = useState<'map' | 'ranking'>('map')
   const treemapRef = useRef<HTMLDivElement | null>(null)
+  const [alleBranchen, setAlleBranchen] = useState(false)
   const geoMapContainerRef = useRef<HTMLDivElement | null>(null)
   const geoMapRef = useRef<maplibregl.Map | null>(null)
   const geoMapPopupRef = useRef<maplibregl.Popup | null>(null)
@@ -850,6 +853,69 @@ export default function LobbyRegister() {
             </p>
           ) : !byFieldTiles.length ? (
             <EmptyState text={t('lobbyTreemapEmpty')} />
+          ) : isMobile ? (
+            // Auf dem Handy werden die Kacheln zu Streifen: dort eine
+            // sortierte Balkenliste, ein Tipp filtert die Liste darunter.
+            <div style={{ display: 'grid', gap: spacing.xs }}>
+              {[...byFieldItems]
+                .sort((a, b) => (b.total_expenses ?? 0) - (a.total_expenses ?? 0))
+                .slice(0, alleBranchen ? undefined : 8)
+                .map((item, _i, liste) => {
+                  const max = liste[0]?.total_expenses ?? 1
+                  const active = selectedFoi === item.code
+                  return (
+                    <button
+                      key={item.code}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => {
+                        setSelectedFoi(active ? '' : item.code)
+                        setPage(1)
+                      }}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        minHeight: 48,
+                        padding: `${spacing.xs}px 0`,
+                        border: 'none',
+                        background: 'transparent',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        color: c.ink,
+                      }}
+                    >
+                      <span style={{ display: 'flex', justifyContent: 'space-between', gap: spacing.sm, alignItems: 'baseline' }}>
+                        <span style={{ fontFamily: fonts.body, fontWeight: active ? 700 : 400, fontSize: fontSize.md, minWidth: 0 }}>
+                          {getFoiLabel(item)}
+                        </span>
+                        <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted, whiteSpace: 'nowrap' }}>
+                          {formatMoney(item.total_expenses ?? null)}
+                        </span>
+                      </span>
+                      <span style={{ display: 'block', height: 8, marginTop: 4, background: c.bgHover }}>
+                        <span
+                          className="rp-wachsen"
+                          style={{
+                            display: 'block',
+                            height: '100%',
+                            width: `${Math.max(2, ((item.total_expenses ?? 0) / max) * 100)}%`,
+                            background: active ? c.red : c.ink,
+                          }}
+                        />
+                      </span>
+                    </button>
+                  )
+                })}
+              {byFieldItems.length > 8 && (
+                <div style={{ marginTop: spacing.sm }}>
+                  <Chip
+                    dense
+                    label={alleBranchen ? t('lobbyFieldsLess') : t('lobbyFieldsAll').replace('{n}', String(byFieldItems.length))}
+                    onClick={() => setAlleBranchen(!alleBranchen)}
+                  />
+                </div>
+              )}
+            </div>
           ) : (
             <div
               ref={treemapRef}
@@ -1008,6 +1074,14 @@ export default function LobbyRegister() {
           )}
         </div>
       </DataCard>
+
+      <MehrOderWeniger
+        eintraege={(listData?.items ?? []).map((item) => ({
+          name: item.name ?? '',
+          betrag: item.financial_expenses_euro ?? 0,
+        }))}
+        geld={(betrag) => formatMoney(betrag)}
+      />
 
       <ExportableContainer title={t('lobbyGeoTitle')} mapRef={geoMapRef}>
       <DataCard>

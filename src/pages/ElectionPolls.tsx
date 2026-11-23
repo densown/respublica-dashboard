@@ -22,6 +22,7 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 import { CoalitionCalculator } from './elections/CoalitionCalculator'
 import { ElectionResult } from './elections/ElectionResult'
 import { PollStanding } from './elections/PollStanding'
+import { ErstTippen } from '../components/spiele/ErstTippen'
 import { PollTrendChart } from './elections/PollTrendChart'
 import { PollVsResult } from './elections/PollVsResult'
 import { SeatCoalitions } from './elections/SeatCoalitions'
@@ -374,7 +375,9 @@ export default function ElectionPolls() {
                       .replace('{n}', String(Math.min(FENSTER, umfragen.length)))
                       .replace('{date}', formatDate(neueste?.veroeffentlicht ?? null, lang))}
                   >
-                    <PollStanding werte={werte} lang={lang} />
+                    <ErstTippen key={wahlSlug} slug={wahlSlug} werte={werte} lang={lang}>
+                      <PollStanding werte={werte} lang={lang} />
+                    </ErstTippen>
                   </Section>
 
                   {/* ---------- Rechnerische Mehrheiten ----------
