@@ -5,7 +5,7 @@ import { LegalFooter, useTheme } from '../design-system'
 import { Kopfzeile, type NavZiel } from '../design-system/components/Kopfzeile'
 import { TabLeiste, type TabZiel } from '../design-system/components/TabLeiste'
 import type { I18nKey } from '../design-system/i18n'
-import { useIsMobile } from '../hooks/useMediaQuery'
+import { useIsMobile, useMediaQuery } from '../hooks/useMediaQuery'
 
 const WORLD_MAP_PATH = '/weltkarte'
 
@@ -60,7 +60,11 @@ function unterpunktAusOrt(pathname: string, search: string): string | undefined 
 export default function DashboardLayout() {
   const { c, t } = useTheme()
   const location = useLocation()
-  const isMobile = useIsMobile()
+  const schmal = useIsMobile()
+  // Handy quer und kleine Tablets: breiter als 768 px, aber ohne Maus. Auch
+  // dort bleibt die Leiste unten, sonst verschwand sie beim Drehen des Handys.
+  const fingerGeraet = useMediaQuery('(hover: none) and (pointer: coarse) and (max-width: 960px)')
+  const isMobile = schmal || fingerGeraet
 
   const aktiv = ressortAusPfad(location.pathname)
   const aktivesKind = unterpunktAusOrt(location.pathname, location.search)
@@ -121,11 +125,10 @@ export default function DashboardLayout() {
 
   return (
     <div
+      className="rp-huelle"
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100dvh',
-        minHeight: '100vh',
         fontFamily: fonts.body,
         background: c.bg,
         color: c.ink,

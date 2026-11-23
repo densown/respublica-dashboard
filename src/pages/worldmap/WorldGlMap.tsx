@@ -764,7 +764,7 @@ export function WorldGlMap({
         top: 0,
         left: 0,
         width: '100vw',
-        height: '100vh',
+        height: '100dvh',
         zIndex: 9999,
         background: c.bg,
         borderRadius: radius.xs,
