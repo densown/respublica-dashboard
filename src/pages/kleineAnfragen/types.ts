@@ -18,6 +18,8 @@ export type Antwort = {
   fraktion: string | null
   fraktion_name: string | null
   fragesteller: string[]
+  /** Fragesteller mit Abgeordnetenwatch-ID, wenn der Name eindeutig zu einem MdB passt */
+  fragesteller_mdb?: { name: string; aw_id: number | null }[]
   ressort: string | null
   sachgebiete: string[]
   einzelfragen: number | null
@@ -46,6 +48,8 @@ export type ListeResponse = {
   sort: 'datum' | 'wert' | 'relevanz'
   hinweis: string
   quelle: { name: string; url: string }
+  /** Nur bei ?abgeordneter= */
+  abgeordneter?: { aw_id: number; name: string; fraktion: string | null }
   daten: Antwort[]
 }
 

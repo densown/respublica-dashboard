@@ -1,6 +1,12 @@
 // i18n-Messages: kleineAnfragen (Tracker Kleine Anfragen, /kleine-anfragen)
 
 export const de = {
+  kaNav: "Kleine Anfragen",
+  kaAbgeordneterFilter: "Anfragen von",
+  kaAbgeordneterAlle: "Alle Abgeordneten",
+  kaProfilTitel: "Kleine Anfragen ({n})",
+  kaProfilNote: "Schriftliche Fragen an die Bundesregierung, bei denen diese Person als Fragesteller genannt ist. Kleine Anfragen sind ein Werkzeug der Opposition, Regierungsfraktionen stellen sie kaum.",
+  kaProfilAlle: "Alle {n} Anfragen ansehen",
   kaKicker: "Kleine Anfragen · Beta",
   kaTitle: "Was die Bundesregierung auf Nachfrage mitteilt",
   kaSubtitle: "Jede Woche beantwortet die Bundesregierung Dutzende Kleine Anfragen aus dem Bundestag, oft mit Zahlen, die sonst nirgends stehen. Wir sammeln die Antworten, fassen sie zusammen und prüfen jede herausgehobene Zahl gegen den Wortlaut.",
@@ -55,6 +61,12 @@ export const de = {
 }
 
 export const en = {
+  kaNav: "Parliamentary questions",
+  kaAbgeordneterFilter: "Questions by",
+  kaAbgeordneterAlle: "All members",
+  kaProfilTitel: "Parliamentary questions ({n})",
+  kaProfilNote: "Written questions to the federal government that name this member as a questioner. They are an opposition tool; governing groups rarely use them.",
+  kaProfilAlle: "See all {n} questions",
   kaKicker: "Parliamentary questions · Beta",
   kaTitle: "What the German government discloses when asked",
   kaSubtitle: "Every week the federal government answers dozens of written questions (Kleine Anfragen) from the Bundestag, often with figures published nowhere else. We collect the answers, summarise them and check every highlighted figure against the original wording.",

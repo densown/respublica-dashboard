@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useTheme } from '../../design-system'
 import { fonts, fontSize, lineHeight, radius, spacing } from '../../design-system/tokens'
 import { fraktionsSchrift } from '../../components/bundestag/fraktion'
@@ -83,7 +84,19 @@ export function AntwortKarte({ a, kompakt = false }: { a: Antwort; kompakt?: boo
       )}
       {!kompakt && a.fragesteller.length > 0 && (
         <div style={meta}>
-          {t('kaKarteGefragt')} {a.fragesteller.join(', ')}
+          {t('kaKarteGefragt')}{' '}
+          {(a.fragesteller_mdb ?? a.fragesteller.map((name) => ({ name, aw_id: null }))).map((f, i) => (
+            <span key={f.name}>
+              {i > 0 && ', '}
+              {f.aw_id ? (
+                <Link to={`/bundestag/abgeordnete/${f.aw_id}`} style={{ color: c.ink }}>
+                  {f.name}
+                </Link>
+              ) : (
+                f.name
+              )}
+            </span>
+          ))}
         </div>
       )}
 
