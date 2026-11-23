@@ -641,8 +641,6 @@ function TradeFlowWidgetBody({
         style={{
           fontFamily: fonts.mono,
           fontSize: 9,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
           color: c.muted,
           marginBottom: 4,
         }}
@@ -836,8 +834,6 @@ export function WidgetShell({
             minWidth: 0,
             fontFamily: fonts.mono,
             fontSize: 10,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
             color: c.text,
             lineHeight: 1.25,
           }}

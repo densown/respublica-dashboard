@@ -57,8 +57,6 @@ export function ShareToolbar({ title, url }: ShareToolbarProps) {
     color: c.inkSoft,
     fontFamily: fonts.mono,
     fontSize: fontSize.micro,
-    textTransform: 'uppercase',
-    letterSpacing: '0.06em',
     cursor: 'pointer',
     textDecoration: 'none',
     transition: `border-color 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,

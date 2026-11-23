@@ -227,8 +227,6 @@ export default function Elections() {
                 style={{
                   fontFamily: fonts.mono,
                   fontSize: narrow ? '0.75rem' : '0.85rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
                   padding: narrow ? '10px 14px' : '12px 24px',
                   flexShrink: 0,
                   border: 'none',

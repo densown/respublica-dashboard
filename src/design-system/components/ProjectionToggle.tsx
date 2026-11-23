@@ -57,8 +57,6 @@ export default function ProjectionToggle({
               color: active ? c.red : c.muted,
               fontFamily: fonts.mono,
               fontSize: 9,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
               cursor: disabled ? 'not-allowed' : 'pointer',
             }}
           >

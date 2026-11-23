@@ -94,7 +94,7 @@ export default function RadarChart({ axes, color, style }: RadarChartProps) {
             fill={c.muted}
             letterSpacing="0.06em"
           >
-            {a.label.toUpperCase()}
+            {a.label}
           </text>
         )
       })}

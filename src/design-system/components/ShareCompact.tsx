@@ -100,8 +100,6 @@ export function ShareCompact({
           style={{
             fontFamily: fonts.mono,
             fontSize: fontSize.micro,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
             color: labelMuted,
             width: '100%',
             marginBottom: 2,

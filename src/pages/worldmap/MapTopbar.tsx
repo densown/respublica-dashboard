@@ -146,8 +146,6 @@ export default function MapTopbar({
                 padding: '6px 14px',
                 fontFamily: fonts.mono,
                 fontSize: 9,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
                 borderRadius: radius.pill,
                 border: active ? 'none' : `1px solid ${c.border}`,
                 background: active ? c.red : 'transparent',
@@ -297,8 +295,6 @@ export default function MapTopbar({
               color: c.ink,
               fontFamily: fonts.mono,
               fontSize: 9,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
               cursor: 'pointer',
               borderRadius: radius.sm,
             }}

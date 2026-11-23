@@ -153,8 +153,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
             alignSelf: 'flex-start',
             fontFamily: fonts.mono,
             fontSize: fontSize.micro,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
             padding: `${spacing.xs}px ${spacing.sm}px`,
             borderRadius: radius.xs,
             background: tc.bg,
@@ -259,8 +257,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                     marginBottom: spacing.sm,
                   }}
@@ -298,8 +294,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                     marginBottom: spacing.sm,
                   }}
@@ -351,8 +345,6 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                     marginBottom: spacing.sm,
                   }}

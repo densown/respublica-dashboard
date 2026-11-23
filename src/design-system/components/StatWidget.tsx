@@ -40,8 +40,6 @@ export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) 
           style={{
             fontFamily: fonts.mono,
             fontSize: fontSize.micro,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
             color: c.muted,
           }}
         >

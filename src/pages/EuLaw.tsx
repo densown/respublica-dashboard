@@ -387,8 +387,6 @@ export default function EuLaw() {
           color: active ? c.red : c.muted,
           fontFamily: fonts.mono,
           fontSize: fontSize.xs,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase' as const,
           cursor: 'pointer',
           transition: `border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
         }}
@@ -615,8 +613,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -652,8 +648,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -899,8 +893,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -936,8 +928,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >

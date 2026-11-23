@@ -227,8 +227,6 @@ export function WorldRankingMode({
           style={{
             fontFamily: fonts.mono,
             fontSize: fontSize.xs,
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
             border: `1px solid ${c.border}`,
             background: c.cardBg,
             color: c.text,
@@ -328,7 +326,6 @@ export function WorldRankingMode({
                         marginLeft: 8,
                         fontFamily: fonts.mono,
                         fontSize: fontSize.micro,
-                        textTransform: 'uppercase',
                         color: c.red,
                       }}
                     >

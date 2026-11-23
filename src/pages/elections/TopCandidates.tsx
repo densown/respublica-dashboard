@@ -108,8 +108,6 @@ export function TopCandidates({ kandidaturen, constituencyLabel }: Props) {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
                     color: farbe,
                     marginBottom: 2,
                   }}

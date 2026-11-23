@@ -109,7 +109,7 @@ export default function Bundestag() {
     <>
       <PageHeader kicker={t('bundestagKicker')} title="Bundestag" subtitle={dek} />
 
-      <ViewToggle<Ansicht>
+      {schmal && <ViewToggle<Ansicht>
         value={ansicht}
         onChange={setAnsicht}
         ariaLabel={t('bundestagViewLabel')}
@@ -118,7 +118,7 @@ export default function Bundestag() {
           { value: 'abgeordnete', label: t('bundestagViewMembers') },
         ]}
         style={{ marginBottom: spacing.xl }}
-      />
+      />}
 
       {ansicht === 'abstimmungen' && (
         <Section last>
@@ -130,23 +130,16 @@ export default function Bundestag() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: schmal ? '1fr' : 'minmax(0, 1.7fr) minmax(260px, 1fr)',
+                gridTemplateColumns: schmal ? 'minmax(0, 1fr)' : 'minmax(0, 1.7fr) minmax(260px, 1fr)',
                 gap: schmal ? spacing.xl : spacing.xxxl,
                 alignItems: 'start',
               }}
             >
+              {schmal && <DeineBilanz abstimmungen={abstimmungen} />}
               <AbstimmungsListe abstimmungen={abstimmungen} />
-              <aside
-                style={{
-                  display: 'grid',
-                  gap: spacing.xl,
-                  order: schmal ? -1 : 0,
-                  position: schmal ? 'static' : 'sticky',
-                  top: spacing.lg,
-                }}
-              >
-                <DeineBilanz abstimmungen={abstimmungen} />
-                {!schmal && (
+              {!schmal && (
+                <aside style={{ display: 'grid', gap: spacing.xl, position: 'sticky', top: spacing.lg }}>
+                  <DeineBilanz abstimmungen={abstimmungen} />
                   <div>
                     <h2
                       style={{
@@ -164,8 +157,8 @@ export default function Bundestag() {
                     </h2>
                     {ort ? <MeineAbgeordneten ort={ort} /> : <WahlkreisFrage onWahl={setOrt} />}
                   </div>
-                )}
-              </aside>
+                </aside>
+              )}
             </div>
           )}
         </Section>

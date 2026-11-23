@@ -213,8 +213,6 @@ export function CountrySidebar({
             fontSize: 9,
             color: c.muted,
             ...(dock === 'bottom' ? {} : { writingMode: 'vertical-rl' as const }),
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
           }}
         >
           {iso3 || t('worldConsoleWorldStrip')}
@@ -425,8 +423,6 @@ export function CountrySidebar({
                 style={{
                   fontFamily: fonts.mono,
                   fontSize: 9,
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
                   color: c.muted,
                   margin: 0,
                   marginTop: 2,
@@ -551,8 +547,6 @@ export function CountrySidebar({
                       color: active ? c.red : c.muted,
                       fontFamily: fonts.mono,
                       fontSize: 9,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
                       cursor: 'pointer',
                       whiteSpace: 'nowrap',
                       transition: 'color 0.15s, border-color 0.15s',
