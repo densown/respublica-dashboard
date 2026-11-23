@@ -299,10 +299,6 @@ export default function Elections() {
               compareRegions={compareRegions}
               setCompareRegions={setCompareRegions}
               onOpenCompare={() => setActiveMode('compare')}
-              onStartCompare={(a) => {
-                setCompareRegions([a])
-                setActiveMode('compare')
-              }}
             />
           ) : (
             <EmptyState

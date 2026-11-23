@@ -1,4 +1,5 @@
 import {
+  useState,
   type CSSProperties,
   type Dispatch,
   type SetStateAction,
@@ -18,6 +19,7 @@ import {
   PARTY_LABELS,
 } from './partyColors'
 import type { KreiseMapBuild } from './mapGeometry'
+import { resolveKreisDisplayName } from './normalizeWahlen'
 import type {
   ElectionType,
   MapRow,
@@ -202,9 +204,17 @@ export function MapMode({
   // Legende nur mit Parteien, die irgendwo vorn liegen
   const sieger = new Set<string>()
   for (const r of normalizedRows) if (r.winning_party) sieger.add(r.winning_party)
+  // Ein Tipp auf die Karte merkt den Kreis nur vor und zeigt darunter, wer
+  // dort vorn liegt. Vorher sprang die Seite sofort in die Kreisanalyse; auf
+  // dem Handy gibt es kein Hover, man wusste nicht, was man angetippt hatte.
+  const [vorgemerkt, setVorgemerkt] = useState<string | null>(null)
   const onMapSelect = (ags: string) => {
-    onActivateKreis(ags.replace(/\s/g, ''))
+    setVorgemerkt(ags.replace(/\s/g, ''))
   }
+  const vorZeile = vorgemerkt ? dataByAgs.get(vorgemerkt) : undefined
+  const vorName = vorgemerkt
+    ? resolveKreisDisplayName(vorgemerkt, kreisNameByAgs, vorZeile?.ags_name)
+    : ''
 
   const onPickSearchKreis = (ags: string) => {
     onActivateKreis(ags.replace(/\s/g, ''))
@@ -382,7 +392,7 @@ export function MapMode({
               turnoutMax={turnoutStats.maxT}
               lang={lang}
               onSelectAgs={onMapSelect}
-              selectedAgs={selectedAgs}
+              selectedAgs={vorgemerkt ?? selectedAgs}
               loading={mapLoading || yearsLoading}
             />
           </div>
@@ -396,17 +406,85 @@ export function MapMode({
             nurSieger={sieger}
           />
           </ExportableContainer>
-          <p
-            style={{
-              margin: `${spacing.md}px 0 0`,
-              fontFamily: fonts.body,
-              fontStyle: 'italic',
-              fontSize: fontSize.sm,
-              color: c.muted,
-            }}
-          >
-            {t('electionsMapHint')}
-          </p>
+          {vorgemerkt ? (
+            <div
+              aria-live="polite"
+              style={{
+                marginTop: spacing.md,
+                paddingTop: spacing.sm,
+                borderTop: `2px solid ${c.ink}`,
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: spacing.md,
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <div
+                  style={{
+                    fontFamily: fonts.display,
+                    fontWeight: 900,
+                    fontSize: fontSize.lg,
+                    color: c.ink,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {vorName}
+                </div>
+                <div
+                  style={{
+                    marginTop: 2,
+                    fontFamily: fonts.body,
+                    fontSize: fontSize.sm,
+                    color: c.muted,
+                  }}
+                >
+                  {vorZeile
+                    ? [
+                        vorZeile.winning_party
+                          ? `${t('electionsLeads')}: ${PARTY_LABELS[vorZeile.winning_party]?.[lang] ?? vorZeile.winning_party}`
+                          : null,
+                        Number.isFinite(vorZeile.turnout)
+                          ? `${t('turnout')}: ${turnoutPct(vorZeile.turnout)}`
+                          : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ') || t('electionsMapNoData')
+                    : t('electionsMapNoData')}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => onActivateKreis(vorgemerkt)}
+                style={{
+                  minHeight: 44,
+                  padding: '0 18px',
+                  borderRadius: radius.sm,
+                  border: `1px solid ${c.ink}`,
+                  background: c.ink,
+                  color: c.bg,
+                  fontFamily: fonts.body,
+                  fontSize: fontSize.base,
+                  cursor: 'pointer',
+                }}
+              >
+                {t('electionsOpenDistrict')}
+              </button>
+            </div>
+          ) : (
+            <p
+              style={{
+                margin: `${spacing.md}px 0 0`,
+                fontFamily: fonts.body,
+                fontStyle: 'italic',
+                fontSize: fontSize.sm,
+                color: c.muted,
+              }}
+            >
+              {t('electionsMapHint')}
+            </p>
+          )}
 
           <div
             style={{

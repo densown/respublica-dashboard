@@ -256,21 +256,21 @@ export function HistoricalTable({
                   (pageSafe * PAGE_SIZE + i) % 2 === 0 ? c.cardBg : c.bg,
               }}
             >
-              <td style={{ padding: '8px 10px', color: c.text }}>{r.year}</td>
-              <td style={{ padding: '8px 10px', color: c.inkSoft }}>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px', color: c.text }}>{r.year}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px', color: c.inkSoft }}>
                 {typeLabel(r.typ as ElectionType)}
               </td>
-              <td style={{ padding: '8px 10px' }}>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>
                 {`${toDisplayPercent(Number(r.turnout)).toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`}
               </td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'cdu_csu', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'spd', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'gruene', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'afd', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'bsw', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'linke_pds', lang)}</td>
-              <td style={{ padding: '8px 10px' }}>{cellPct(r, 'fdp', lang)}</td>
-              <td style={{ padding: '8px 10px', color: c.text }}>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'cdu_csu', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'spd', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'gruene', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'afd', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'bsw', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'linke_pds', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px' }}>{cellPct(r, 'fdp', lang)}</td>
+              <td style={{ whiteSpace: 'nowrap', padding: '8px 10px', color: c.text }}>
                 {PARTY_LABELS[r._winner]?.[lang] ?? r._winner}
               </td>
             </tr>

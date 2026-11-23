@@ -93,7 +93,8 @@ export function PartyBarChart({
                 const n = typeof v === 'number' ? v : Number(v)
                 if (!Number.isFinite(n)) return ''
                 const pct = toDisplayPercent(n)
-                return `${pct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`
+                // Geschuetztes Leerzeichen: recharts bricht Beschriftungen sonst am Leerzeichen um
+                return `${pct.toFixed(1).replace('.', lang === 'de' ? ',' : '.')}\u00a0%`
               }}
               style={{
                 fill: c.text,

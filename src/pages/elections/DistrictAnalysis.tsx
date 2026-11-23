@@ -170,7 +170,6 @@ export type DistrictAnalysisProps = {
   compareRegions: string[]
   setCompareRegions: Dispatch<SetStateAction<string[]>>
   onOpenCompare: () => void
-  onStartCompare?: (ags: string) => void
 }
 
 export function DistrictAnalysis({
@@ -185,7 +184,6 @@ export function DistrictAnalysis({
   compareRegions,
   setCompareRegions,
   onOpenCompare,
-  onStartCompare,
 }: DistrictAnalysisProps) {
   const { c, t, lang, theme } = useTheme()
   const partyColors = partyColorsForTheme(theme === 'dark')
@@ -480,13 +478,14 @@ export function DistrictAnalysis({
       : `${t('addToCompare')} (${compareCount}/4)`
 
   const addToComparePrimaryStyle: CSSProperties = {
-    background: c.red,
-    color: '#fff',
-    padding: '8px 16px',
+    background: 'transparent',
+    color: c.text,
+    minHeight: 44,
+    padding: '0 16px',
     borderRadius: radius.sm,
-    fontSize: fontSize.sm,
+    fontSize: fontSize.md,
     fontFamily: fonts.body,
-    border: 'none',
+    border: `1px solid ${c.ink}`,
     cursor: addToCompareDisabled ? 'not-allowed' : 'pointer',
     opacity: addToCompareDisabled ? 0.5 : 1,
     whiteSpace: 'nowrap',
@@ -504,8 +503,6 @@ export function DistrictAnalysis({
     <div
       style={{
         marginTop: spacing.lg,
-        paddingLeft: narrow ? 12 : 0,
-        paddingRight: narrow ? 12 : 0,
         boxSizing: 'border-box',
         width: '100%',
         maxWidth: '100%',
@@ -527,15 +524,15 @@ export function DistrictAnalysis({
           onClick={onBackToMap}
           style={{
             minHeight: 44,
-            padding: '0 16px',
-            borderRadius: radius.lg,
-            border: `1px solid ${c.border}`,
-            background: c.inputBg,
-            color: c.text,
-            fontFamily: fonts.mono,
-            fontSize: fontSize.sm,
+            padding: 0,
+            border: 'none',
+            background: 'none',
+            color: c.muted,
+            fontFamily: fonts.body,
+            fontStyle: 'italic',
+            fontSize: fontSize.md,
             cursor: 'pointer',
-            alignSelf: narrow ? 'stretch' : 'auto',
+            alignSelf: 'flex-start',
           }}
         >
           {t('backToMap')}
@@ -583,25 +580,6 @@ export function DistrictAnalysis({
           >
             {addToCompareLabel}
           </button>
-          {onStartCompare ? (
-            <button
-              type="button"
-              onClick={() => onStartCompare(selectedKey)}
-              style={{
-                minHeight: 44,
-                padding: '0 18px',
-                borderRadius: radius.lg,
-                border: `1px solid ${c.border}`,
-                background: c.inputBg,
-                color: c.text,
-                fontFamily: fonts.body,
-                fontSize: fontSize.md,
-                cursor: 'pointer',
-              }}
-            >
-              + {t('compare')}
-            </button>
-          ) : null}
           {compareCount >= 2 ? (
             <button
               type="button"
@@ -650,6 +628,204 @@ export function DistrictAnalysis({
 
       {!loading && data && (
         <>
+          {sectionTitle(t('singleResult'), c)}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: narrow ? 'column' : 'row',
+              flexWrap: 'wrap',
+              gap: spacing.md,
+              marginBottom: spacing.md,
+            }}
+          >
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span
+                style={{
+                  fontFamily: fonts.body,
+                  fontSize: fontSize.sm,
+                  color: c.muted,
+                }}
+              >
+                {t('electionYear')}
+              </span>
+              <select
+                value={resultYear}
+                onChange={(e) => setResultYear(Number(e.target.value))}
+                disabled={!yearsForResultTyp.length}
+                style={selectCss(c, narrow)}
+              >
+                {yearsForResultTyp.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span
+                style={{
+                  fontFamily: fonts.body,
+                  fontSize: fontSize.sm,
+                  color: c.muted,
+                }}
+              >
+                {t('electionType')}
+              </span>
+              <select
+                value={resultTyp}
+                onChange={(e) => setResultTyp(e.target.value as ElectionType)}
+                style={selectCss(c, narrow)}
+              >
+                {ELECTION_TYPES.map((tp) => (
+                  <option key={tp} value={tp}>
+                    {typeLabelT(t, tp)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: narrow ? '1fr' : '1fr 1fr',
+              gap: spacing.xl,
+              alignItems: 'start',
+              width: '100%',
+              maxWidth: '100%',
+            }}
+          >
+            <div
+              style={{
+                fontFamily: fonts.body,
+                fontSize: fontSize.md,
+                color: c.text,
+                lineHeight: 1.6,
+                minWidth: 0,
+              }}
+            >
+              {singleRow ? (
+                <>
+                  <div>
+                    <strong>{t('turnout')}:</strong>{' '}
+                    {toDisplayPercent(Number(singleRow.turnout))
+                      .toFixed(1)
+                      .replace('.', sep)}{' '}
+                    %
+                    {nationalAvgTurnout > 0 ? (
+                      <span style={{ color: c.muted }}>
+                        {' '}
+                        (
+                        {interpolate(t('vsAverage'), {
+                          avg: nationalAvgTurnout
+                            .toFixed(1)
+                            .replace('.', sep),
+                        })}
+                        )
+                      </span>
+                    ) : null}
+                  </div>
+                  <div style={{ marginTop: 8 }}>
+                    <strong>{t('winningParty')}:</strong>{' '}
+                    {PARTY_LABELS[winnerPartyKey(singleRow)]?.[lang] ??
+                      winnerPartyKey(singleRow)}
+                  </div>
+                  <div style={{ marginTop: 8 }}>
+                    <strong>{t('previousElection')}:</strong>{' '}
+                    {prevElectionDelta ? (
+                      <span
+                        style={{
+                          color:
+                            prevElectionDelta.delta >= 0 ? c.yes : c.no,
+                        }}
+                      >
+                        {prevElectionDelta.delta >= 0 ? '+' : ''}
+                        {prevElectionDelta.delta
+                          .toFixed(1)
+                          .replace('.', sep)}{' '}
+                        Pp (
+                        {
+                          PARTY_LABELS[prevElectionDelta.party]?.[lang] ??
+                            prevElectionDelta.party
+                        }
+                        )
+                      </span>
+                    ) : (
+                      '—'
+                    )}
+                  </div>
+                </>
+              ) : (
+                <span style={{ color: c.muted }}>{t('noData')}</span>
+              )}
+            </div>
+            <div style={{ width: '100%', minWidth: 0, overflow: 'hidden' }}>
+              {singleRow ? (
+                <PartyBarChart
+                  data={singleBarData}
+                  year={singleRow.year}
+                  lang={lang}
+                />
+              ) : null}
+            </div>
+          </div>
+
+          {sectionTitle(t('positionInCountry'), c)}
+          <label
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 6,
+              marginBottom: spacing.md,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: fonts.body,
+                fontSize: fontSize.sm,
+                color: c.muted,
+              }}
+            >
+              {t('partyLabel')}
+            </span>
+            <select
+              value={focusParty}
+              onChange={(e) => setFocusParty(e.target.value)}
+              style={selectCss(c, narrow)}
+            >
+              {DISTRICT_CHART_PARTIES.map((p) => (
+                <option key={p} value={p}>
+                  {PARTY_LABELS[p]?.[lang] ?? p}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p
+            style={{
+              fontFamily: fonts.body,
+              fontSize: fontSize.sm,
+              color: c.muted,
+              marginBottom: spacing.sm,
+            }}
+          >
+            {typeLabelT(t, resultTyp)} {resultYear}
+          </p>
+          {rankingLoading ? (
+            <LoadingSpinner />
+          ) : percentileStats && percentileStats.value != null ? (
+            <PercentileBar
+              lang={lang}
+              t={t}
+              min={percentileStats.min}
+              max={percentileStats.max}
+              value={percentileStats.value}
+              rank={percentileStats.rank}
+              total={percentileStats.total}
+              accentColor={partyColors[focusParty]}
+            />
+          ) : (
+            <p style={{ color: c.muted, fontFamily: fonts.body }}>{t('noData')}</p>
+          )}
+
           {sectionTitle(t('partyTimeline'), c)}
           <div style={{ marginBottom: spacing.sm }}>
             <span
@@ -946,204 +1122,6 @@ export function DistrictAnalysis({
               />
             ) : null}
           </div>
-
-          {sectionTitle(t('singleResult'), c)}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: narrow ? 'column' : 'row',
-              flexWrap: 'wrap',
-              gap: spacing.md,
-              marginBottom: spacing.md,
-            }}
-          >
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <span
-                style={{
-                  fontFamily: fonts.body,
-                  fontSize: fontSize.sm,
-                  color: c.muted,
-                }}
-              >
-                {t('electionYear')}
-              </span>
-              <select
-                value={resultYear}
-                onChange={(e) => setResultYear(Number(e.target.value))}
-                disabled={!yearsForResultTyp.length}
-                style={selectCss(c, narrow)}
-              >
-                {yearsForResultTyp.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <span
-                style={{
-                  fontFamily: fonts.body,
-                  fontSize: fontSize.sm,
-                  color: c.muted,
-                }}
-              >
-                {t('electionType')}
-              </span>
-              <select
-                value={resultTyp}
-                onChange={(e) => setResultTyp(e.target.value as ElectionType)}
-                style={selectCss(c, narrow)}
-              >
-                {ELECTION_TYPES.map((tp) => (
-                  <option key={tp} value={tp}>
-                    {typeLabelT(t, tp)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: narrow ? '1fr' : '1fr 1fr',
-              gap: spacing.xl,
-              alignItems: 'start',
-              width: '100%',
-              maxWidth: '100%',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: fonts.body,
-                fontSize: fontSize.md,
-                color: c.text,
-                lineHeight: 1.6,
-                minWidth: 0,
-              }}
-            >
-              {singleRow ? (
-                <>
-                  <div>
-                    <strong>{t('turnout')}:</strong>{' '}
-                    {toDisplayPercent(Number(singleRow.turnout))
-                      .toFixed(1)
-                      .replace('.', sep)}{' '}
-                    %
-                    {nationalAvgTurnout > 0 ? (
-                      <span style={{ color: c.muted }}>
-                        {' '}
-                        (
-                        {interpolate(t('vsAverage'), {
-                          avg: nationalAvgTurnout
-                            .toFixed(1)
-                            .replace('.', sep),
-                        })}
-                        )
-                      </span>
-                    ) : null}
-                  </div>
-                  <div style={{ marginTop: 8 }}>
-                    <strong>{t('winningParty')}:</strong>{' '}
-                    {PARTY_LABELS[winnerPartyKey(singleRow)]?.[lang] ??
-                      winnerPartyKey(singleRow)}
-                  </div>
-                  <div style={{ marginTop: 8 }}>
-                    <strong>{t('previousElection')}:</strong>{' '}
-                    {prevElectionDelta ? (
-                      <span
-                        style={{
-                          color:
-                            prevElectionDelta.delta >= 0 ? c.yes : c.no,
-                        }}
-                      >
-                        {prevElectionDelta.delta >= 0 ? '+' : ''}
-                        {prevElectionDelta.delta
-                          .toFixed(1)
-                          .replace('.', sep)}{' '}
-                        Pp (
-                        {
-                          PARTY_LABELS[prevElectionDelta.party]?.[lang] ??
-                            prevElectionDelta.party
-                        }
-                        )
-                      </span>
-                    ) : (
-                      '—'
-                    )}
-                  </div>
-                </>
-              ) : (
-                <span style={{ color: c.muted }}>{t('noData')}</span>
-              )}
-            </div>
-            <div style={{ width: '100%', minWidth: 0, overflow: 'hidden' }}>
-              {singleRow ? (
-                <PartyBarChart
-                  data={singleBarData}
-                  year={singleRow.year}
-                  lang={lang}
-                />
-              ) : null}
-            </div>
-          </div>
-
-          {sectionTitle(t('positionInCountry'), c)}
-          <label
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 6,
-              marginBottom: spacing.md,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: fonts.body,
-                fontSize: fontSize.sm,
-                color: c.muted,
-              }}
-            >
-              {t('partyLabel')}
-            </span>
-            <select
-              value={focusParty}
-              onChange={(e) => setFocusParty(e.target.value)}
-              style={selectCss(c, narrow)}
-            >
-              {DISTRICT_CHART_PARTIES.map((p) => (
-                <option key={p} value={p}>
-                  {PARTY_LABELS[p]?.[lang] ?? p}
-                </option>
-              ))}
-            </select>
-          </label>
-          <p
-            style={{
-              fontFamily: fonts.body,
-              fontSize: fontSize.sm,
-              color: c.muted,
-              marginBottom: spacing.sm,
-            }}
-          >
-            {typeLabelT(t, resultTyp)} {resultYear}
-          </p>
-          {rankingLoading ? (
-            <LoadingSpinner />
-          ) : percentileStats && percentileStats.value != null ? (
-            <PercentileBar
-              lang={lang}
-              t={t}
-              min={percentileStats.min}
-              max={percentileStats.max}
-              value={percentileStats.value}
-              rank={percentileStats.rank}
-              total={percentileStats.total}
-              accentColor={partyColors[focusParty]}
-            />
-          ) : (
-            <p style={{ color: c.muted, fontFamily: fonts.body }}>{t('noData')}</p>
-          )}
 
           {sectionTitle(t('historicalTable'), c)}
           <HistoricalTable
