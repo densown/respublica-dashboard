@@ -74,6 +74,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     for (const [schluessel, wert] of Object.entries(palette)) {
       root.style.setProperty(`--rp-${schluessel}`, String(wert))
     }
+
+    // Safari faerbt Statusleiste und Werkzeugleiste nach theme-color und dem
+    // Seitenhintergrund. Beides folgt hier dem Modus, sonst bleiben die
+    // Raender im dunklen Modus weiss.
+    root.style.colorScheme = theme
+    root.style.backgroundColor = palette.bg
+    document.body.style.backgroundColor = palette.bg
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', palette.bg)
   }, [theme])
 
   useEffect(() => {
