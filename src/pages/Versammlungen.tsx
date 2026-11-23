@@ -1,3 +1,4 @@
+import { useSeo } from '../hooks/useSeo'
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
@@ -39,6 +40,14 @@ function heuteIso(): string {
 
 export default function Versammlungen() {
   const { c, t, lang } = useTheme()
+  useSeo({
+    titel: lang === 'de' ? 'Demonstrationen in Berlin: Zahlen nach Jahr und Thema' : 'Protests in Berlin: numbers by year and topic',
+    beschreibung:
+      lang === 'de'
+        ? 'Wie viel in Berlin demonstriert wird: Versammlungen nach Jahr, Thema und Form, gezählt aus der Liste der Berliner Versammlungsbehörde und Auskünften der Polizei.'
+        : 'How much Berlin protests: assemblies by year, topic and form, counted from the list of the Berlin assembly authority and police disclosures.',
+    pfad: '/versammlungen',
+  })
   const [params, setParams] = useSearchParams()
   const heute = useMemo(heuteIso, [])
   const aktuellesJahr = Number(heute.slice(0, 4))

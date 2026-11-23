@@ -1,3 +1,4 @@
+import { useSeo } from '../hooks/useSeo'
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
@@ -32,6 +33,14 @@ const DEUTUNG_KEYS: Record<string, string> = {
 
 export default function DemocracyIndex() {
   const { c, t, lang, theme } = useTheme()
+  useSeo({
+    titel: lang === 'de' ? 'Demokratie-Index: Länder im Vergleich' : 'Democracy index: countries compared',
+    beschreibung:
+      lang === 'de'
+        ? 'Wie demokratisch ist ein Land? Mitsprache, Rechtsstaat, Korruptionskontrolle und weitere Dimensionen im Ländervergleich, aus Daten der Weltbank.'
+        : 'How democratic is a country? Voice, rule of law, control of corruption and more, compared across countries with World Bank data.',
+    pfad: '/demokratie',
+  })
   const narrow = useIsMobile()
   const [searchParams, setSearchParams] = useSearchParams()
   const dunkel = theme === 'dark'
