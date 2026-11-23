@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ExportableContainer,
-  LoadingSpinner,
+  Platzhalter,
   PageHeader,
   Section,
   useTheme,
@@ -11,6 +11,11 @@ import {
 import { fontSize, fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useSeo } from '../hooks/useSeo'
+import { useIsMobile } from '../hooks/useMediaQuery'
+import { useMeinOrt } from '../hooks/useMeins'
+import { DeineBilanz } from '../components/einstieg/DeineBilanz'
+import { MeineAbgeordneten } from '../components/einstieg/MeineAbgeordneten'
+import { WahlkreisFrage } from '../components/einstieg/WahlkreisFrage'
 import { AbgeordnetenListe } from '../components/bundestag/AbgeordnetenListe'
 import { AbstimmungsListe } from '../components/bundestag/AbstimmungsListe'
 import { datumLang } from '../components/bundestag/abstimmungText'
@@ -37,6 +42,8 @@ export default function Bundestag() {
   const navigate = useNavigate()
   const { c, t, lang } = useTheme()
   const [params, setParams] = useSearchParams()
+  const schmal = useIsMobile()
+  const [ort, setOrt] = useMeinOrt()
   const ansicht: Ansicht = params.get('ansicht') === 'abgeordnete' ? 'abgeordnete' : 'abstimmungen'
 
   const setAnsicht = useCallback(
@@ -116,11 +123,50 @@ export default function Bundestag() {
       {ansicht === 'abstimmungen' && (
         <Section last>
           {liste.loading && !liste.data ? (
-            <LoadingSpinner />
+            <Platzhalter zeilen={4} />
           ) : liste.error && !liste.data ? (
             fehler
           ) : (
-            <AbstimmungsListe abstimmungen={abstimmungen} />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: schmal ? '1fr' : 'minmax(0, 1.7fr) minmax(260px, 1fr)',
+                gap: schmal ? spacing.xl : spacing.xxxl,
+                alignItems: 'start',
+              }}
+            >
+              <AbstimmungsListe abstimmungen={abstimmungen} />
+              <aside
+                style={{
+                  display: 'grid',
+                  gap: spacing.xl,
+                  order: schmal ? -1 : 0,
+                  position: schmal ? 'static' : 'sticky',
+                  top: spacing.lg,
+                }}
+              >
+                <DeineBilanz abstimmungen={abstimmungen} />
+                {!schmal && (
+                  <div>
+                    <h2
+                      style={{
+                        margin: `0 0 ${spacing.sm}px`,
+                        paddingTop: spacing.sm,
+                        borderTop: `2px solid ${c.ink}`,
+                        fontFamily: fonts.body,
+                        fontStyle: 'italic',
+                        fontWeight: 400,
+                        fontSize: fontSize.base,
+                        color: c.red,
+                      }}
+                    >
+                      {ort ? t('ortDein').replace('{name}', ort.name) : t('ortFrage')}
+                    </h2>
+                    {ort ? <MeineAbgeordneten ort={ort} /> : <WahlkreisFrage onWahl={setOrt} />}
+                  </div>
+                )}
+              </aside>
+            </div>
           )}
         </Section>
       )}
@@ -145,7 +191,7 @@ export default function Bundestag() {
 
           <Section title={t('bundestagMembersTitle')} last>
             {personen.loading && !personen.data ? (
-              <LoadingSpinner />
+              <Platzhalter zeilen={6} form="zeile" />
             ) : personen.error && !personen.data ? (
               fehler
             ) : (
