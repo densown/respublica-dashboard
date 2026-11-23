@@ -325,8 +325,6 @@ export function CompareMode({
     <div
       style={{
         marginTop: spacing.lg,
-        paddingLeft: narrow ? 12 : 0,
-        paddingRight: narrow ? 12 : 0,
         boxSizing: 'border-box',
         width: '100%',
         maxWidth: '100%',
@@ -348,14 +346,15 @@ export function CompareMode({
           onClick={onBackToMap}
           style={{
             minHeight: 44,
-            padding: '0 16px',
-            borderRadius: radius.lg,
-            border: `1px solid ${c.border}`,
-            background: c.cardBg,
-            color: c.text,
-            fontFamily: fonts.mono,
-            fontSize: fontSize.sm,
+            padding: 0,
+            border: 'none',
+            background: 'none',
+            color: c.muted,
+            fontFamily: fonts.body,
+            fontStyle: 'italic',
+            fontSize: fontSize.md,
             cursor: 'pointer',
+            alignSelf: 'flex-start',
           }}
         >
           {t('backToMap')}

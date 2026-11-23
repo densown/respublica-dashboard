@@ -68,3 +68,23 @@ export function sectionTitle(text: string, c: { border: string; text: string }) 
     </h3>
   )
 }
+
+/**
+ * Kreise der Karte, die es so nicht mehr gibt: Goettingen und Osterode sind
+ * seit 2016 ein Kreis (03159), Eisenach gehoert seit 2021 zum Wartburgkreis.
+ * Ohne die Zuordnung bleiben sie auf der Karte als "Keine Daten" weiss.
+ */
+export const AGS_NACHFOLGER: Record<string, string> = {
+  '03152': '03159',
+  '03156': '03159',
+  '16056': '16063',
+}
+
+/** Traegt fuer alte Kartenkreise die Zeile des Nachfolgers ein, wenn sie selbst fehlen */
+export function mitNachfolgern<T>(m: Map<string, T>): Map<string, T> {
+  for (const [alt, neu] of Object.entries(AGS_NACHFOLGER)) {
+    const zeile = m.get(neu)
+    if (zeile && !m.has(alt)) m.set(alt, zeile)
+  }
+  return m
+}

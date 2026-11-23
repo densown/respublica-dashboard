@@ -138,10 +138,12 @@ export function ElectionMap({
             d={p.d}
             fill={fillForPath(p.ags)}
             fillOpacity={1}
-            stroke={
-              isSel ? c.red : isHover ? c.ink : c.muted
-            }
-            strokeWidth={isSel || isHover ? 2 : 0.3}
+            // Grenzen in der Farbe des Kartengrunds: so trennen sie auch
+            // Nachbarn gleicher Farbe, hell wie dunkel. Ein grauer Haarstrich
+            // verschwand auf dem Handy.
+            stroke={isSel ? c.red : isHover ? c.ink : c.cardBg}
+            strokeWidth={isSel ? 2.5 : isHover ? 2 : 0.8}
+            strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
             style={{
               cursor: comparePickMode ? 'crosshair' : 'pointer',
@@ -226,6 +228,21 @@ export function ElectionMap({
           </pattern>
         </defs>
         <g>{svgInner}</g>
+        {/* Gewaehlter Kreis noch einmal obenauf, sonst ueberdecken Nachbarn den Rand */}
+        {paths
+          .filter((p) => selectedAgs != null && normAgs(p.ags) === normAgs(selectedAgs))
+          .map((p) => (
+            <path
+              key={`sel-${p.ags}`}
+              d={p.d}
+              fill="none"
+              stroke={c.red}
+              strokeWidth={2.5}
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+              pointerEvents="none"
+            />
+          ))}
       </svg>
       {tip && (
         <div
