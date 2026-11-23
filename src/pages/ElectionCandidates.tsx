@@ -134,10 +134,12 @@ export default function ElectionCandidates() {
 
   // Wahlkreisgeometrie liegt je Wahl unter public/data und wird ueber den Slug
   // gefunden. Fehlt die Datei, faellt die Seite auf die Nummernliste zurueck —
-  // fuer die meisten Wahlen gibt es (noch) keine Geodaten.
+  // fuer die meisten Wahlen gibt es (noch) keine Geodaten. Ohne Kandidaturen
+  // wird gar nicht erst gefragt: die Karte haette nichts zu zeigen.
+  const hatKandidaturen = (data?.gesamt ?? 0) > 0
   const [geo, setGeo] = useState<ConstituencyGeoJson | null>(null)
   useEffect(() => {
-    if (!wahlSlug) {
+    if (!wahlSlug || !hatKandidaturen) {
       setGeo(null)
       return
     }
@@ -154,7 +156,7 @@ export default function ElectionCandidates() {
     return () => {
       abgebrochen = true
     }
-  }, [wahlSlug])
+  }, [wahlSlug, hatKandidaturen])
 
   const ersteLadung = (loading || listeLoading) && !data
   const laedtNach = loading && Boolean(data)

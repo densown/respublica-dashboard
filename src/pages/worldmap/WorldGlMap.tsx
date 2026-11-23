@@ -37,7 +37,9 @@ const FALLBACK_WATER_LIGHT = light.mapWater
 
 // Sekunden, nach denen ohne geladenen Basemap-Style auf den lokalen Fallback
 // umgeschaltet wird (langsames/blockiertes CDN ohne 'error'-Event).
-const STYLE_FALLBACK_TIMEOUT_MS = 8000
+// Nach vier Sekunden ohne Basemap uebernimmt der lokale Stil. Acht waren auf
+// dem Handy zu lang: so lange stand nur eine leere Flaeche da.
+const STYLE_FALLBACK_TIMEOUT_MS = 4000
 
 /**
  * Minimaler, vollständig lokaler MapLibre-Style ohne Netzwerkabhängigkeit.
@@ -195,6 +197,8 @@ export function WorldGlMap({
   const { c, t, theme } = useTheme()
   const isDark = theme === 'dark'
 
+  /** Erst wenn Stil und Laenderflaechen stehen; bis dahin liegt ein Ladehinweis ueber der Karte. */
+  const [bereit, setBereit] = useState(false)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<maplibregl.Popup | null>(null)
@@ -545,6 +549,7 @@ export function WorldGlMap({
       installChoropleth(map)
       hideBasemapLabels(map)
       applyProjection(map, projectionRef.current, 'init')
+      setBereit(true)
     }
 
     // Schlaegt der externe CARTO-Basemap-Style fehl (CDN blockiert, Mobilfunk,
@@ -563,9 +568,12 @@ export function WorldGlMap({
     map.on('load', onLoad)
     map.on('error', onError)
     const styleWatchdog = window.setTimeout(goFallback, STYLE_FALLBACK_TIMEOUT_MS)
+    // Der Ladehinweis darf nie haengen bleiben, auch wenn kein Stil ankommt.
+    const hinweisAus = window.setTimeout(() => setBereit(true), 12000)
 
     return () => {
       window.clearTimeout(styleWatchdog)
+      window.clearTimeout(hinweisAus)
       map.off('load', onLoad)
       map.off('error', onError)
       detachHandlers(map, handlersRef.current, hoveredIsoRef)
@@ -574,6 +582,7 @@ export function WorldGlMap({
       popupRef.current = null
       map.remove()
       mapRef.current = null
+      setBereit(false)
       prevThemeDarkRef.current = null
       prevProjectionRef.current = projectionRef.current
     }
@@ -848,6 +857,27 @@ export function WorldGlMap({
               : { width: '100%', height: '100%' }
         }
       />
+      {!bereit && (
+        <div
+          role="status"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 25,
+            background: c.bgAlt,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 12,
+            fontFamily: fonts.body,
+            fontSize: fontSize.md,
+            color: c.muted,
+          }}
+        >
+          <LoadingSpinner />
+          <span>{t('loading')}</span>
+        </div>
+      )}
       <div
         className="world-gl-map__watermark"
         aria-hidden

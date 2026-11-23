@@ -7,15 +7,13 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { Badge, DataCard, useTheme } from '../../design-system'
+import { Badge, DataCard, Fundstelle, useTheme } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
-import { EU_COURT } from '../../design-system/palettes'
+import { fontSize, fonts, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuUrteilDetail, EuUrteilListItem } from './types'
-import { ON_DATA_LIGHT } from '../../design-system/palettes'
 
 
 const PREVIEW_LEN = 220
@@ -24,11 +22,6 @@ function trunc(s: string, max: number): string {
   const t = s.trim()
   if (t.length <= max) return t
   return `${t.slice(0, Math.max(0, max - 1))}…`
-}
-
-function courtColors(gericht: string): { bg: string; fg: string } {
-  if (gericht === 'EuG') return { bg: EU_COURT.EuG, fg: ON_DATA_LIGHT }
-  return { bg: EU_COURT.EuGH, fg: ON_DATA_LIGHT }
 }
 
 function courtLabel(gericht: string, t: (k: I18nKey) => string): string {
@@ -86,7 +79,6 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
       ? (item.auswirkung_de ?? '').trim()
       : (item.auswirkung_en ?? '').trim()
 
-  const cc = courtColors(item.gericht)
   const badgeText = courtLabel(item.gericht, t)
 
   const toggle = useCallback(() => {
@@ -135,46 +127,15 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
           minWidth: 0,
         }}
       >
-        <span
-          style={{
-            display: 'inline-block',
-            alignSelf: 'flex-start',
-            fontFamily: fonts.body,
-            fontSize: fontSize.xs,
-            fontWeight: 600,
-            padding: `${spacing.xs}px ${spacing.sm}px`,
-            borderRadius: radius.sm,
-            background: cc.bg,
-            color: cc.fg,
-            lineHeight: 1.2,
-          }}
-        >
+        {/* Gericht als Zeile ueber dem Titel, Aktenzeichen als Fundstelle */}
+        <span style={{ fontFamily: fonts.body, fontStyle: 'italic', fontSize: fontSize.sm, color: c.red, lineHeight: 1.2 }}>
           {badgeText}
         </span>
-        {item.ecli?.trim() ? (
-          <p
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: fontSize.micro,
-              color: c.muted,
-              margin: 0,
-              wordBreak: 'break-all',
-            }}
-          >
-            {item.ecli.trim()}
-          </p>
-        ) : (
-          <p
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: fontSize.xs,
-              color: c.muted,
-              margin: 0,
-            }}
-          >
-            {item.celex}
-          </p>
-        )}
+        <span style={{ whiteSpace: 'normal', wordBreak: 'break-all' }}>
+          <Fundstelle href={item.curia_url ?? item.eurlex_url ?? undefined} title={item.curia_url ? 'Curia' : 'EUR-Lex'}>
+            {item.ecli?.trim() || `CELEX ${item.celex}`}
+          </Fundstelle>
+        </span>
       </div>
       {item.datum ? (
         <time

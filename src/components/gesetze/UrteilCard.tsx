@@ -7,31 +7,16 @@ import {
 import {
   Badge,
   DataCard,
+  Fundstelle,
   useTheme,
 } from '../../design-system'
-import type { BadgeVariant } from '../../design-system'
 import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { useApi } from '../../hooks/useApi'
 import {
-  courtBadgeVariant,
   formatDisplayDate,
   rechtsprechungFullTextUrl,
 } from './utils'
 import type { Urteil } from './types'
-
-function smallRgBadgeVariant(rg: string): BadgeVariant {
-  const s = rg.toLowerCase()
-  if (s.includes('zivil')) return 'blue'
-  if (s.includes('straf')) return 'no'
-  if (s.includes('verfassung')) return 'muted'
-  if (s.includes('verwaltung')) return 'yes'
-  if (s.includes('steuer')) return 'teal'
-  if (s.includes('arbeit')) return 'amber'
-  if (s.includes('sozial')) return 'purple'
-  if (s.includes('patent')) return 'gray'
-  if (s.includes('öffentlich')) return 'muted'
-  return 'muted'
-}
 
 function nlToBr(text: string): ReactNode[] {
   const lines = text.split('\n')
@@ -105,29 +90,42 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
   return (
     <DataCard
       header={
-        <Badge text={court} variant={courtBadgeVariant(court)} />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: spacing.md,
+            width: '100%',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, minWidth: 0 }}>
+            {/* Gericht und Rechtsgebiet als Zeile, Aktenzeichen als Fundstelle */}
+            <span style={{ fontFamily: fonts.body, fontStyle: 'italic', fontSize: fontSize.sm, color: c.red, lineHeight: 1.2 }}>
+              {court}
+              {rg ? <span style={{ color: c.muted }}>{` · ${rg}`}</span> : null}
+            </span>
+            <Fundstelle href={fullUrl || undefined} title={t('urteileFullTextLink')}>
+              {az}
+            </Fundstelle>
+          </div>
+          {urteil.datum ? (
+            <time
+              dateTime={urteil.datum}
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: fontSize.xs,
+                color: c.muted,
+                flexShrink: 0,
+                marginTop: 2,
+              }}
+            >
+              {formatDisplayDate(urteil.datum, lang)}
+            </time>
+          ) : null}
+        </div>
       }
     >
-      <p
-        style={{
-          fontFamily: fonts.mono,
-          fontSize: fontSize.sm,
-          color: c.inkSoft,
-          marginBottom: rg ? spacing.xs : spacing.md,
-        }}
-      >
-        {az}
-        <span style={{ color: c.subtle, margin: `0 ${spacing.xs}px` }}>·</span>
-        <time dateTime={urteil.datum ?? undefined}>
-          {formatDisplayDate(urteil.datum, lang)}
-        </time>
-      </p>
-      {rg ? (
-        <div style={{ marginBottom: spacing.md }}>
-          <Badge text={rg} variant={smallRgBadgeVariant(rg)} />
-        </div>
-      ) : null}
-
       {summary ? (
         <>
           <p
