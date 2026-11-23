@@ -14,6 +14,8 @@ export const de = {
   // Kurzformen fuer die Seitenleiste. Bewusst eigene Schluessel: die
   // seiteninternen Reiter heissen ausgeschrieben "Gesetzesaenderungen" und
   // "EU-Rechtsprechung", was in 228 Pixeln Breite abgeschnitten wuerde.
+  navBtAbstimmungen: "Abstimmungen",
+  navBtAbgeordnete: "Abgeordnete",
   navLaws: "Gesetze",
   navRulings: "Urteile",
   navEuActs: "Rechtsakte",
@@ -226,6 +228,8 @@ export const en = {
   backToArticles: "Back to articles",
   lawsTracked: "Laws",
   rulings: "Rulings",
+  navBtAbstimmungen: "Votes",
+  navBtAbgeordnete: "Members",
   navLaws: "Laws",
   navRulings: "Rulings",
   navEuActs: "Legal acts",
