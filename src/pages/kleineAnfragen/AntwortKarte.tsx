@@ -157,7 +157,9 @@ export function AntwortKarte({ a, kompakt = false }: { a: Antwort; kompakt?: boo
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: spacing.lg }}>
-        {a.pdf_url && (
+        {/* Das DIP meldet die PDF-Adresse sofort, der Bundestag legt die Datei aber erst
+            einige Werktage spaeter ab (bis dahin 404). Volltext und PDF kommen gemeinsam. */}
+        {a.pdf_url && a.volltext_vorhanden && (
           <a href={a.pdf_url} target="_blank" rel="noopener noreferrer" style={{ ...link, minHeight: 44, display: 'inline-flex', alignItems: 'center' }}>
             {t('kaKartePdf')} ↗
           </a>
