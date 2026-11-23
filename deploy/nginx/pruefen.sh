@@ -91,5 +91,23 @@ else
   fehler=1
 fi
 
+# Einzelseiten mit Inhalt: die Sitemap kommt aus der API und nennt
+# Abstimmungen, und eine davon traegt eigenen Titel und Kerntext.
+einzel=$(curl -s -m 15 "$BASIS/sitemap.xml" | grep -o 'https://app\.respublica\.media/bundestag/[0-9]*' | head -1 | sed 's#https://app\.respublica\.media##')
+if [ -n "$einzel" ]; then
+  echo "ok     sitemap.xml nennt Einzelseiten ($einzel)"
+  if curl -s -m 15 "$BASIS$einzel" | grep -q '<div id="root"><main'; then
+    echo "ok     $einzel liefert Kerntext ohne JavaScript"
+  else
+    echo "FEHLER $einzel liefert keinen Kerntext, API-Route /api/seiten/html pruefen"
+    fehler=1
+  fi
+  kopf "$einzel" cache-control no-store
+  kopf "$einzel" x-frame-options sameorigin
+else
+  echo "FEHLER sitemap.xml nennt keine Einzelseiten, kommt also aus dist statt aus der API"
+  fehler=1
+fi
+
 if [ "$fehler" = 0 ]; then echo "Alles in Ordnung."; else echo "Mindestens eine Pruefung fehlgeschlagen."; fi
 exit "$fehler"

@@ -8,7 +8,9 @@
 | `/abstimmungen`, `/abstimmungen/<nr>` | 301 nach `/bundestag` bzw. `/bundestag/<nr>` |
 | `/abgeordnete`, `/abgeordnete/<nr>` | 301 nach `/bundestag?ansicht=abgeordnete` bzw. `/bundestag/abgeordnete/<nr>` |
 | `/demokratie-index` | 301 nach `/demokratie` |
-| Dateien aus `dist` (Skripte, Bilder, `robots.txt`, `sitemap.xml`, `data/`) | 200 |
+| `/bundestag/<nr>`, `/bundestag/abgeordnete/<nr>`, `/gesetze/<nr>` | 200, index.html mit eigenem Titel, Beschreibung und Kerntext aus der API (`/api/seiten/html`). Fällt die API aus oder kennt sie die Nummer nicht: index.html wie bei den anderen Seiten |
+| `/sitemap.xml` | 200, aus der API (`/api/seiten/sitemap.xml`, alle Einzelseiten). Fällt die API aus: die feste Datei aus `dist` |
+| Dateien aus `dist` (Skripte, Bilder, `robots.txt`, `data/`) | 200 |
 | alles andere | 404, als Inhalt die App mit ihrer Fehlerseite, nicht im Cache |
 
 Vorher lieferte jeder Pfad index.html mit Status 200. Wer ohne JavaScript
@@ -59,6 +61,17 @@ Zurueck, falls etwas nicht stimmt:
 cp /root/backups/nginx/app.respublica.media.bak-<datum> /etc/nginx/sites-available/app.respublica.media
 /usr/sbin/nginx -t && systemctl reload nginx
 ```
+
+## Einzelseiten und Sitemap aus der API
+
+Seit November 2026 gibt `app-routen.conf` Einzelseiten und `/sitemap.xml`
+an die API auf Port 3002 weiter (Routen in `respublica-api`,
+`api/routes/seiten.js`). Die API liest `/root/apps/dashboard/dist/index.html`
+und setzt Titel, Beschreibung und Kerntext ein. Voraussetzung: Die API läuft
+mit diesen Routen. Ohne sie ändert sich nichts, nginx fällt auf die Dateien
+aus `dist` zurück.
+
+Einspielen wie eine neue Route: Schritt 2 und 4 bis 5 von oben.
 
 ## Neue Route in der App
 
