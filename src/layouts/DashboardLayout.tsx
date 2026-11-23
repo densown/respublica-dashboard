@@ -14,7 +14,8 @@ const ROUTE_PREFIX: Record<string, string> = {
   koalition: 'coalition',
   demokratie: 'democracy',
   versammlungen: 'versammlungen',
-  'kleine-anfragen': 'kleineAnfragen',
+  // Kleine Anfragen haengen als Unterpunkt am Bundestag
+  'kleine-anfragen': 'bundestag',
   weltkarte: 'worldmap',
   'eu-parlament': 'euParl',
   lobbyregister: 'lobby',
@@ -47,6 +48,11 @@ const MODULE_PATH: Record<string, string> = {
  * verlinkbar und der Eintrag koennte seinen Zustand nicht anzeigen.
  */
 const SUB_NAV: Record<string, { id: string; labelKey: string; path: string }[]> = {
+  bundestag: [
+    { id: 'bundestag.votes', labelKey: 'navBtAbstimmungen', path: '/bundestag' },
+    { id: 'bundestag.members', labelKey: 'navBtAbgeordnete', path: '/bundestag?ansicht=abgeordnete' },
+    { id: 'bundestag.questions', labelKey: 'kaNav', path: '/kleine-anfragen' },
+  ],
   elections: [
     { id: 'elections.results', labelKey: 'electionPollsNavResults', path: '/wahlen' },
     { id: 'elections.polls', labelKey: 'electionPollsNavPolls', path: '/wahlen/umfragen' },
@@ -68,6 +74,13 @@ const SUB_NAV: Record<string, { id: string; labelKey: string; path: string }[]> 
  */
 function activeChildFromLocation(pathname: string, search: string): string | undefined {
   const tab = new URLSearchParams(search).get('tab')
+  if (pathname.startsWith('/kleine-anfragen')) return 'bundestag.questions'
+  if (pathname.startsWith('/bundestag')) {
+    const ansicht = new URLSearchParams(search).get('ansicht')
+    return ansicht === 'abgeordnete' || pathname.startsWith('/bundestag/abgeordnete')
+      ? 'bundestag.members'
+      : 'bundestag.votes'
+  }
   if (pathname.startsWith('/wahlen')) {
     if (pathname.startsWith('/wahlen/umfragen')) return 'elections.polls'
     if (pathname.startsWith('/wahlen/kandidaturen')) return 'elections.candidates'
@@ -134,7 +147,6 @@ export default function DashboardLayout() {
       { kind: 'section' as const, label: t('sectionGermany') },
       { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
       { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },
-      { kind: 'link' as const, id: 'kleineAnfragen', icon: '◫', label: t('kaNav') },
       { kind: 'link' as const, id: 'legislation', icon: '§', label: t('legislation') },
       { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
       { kind: 'section' as const, label: t('sectionEurope') },
