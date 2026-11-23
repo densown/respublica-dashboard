@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { fontSize, fonts, motion, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { Piktogramm } from './Piktogramm'
+import { TabLeiste, type TabZiel } from './TabLeiste'
 
 export type NavZiel = {
   id: string
@@ -17,7 +18,7 @@ export type KopfzeileProps = {
   /** Schmale Fassung fuer das Handy: Logo, Datum und darunter die Ressorts. */
   schmal?: boolean
   /** Ressorts der schmalen Fassung (fuenf Woerter in einer Zeile) */
-  ressorts?: { id: string; label: string; path: string }[]
+  ressorts?: TabZiel[]
   /** Aktives Ressort der schmalen Fassung */
   aktivesRessort?: string
 }
@@ -95,49 +96,10 @@ export function Kopfzeile({
           </span>
         </div>
         {/*
-          Die Ressorts stehen oben unter dem Kopf, nicht mehr als Leiste am
-          unteren Rand: dort liegt auf dem iPhone die Adressleiste von Safari
-          und ueberdeckte die Navigation.
+          Die Leiste steht oben unter dem Kopf, nicht am unteren Rand: dort
+          liegt auf dem iPhone die Adressleiste von Safari und ueberdeckte sie.
         */}
-        {ressorts.length > 0 && (
-          <nav
-            aria-label={t('navHauptnavigation')}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${ressorts.length}, auto)`,
-              justifyContent: 'space-between',
-              padding: `0 ${spacing.lg}px`,
-              borderBottom: `1px solid ${c.border}`,
-            }}
-          >
-            {ressorts.map((z) => {
-              const istAktiv = z.id === aktivesRessort
-              return (
-                <Link
-                  key={z.id}
-                  to={z.path}
-                  aria-current={istAktiv ? 'page' : undefined}
-                  className="rp-navwort"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    minHeight: 44,
-                    fontFamily: fonts.body,
-                    fontSize: fontSize.md,
-                    fontWeight: istAktiv ? 600 : 400,
-                    color: istAktiv ? c.ink : c.inkSoft,
-                    textDecoration: 'none',
-                    boxShadow: istAktiv ? `inset 0 -2px 0 ${c.red}` : 'none',
-                    whiteSpace: 'nowrap',
-                    WebkitTapHighlightColor: 'transparent',
-                  }}
-                >
-                  {z.label}
-                </Link>
-              )
-            })}
-          </nav>
-        )}
+        {ressorts.length > 0 && <TabLeiste ziele={ressorts} aktiv={aktivesRessort ?? ''} />}
       </header>
     )
   }

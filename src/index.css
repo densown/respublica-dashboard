@@ -106,3 +106,4 @@ body {
 .rp-wischzeile::-webkit-scrollbar { display: none; }
 .rp-wischzeile > * { flex-shrink: 0; }
 .rp-ohne-scrollbalken::-webkit-scrollbar { display: none; }
+.rp-tab:active { transform: scale(0.94); }

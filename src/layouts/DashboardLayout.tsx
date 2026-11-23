@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { fonts, spacing, motion } from '../design-system/tokens'
 import { LegalFooter, useTheme } from '../design-system'
+import type { TabZiel } from '../design-system/components/TabLeiste'
 import { Kopfzeile, type NavZiel } from '../design-system/components/Kopfzeile'
 import type { I18nKey } from '../design-system/i18n'
 import { useIsMobile, useMediaQuery } from '../hooks/useMediaQuery'
@@ -107,13 +108,13 @@ export default function DashboardLayout() {
     ]
   }, [t])
 
-  const tabs = useMemo(
+  const tabs = useMemo<TabZiel[]>(
     () => [
-      { id: 'start', label: t('navStart'), path: '/' },
-      { id: 'bundestag', label: t('bundestag'), path: '/bundestag' },
-      { id: 'wahlen', label: t('navElections'), path: '/wahlen/umfragen' },
-      { id: 'gesetze', label: t('navGesetze'), path: '/gesetze' },
-      { id: 'mehr', label: t('navMehr'), path: '/mehr' },
+      { id: 'start', label: t('navStart'), path: '/', icon: 'start' },
+      { id: 'bundestag', label: t('bundestag'), path: '/bundestag', icon: 'bundestag' },
+      { id: 'wahlen', label: t('navElections'), path: '/wahlen/umfragen', icon: 'wahlen' },
+      { id: 'gesetze', label: t('navGesetze'), path: '/gesetze', icon: 'gesetze' },
+      { id: 'mehr', label: t('navMehr'), path: '/mehr', icon: 'mehr' },
     ],
     [t],
   )
