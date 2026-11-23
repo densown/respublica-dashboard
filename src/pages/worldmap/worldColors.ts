@@ -51,8 +51,33 @@ export type WorldFillColorOptions = {
   darkBasemap?: boolean
 }
 
+/** Ab diesem Verhaeltnis von groesstem zu kleinstem Wert wird logarithmisch gefaerbt. */
+const LOG_AB_VERHAELTNIS = 30
+
 /**
- * Füllfarbe für ein Land: linear interpoliert nach Kategorie.
+ * Ob die Karte logarithmisch gefaerbt wird. Geld und Bevoelkerung sind so
+ * schief verteilt, dass eine lineare Skala fast alle Laender am hellen Ende
+ * zeigt: beim BIP pro Kopf liegen zwischen Burundi und Luxemburg drei
+ * Groessenordnungen. Nur bei durchweg positiven Werten moeglich.
+ */
+export function worldSkalaIstLog(min: number, max: number, category: string): boolean {
+  return category !== 'governance' && min > 0 && max / min >= LOG_AB_VERHAELTNIS
+}
+
+/** Lage eines Werts auf der Farbskala, 0 bis 1. */
+export function worldSkalenAnteil(value: number, min: number, max: number): number {
+  if (min > 0 && max / min >= LOG_AB_VERHAELTNIS) {
+    if (value <= 0) return 0
+    const t = (Math.log(value) - Math.log(min)) / (Math.log(max) - Math.log(min))
+    return Math.min(1, Math.max(0, t))
+  }
+  const span = max - min || 1
+  return Math.min(1, Math.max(0, (value - min) / span))
+}
+
+/**
+ * Füllfarbe für ein Land: nach Kategorie interpoliert, bei sehr schiefen
+ * Verteilungen logarithmisch (siehe worldSkalaIstLog).
  * Governance: divergierend rot–weiß–grün für festes Intervall [-2.5, 2.5].
  */
 export function worldFillColor(
@@ -76,8 +101,7 @@ export function worldFillColor(
     return darkMap ? liftChoroplethColorForDarkBasemap(c) : c
   }
 
-  const span = max - min || 1
-  const t = Math.min(1, Math.max(0, (value - min) / span))
+  const t = worldSkalenAnteil(value, min, max)
   const scale = SEQUENTIAL[category] ?? SEQUENTIAL.economy
   const c = mix(scale.lo, scale.hi, t)
   return darkMap ? liftChoroplethColorForDarkBasemap(c) : c

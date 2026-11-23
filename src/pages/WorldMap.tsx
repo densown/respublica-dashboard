@@ -25,6 +25,7 @@ import {
 } from './worldmap/WidgetDashboard'
 import { WorldGlMap } from './worldmap/WorldGlMap'
 import { WorldMapLegend } from './worldmap/WorldMapLegend'
+import { worldSkalaIstLog } from './worldmap/worldColors'
 import { worldApiUrl } from './worldmap/worldMapData'
 import type {
   ClimateResponse,
@@ -970,6 +971,7 @@ export default function WorldMap() {
               labelMax={formatValue(maxV)}
               unitShort={unitShort}
               compact
+              log={worldSkalaIstLog(minV, maxV, category)}
             />
           </div>
         </div>

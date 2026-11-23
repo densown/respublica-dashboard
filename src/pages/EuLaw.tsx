@@ -31,7 +31,6 @@ import { fontSize, fonts, motion, radius, spacing } from '../design-system/token
 import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
-import { ON_DATA_LIGHT } from '../design-system/palettes'
 import { useSeo } from '../hooks/useSeo'
 
 const PAGE_SIZE = 20
@@ -287,10 +286,10 @@ export default function EuLaw() {
       flex: '0 0 auto',
       minHeight: 44,
       padding: `0 ${spacing.lg}px`,
-      borderRadius: radius.pill,
-      border: `1px solid ${active ? c.red : c.border}`,
-      background: active ? c.red : c.cardBg,
-      color: active ? ON_DATA_LIGHT : c.muted,
+      borderRadius: radius.sm,
+      border: `1px solid ${active ? c.ink : c.border}`,
+      background: active ? c.ink : 'transparent',
+      color: active ? c.bg : c.inkSoft,
       fontFamily: fonts.body,
       fontSize: fontSize.md,
       fontWeight: active ? 600 : 400,

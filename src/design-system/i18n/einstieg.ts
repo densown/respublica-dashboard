@@ -1,6 +1,19 @@
 // i18n-Messages: Einstieg (Wahlkreis, Rundgang, eigene Stimmen, Titelseite)
 
 export const de = {
+  tippFrage: "Wer liegt vorn?",
+  tippText: "Erst tippen, dann aufdecken.",
+  tippOhne: "Ohne Tipp zeigen",
+  tippRichtig: "Richtig getippt. Vorn: {partei} mit {wert} %.",
+  tippFalsch: "Dein Tipp: {tipp}. Vorn: {partei} mit {wert} %.",
+  mowTitel: "Mehr oder weniger?",
+  mowText: "Zwei Organisationen aus dem Register. Wer gibt mehr für Interessenvertretung aus?",
+  mowFrage: "Wer gibt mehr für Interessenvertretung aus?",
+  mowStart: "Los",
+  mowWeiter: "Nächstes Paar",
+  mowRichtig: "Richtig.",
+  mowFalsch: "Daneben.",
+  mowSerie: "{n} in Folge",
   ortFrage: "Wo wohnst du?",
   ortPlatzhalter: "Stadt oder Landkreis, etwa Saarbrücken",
   ortHinweis: "Wahlkreise heißen nach Stadt oder Landkreis. Deine Angabe bleibt in deinem Browser.",
@@ -64,6 +77,19 @@ export const de = {
 } as const
 
 export const en = {
+  tippFrage: "Who is in the lead?",
+  tippText: "Guess first, then reveal.",
+  tippOhne: "Show without guessing",
+  tippRichtig: "Correct: {partei} leads with {wert} %.",
+  tippFalsch: "Your guess: {tipp}. {partei} leads with {wert} %.",
+  mowTitel: "More or less?",
+  mowText: "Two organisations from the register. Which one spends more on lobbying?",
+  mowFrage: "Which one spends more on lobbying?",
+  mowStart: "Start",
+  mowWeiter: "Next pair",
+  mowRichtig: "Correct.",
+  mowFalsch: "Not quite.",
+  mowSerie: "{n} in a row",
   ortFrage: "Where do you live?",
   ortPlatzhalter: "City or district, e.g. Saarbrücken",
   ortHinweis: "Constituencies are named after a city or district. Your answer stays in your browser.",

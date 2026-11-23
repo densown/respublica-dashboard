@@ -8,6 +8,8 @@ type WorldMapLegendProps = {
   labelMax: string
   unitShort: string
   compact?: boolean
+  /** Karte ist logarithmisch gefaerbt: Hinweis unter der Skala. */
+  log?: boolean
 }
 
 export function WorldMapLegend({
@@ -16,6 +18,7 @@ export function WorldMapLegend({
   labelMax,
   unitShort,
   compact,
+  log,
 }: WorldMapLegendProps) {
   const { c, t, theme } = useTheme()
   const gradient = worldChoroplethGradientCss(category, {
@@ -75,6 +78,11 @@ export function WorldMapLegend({
           {labelMax}
         </span>
       </div>
+      {log && (
+        <div style={{ marginTop: gap, color: c.muted, fontSize: fs, textAlign: 'center' }}>
+          {t('worldLegendLog')}
+        </div>
+      )}
     </div>
   )
 }

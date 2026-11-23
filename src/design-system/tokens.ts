@@ -62,7 +62,7 @@ export const light = {
   gradEnd: '#9CA3AF',
 
   /** Sitzfarbe CDU/CSU im Halbrund — schwarz geht im Dunkeln unter. */
-  seatCdu: '#000000',
+  seatCdu: '#1A1A1A',
 
   /** Halbtransparente Flaeche fuer Diagramm-Tooltips. */
   tooltipBg: '#FFFFFFEE',
@@ -129,7 +129,7 @@ export const dark = {
   gradStart: '#3D362B',
   gradEnd: '#8F8778',
 
-  seatCdu: '#CCCCCC',
+  seatCdu: '#8899AA',
 
   tooltipBg: '#1F1B15EE',
 
