@@ -46,8 +46,10 @@ export function TabLeiste({ ziele, aktiv }: TabLeisteProps) {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 2,
-              minHeight: 56,
+              gap: 1,
+              // Flach gehalten: in Safari liegt direkt darunter schon die
+              // Adressleiste, zwei hohe Leisten nehmen zu viel vom Bild.
+              minHeight: 48,
               color: istAktiv ? c.red : c.inkSoft,
               textDecoration: 'none',
               fontFamily: fonts.body,
@@ -58,7 +60,7 @@ export function TabLeiste({ ziele, aktiv }: TabLeisteProps) {
               WebkitTapHighlightColor: 'transparent',
             }}
           >
-            <Piktogramm name={z.icon} size={22} />
+            <Piktogramm name={z.icon} size={20} />
             <span>{z.label}</span>
           </Link>
         )
