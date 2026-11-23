@@ -19,6 +19,7 @@ import { MeineAbgeordneten } from '../components/einstieg/MeineAbgeordneten'
 import { SelbstAbstimmen } from '../components/einstieg/SelbstAbstimmen'
 import { AbgeordnetenStimmen } from '../components/bundestag/AbgeordnetenStimmen'
 import { AbstimmungsBild } from '../components/bundestag/AbstimmungsBild'
+import { LobbyZurAbstimmung, type LobbyZurAbstimmungData } from '../components/bundestag/LobbyZurAbstimmung'
 import { FraktionsStimmen } from '../components/bundestag/FraktionsStimmen'
 import { Hemicycle, type SitzverteilungRow } from '../components/bundestag/Hemicycle'
 import {
@@ -80,6 +81,9 @@ export default function Abstimmung() {
   )
   // alle=1: auch wer inzwischen ausgeschieden ist, fuer aeltere Abstimmungen
   const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete?alle=1')
+  const { data: lobby } = useApi<LobbyZurAbstimmungData>(
+    gueltig ? `/api/bundestag/abstimmungen/${id}/lobby` : '',
+  )
   const { data: sitzverteilung } = useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
   const geladen = data != null
 
@@ -392,6 +396,12 @@ export default function Abstimmung() {
           )}
         </Section>
       </div>
+
+      {lobby && lobby.organisationen?.length > 0 && (
+        <Section number={naechste()} title={t('voteLobbyTitle')}>
+          <LobbyZurAbstimmung data={lobby} />
+        </Section>
+      )}
 
       <Section number={naechste()} title={t('votePageShare')}>
         <AbstimmungsBild data={data} abweichler={abweichler} kicker={kicker} />
