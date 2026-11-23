@@ -296,12 +296,15 @@ export function ElectionMapLegend({
   turnoutMin,
   turnoutMax,
   partyForScale,
+  nurSieger,
 }: {
   metric: string
   lang: Lang
   turnoutMin: number
   turnoutMax: number
   partyForScale?: string
+  /** Wahlsieger-Legende auf Parteien beschraenken, die irgendwo vorn liegen */
+  nurSieger?: Set<string>
 }) {
   const { c, t, theme } = useTheme()
   const partyColors = useMemo(
@@ -310,7 +313,9 @@ export function ElectionMapLegend({
   )
 
   if (metric === 'winning_party') {
-    const keys = [...MAIN_PARTIES, 'other'] as const
+    const alle = [...MAIN_PARTIES, 'other'] as string[]
+    const gefiltert = nurSieger?.size ? alle.filter((k) => nurSieger.has(k)) : alle
+    const keys = gefiltert.length ? gefiltert : alle
     return (
       <div
         style={{
