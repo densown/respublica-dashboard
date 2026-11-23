@@ -12,6 +12,13 @@ body,
   height: 100%;
 }
 
+html,
+body {
+  /* Safari zeigt diese Farbe hinter Statusleiste und Werkzeugleiste. Ohne
+     sie blieben beide Raender im dunklen Modus weiss. */
+  background: var(--rp-bg, #F5F0E8);
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   /* Die Seite selbst rollt nie, nur der Bereich zwischen Kopf und Leiste.
