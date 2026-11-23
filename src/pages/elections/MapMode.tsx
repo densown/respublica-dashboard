@@ -10,6 +10,7 @@ import {
 } from '../../design-system'
 import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { AdvancedAnalysis } from './AdvancedAnalysis'
+import { Gesamtergebnis, type GesamtErgebnis } from './Gesamtergebnis'
 import { ElectionMap, ElectionMapLegend } from './ElectionMap'
 import { KreisAutocomplete, type KreisSearchHit } from './KreisAutocomplete'
 import {
@@ -141,6 +142,8 @@ export type MapModeProps = {
     minT: number
     maxT: number
   }
+  /** Ergebnis der ganzen Wahl, nur bei bundesweiten Wahlen */
+  gesamt: GesamtErgebnis | null
   selectedAgs: string | null
   onActivateKreis: (ags: string) => void
   showAdvanced: boolean
@@ -172,6 +175,7 @@ export function MapMode({
   dataByAgs,
   kreisNameByAgs,
   turnoutStats,
+  gesamt,
   selectedAgs,
   onActivateKreis,
   showAdvanced,
@@ -195,6 +199,9 @@ export function MapMode({
     </div>
   )
 
+  // Legende nur mit Parteien, die irgendwo vorn liegen
+  const sieger = new Set<string>()
+  for (const r of normalizedRows) if (r.winning_party) sieger.add(r.winning_party)
   const onMapSelect = (ags: string) => {
     onActivateKreis(ags.replace(/\s/g, ''))
   }
@@ -278,7 +285,7 @@ export function MapMode({
               marginBottom: 6,
             }}
           >
-            {t('metric')}
+            {t('electionsMapShows')}
           </span>
           <select
             value={metric}
@@ -341,6 +348,22 @@ export function MapMode({
                 )}
               </div>
             )}
+          {gesamt && <Gesamtergebnis daten={gesamt} />}
+          {gesamt && debouncedMetric === 'winning_party' && (
+            <h2
+              style={{
+                margin: `0 0 ${spacing.md}px`,
+                paddingBottom: spacing.sm,
+                borderBottom: `1px solid ${c.border}`,
+                fontFamily: fonts.display,
+                fontWeight: 900,
+                fontSize: fontSize.xl,
+                color: c.ink,
+              }}
+            >
+              {t('electionsWhereLeads')}
+            </h2>
+          )}
           <ExportableContainer title={t('electionsTitle')}>
           <div
             style={{
@@ -370,8 +393,20 @@ export function MapMode({
             turnoutMin={turnoutStats.minT}
             turnoutMax={turnoutStats.maxT}
             partyForScale={debouncedMetric}
+            nurSieger={sieger}
           />
           </ExportableContainer>
+          <p
+            style={{
+              margin: `${spacing.md}px 0 0`,
+              fontFamily: fonts.body,
+              fontStyle: 'italic',
+              fontSize: fontSize.sm,
+              color: c.muted,
+            }}
+          >
+            {t('electionsMapHint')}
+          </p>
 
           <div
             style={{
@@ -385,7 +420,9 @@ export function MapMode({
               maxWidth: '100%',
             }}
           >
-            {statCard(t('avgTurnout'), turnoutPct(turnoutStats.avg))}
+            {gesamt?.turnout != null
+              ? statCard(t('electionsTurnoutAll'), turnoutPct(gesamt.turnout * 100))
+              : statCard(t('avgTurnout'), turnoutPct(turnoutStats.avg))}
             {statCard(
               t('highestTurnout'),
               Number.isFinite(turnoutStats.hi.v)

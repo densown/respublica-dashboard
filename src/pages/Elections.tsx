@@ -14,6 +14,7 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
+import type { GesamtErgebnis } from './elections/Gesamtergebnis'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useSeo } from '../hooks/useSeo'
 import type {
@@ -36,6 +37,20 @@ const CompareMode = lazy(() =>
 )
 
 export type ElectionsActiveMode = 'map' | 'analysis' | 'compare'
+
+/**
+ * Kreise der Karte, die es so nicht mehr gibt: Goettingen und Osterode sind
+ * seit 2016 ein Kreis (03159), Eisenach gehoert seit 2021 zum Wartburgkreis.
+ * Ohne die Zuordnung bleiben sie auf der Karte als "Keine Daten" weiss.
+ */
+const AGS_NACHFOLGER: Record<string, string> = {
+  '03152': '03159',
+  '03156': '03159',
+  '16056': '16063',
+}
+
+/** Nur diese Wahlen finden bundesweit am selben Tag statt */
+const BUNDESWEIT = new Set<ElectionType>(['federal', 'european'])
 
 const MODE_TAB_KEYS = {
   map: 'modeMap',
@@ -148,10 +163,26 @@ export default function Elections() {
     for (const r of normalizedRows) {
       m.set(r.ags.replace(/\s/g, ''), r)
     }
+    for (const [alt, neu] of Object.entries(AGS_NACHFOLGER)) {
+      const zeile = m.get(neu)
+      if (zeile && !m.has(alt)) m.set(alt, zeile)
+    }
     return m
   }, [normalizedRows])
 
   const winnersByAgs = dataByAgs
+
+  // Ergebnis der ganzen Wahl. Bei Landtags- und Kommunalwahlen waehlen die
+  // Laender in verschiedenen Jahren, eine Summe ueber alle waere irrefuehrend.
+  const gesamtEp =
+    BUNDESWEIT.has(debouncedType) && debouncedYear
+      ? `/api/wahlen/gesamt?typ=${encodeURIComponent(debouncedType)}&year=${debouncedYear}`
+      : ''
+  const { data: gesamtRoh } = useApi<GesamtErgebnis>(gesamtEp)
+  const gesamt =
+    gesamtRoh && gesamtRoh.typ === debouncedType && gesamtRoh.year === debouncedYear && gesamtRoh.parteien?.length
+      ? gesamtRoh
+      : null
 
   const turnoutStats = useMemo(() => {
     // Nur Kreise mit Wahlbeteiligung: eine Luecke (NaN) ist keine 0 %
@@ -196,7 +227,7 @@ export default function Elections() {
 
   return (
     <div style={{ paddingBottom: spacing.xl }}>
-      <PageHeader title={t('electionsTitle')} subtitle={t('electionsSubtitle')} />
+      <PageHeader title={t('electionsResultsTitle')} subtitle={t('electionsResultsSubtitle')} />
 
       <ViewToggle
         value={activeMode}
@@ -245,6 +276,7 @@ export default function Elections() {
             dataByAgs={dataByAgs}
             kreisNameByAgs={kreisNameByAgs}
             turnoutStats={turnoutStats}
+            gesamt={gesamt}
             selectedAgs={selectedAgs}
             onActivateKreis={onActivateKreis}
             showAdvanced={showAdvanced}
