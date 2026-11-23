@@ -26,6 +26,8 @@ import {
 import { WorldGlMap } from './worldmap/WorldGlMap'
 import { WorldMapLegend } from './worldmap/WorldMapLegend'
 import { worldSkalaIstLog } from './worldmap/worldColors'
+import { landName } from './worldmap/worldLandName'
+import { worldIndicatorDisplayLabel } from './worldmap/worldIndicatorShortNames'
 import { worldApiUrl } from './worldmap/worldMapData'
 import type {
   ClimateResponse,
@@ -439,6 +441,8 @@ export default function WorldMap() {
     [categories, indicatorCode],
   )
 
+  const indicatorLabel = worldIndicatorDisplayLabel(indicatorCode, lang as Lang, indicatorName)
+
   const fmtCtx = useMemo(
     () => ({
       indicatorCode,
@@ -466,10 +470,10 @@ export default function WorldMap() {
     if (!geojson) return m
     for (const f of geojson.features) {
       const iso = f.properties.iso3?.toUpperCase()
-      if (iso) m.set(iso, f.properties.name)
+      if (iso) m.set(iso, landName(f.properties.iso2, lang, f.properties.name))
     }
     return m
-  }, [geojson])
+  }, [geojson, lang])
 
   const { minV, maxV } = useMemo(() => {
     const rows = mapRowsCountries.filter(
@@ -499,15 +503,22 @@ export default function WorldMap() {
     return mapRowsCountries.find((r) => normIso(r.country_code) === u) ?? null
   }, [mapRowsCountries, selectedCountry])
 
-  const { data: consoleRankingRaw } = useApi<WorldRankingRow[]>(
-    !selectedCountry && debInd
-      ? `/api/world/ranking?indicator=${encodeURIComponent(debInd)}&year=${String(mapQueryYear)}&limit=200&order=desc`
-      : '',
-  )
+  // Rangliste der Uebersicht aus den Daten, die die Karte ohnehin geladen hat.
+  // Vorher holte die Seite dafuer dieselben Werte ein zweites Mal vom Server.
   const consoleRanking = useMemo(() => {
-    const list = (consoleRankingRaw ?? []).filter(isRealCountry)
+    const list: WorldRankingRow[] = mapRowsCountries
+      .filter((r) => r.value != null && !Number.isNaN(r.value as number))
+      .sort((a, b) => (b.value as number) - (a.value as number))
+      .map((r, i) => ({
+        country_code: r.country_code,
+        country_name:
+          nameByIso.get(normIso(r.country_code)) ?? r.country_name ?? r.country_code,
+        region: r.region,
+        value: r.value as number,
+        rank: i + 1,
+      }))
     return list.length ? list : null
-  }, [consoleRankingRaw])
+  }, [mapRowsCountries, nameByIso])
 
   const consoleGlobalStats = useMemo(() => {
     const rows = consoleRanking
@@ -527,11 +538,11 @@ export default function WorldMap() {
   const worldConsoleActiveIndicator: WorldConsoleActiveIndicator = useMemo(
     () => ({
       code: indicatorCode,
-      name: indicatorName,
+      name: indicatorLabel,
       category,
       lowerIsBetter: LOWER_IS_BETTER_INDICATORS.has(indicatorCode),
     }),
-    [indicatorCode, indicatorName, category],
+    [indicatorCode, indicatorLabel, category],
   )
 
   const sidebarPercentile = useMemo(() => {
@@ -668,6 +679,11 @@ export default function WorldMap() {
   const onCloseSidebar = useCallback(() => {
     setSidebarOpen(false)
     setSidebarCompact(false)
+    // Handy: das Blatt schliesst und die Auswahl ist weg, sonst bliebe ein
+    // Land markiert, zu dem nichts mehr zu sehen ist.
+    if (window.innerWidth < breakpoints.mobile) {
+      setSelection({ primary: null, compare: [] })
+    }
   }, [])
 
   const handleYearChange = useCallback(
@@ -951,29 +967,49 @@ export default function WorldMap() {
         </div>
         </ExportableContainer>
 
+        {narrow && !selectedCountry ? (
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              position: 'absolute',
+              left: spacing.md,
+              top: spacing.sm,
+              zIndex: 28,
+              minHeight: 40,
+              padding: `0 ${spacing.md}px`,
+              border: `1px solid ${c.border}`,
+              borderRadius: radius.md,
+              background: c.cardBg,
+              color: c.ink,
+              fontFamily: fonts.body,
+              fontSize: fontSize.sm,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
+            }}
+          >
+            {t('worldMobileRanking')}
+          </button>
+        ) : null}
         <div
           style={{
             position: 'absolute',
             left: spacing.md,
-            right: spacing.md,
-            // Über dem Res.Publica-Wasserzeichen (bottom:10) ausrichten, damit
-            // sich Skala-Beschriftung und Wasserzeichen nicht mehr überlagern.
-            bottom: spacing.xxl,
+            bottom: spacing.md,
             zIndex: 28,
-            maxWidth: narrow ? 'none' : 420,
-            pointerEvents: 'none',
+            width: narrow ? 'min(260px, calc(100% - 96px))' : 280,
           }}
         >
-          <div style={{ pointerEvents: 'auto' }}>
-            <WorldMapLegend
-              category={category}
-              labelMin={formatValue(minV)}
-              labelMax={formatValue(maxV)}
-              unitShort={unitShort}
-              compact
-              log={worldSkalaIstLog(minV, maxV, category)}
-            />
-          </div>
+          <WorldMapLegend
+            category={category}
+            title={`${indicatorLabel}, ${mapQueryYear}`}
+            labelMin={formatValue(minV)}
+            labelMax={formatValue(maxV)}
+            unitShort={unitShort}
+            compact
+            log={worldSkalaIstLog(minV, maxV, category)}
+          />
         </div>
       </div>
     ),
@@ -1006,6 +1042,7 @@ export default function WorldMap() {
       unitShort,
       isDark,
       mapProjection,
+      indicatorLabel,
     ],
   )
 
@@ -1042,6 +1079,11 @@ export default function WorldMap() {
     geojson,
     onRemoveFromSelection,
     onClearAllSelection: clearSelection,
+    nameByIso,
+    onSelectFromList: (iso3: string) => {
+      setPrimaryCountry(iso3)
+      setSidebarOpen(true)
+    },
   }
 
   return (
@@ -1076,6 +1118,7 @@ export default function WorldMap() {
         }
         visibleWidgets={visibleFloatingWidgets}
         onToggleWidget={onToggleFloating}
+        narrow={narrow}
       />
 
       <div

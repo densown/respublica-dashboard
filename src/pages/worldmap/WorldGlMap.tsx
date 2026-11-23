@@ -14,15 +14,8 @@ import { type MapProjectionMode, LoadingSpinner, useTheme } from '../../design-s
 import { dark, fontSize, fonts, light, radius, spacing } from '../../design-system/tokens'
 import { worldFillColor } from './worldColors'
 import type { WorldGeoJson, WorldMapRow } from './worldTypes'
-import {
-  MAP_OUTLINE,
-  MAP_OUTLINE_HOVER,
-  ON_DATA_DARK,
-  ON_DATA_LIGHT,
-} from '../../design-system/palettes'
+import { ON_DATA_DARK, ON_DATA_LIGHT } from '../../design-system/palettes'
 
-const STYLE_LIGHT = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json'
-const STYLE_DARK = 'https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json'
 
 const LAND_NODATA_LIGHT = light.mapLandNoData
 const LAND_NODATA_DARK = dark.mapLandNoData
@@ -31,34 +24,32 @@ const GLOBE_BOUNDS: maplibregl.LngLatBoundsLike = [
   [179.5, 85],
 ]
 
-// Wasserfarbe des lokalen Fallback-Styles (an CARTO positron/dark-matter angelehnt)
-const FALLBACK_WATER_DARK = dark.mapWater
-const FALLBACK_WATER_LIGHT = light.mapWater
+const WASSER_DUNKEL = dark.mapWater
+const WASSER_HELL = light.mapWater
 
-// Sekunden, nach denen ohne geladenen Basemap-Style auf den lokalen Fallback
-// umgeschaltet wird (langsames/blockiertes CDN ohne 'error'-Event).
-// Nach vier Sekunden ohne Basemap uebernimmt der lokale Stil. Acht waren auf
-// dem Handy zu lang: so lange stand nur eine leere Flaeche da.
-const STYLE_FALLBACK_TIMEOUT_MS = 4000
+/** Ausschnitt beim ersten Laden: die bewohnte Welt ohne Antarktis. */
+const WELT_AUSSCHNITT: maplibregl.LngLatBoundsLike = [
+  [-168, -56],
+  [178, 76],
+]
 
 /**
- * Minimaler, vollständig lokaler MapLibre-Style ohne Netzwerkabhängigkeit.
- * Dient als Fallback, falls der externe CARTO-Basemap-Style nicht lädt (CDN
- * blockiert, Mobilfunk, Timeout). Die Länder-Choropleth kommt ohnehin aus
- * lokalem GeoJSON, daher bleibt die Karte (und der Globus) so immer sichtbar.
+ * Stil der Karte, ganz ohne Netz: Wasser als Flaeche, die Laender kommen aus
+ * dem eigenen GeoJSON. Frueher lag eine Basiskarte von CARTO darunter. Sie
+ * war unter den Laenderflaechen kaum zu sehen, und wenn sie auf dem Handy
+ * nicht lud, blieb die Karte schwarz. Ohne `glyphs` zeichnet MapLibre die
+ * Beschriftung mit einer Schrift des Geraets.
  */
-function buildFallbackStyle(isDark: boolean): maplibregl.StyleSpecification {
-  const base = import.meta.env.BASE_URL?.replace(/\/$/, '') || ''
+function lokalerStil(isDark: boolean): maplibregl.StyleSpecification {
   return {
     version: 8,
-    glyphs: `${base}/fonts/{fontstack}/{range}.pbf`,
     sources: {},
     layers: [
       {
         id: 'background',
         type: 'background',
         paint: {
-          'background-color': isDark ? FALLBACK_WATER_DARK : FALLBACK_WATER_LIGHT,
+          'background-color': isDark ? WASSER_DUNKEL : WASSER_HELL,
         },
       },
     ],
@@ -162,20 +153,6 @@ function detachHandlers(
   hoveredIsoRef.current = null
 }
 
-function hideBasemapLabels(map: maplibregl.Map) {
-  const style = map.getStyle()
-  if (!style?.layers) return
-  style.layers.forEach((layer) => {
-    if (layer.type === 'symbol' && layer.id !== 'country-labels') {
-      try {
-        map.setLayoutProperty(layer.id, 'visibility', 'none')
-      } catch {
-        /* ignore */
-      }
-    }
-  })
-}
-
 export function WorldGlMap({
   geojson,
   mapData,
@@ -231,7 +208,7 @@ export function WorldGlMap({
       const centerBefore = map.getCenter()
 
       try {
-        map.setMinZoom(nextProjection === 'globe' ? 0 : 1)
+        map.setMinZoom(nextProjection === 'globe' ? 0 : 0.4)
       } catch {
         /* ignore */
       }
@@ -262,10 +239,10 @@ export function WorldGlMap({
           zoom: Math.max(0, zoomBefore),
           duration: source === 'change' ? 450 : 0,
         })
-      } else if (zoomBefore < 1) {
+      } else if (zoomBefore < 0.4) {
         map.easeTo({
           center: centerBefore,
-          zoom: 1,
+          zoom: 0.4,
           duration: 300,
         })
       }
@@ -291,6 +268,8 @@ export function WorldGlMap({
   )
 
   const selectedKey = selectedIso?.trim().toUpperCase() ?? ''
+  // Grenzen in der Farbe des Papiers: sie trennen, ohne das Bild zu vergittern.
+  const grenzFarbe = isDark ? dark.mapWater : light.mapLabelHalo
 
   const borderLineColor: ExpressionSpecification = useMemo(
     () => [
@@ -298,10 +277,10 @@ export function WorldGlMap({
       ['==', ['upcase', ['get', 'iso3']], selectedKey],
       c.red,
       ['boolean', ['feature-state', 'hover'], false],
-      MAP_OUTLINE_HOVER,
-      MAP_OUTLINE,
+      c.ink,
+      grenzFarbe,
     ],
-    [selectedKey, c.red],
+    [selectedKey, c.red, c.ink, grenzFarbe],
   )
 
   const borderLineWidth: ExpressionSpecification = useMemo(
@@ -310,11 +289,21 @@ export function WorldGlMap({
       ['==', ['upcase', ['get', 'iso3']], selectedKey],
       2,
       ['boolean', ['feature-state', 'hover'], false],
-      2,
-      0.8,
+      1.5,
+      0.6,
     ],
     [selectedKey],
   )
+
+  // Beschriftung in der Sprache der Oberflaeche, Rueckfall auf den Namen der Geodaten
+  const labelExpr: ExpressionSpecification = useMemo(() => {
+    const paare: string[] = []
+    for (const [iso, name] of nameByIso) paare.push(iso, name)
+    if (!paare.length) return ['get', 'name']
+    return ['match', ['upcase', ['get', 'iso3']], ...paare, ['get', 'name']] as unknown as ExpressionSpecification
+  }, [nameByIso])
+  const labelExprRef = useRef(labelExpr)
+  labelExprRef.current = labelExpr
 
   const fillExprRef = useRef(fillExpr)
   const borderLineColorRef = useRef(borderLineColor)
@@ -392,21 +381,23 @@ export function WorldGlMap({
       type: 'symbol',
       source: 'country-centroids',
       layout: {
-        'text-field': ['get', 'name'],
-        'text-font': ['Noto Sans Regular'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 1, 7, 3, 10, 5, 13],
+        'text-field': labelExprRef.current,
+        'text-size': ['interpolate', ['linear'], ['zoom'], 2, 10, 4, 12, 6, 14],
         'text-max-width': 6,
         'text-allow-overlap': false,
         'text-ignore-placement': false,
         'symbol-placement': 'point',
         'text-anchor': 'center',
-        'text-padding': 10,
+        'text-padding': 14,
       },
+      // Ganz herausgezoomt bleibt die Karte ohne Schrift: die Namen stehen im
+      // Hinweis beim Antippen, und kleine Laender waeren sonst zugestellt.
+      minzoom: 2.2,
       paint: {
         'text-color': isDark ? ON_DATA_LIGHT : ON_DATA_DARK,
         'text-halo-color': isDark ? dark.mapLabelHalo : light.mapLabelHalo,
         'text-halo-width': 1.5,
-        'text-opacity': ['interpolate', ['linear'], ['zoom'], 1, 0.6, 3, 1],
+        'text-opacity': 0.9,
       },
     })
 
@@ -433,6 +424,9 @@ export function WorldGlMap({
     }
 
     const onMove = (e: maplibregl.MapLayerMouseEvent) => {
+      // Mit dem Finger gibt es kein Schweben: der Hinweis bliebe nach dem
+      // Antippen ueber der Karte stehen. Dort zeigt das Blatt von unten alles.
+      if (window.matchMedia?.('(hover: none)').matches) return
       const f = e.features?.[0]
       const raw = f?.properties?.iso3
       if (typeof raw !== 'string') return
@@ -469,8 +463,8 @@ export function WorldGlMap({
       // Feste helle Textfarben: der Popup-Hintergrund ist in beiden Themes dunkel
       // (siehe .world-gl-popup in worldGlMap.css), damit über hell wie dunkel
       // eingefärbten Ländern genug Kontrast bleibt.
-      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:${isDark ? dark.ink : light.ink};min-width:140px;">
-        <div style="font-weight:700;margin-bottom:4px;color:${isDark ? dark.ink : light.ink};">${escHtml(name)}</div>
+      const html = `<div style="font-family:${escHtml(fonts.body)};font-size:13px;color:#F5F0E8;min-width:140px;">
+        <div style="font-weight:700;margin-bottom:4px;color:#FFFFFF;">${escHtml(name)}</div>
         <div style="font-family:${escHtml(fonts.mono)};font-size:12px;">${escHtml(line1)}</div>
         <div style="margin-top:6px;color:rgba(255,255,255,0.62);font-size:11px;">${escHtml(hint)}</div>
       </div>`
@@ -513,69 +507,52 @@ export function WorldGlMap({
   useEffect(() => {
     if (!geojson || !containerRef.current) return
 
-    const styleUrl = isDark ? STYLE_DARK : STYLE_LIGHT
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: styleUrl,
+      style: lokalerStil(isDark),
       center: [10, 30],
       zoom: 1.5,
       maxZoom: 8,
-      minZoom: projectionRef.current === 'globe' ? 0 : 1,
+      // Hochkant passt die ganze Welt erst unter Zoom 1 in die Breite
+      minZoom: projectionRef.current === 'globe' ? 0 : 0.4,
       attributionControl: false,
+      // Kein Drehen und Kippen: auf dem Handy verdrehte sich die Karte beim
+      // Zoomen mit zwei Fingern und stand danach schief.
+      dragRotate: false,
+      pitchWithRotate: false,
+      touchPitch: false,
+      localIdeographFontFamily: "'Source Serif 4', Georgia, serif",
     })
+    map.touchZoomRotate.disableRotation()
+    map.keyboard.disableRotation()
 
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
       'top-right',
     )
-    map.addControl(
-      new maplibregl.AttributionControl({
-        compact: true,
-        customAttribution: '© <a href="https://carto.com/" target="_blank" rel="noopener noreferrer">CARTO</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
-      }),
-      'bottom-right',
-    )
     mapRef.current = map
     prevThemeDarkRef.current = isDark
 
     let settled = false
-    let fellBack = false
-
     const finishInit = () => {
       if (settled) return
       settled = true
-      window.clearTimeout(styleWatchdog)
-      map.off('error', onError)
       installChoropleth(map)
-      hideBasemapLabels(map)
+      map.resize()
+      if (projectionRef.current !== 'globe') {
+        // Die ganze Welt in den Rahmen, egal ob Handy hochkant oder Desktop
+        map.fitBounds(WELT_AUSSCHNITT, { padding: 12, animate: false })
+      }
       applyProjection(map, projectionRef.current, 'init')
       setBereit(true)
     }
-
-    // Schlaegt der externe CARTO-Basemap-Style fehl (CDN blockiert, Mobilfunk,
-    // Timeout), feuert 'load' nie und die Karte bliebe komplett schwarz. Dann
-    // auf den lokalen Fallback-Style wechseln, damit Karte und Globus erscheinen.
-    const goFallback = () => {
-      if (settled || fellBack) return
-      if (map.isStyleLoaded()) return
-      fellBack = true
-      map.setStyle(buildFallbackStyle(isDark))
-      map.once('style.load', finishInit)
-    }
-
-    const onLoad = () => finishInit()
-    const onError = () => goFallback()
-    map.on('load', onLoad)
-    map.on('error', onError)
-    const styleWatchdog = window.setTimeout(goFallback, STYLE_FALLBACK_TIMEOUT_MS)
-    // Der Ladehinweis darf nie haengen bleiben, auch wenn kein Stil ankommt.
-    const hinweisAus = window.setTimeout(() => setBereit(true), 12000)
+    map.on('load', finishInit)
+    // Der Ladehinweis darf nie haengen bleiben.
+    const hinweisAus = window.setTimeout(() => setBereit(true), 8000)
 
     return () => {
-      window.clearTimeout(styleWatchdog)
       window.clearTimeout(hinweisAus)
-      map.off('load', onLoad)
-      map.off('error', onError)
+      map.off('load', finishInit)
       detachHandlers(map, handlersRef.current, hoveredIsoRef)
       handlersRef.current = undefined
       popupRef.current?.remove()
@@ -619,40 +596,15 @@ export function WorldGlMap({
     detachHandlers(map, handlersRef.current, hoveredIsoRef)
     handlersRef.current = undefined
 
-    const styleUrl = isDark ? STYLE_DARK : STYLE_LIGHT
-    map.setStyle(styleUrl)
-
-    let settled = false
-    let fellBack = false
-
     const onStyleReady = () => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(styleWatchdog)
-      map.off('error', onError)
       installChoropleth(map)
-      hideBasemapLabels(map)
       applyProjection(map, projectionRef.current, 'style')
     }
-
-    // Auch beim Theme-Wechsel auf den lokalen Fallback-Style ausweichen, falls
-    // der neue CARTO-Style nicht laedt, damit die Karte nicht schwarz wird.
-    const goFallback = () => {
-      if (settled || fellBack) return
-      if (map.isStyleLoaded()) return
-      fellBack = true
-      map.setStyle(buildFallbackStyle(isDark))
-    }
-
-    const onError = () => goFallback()
     map.once('style.load', onStyleReady)
-    map.on('error', onError)
-    const styleWatchdog = window.setTimeout(goFallback, STYLE_FALLBACK_TIMEOUT_MS)
+    map.setStyle(lokalerStil(isDark))
 
     return () => {
-      window.clearTimeout(styleWatchdog)
       map.off('style.load', onStyleReady)
-      map.off('error', onError)
     }
   }, [isDark, geojson, applyProjection])
 
@@ -703,6 +655,12 @@ export function WorldGlMap({
       ['!=', ['upcase', ['get', 'iso3']], primaryKey],
     ] as maplibregl.FilterSpecification)
   }, [compareListKey, selectedIso])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map?.getLayer('country-labels')) return
+    map.setLayoutProperty('country-labels', 'text-field', labelExpr)
+  }, [labelExpr])
 
   useEffect(() => {
     const map = mapRef.current
@@ -883,8 +841,8 @@ export function WorldGlMap({
         aria-hidden
         style={{
           position: 'absolute',
-          left: 10,
-          bottom: 10,
+          right: 10,
+          bottom: 8,
           zIndex: 26,
           fontFamily: fonts.mono,
           fontSize: 11,

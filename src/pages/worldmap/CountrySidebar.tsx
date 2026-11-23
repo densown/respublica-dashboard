@@ -71,6 +71,10 @@ export type CountrySidebarProps = {
   geojson: WorldGeoJson | null
   onRemoveFromSelection: (iso3: string) => void
   onClearAllSelection: () => void
+  /** Laendernamen in der Sprache der Oberflaeche */
+  nameByIso?: Map<string, string>
+  /** Land aus der Rangliste der Uebersicht oeffnen */
+  onSelectFromList?: (iso3: string) => void
 }
 
 export type ConsoleTabLayoutDirection = 'vertical' | 'horizontal'
@@ -127,6 +131,8 @@ export function CountrySidebar({
   geojson,
   onRemoveFromSelection,
   onClearAllSelection,
+  nameByIso,
+  onSelectFromList,
 }: CountrySidebarProps) {
   const { c, t } = useTheme()
   const [activeTab, setActiveTab] = useState<ConsoleTabId>('uebersicht')
@@ -253,6 +259,12 @@ export function CountrySidebar({
         }
       : undefined
 
+  const countryName =
+    (iso3 ? nameByIso?.get(iso3.trim().toUpperCase()) : undefined) ||
+    countryDetail?.country_name ||
+    iso3 ||
+    t('worldConsoleWorldMapTitle')
+
   const content = !hasCountry ? (
     <GlobalView
       activeIndicatorLabel={activeIndicator?.name}
@@ -260,6 +272,8 @@ export function CountrySidebar({
       stats={globalStats}
       totalCountries={globalStats?.total}
       layoutDirection={layoutDirection}
+      formatValue={formatIndicatorValue}
+      onSelectCountry={onSelectFromList}
     />
   ) : (
     (() => {
@@ -274,6 +288,8 @@ export function CountrySidebar({
               lowerIsBetter={lowerIsBetter}
               mapYear={mapYear}
               layoutDirection={layoutDirection}
+              formatValue={formatIndicatorValue}
+              countryName={countryName}
             />
           )
         case 'demokratie':
@@ -374,7 +390,6 @@ export function CountrySidebar({
           minWidth: 0,
         }
 
-  const countryName = countryDetail?.country_name || iso3 || t('worldConsoleWorldMapTitle')
   const countryRegion = countryDetail?.region
   const countryIncome = countryDetail?.income_level
 
@@ -402,6 +417,25 @@ export function CountrySidebar({
           }}
         >
           <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
+            {hasCountry && (
+              <button
+                type="button"
+                onClick={onClearAllSelection}
+                style={{
+                  display: 'block',
+                  padding: 0,
+                  marginBottom: 4,
+                  border: 'none',
+                  background: 'transparent',
+                  fontFamily: fonts.body,
+                  fontSize: 12,
+                  color: c.muted,
+                  cursor: 'pointer',
+                }}
+              >
+                ‹ {t('worldConsoleGlobalOverview')}
+              </button>
+            )}
             <h2
               style={{
                 fontFamily: fonts.display,
@@ -421,8 +455,9 @@ export function CountrySidebar({
             {hasCountry && (countryRegion || countryIncome) && (
               <p
                 style={{
-                  fontFamily: fonts.mono,
-                  fontSize: 9,
+                  fontFamily: fonts.body,
+                  fontStyle: 'italic',
+                  fontSize: 12,
                   color: c.muted,
                   margin: 0,
                   marginTop: 2,
@@ -438,8 +473,8 @@ export function CountrySidebar({
                 type="button"
                 onClick={cycleDock}
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: sheetLayout ? 40 : 32,
+                  height: sheetLayout ? 40 : 32,
                   border: `1px solid ${c.border}`,
                   borderRadius: radius.sm,
                   background: 'transparent',
@@ -462,8 +497,8 @@ export function CountrySidebar({
                 type="button"
                 onClick={() => onMinimize(true)}
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: sheetLayout ? 40 : 32,
+                  height: sheetLayout ? 40 : 32,
                   border: `1px solid ${c.border}`,
                   borderRadius: radius.sm,
                   background: 'transparent',
@@ -486,8 +521,8 @@ export function CountrySidebar({
                 type="button"
                 onClick={onClose}
                 style={{
-                  width: 28,
-                  height: 28,
+                  width: sheetLayout ? 40 : 32,
+                  height: sheetLayout ? 40 : 32,
                   border: `1px solid ${c.border}`,
                   borderRadius: radius.sm,
                   background: 'transparent',
@@ -540,13 +575,15 @@ export function CountrySidebar({
                     onClick={() => setActiveTab(tab.id)}
                     style={{
                       flexShrink: 0,
-                      padding: `${spacing.sm}px ${spacing.md}px`,
+                      minHeight: 40,
+                      padding: `0 ${spacing.md}px`,
                       border: 'none',
                       borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
                       background: 'transparent',
-                      color: active ? c.red : c.muted,
-                      fontFamily: fonts.mono,
-                      fontSize: 9,
+                      color: active ? c.ink : c.muted,
+                      fontFamily: fonts.body,
+                      fontWeight: active ? 600 : 400,
+                      fontSize: 13,
                       cursor: 'pointer',
                       whiteSpace: 'nowrap',
                       transition: 'color 0.15s, border-color 0.15s',

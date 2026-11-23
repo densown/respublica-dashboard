@@ -156,7 +156,10 @@ export default function DashboardLayout() {
             padding: isWorldMapPage ? 0 : mainPad,
             paddingBottom: 0,
             // Kurze Seiten: der Fuss steht am Fensterende, nicht mitten im Bild
-            flex: '1 0 auto',
+            // Die Weltkarte fuellt genau das Fenster und darf schrumpfen: sonst
+            // waechst sie mit dem Inhalt der Seitenleiste ueber den Rand und
+            // Legende und Kartenrand liegen unsichtbar darunter.
+            flex: isWorldMapPage ? '1 1 0' : '1 0 auto',
             minHeight: isWorldMapPage ? 0 : undefined,
             display: isWorldMapPage ? 'flex' : 'block',
             flexDirection: isWorldMapPage ? 'column' : undefined,

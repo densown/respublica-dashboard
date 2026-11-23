@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import {
   ProjectionToggle,
   type MapProjectionMode,
   useTheme,
 } from '../../design-system'
 import type { I18nKey } from '../../design-system/i18n'
-import { fonts, radius, spacing } from '../../design-system/tokens'
+import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import type { WorldCategoryApi } from './worldTypes'
 import type { FloatingWidgetType } from './WidgetDashboard'
+import { worldIndicatorDisplayLabel } from './worldIndicatorShortNames'
 
 const WORLD_CAT_I18N: Record<string, I18nKey> = {
   population: 'worldCat_population',
@@ -48,6 +49,8 @@ export type MapTopbarProps = {
   projectionDisabledReason?: string
   visibleWidgets: Set<FloatingWidgetType>
   onToggleWidget: (type: FloatingWidgetType) => void
+  /** Handy: nur Thema, Kennzahl und Jahr. Globus und Zusatzfenster bleiben dem Desktop. */
+  narrow?: boolean
 }
 
 const WIDGET_MENU: { type: FloatingWidgetType; labelKey: I18nKey }[] = [
@@ -58,6 +61,11 @@ const WIDGET_MENU: { type: FloatingWidgetType; labelKey: I18nKey }[] = [
   { type: 'sparkline', labelKey: 'worldWidgetSparkline' },
 ]
 
+/**
+ * Kopf der Weltkarte: erst das Thema, dann die Kennzahl und das Jahr.
+ * Themen stehen als Textreiter mit Unterstrich wie die Unternavigation der
+ * App, nicht mehr als rote Pillen in 9 Pixel Schrift.
+ */
 export default function MapTopbar({
   categories,
   activeCategory,
@@ -75,8 +83,9 @@ export default function MapTopbar({
   projectionDisabledReason,
   visibleWidgets,
   onToggleWidget,
+  narrow = false,
 }: MapTopbarProps) {
-  const { c, t } = useTheme()
+  const { c, t, lang } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuWrapRef = useRef<HTMLDivElement>(null)
 
@@ -90,48 +99,45 @@ export default function MapTopbar({
   }, [menuOpen])
 
   const yearDisabled = yearMax <= yearMin
+  const feld = 44
 
-  const stepperBtnBase: CSSProperties = {
-    width: 32,
-    minHeight: 32,
-    border: `1px solid ${c.border}`,
+  const stepperBtn: CSSProperties = {
+    width: feld,
+    height: feld,
+    border: 'none',
     background: 'transparent',
     color: c.ink,
-    fontFamily: fonts.mono,
-    fontSize: 14,
+    fontFamily: fonts.body,
+    fontSize: 20,
+    lineHeight: 1,
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: radius.sm,
   }
-
-  const onRowClick = useCallback(
-    (type: FloatingWidgetType) => {
-      onToggleWidget(type)
-    },
-    [onToggleWidget],
-  )
 
   return (
     <div
       style={{
         flexShrink: 0,
-        background: c.cardBg,
+        background: c.bg,
         borderBottom: `1px solid ${c.border}`,
         zIndex: 50,
       }}
     >
       <div
+        className="rp-ohne-scrollbalken"
+        role="tablist"
+        aria-label={t('worldTopbarTopics')}
         style={{
-          height: 36,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'stretch',
           overflowX: 'auto',
           scrollbarWidth: 'none',
-          gap: spacing.xs,
-          padding: `0 ${spacing.md}px`,
+          gap: spacing.lg,
+          padding: `0 ${spacing.lg}px`,
           boxSizing: 'border-box',
+          borderBottom: `1px solid ${c.border}`,
         }}
       >
         {categories.map((cat) => {
@@ -140,23 +146,22 @@ export default function MapTopbar({
             <button
               key={cat.id}
               type="button"
+              role="tab"
+              aria-selected={active}
               onClick={() => onCategoryChange(cat.id)}
               style={{
                 flexShrink: 0,
-                padding: '6px 14px',
-                fontFamily: fonts.mono,
-                fontSize: 9,
-                borderRadius: radius.pill,
-                border: active ? 'none' : `1px solid ${c.border}`,
-                background: active ? c.red : 'transparent',
-                color: active ? '#fff' : c.muted,
+                minHeight: feld,
+                padding: 0,
+                border: 'none',
+                borderBottom: `2px solid ${active ? c.red : 'transparent'}`,
+                background: 'transparent',
+                fontFamily: fonts.body,
+                fontSize: fontSize.md,
+                fontWeight: active ? 600 : 400,
+                color: active ? c.ink : c.muted,
                 cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                if (!active) e.currentTarget.style.background = c.bgHover
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = active ? c.red : 'transparent'
+                whiteSpace: 'nowrap',
               }}
             >
               {worldCategoryLabel(cat.id, t)}
@@ -167,13 +172,11 @@ export default function MapTopbar({
 
       <div
         style={{
-          minHeight: 44,
           display: 'flex',
           alignItems: 'center',
           gap: spacing.md,
-          padding: `${spacing.sm}px ${spacing.md}px`,
+          padding: `${spacing.sm}px ${spacing.lg}px`,
           boxSizing: 'border-box',
-          flexWrap: 'wrap',
         }}
       >
         <select
@@ -182,22 +185,24 @@ export default function MapTopbar({
           onChange={(e) => onIndicatorCodeChange(e.target.value)}
           aria-label={t('worldIndicator')}
           style={{
-            maxWidth: 320,
-            flex: '1 1 160px',
-            minWidth: 120,
+            flex: '1 1 0',
+            minWidth: 0,
+            maxWidth: 360,
+            height: feld,
             fontFamily: fonts.body,
-            fontSize: 13,
+            fontSize: fontSize.base,
+            fontWeight: 600,
             border: `1px solid ${c.border}`,
-            background: c.bg,
+            background: c.cardBg,
             color: c.ink,
-            padding: '8px 12px',
-            borderRadius: radius.sm,
+            padding: `0 ${spacing.md}px`,
+            borderRadius: radius.md,
             boxSizing: 'border-box',
           }}
         >
           {indicators.map((ind) => (
-            <option key={ind.code} value={ind.code}>
-              {ind.name}
+            <option key={ind.code} value={ind.code} title={ind.name}>
+              {worldIndicatorDisplayLabel(ind.code, lang, ind.name)}
             </option>
           ))}
         </select>
@@ -206,32 +211,28 @@ export default function MapTopbar({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: spacing.xs,
             flexShrink: 0,
+            border: `1px solid ${c.border}`,
+            borderRadius: radius.md,
+            background: c.cardBg,
           }}
         >
           <button
             type="button"
-            style={stepperBtnBase}
+            style={{ ...stepperBtn, opacity: yearDisabled || year <= yearMin ? 0.35 : 1 }}
             disabled={yearDisabled || year <= yearMin}
             onClick={() => onYearChange(year - 1)}
             aria-label={t('worldYearStepPrev')}
-            onMouseEnter={(e) => {
-              if (!e.currentTarget.disabled) e.currentTarget.style.background = c.bgHover
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
-            }}
           >
-            −
+            ‹
           </button>
           <span
             style={{
-              minWidth: 48,
+              minWidth: 44,
               textAlign: 'center',
-              fontFamily: fonts.body,
-              fontSize: 16,
-              fontWeight: 600,
+              fontFamily: fonts.mono,
+              fontSize: fontSize.base,
+              fontVariantNumeric: 'tabular-nums',
               color: c.ink,
             }}
             aria-label={t('worldTopbarYear')}
@@ -240,122 +241,99 @@ export default function MapTopbar({
           </span>
           <button
             type="button"
-            style={stepperBtnBase}
+            style={{ ...stepperBtn, opacity: yearDisabled || year >= yearMax ? 0.35 : 1 }}
             disabled={yearDisabled || year >= yearMax}
             onClick={() => onYearChange(year + 1)}
             aria-label={t('worldYearStepNext')}
-            onMouseEnter={(e) => {
-              if (!e.currentTarget.disabled) e.currentTarget.style.background = c.bgHover
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
-            }}
           >
-            +
+            ›
           </button>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: spacing.sm,
-            flexShrink: 0,
-          }}
-        >
-          <ProjectionToggle
-            value={projection}
-            onChange={onProjectionChange}
-            disabled={projectionDisabled}
-            disabledReason={projectionDisabledReason}
-          />
-          {projectionDisabled ? (
-            <span
-              style={{
-                fontFamily: fonts.body,
-                fontSize: 12,
-                color: c.muted,
-                lineHeight: 1.2,
-                maxWidth: 260,
-              }}
-            >
-              {projectionDisabledReason ?? t('worldProjectionUnsupportedHint')}
-            </span>
-          ) : null}
-        </div>
-
-        <div ref={menuWrapRef} style={{ position: 'relative', marginLeft: 'auto', flexShrink: 0 }}>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            style={{
-              padding: '8px 12px',
-              border: `1px solid ${c.border}`,
-              background: c.cardBg,
-              color: c.ink,
-              fontFamily: fonts.mono,
-              fontSize: 9,
-              cursor: 'pointer',
-              borderRadius: radius.sm,
-            }}
-          >
-            {t('worldTopbarAddWidget')}
-          </button>
-          {menuOpen ? (
-            <div
-              style={{
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                marginTop: 4,
-                minWidth: 220,
-                background: c.cardBg,
-                border: `1px solid ${c.border}`,
-                borderRadius: radius.md,
-                boxShadow: c.shadow,
-                zIndex: 80,
-                padding: `${spacing.xs}px 0`,
-              }}
-            >
-              {WIDGET_MENU.map(({ type, labelKey }) => {
-                const on = visibleWidgets.has(type)
-                return (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => onRowClick(type)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: spacing.sm,
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '8px 16px',
-                      border: 'none',
-                      background: 'transparent',
-                      fontFamily: fonts.body,
-                      fontSize: 13,
-                      color: c.ink,
-                      cursor: 'pointer',
-                      boxSizing: 'border-box',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = c.bgHover
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent'
-                    }}
-                  >
-                    <span style={{ width: 14, flexShrink: 0, fontFamily: fonts.mono, fontSize: 12 }}>
-                      {on ? '✓' : ''}
-                    </span>
-                    {t(labelKey)}
-                  </button>
-                )
-              })}
+        {!narrow && (
+          <>
+            <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
+              {projectionDisabled ? null : (
+                <ProjectionToggle
+                  value={projection}
+                  onChange={onProjectionChange}
+                  disabled={projectionDisabled}
+                  disabledReason={projectionDisabledReason}
+                />
+              )}
             </div>
-          ) : null}
-        </div>
+
+            <div ref={menuWrapRef} style={{ position: 'relative', flexShrink: 0 }}>
+              <button
+                type="button"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((o) => !o)}
+                style={{
+                  height: feld,
+                  padding: `0 ${spacing.md}px`,
+                  border: `1px solid ${c.border}`,
+                  background: 'transparent',
+                  color: c.inkSoft,
+                  fontFamily: fonts.body,
+                  fontSize: fontSize.sm,
+                  cursor: 'pointer',
+                  borderRadius: radius.md,
+                }}
+              >
+                {t('worldTopbarAddWidget')}
+              </button>
+              {menuOpen ? (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: 4,
+                    minWidth: 220,
+                    background: c.cardBg,
+                    border: `1px solid ${c.border}`,
+                    borderRadius: radius.md,
+                    boxShadow: c.shadow,
+                    zIndex: 80,
+                    padding: `${spacing.xs}px 0`,
+                  }}
+                >
+                  {WIDGET_MENU.map(({ type, labelKey }) => {
+                    const on = visibleWidgets.has(type)
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => onToggleWidget(type)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: spacing.sm,
+                          width: '100%',
+                          minHeight: 40,
+                          textAlign: 'left',
+                          padding: `0 ${spacing.lg}px`,
+                          border: 'none',
+                          background: 'transparent',
+                          fontFamily: fonts.body,
+                          fontSize: fontSize.md,
+                          color: c.ink,
+                          cursor: 'pointer',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        <span style={{ width: 14, flexShrink: 0, color: c.red }}>
+                          {on ? '✓' : ''}
+                        </span>
+                        {t(labelKey)}
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : null}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

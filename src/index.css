@@ -89,3 +89,4 @@ body {
 .rp-wischzeile { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
 .rp-wischzeile::-webkit-scrollbar { display: none; }
 .rp-wischzeile > * { flex-shrink: 0; }
+.rp-ohne-scrollbalken::-webkit-scrollbar { display: none; }
