@@ -86,6 +86,7 @@ export function MehrOderWeniger({
           </span>
         )}
       </div>
+      <p style={{ margin: `${spacing.xs}px 0 0`, fontFamily: fonts.body, fontSize: fontSize.md, color: c.inkSoft }}>{t('mowFrage')}</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: spacing.md, marginTop: spacing.md }}>
         {([0, 1] as const).map((i) => {
           const e = paar[i]
