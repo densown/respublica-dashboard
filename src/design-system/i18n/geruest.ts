@@ -1,4 +1,4 @@
-// i18n-Messages: Geruest (Kopfzeile, Leiste unten, Seite "Mehr", Fuss)
+// i18n-Messages: Geruest (Kopfzeile, Seite "Mehr", Fuss)
 
 export const de = {
   notFoundStamp: "Unzustellbar",

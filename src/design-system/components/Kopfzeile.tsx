@@ -14,8 +14,12 @@ export type KopfzeileProps = {
   ziele: NavZiel[]
   aktiv: string
   aktivesKind?: string
-  /** Schmale Fassung fuer das Handy: nur Logo und Datum. */
+  /** Schmale Fassung fuer das Handy: Logo, Datum und darunter die Ressorts. */
   schmal?: boolean
+  /** Ressorts der schmalen Fassung (fuenf Woerter in einer Zeile) */
+  ressorts?: { id: string; label: string; path: string }[]
+  /** Aktives Ressort der schmalen Fassung */
+  aktivesRessort?: string
 }
 
 function heute(lang: string): string {
@@ -32,7 +36,14 @@ function heute(lang: string): string {
  * Ersetzt die schwarze Seitenleiste, die die App wie eine
  * Verwaltungsoberflaeche aussehen liess.
  */
-export function Kopfzeile({ ziele, aktiv, aktivesKind, schmal }: KopfzeileProps) {
+export function Kopfzeile({
+  ziele,
+  aktiv,
+  aktivesKind,
+  schmal,
+  ressorts = [],
+  aktivesRessort,
+}: KopfzeileProps) {
   const { c, t, lang, setLang, theme, setTheme } = useTheme()
   const aktivesZiel = ziele.find((z) => z.id === aktiv)
   const kinder = aktivesZiel?.kinder ?? []
@@ -57,32 +68,76 @@ export function Kopfzeile({ ziele, aktiv, aktivesKind, schmal }: KopfzeileProps)
 
   if (schmal) {
     return (
-      <header
-        style={{
-          flexShrink: 0,
-          display: 'flex',
-          alignItems: 'baseline',
-          justifyContent: 'space-between',
-          gap: spacing.md,
-          padding: `${spacing.md}px ${spacing.lg}px ${spacing.sm}px`,
-          background: c.bg,
-          borderBottom: `3px double ${c.ink}`,
-        }}
-      >
-        {logo}
-        <span
+      <header style={{ flexShrink: 0, background: c.bg }}>
+        <div
           style={{
-            fontFamily: fonts.body,
-            fontStyle: 'italic',
-            fontSize: fontSize.xs,
-            color: c.muted,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            gap: spacing.md,
+            padding: `${spacing.md}px ${spacing.lg}px ${spacing.sm}px`,
+            borderBottom: `3px double ${c.ink}`,
           }}
         >
-          {heute(lang)}
-        </span>
+          {logo}
+          <span
+            style={{
+              fontFamily: fonts.body,
+              fontStyle: 'italic',
+              fontSize: fontSize.xs,
+              color: c.muted,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {heute(lang)}
+          </span>
+        </div>
+        {/*
+          Die Ressorts stehen oben unter dem Kopf, nicht mehr als Leiste am
+          unteren Rand: dort liegt auf dem iPhone die Adressleiste von Safari
+          und ueberdeckte die Navigation.
+        */}
+        {ressorts.length > 0 && (
+          <nav
+            aria-label={t('navHauptnavigation')}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${ressorts.length}, auto)`,
+              justifyContent: 'space-between',
+              padding: `0 ${spacing.lg}px`,
+              borderBottom: `1px solid ${c.border}`,
+            }}
+          >
+            {ressorts.map((z) => {
+              const istAktiv = z.id === aktivesRessort
+              return (
+                <Link
+                  key={z.id}
+                  to={z.path}
+                  aria-current={istAktiv ? 'page' : undefined}
+                  className="rp-navwort"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    minHeight: 44,
+                    fontFamily: fonts.body,
+                    fontSize: fontSize.md,
+                    fontWeight: istAktiv ? 600 : 400,
+                    color: istAktiv ? c.ink : c.inkSoft,
+                    textDecoration: 'none',
+                    boxShadow: istAktiv ? `inset 0 -2px 0 ${c.red}` : 'none',
+                    whiteSpace: 'nowrap',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                >
+                  {z.label}
+                </Link>
+              )
+            })}
+          </nav>
+        )}
       </header>
     )
   }

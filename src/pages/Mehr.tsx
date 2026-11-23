@@ -29,7 +29,7 @@ const AUSSERHALB: Eintrag[] = [
 ]
 
 /**
- * "Mehr": alles, was nicht in der Leiste unten steht, dazu die
+ * "Mehr": alles, was nicht in der Kopfzeile steht, dazu die
  * Einstellungen. Eine eigene Seite statt eines Aufklappmenues, damit sie
  * eine Adresse hat und Zurueck funktioniert.
  */

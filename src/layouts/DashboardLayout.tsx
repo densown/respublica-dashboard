@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { fonts, spacing, motion } from '../design-system/tokens'
 import { LegalFooter, useTheme } from '../design-system'
 import { Kopfzeile, type NavZiel } from '../design-system/components/Kopfzeile'
-import { TabLeiste, type TabZiel } from '../design-system/components/TabLeiste'
 import type { I18nKey } from '../design-system/i18n'
 import { useIsMobile, useMediaQuery } from '../hooks/useMediaQuery'
 
@@ -62,7 +61,7 @@ export default function DashboardLayout() {
   const location = useLocation()
   const schmal = useIsMobile()
   // Handy quer und kleine Tablets: breiter als 768 px, aber ohne Maus. Auch
-  // dort bleibt die Leiste unten, sonst verschwand sie beim Drehen des Handys.
+  // dort gilt die schmale Fassung mit den Ressorts unter dem Kopf.
   const fingerGeraet = useMediaQuery('(hover: none) and (pointer: coarse) and (max-width: 960px)')
   const isMobile = schmal || fingerGeraet
 
@@ -108,13 +107,13 @@ export default function DashboardLayout() {
     ]
   }, [t])
 
-  const tabs = useMemo<TabZiel[]>(
+  const tabs = useMemo(
     () => [
-      { id: 'start', label: t('navStart'), path: '/', icon: 'start' },
-      { id: 'bundestag', label: t('bundestag'), path: '/bundestag', icon: 'bundestag' },
-      { id: 'wahlen', label: t('navElections'), path: '/wahlen/umfragen', icon: 'wahlen' },
-      { id: 'gesetze', label: t('navGesetze'), path: '/gesetze', icon: 'gesetze' },
-      { id: 'mehr', label: t('navMehr'), path: '/mehr', icon: 'mehr' },
+      { id: 'start', label: t('navStart'), path: '/' },
+      { id: 'bundestag', label: t('bundestag'), path: '/bundestag' },
+      { id: 'wahlen', label: t('navElections'), path: '/wahlen/umfragen' },
+      { id: 'gesetze', label: t('navGesetze'), path: '/gesetze' },
+      { id: 'mehr', label: t('navMehr'), path: '/mehr' },
     ],
     [t],
   )
@@ -137,9 +136,16 @@ export default function DashboardLayout() {
           `background ${motion.slow} ${motion.easing}, color ${motion.slow} ${motion.easing}`,
       }}
     >
-      <Kopfzeile ziele={ziele} aktiv={aktiv} aktivesKind={aktivesKind} schmal={isMobile} />
+      <Kopfzeile
+        ziele={ziele}
+        aktiv={aktiv}
+        aktivesKind={aktivesKind}
+        schmal={isMobile}
+        ressorts={tabs}
+        aktivesRessort={aktiverTab}
+      />
 
-      {/* Eigener Scrollbereich: Kopfzeile und Leiste bleiben stehen. */}
+      {/* Eigener Scrollbereich: die Kopfzeile bleibt stehen. */}
       <div
         id="rp-scroll"
         style={{
@@ -173,7 +179,6 @@ export default function DashboardLayout() {
         {!isWorldMapPage && <LegalFooter />}
       </div>
 
-      {isMobile && <TabLeiste ziele={tabs} aktiv={aktiverTab} />}
     </div>
   )
 }

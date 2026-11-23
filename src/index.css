@@ -15,14 +15,14 @@ body,
 body {
   -webkit-font-smoothing: antialiased;
   /* Die Seite selbst rollt nie, nur der Bereich zwischen Kopf und Leiste.
-     Sonst schiebt Safari die Leiste unten aus dem Bild. */
+     Sonst verschiebt Safari die ganze App. */
   overflow: hidden;
   overscroll-behavior: none;
 }
 
 /* Huelle der App: genau so hoch wie der sichtbare Bereich. 100vh ist in
    Safari auf dem iPhone hoeher als das, was man sieht (die Adressleiste zaehlt
-   nicht mit); die Leiste unten lag dann dahinter. dvh folgt dem sichtbaren
+   nicht mit); der untere Rand lag dann dahinter. dvh folgt dem sichtbaren
    Bereich, vh bleibt nur als Rueckfall fuer alte Browser. */
 .rp-huelle {
   height: 100vh;
@@ -73,7 +73,6 @@ body {
 /* Geruest: Rueckmeldung beim Antippen. Inline-Styles koennen :active und
    :hover nicht ausdruecken. */
 .rp-navwort:hover { color: var(--rp-ink) !important; }
-.rp-tab:active { transform: scale(0.94); }
 .rp-zeile .rp-pfeil { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
 .rp-zeile:hover .rp-pfeil { transform: translateX(4px); }
 .rp-zeile:active .rp-pfeil { transform: translateX(8px); }
