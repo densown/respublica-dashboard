@@ -69,16 +69,6 @@ function normalizeUrteileList(raw: unknown): Urteil[] {
   return []
 }
 
-function urteilReferencesGesetz(u: Urteil, kuerzel: string): boolean {
-  const k = kuerzel.trim().toLowerCase()
-  if (!k) return false
-  const refs = u.gesetze
-  if (!Array.isArray(refs)) return false
-  return refs.some(
-    (x) => typeof x === 'string' && x.trim().toLowerCase() === k,
-  )
-}
-
 function displayTitel(g: Gesetz): string {
   const t = (g.titel ?? '').trim()
   if (t) return t
@@ -380,11 +370,22 @@ export default function Legislation() {
     error: lobbyLawError,
   } = useApi<LobbyLawResponse>(lobbyLawEndpoint)
 
-  const linkedUrteile = useMemo(() => {
-    const ku = gesetzMerged?.kuerzel?.trim() ?? ''
-    if (!ku) return []
-    return urteileBase.filter((u) => urteilReferencesGesetz(u, ku))
-  }, [gesetzMerged, urteileBase])
+  // Urteile zum Gesetz kommen fertig zugeordnet aus der API. Frueher filterte
+  // die Seite die Urteilsliste nach dem Kuerzel des Gesetzes. Die Liste traegt
+  // aber keine Gesetze, und das Kuerzel ist meist der Schluessel von
+  // gesetze-im-internet.de ("GG-BJNR000010949"), den kein Urteil nennt: die
+  // Rubrik blieb immer leer.
+  const urteileZumGesetzEndpoint = useMemo(() => {
+    if (mainTab !== 'gesetze') return ''
+    const gesetzId = gesetzMerged?.gesetz_id
+    if (!gesetzId || !Number.isFinite(gesetzId)) return ''
+    return `/api/urteile/by-gesetz-id?gesetz_id=${gesetzId}`
+  }, [mainTab, gesetzMerged?.gesetz_id])
+  const { data: urteileZumGesetz } = useApi<{ urteile?: Urteil[] }>(urteileZumGesetzEndpoint)
+  const linkedUrteile = useMemo(
+    () => (urteileZumGesetzEndpoint && Array.isArray(urteileZumGesetz?.urteile) ? urteileZumGesetz.urteile : []),
+    [urteileZumGesetzEndpoint, urteileZumGesetz],
+  )
 
   const listReady = !loadingList && !errList
   const showNotFound = hasValidId && listReady && listEntry == null
