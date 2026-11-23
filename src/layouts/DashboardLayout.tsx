@@ -121,11 +121,6 @@ export default function DashboardLayout() {
     //   { kind: 'link' as const, id: 'versammlungen', icon: '◎', label: t('versammlungenNav') }
     // (Schluessel versammlungenNav dann in i18n/versammlungen.ts anlegen)
     //
-    // Ebenso der Tracker Kleine Anfragen unter /kleine-anfragen (Beta,
-    // /api/kleine-anfragen*). Zum Veroeffentlichen unter sectionGermany:
-    //   { kind: 'link' as const, id: 'kleineAnfragen', icon: '?', label: t('kaNav') }
-    // (Schluessel kaNav dann in i18n/kleineAnfragen.ts anlegen)
-    //
     // Alle Routen bleiben erreichbar, damit vorhandene Links nicht
     // brechen.
     //
@@ -139,6 +134,7 @@ export default function DashboardLayout() {
       { kind: 'section' as const, label: t('sectionGermany') },
       { kind: 'link' as const, id: 'elections', icon: '◇', label: t('navElections') },
       { kind: 'link' as const, id: 'bundestag', icon: '⬡', label: t('bundestag') },
+      { kind: 'link' as const, id: 'kleineAnfragen', icon: '◫', label: t('kaNav') },
       { kind: 'link' as const, id: 'legislation', icon: '§', label: t('legislation') },
       { kind: 'link' as const, id: 'lobby', icon: '⊘', label: t('lobby') },
       { kind: 'section' as const, label: t('sectionEurope') },

@@ -12,6 +12,8 @@ import {
 import { stimmFlaeche } from '../design-system/palettes'
 import { fontSize, fonts, lineHeight, measure, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { AntwortKarte } from './kleineAnfragen/AntwortKarte'
+import type { ListeResponse } from './kleineAnfragen/types'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
 import { anzeigeTitel, datumLang, ergebnisZeile, stimmenKurz } from '../components/bundestag/abstimmungText'
@@ -72,6 +74,7 @@ export default function Abgeordneter() {
 
   const profil = useApi<MemberTopicProfileData>(gueltig ? `/api/abgeordnete/${id}/themen` : '')
   const stimmen = useApi<StimmZeile[]>(gueltig ? `/api/abgeordnete/${id}/votes` : '')
+  const anfragen = useApi<ListeResponse>(gueltig ? `/api/kleine-anfragen?abgeordneter=${id}&limit=3` : '')
 
   const zeilen: Zeile[] = useMemo(
     () =>
@@ -361,6 +364,28 @@ export default function Abgeordneter() {
       <Section number={naechste()} title={t('profileTopics')} note={t('profileTopicsNote')}>
         <MemberTopicProfile data={profil.data} />
       </Section>
+
+      {anfragen.data && anfragen.data.total > 0 && (
+        <Section
+          number={naechste()}
+          title={t('kaProfilTitel').replace('{n}', String(anfragen.data.total))}
+          note={t('kaProfilNote')}
+        >
+          <div>
+            {anfragen.data.daten.map((a) => (
+              <AntwortKarte key={a.id} a={a} kompakt />
+            ))}
+          </div>
+          {anfragen.data.total > anfragen.data.daten.length && (
+            <Link
+              to={`/kleine-anfragen?abgeordneter=${id}`}
+              style={{ color: c.ink, fontFamily: fonts.mono, fontSize: fontSize.sm, display: 'inline-block', marginTop: spacing.md }}
+            >
+              {t('kaProfilAlle').replace('{n}', String(anfragen.data.total))} →
+            </Link>
+          )}
+        </Section>
+      )}
 
       <Section
         number={naechste()}

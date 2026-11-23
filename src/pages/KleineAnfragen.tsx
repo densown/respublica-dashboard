@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
   Chip,
   EmptyState,
@@ -40,6 +40,7 @@ export default function KleineAnfragen() {
   const sachgebiet = params.get('sachgebiet') ?? ''
   const nurZahlen = params.get('zahlen') === '1'
   const nichtErhoben = params.get('nichtwissen') === '1'
+  const abgeordneter = Number.parseInt(params.get('abgeordneter') ?? '', 10) || 0
   const seite = Math.max(1, Number(params.get('seite')) || 1)
 
   // Suchfeld lokal halten und verzoegert in die URL schreiben: sonst ein
@@ -75,6 +76,7 @@ export default function KleineAnfragen() {
     sachgebiet && `sachgebiet=${encodeURIComponent(sachgebiet)}`,
     nurZahlen && 'nur_zahlen=1',
     nichtErhoben && 'nicht_erhoben=1',
+    abgeordneter > 0 && `abgeordneter=${abgeordneter}`,
   ]
     .filter(Boolean)
     .join('&')
@@ -178,6 +180,19 @@ export default function KleineAnfragen() {
         <Chip dense label={t('kaNurZahlen')} active={nurZahlen} onClick={() => setParam('zahlen', nurZahlen ? '' : '1')} />
         <Chip dense label={t('kaNichtErhoben')} active={nichtErhoben} onClick={() => setParam('nichtwissen', nichtErhoben ? '' : '1')} />
       </Toolbar>
+
+      {liste?.abgeordneter && (
+        <Toolbar label={t('kaAbgeordneterFilter')}>
+          <Link
+            to={`/bundestag/abgeordnete/${liste.abgeordneter.aw_id}`}
+            style={{ color: c.ink, fontFamily: fonts.body, fontSize: fontSize.sm }}
+          >
+            {liste.abgeordneter.name}
+            {liste.abgeordneter.fraktion ? ` (${liste.abgeordneter.fraktion})` : ''}
+          </Link>
+          <Chip dense label={t('kaAbgeordneterAlle')} active={false} onClick={() => setParam('abgeordneter', '')} />
+        </Toolbar>
+      )}
 
       <Section title={t('kaListeTitle')} aside={liste ? t('kaTreffer').replace('{n}', zahl(liste.total)) : undefined}>
         {fehlerListe && !liste && <p style={absatz}>{t('kaFehler')}</p>}
