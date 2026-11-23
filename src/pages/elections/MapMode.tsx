@@ -4,7 +4,6 @@ import {
   type SetStateAction,
 } from 'react'
 import {
-  DataCard,
   EmptyState,
   ExportableContainer,
   useTheme,
@@ -186,19 +185,14 @@ export function MapMode({
       ? `${v.toFixed(1).replace('.', lang === 'de' ? ',' : '.')} %`
       : t('electionsMapNoData')
 
+  // Kennzahl als Zeile mit Linie darueber statt als Kasten
   const statCard = (title: string, body: string) => (
-    <DataCard header={<span style={{ fontFamily: fonts.body, fontSize: fontSize.sm, color: c.muted }}>{title}</span>}>
-      <div
-        style={{
-          fontFamily: fonts.mono,
-          fontSize: fontSize.lg,
-          color: c.text,
-          lineHeight: 1.4,
-        }}
-      >
+    <div style={{ paddingTop: spacing.sm, borderTop: `1px solid ${c.ink}`, minWidth: 0 }}>
+      <div style={{ fontFamily: fonts.body, fontWeight: 600, fontSize: fontSize.base, color: c.text, lineHeight: 1.3, overflowWrap: 'anywhere' }}>
         {body}
       </div>
-    </DataCard>
+      <div style={{ marginTop: 2, fontFamily: fonts.body, fontSize: fontSize.sm, color: c.muted }}>{title}</div>
+    </div>
   )
 
   const onMapSelect = (ags: string) => {
@@ -214,11 +208,11 @@ export function MapMode({
     <>
       <div
         style={{
-          display: 'flex',
-          flexDirection: narrow ? 'column' : 'row',
-          flexWrap: narrow ? 'nowrap' : 'wrap',
+          display: narrow ? 'grid' : 'flex',
+          gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+          flexWrap: 'wrap',
           gap: spacing.md,
-          marginTop: spacing.lg,
+          marginTop: 0,
           marginBottom: spacing.xl,
           width: '100%',
           maxWidth: '100%',
@@ -416,16 +410,15 @@ export function MapMode({
           style={{
             minHeight: 44,
             padding: '0 18px',
-            borderRadius: radius.lg,
-            border: `1px solid ${c.border}`,
-            background: c.cardBg,
+            borderRadius: radius.sm,
+            border: `1px solid ${c.ink}`,
+            background: 'transparent',
             color: c.text,
             fontFamily: fonts.body,
             fontSize: fontSize.base,
             cursor: 'pointer',
           }}
         >
-          {showAdvanced ? '▼ ' : '▶ '}
           {t('advancedAnalysis')}
         </button>
       </div>

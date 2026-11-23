@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Chip, EmptyState, useTheme, VoteBar } from '../../design-system'
+import { Chip, EmptyState, Stempel, useTheme, VoteBar } from '../../design-system'
+import { useEigeneStimmen } from '../../hooks/useMeins'
 import { fontSize, fonts, lineHeight, measure, radius, spacing } from '../../design-system/tokens'
 import { StimmMarke } from './StimmMarke'
 import {
@@ -8,6 +9,8 @@ import {
   aufzaehlen,
   datumLang,
   ergebnisWort,
+  istAngenommen,
+  istGespalten,
   kurztextFuer,
   lagerDerFraktionen,
   stimmenKurz,
@@ -27,6 +30,18 @@ import { fuerSuche } from './stimmen'
 
 const SEITE = 20
 
+/** Bis zu diesem Abstand zwischen Ja und Nein gilt eine Abstimmung als knapp. */
+const KNAPP = 60
+
+type Auswahl = 'alle' | 'angenommen' | 'abgelehnt' | 'knapp' | 'gespalten'
+const AUSWAHL: { wert: Auswahl; wort: 'bundestagFilterAll' | 'accepted' | 'rejected' | 'bundestagFilterClose' | 'bundestagFilterSplit' }[] = [
+  { wert: 'alle', wort: 'bundestagFilterAll' },
+  { wert: 'angenommen', wort: 'accepted' },
+  { wert: 'abgelehnt', wort: 'rejected' },
+  { wert: 'knapp', wort: 'bundestagFilterClose' },
+  { wert: 'gespalten', wort: 'bundestagFilterSplit' },
+]
+
 const LAGER = [
   { stimme: 'yes', wort: 'bundestagCampYes' },
   { stimme: 'no', wort: 'bundestagCampNo' },
@@ -38,7 +53,7 @@ function mitErgebnis(a: AbstimmungsListenEintrag): AbstimmungsDetailData | null 
   return { ...a, ergebnis: a.ergebnis, fraktionen: a.fraktionen }
 }
 
-function AbstimmungsKachel({ eintrag }: { eintrag: AbstimmungsListenEintrag }) {
+function AbstimmungsKachel({ eintrag, eigene }: { eintrag: AbstimmungsListenEintrag; eigene?: 'yes' | 'no' | 'abstain' }) {
   const { c, t, lang } = useTheme()
   const d = mitErgebnis(eintrag)
   const kurztext = kurztextFuer(eintrag, lang)
@@ -48,12 +63,13 @@ function AbstimmungsKachel({ eintrag }: { eintrag: AbstimmungsListenEintrag }) {
   return (
     <Link
       to={`/bundestag/${eintrag.poll_id}`}
-      className="rp-chip"
+      className="rp-karte"
       style={{
         display: 'block',
         padding: spacing.lg,
         background: c.cardBg,
         border: `1px solid ${c.cardBorder}`,
+        borderRadius: radius.sm,
         color: c.ink,
         textDecoration: 'none',
       }}
@@ -88,10 +104,9 @@ function AbstimmungsKachel({ eintrag }: { eintrag: AbstimmungsListenEintrag }) {
             style={{
               display: 'block',
               marginTop: spacing.xs,
-              fontFamily: fonts.mono,
-              fontSize: fontSize.micro,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
+              fontFamily: fonts.body,
+              fontStyle: 'italic',
+              fontSize: fontSize.xs,
               color: c.muted,
             }}
           >
@@ -106,19 +121,23 @@ function AbstimmungsKachel({ eintrag }: { eintrag: AbstimmungsListenEintrag }) {
             style={{
               display: 'flex',
               flexWrap: 'wrap',
-              alignItems: 'baseline',
-              columnGap: spacing.sm,
-              marginBottom: spacing.xs,
+              alignItems: 'center',
+              gap: `${spacing.xs}px ${spacing.md}px`,
+              marginBottom: spacing.sm,
             }}
           >
-            <span style={{ fontFamily: fonts.body, fontWeight: 600, fontSize: fontSize.md }}>
-              {ergebnisWort(d, t)}
-            </span>
+            <Stempel ruhig wort={ergebnisWort(d, t)} art={istAngenommen(d) ? 'ja' : 'nein'} groesse={10} />
             <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
               {t('bundestagCardResult')
                 .replace('{ja}', zahl(d.ergebnis.ja_gesamt))
                 .replace('{nein}', zahl(d.ergebnis.nein_gesamt))}
             </span>
+            {eigene && (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs, marginLeft: 'auto', fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.ink }}>
+                {t('selbstDu').replace('{wort}', '')}
+                <StimmMarke stimme={eigene} />
+              </span>
+            )}
           </span>
           <VoteBar
             ja={d.ergebnis.ja_gesamt}
@@ -188,14 +207,22 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
   const { c, t, lang } = useTheme()
   const [suche, setSuche] = useState('')
   const [sichtbar, setSichtbar] = useState(SEITE)
+  const [auswahl, setAuswahl] = useState<Auswahl>('alle')
+  const { stimmen } = useEigeneStimmen()
 
   const gefiltert = useMemo(() => {
     const q = fuerSuche(suche.trim())
-    if (!q) return abstimmungen
-    return abstimmungen.filter((a) =>
-      fuerSuche(`${a.poll_titel} ${kurztextFuer(a, lang) ?? ''}`).includes(q),
-    )
-  }, [abstimmungen, suche, lang])
+    return abstimmungen.filter((a) => {
+      if (q && !fuerSuche(`${a.poll_titel} ${kurztextFuer(a, lang) ?? ''}`).includes(q)) return false
+      if (auswahl === 'alle') return true
+      const d = mitErgebnis(a)
+      if (!d) return false
+      if (auswahl === 'angenommen') return istAngenommen(d)
+      if (auswahl === 'abgelehnt') return !istAngenommen(d)
+      if (auswahl === 'knapp') return Math.abs(d.ergebnis.ja_gesamt - d.ergebnis.nein_gesamt) <= KNAPP
+      return d.fraktionen.some(istGespalten)
+    })
+  }, [abstimmungen, suche, lang, auswahl])
 
   // Nach Sitzungstag, in der Reihenfolge der API (neueste zuerst)
   const tage = useMemo(() => {
@@ -218,20 +245,6 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
 
   return (
     <div style={{ maxWidth: measure.liste }}>
-      {mitKurztext && (
-        <p
-          style={{
-            margin: `0 0 ${spacing.md}px`,
-            fontFamily: fonts.body,
-            fontSize: fontSize.sm,
-            lineHeight: lineHeight.normal,
-            color: c.muted,
-            maxWidth: '68ch',
-          }}
-        >
-          {t('bundestagAutoHint')}
-        </p>
-      )}
       <input
         type="search"
         value={suche}
@@ -256,6 +269,25 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
           marginBottom: spacing.md,
         }}
       />
+      <div
+        role="group"
+        aria-label={t('bundestagFilterLabel')}
+        className="rp-wischzeile"
+        style={{ display: 'flex', gap: spacing.sm, marginBottom: spacing.md }}
+      >
+        {AUSWAHL.map((a) => (
+          <Chip
+            key={a.wert}
+            dense
+            label={t(a.wort)}
+            active={auswahl === a.wert}
+            onClick={() => {
+              setAuswahl(a.wert)
+              setSichtbar(SEITE)
+            }}
+          />
+        ))}
+      </div>
 
       <div
         aria-live="polite"
@@ -268,7 +300,7 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
           borderBottom: `1px solid ${c.ink}`,
         }}
       >
-        {suche.trim()
+        {suche.trim() || auswahl !== 'alle'
           ? t('bundestagVotesMatches')
               .replace('{n}', String(gefiltert.length))
               .replace('{gesamt}', String(abstimmungen.length))
@@ -311,7 +343,7 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
               <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: spacing.md }}>
                 {tag.eintraege.map((a) => (
                   <li key={a.poll_id}>
-                    <AbstimmungsKachel eintrag={a} />
+                    <AbstimmungsKachel eintrag={a} eigene={stimmen[String(a.poll_id)]} />
                   </li>
                 ))}
               </ul>
@@ -324,6 +356,21 @@ export function AbstimmungsListe({ abstimmungen }: AbstimmungsListeProps) {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Chip label={t('bundestagVotesMore')} onClick={() => setSichtbar(sichtbar + SEITE)} />
         </div>
+      )}
+      {mitKurztext && (
+        <p
+          style={{
+            margin: `${spacing.xl}px 0 0`,
+            fontFamily: fonts.body,
+            fontStyle: 'italic',
+            fontSize: fontSize.sm,
+            lineHeight: lineHeight.normal,
+            color: c.muted,
+            maxWidth: '68ch',
+          }}
+        >
+          {t('bundestagAutoHint')}
+        </p>
       )}
     </div>
   )

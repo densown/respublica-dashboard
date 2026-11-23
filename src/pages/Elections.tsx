@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { EmptyState, PageHeader, useTheme } from '../design-system'
+import { EmptyState, PageHeader, useTheme, ViewToggle } from '../design-system'
 import { fonts, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
@@ -198,62 +198,13 @@ export default function Elections() {
     <div style={{ paddingBottom: spacing.xl }}>
       <PageHeader title={t('electionsTitle')} subtitle={t('electionsSubtitle')} />
 
-      <div
-        style={{
-          marginTop: spacing.md,
-          overflowX: 'auto',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
-        <div
-          role="tablist"
-          aria-label={t('electionsTitle')}
-          style={{
-            display: 'flex',
-            gap: 0,
-            borderBottom: `1px solid ${c.border}`,
-            minWidth: 'min-content',
-          }}
-        >
-          {modeTabs.map(({ id, label }) => {
-            const isActive = activeMode === id
-            return (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveMode(id)}
-                style={{
-                  fontFamily: fonts.mono,
-                  fontSize: narrow ? '0.75rem' : '0.85rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  padding: narrow ? '10px 14px' : '12px 24px',
-                  flexShrink: 0,
-                  border: 'none',
-                  borderBottom: isActive
-                    ? `3px solid ${c.red}`
-                    : '3px solid transparent',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  fontWeight: isActive ? 700 : 400,
-                  color: isActive ? c.text : c.muted,
-                  boxSizing: 'border-box',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = c.text
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.color = c.muted
-                }}
-              >
-                {label}
-              </button>
-            )
-          })}
-        </div>
-      </div>
+      <ViewToggle
+        value={activeMode}
+        onChange={setActiveMode}
+        ariaLabel={t('electionsTitle')}
+        options={modeTabs.map((m) => ({ value: m.id, label: m.label }))}
+        style={{ marginBottom: spacing.lg }}
+      />
 
       <Suspense
         fallback={

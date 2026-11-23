@@ -87,8 +87,6 @@ function aiSectionTitle(c: { inkSoft: string }, text: string) {
       style={{
         fontFamily: fonts.mono,
         fontSize: fontSize.micro,
-        textTransform: 'uppercase',
-        letterSpacing: '0.08em',
         color: c.inkSoft,
         marginTop: spacing.xxxl,
         marginBottom: spacing.sm,

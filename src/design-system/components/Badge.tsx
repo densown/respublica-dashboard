@@ -32,8 +32,6 @@ export function Badge({ text, variant = 'default' }: BadgeProps) {
     display: 'inline-block',
     fontFamily: fonts.mono,
     fontSize: fontSize.micro,
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.08em',
     padding: `${spacing.xs}px ${spacing.sm}px`,
     borderRadius: radius.xs,
     lineHeight: 1.2,

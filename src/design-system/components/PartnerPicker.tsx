@@ -47,8 +47,6 @@ export default function PartnerPicker({
           marginBottom: spacing.xs,
           fontFamily: fonts.mono,
           fontSize: 10,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
           color: c.muted,
         }}
       >

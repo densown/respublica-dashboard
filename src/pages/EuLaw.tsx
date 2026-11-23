@@ -12,6 +12,7 @@ import {
   PageHeader,
   Pagination,
   StatWidget,
+  ViewToggle,
   useTheme,
 } from '../design-system'
 import type { I18nKey } from '../design-system/i18n'
@@ -370,34 +371,6 @@ export default function EuLaw() {
     navigate({ pathname: '/eu-recht', search: '?tab=case-law' })
   }, [navigate])
 
-  const tabBtn = (tab: 'acts' | 'case-law', label: string) => {
-    const active = mainTab === tab
-    return (
-      <button
-        key={tab}
-        type="button"
-        role="tab"
-        aria-selected={active}
-        onClick={() => (tab === 'acts' ? goActsTab() : goCourtTab())}
-        style={{
-          padding: `${spacing.md}px ${spacing.lg}px`,
-          borderRadius: radius.md,
-          border: `1px solid ${active ? c.red : c.border}`,
-          background: active ? c.bgHover : c.bgAlt,
-          color: active ? c.red : c.muted,
-          fontFamily: fonts.mono,
-          fontSize: fontSize.xs,
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase' as const,
-          cursor: 'pointer',
-          transition: `border-color 0.2s ${motion.easing}, background 0.2s ${motion.easing}, color 0.2s ${motion.easing}`,
-        }}
-      >
-        {label}
-      </button>
-    )
-  }
-
   const courtRgOptions = useMemo(() => {
     const rows = courtStats?.by_rechtsgebiet ?? []
     return rows
@@ -415,8 +388,6 @@ export default function EuLaw() {
       style={{
         width: '100%',
         maxWidth: 900,
-        margin: '0 auto',
-        padding: `${spacing.lg}px ${spacing.xl}px ${spacing.xxl}px`,
         boxSizing: 'border-box',
         minWidth: 0,
       }}
@@ -430,28 +401,23 @@ export default function EuLaw() {
         }
       />
 
-      <nav
-        role="tablist"
-        aria-label={t('euLawTabsAria')}
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: spacing.sm,
-          marginBottom: spacing.lg,
-          paddingBottom: spacing.md,
-          borderBottom: `1px solid ${c.border}`,
-        }}
-      >
-        {tabBtn('acts', t('euLawTabActs'))}
-        {tabBtn('case-law', t('euLawTabCaseLaw'))}
-      </nav>
+      <ViewToggle
+        value={mainTab}
+        onChange={(tab) => (tab === 'acts' ? goActsTab() : goCourtTab())}
+        ariaLabel={t('euLawTabsAria')}
+        options={[
+          { value: 'acts', label: t('euLawTabActs') },
+          { value: 'case-law', label: t('euLawTabCaseLaw') },
+        ]}
+        style={{ marginBottom: spacing.lg }}
+      />
 
       {mainTab === 'acts' ? (
         <>
           <div
             style={{
               display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
+              flexDirection: 'row',
               flexWrap: 'wrap',
               gap: spacing.md,
               marginBottom: spacing.xl,
@@ -466,7 +432,6 @@ export default function EuLaw() {
                     ? '—'
                     : totalActs
               }
-              sub={t('euLawStatActsSub')}
             />
             <StatWidget
               label={t('euLawStatRegLabel')}
@@ -615,8 +580,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -652,8 +615,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -746,7 +707,7 @@ export default function EuLaw() {
           <div
             style={{
               display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
+              flexDirection: 'row',
               flexWrap: 'wrap',
               gap: spacing.md,
               marginBottom: spacing.xl,
@@ -899,8 +860,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >
@@ -936,8 +895,6 @@ export default function EuLaw() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: c.muted,
                   }}
                 >

@@ -33,7 +33,7 @@ pruefe() {
 # Seiten
 for p in / /wahlen /wahlen/umfragen /wahlen/kandidaturen /quellen /bundestag \
   /bundestag/1 /bundestag/abgeordnete/1 /gesetze /gesetze/1 /gesetzgebung \
-  /eu-recht /koalition /koalitionsvertrag /demokratie /versammlungen \
+  /mehr /eu-recht /koalition /koalitionsvertrag /demokratie /versammlungen \
   /weltkarte /eu-parlament /lobbyregister /bundestag/ "/bundestag?ansicht=abgeordnete"; do
   pruefe "$p" 200
 done

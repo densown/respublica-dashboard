@@ -15,8 +15,6 @@ export default function MonoLabel({ children, style }: MonoLabelProps) {
         display: 'block',
         fontFamily: fonts.mono,
         fontSize: fs.sm,
-        letterSpacing: '0.12em',
-        textTransform: 'uppercase',
         color: c.muted,
         lineHeight: 1.2,
         ...style,

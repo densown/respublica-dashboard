@@ -125,8 +125,6 @@ export function TabVergleich({
                 style={{
                   fontFamily: fonts.mono,
                   fontSize: 8,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
                   color: c.red,
                   border: `1px solid ${c.red}`,
                   borderRadius: radius.sm,
@@ -216,8 +214,6 @@ export function TabVergleich({
         color: c.ink,
         fontFamily: fonts.mono,
         fontSize: 11,
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
         cursor: 'pointer',
       }}
     >

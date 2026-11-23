@@ -110,8 +110,6 @@ export function DataTable<T>({
                     style={{
                       fontFamily: fonts.mono,
                       fontSize: fontSize.micro,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.06em',
                       color: c.muted,
                     }}
                   >
@@ -159,8 +157,6 @@ export function DataTable<T>({
                   padding: `${spacing.sm}px ${spacing.md}px ${spacing.sm}px 0`,
                   fontFamily: fonts.mono,
                   fontSize: fontSize.micro,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
                   fontWeight: 400,
                   color: c.muted,
                   whiteSpace: 'nowrap',

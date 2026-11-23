@@ -733,8 +733,8 @@ export default function LobbyRegister() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
-          gap: spacing.md,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(96px, 1fr))',
+          gap: spacing.lg,
           marginBottom: spacing.xl,
         }}
       >
@@ -747,8 +747,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : (statsData?.total ?? '-')
           }
-          sub={t('lobbyStatTotalSub')}
-          icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('lobbyStatActive')}
@@ -759,8 +757,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : (statsData?.active ?? '-')
           }
-          sub={t('lobbyStatActiveSub')}
-          icon={<span aria-hidden>◇</span>}
         />
         <StatWidget
           label={t('lobbyStatAvgExpenses')}
@@ -771,8 +767,6 @@ export default function LobbyRegister() {
                 ? '-'
                 : formatAverageMoney(statsData?.avg_ausgaben ?? null)
           }
-          sub={t('lobbyStatAvgExpensesSub')}
-          icon={<span aria-hidden>◇</span>}
         />
       </div>
 
@@ -1053,8 +1047,6 @@ export default function LobbyRegister() {
                     color: active ? c.red : c.muted,
                     fontFamily: fonts.mono,
                     fontSize: fontSize.xs,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
                     cursor: 'pointer',
                     transition: `border-color 0.2s ${TAB_TRANSITION}, background 0.2s ${TAB_TRANSITION}, color 0.2s ${TAB_TRANSITION}`,
                   }}
@@ -1293,8 +1285,6 @@ export default function LobbyRegister() {
               style={{
                 fontFamily: fonts.mono,
                 fontSize: fontSize.micro,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
                 color: c.muted,
               }}
             >
@@ -1335,8 +1325,6 @@ export default function LobbyRegister() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
                     color: c.muted,
                   }}
                 >
@@ -1371,8 +1359,6 @@ export default function LobbyRegister() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
                     color: c.muted,
                   }}
                 >
@@ -1419,8 +1405,6 @@ export default function LobbyRegister() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
                     color: c.muted,
                   }}
                 >
@@ -1455,8 +1439,6 @@ export default function LobbyRegister() {
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: fontSize.micro,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
                     color: c.muted,
                   }}
                 >
@@ -1538,8 +1520,6 @@ export default function LobbyRegister() {
               style={{
                 fontFamily: fonts.mono,
                 fontSize: fontSize.micro,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
                 color: c.muted,
               }}
             >
@@ -1910,8 +1890,6 @@ export default function LobbyRegister() {
                             color: active ? c.red : c.muted,
                             fontFamily: fonts.mono,
                             fontSize: fontSize.xs,
-                            letterSpacing: '0.06em',
-                            textTransform: 'uppercase',
                             cursor: 'pointer',
                             whiteSpace: 'nowrap',
                           }}

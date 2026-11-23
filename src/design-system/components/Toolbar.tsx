@@ -38,8 +38,6 @@ export function Toolbar({ label, children, tight }: ToolbarProps) {
           style={{
             fontFamily: fonts.mono,
             fontSize: fontSize.micro,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
             color: c.muted,
             marginRight: spacing.xs,
           }}

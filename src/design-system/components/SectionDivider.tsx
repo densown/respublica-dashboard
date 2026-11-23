@@ -23,8 +23,6 @@ export default function SectionDivider({ label, style }: SectionDividerProps) {
         style={{
           fontFamily: fonts.mono,
           fontSize: 9,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
           color: c.muted,
           whiteSpace: 'nowrap',
         }}

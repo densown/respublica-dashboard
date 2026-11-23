@@ -107,8 +107,6 @@ export default function MapControlsPanel({
                 color: active ? c.red : c.ink,
                 fontFamily: fonts.mono,
                 fontSize: 10,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
                 cursor: 'pointer',
                 boxSizing: 'border-box',
               }}

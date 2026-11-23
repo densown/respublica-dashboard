@@ -52,3 +52,40 @@ body {
 .rp-skeleton-bar {
   animation: rp-skeleton-pulse 1.35s ease-in-out infinite;
 }
+
+/* Geruest: Rueckmeldung beim Antippen. Inline-Styles koennen :active und
+   :hover nicht ausdruecken. */
+.rp-navwort:hover { color: var(--rp-ink) !important; }
+.rp-tab:active { transform: scale(0.94); }
+.rp-zeile .rp-pfeil { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+.rp-zeile:hover .rp-pfeil { transform: translateX(4px); }
+.rp-zeile:active .rp-pfeil { transform: translateX(8px); }
+.rp-zeile:active { opacity: 0.7; }
+
+/* Stempel: einmal aufdruecken, wenn er erscheint. */
+@keyframes rp-stempel-druck {
+  0% { opacity: 0; transform: rotate(-9deg) scale(1.7); }
+  60% { opacity: 1; transform: rotate(-2deg) scale(0.94); }
+  100% { opacity: 1; transform: rotate(-3deg) scale(1); }
+}
+.rp-stempel { animation: rp-stempel-druck 0.38s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.25s both; }
+
+.rp-fundstelle:hover { color: var(--rp-red) !important; }
+
+/* Antippbare Karten: Druckzustand. */
+.rp-karte { transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s; }
+.rp-karte:hover { border-color: var(--rp-ink) !important; }
+.rp-karte:active { transform: scale(0.985); }
+
+/* Inhalt blendet beim Seitenwechsel kurz ein. */
+@keyframes rp-ein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rp-ein { animation: rp-ein 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* Balken, die von links wachsen. */
+@keyframes rp-wachsen { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rp-wachsen { transform-origin: left center; animation: rp-wachsen 0.6s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* Wischbare Chip-Zeile ohne sichtbaren Rollbalken. */
+.rp-wischzeile { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+.rp-wischzeile::-webkit-scrollbar { display: none; }
+.rp-wischzeile > * { flex-shrink: 0; }

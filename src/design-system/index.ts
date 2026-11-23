@@ -27,7 +27,6 @@ export {
 } from './components/FilterToolbar'
 export { LegalFooter } from './components/LegalFooter'
 export { LoadingSpinner } from './components/LoadingSpinner'
-export { MobileNav, type MobileNavProps } from './components/MobileNav'
 export { PageHeader, type PageHeaderProps } from './components/PageHeader'
 export { Section, type SectionProps } from './components/Section'
 export { Chip, type ChipProps } from './components/Chip'
@@ -41,14 +40,6 @@ export { Pagination, type PaginationProps } from './components/Pagination'
 export { ProgressBar, type ProgressBarProps, type ProgressSegment } from './components/ProgressBar'
 export { ShareCompact, type ShareCompactProps } from './components/ShareCompact'
 export { ShareToolbar, type ShareToolbarProps } from './components/ShareToolbar'
-export {
-  Sidebar,
-  type SidebarModule,
-  type SidebarNavEntry,
-  type SidebarNavLink,
-  type SidebarNavSection,
-  type SidebarProps,
-} from './components/Sidebar'
 export { StatWidget, type StatWidgetProps } from './components/StatWidget'
 export { VoteBar, type VoteBarProps } from './components/VoteBar'
 export {
@@ -58,3 +49,9 @@ export {
 } from './components/ViewToggle'
 export { stimmFlaeche, type StimmArt, type StimmFarben } from './palettes'
 export { ExportableContainer, type ExportableContainerProps } from './components/ExportableContainer'
+export { Piktogramm, type PiktogrammName, type PiktogrammProps } from './components/Piktogramm'
+export { Stempel, type StempelArt, type StempelProps } from './components/Stempel'
+export { Fundstelle, type FundstelleProps } from './components/Fundstelle'
+export { Platzhalter, type PlatzhalterProps } from './components/Platzhalter'
+export { Erklaerung, type ErklaerungProps } from './components/Erklaerung'
+export { MehrWerkzeuge, type MehrWerkzeugeProps } from './components/MehrWerkzeuge'

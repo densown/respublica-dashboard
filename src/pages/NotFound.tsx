@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import { PageHeader, useTheme } from '../design-system'
+import { PageHeader, useTheme, Stempel } from '../design-system'
 import { fontSize, fonts, spacing } from '../design-system/tokens'
 import { useSeo } from '../hooks/useSeo'
 
@@ -26,6 +26,7 @@ export default function NotFound() {
   return (
     <>
       <PageHeader title="404" subtitle={t('notFoundSubtitle')} />
+      <Stempel wort={t('notFoundStamp')} art="nein" groesse={20} />
       <p
         style={{
           fontFamily: fonts.body,

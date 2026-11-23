@@ -72,11 +72,9 @@ export default function ViewToggle<T extends string = ViewToggleValue>({
               borderRadius: radius.md,
               background: active ? c.surface : 'transparent',
               color: active ? c.red : c.muted,
-              fontFamily: fonts.mono,
-              fontSize: fontSize.micro,
+              fontFamily: fonts.body,
+              fontSize: fontSize.md,
               fontWeight: active ? 600 : 400,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
               cursor: 'pointer',
               transition: 'all 0.2s ease-out',
             }}

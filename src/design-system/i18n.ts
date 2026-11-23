@@ -11,6 +11,8 @@ import { de as sourcesDe, en as sourcesEn } from './i18n/sources'
 import { de as versammlungenDe, en as versammlungenEn } from './i18n/versammlungen'
 import { de as bundestagDe, en as bundestagEn } from './i18n/bundestag'
 import { de as kleineAnfragenDe, en as kleineAnfragenEn } from './i18n/kleineAnfragen'
+import { de as geruestDe, en as geruestEn } from './i18n/geruest'
+import { de as einstiegDe, en as einstiegEn } from './i18n/einstieg'
 
 export const de = {
   ...commonDe,
@@ -24,6 +26,8 @@ export const de = {
   ...versammlungenDe,
   ...bundestagDe,
   ...kleineAnfragenDe,
+  ...geruestDe,
+  ...einstiegDe,
 } as const
 
 export const en = {
@@ -38,6 +42,8 @@ export const en = {
   ...versammlungenEn,
   ...bundestagEn,
   ...kleineAnfragenEn,
+  ...geruestEn,
+  ...einstiegEn,
 } as const
 
 export type I18nKey = keyof typeof de

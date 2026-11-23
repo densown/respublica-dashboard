@@ -10,7 +10,7 @@ export const de = {
   kaKicker: "Kleine Anfragen · Beta",
   kaTitle: "Was die Bundesregierung auf Nachfrage mitteilt",
   kaSubtitle: "Jede Woche beantwortet die Bundesregierung Dutzende Kleine Anfragen aus dem Bundestag, oft mit Zahlen, die sonst nirgends stehen. Wir sammeln die Antworten, fassen sie zusammen und prüfen jede herausgehobene Zahl gegen den Wortlaut.",
-  kaMeta: "{n} Antworten seit {von} · {a} ausgewertet",
+  kaMeta: "{n} Antworten seit {von}",
   kaSeoTitel: "Kleine Anfragen im Bundestag: Antworten der Bundesregierung durchsuchen",
   kaSeoBeschreibung: "Antworten der Bundesregierung auf Kleine Anfragen, durchsuchbar nach Thema, Fraktion und Ministerium, mit Zusammenfassung und geprüften Kernzahlen.",
 
@@ -70,7 +70,7 @@ export const en = {
   kaKicker: "Parliamentary questions · Beta",
   kaTitle: "What the German government discloses when asked",
   kaSubtitle: "Every week the federal government answers dozens of written questions (Kleine Anfragen) from the Bundestag, often with figures published nowhere else. We collect the answers, summarise them and check every highlighted figure against the original wording.",
-  kaMeta: "{n} answers since {von} · {a} analysed",
+  kaMeta: "{n} answers since {von}",
   kaSeoTitel: "Bundestag written questions: search the German government's answers",
   kaSeoBeschreibung: "Answers of the German federal government to Kleine Anfragen, searchable by topic, parliamentary group and ministry, with summaries and verified key figures.",
 

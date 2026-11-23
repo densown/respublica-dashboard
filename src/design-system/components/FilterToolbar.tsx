@@ -83,8 +83,6 @@ export function FilterToolbar({ placeholder, filters, search }: FilterToolbarPro
             style={{
               fontFamily: fonts.mono,
               fontSize: fs.sm,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
               color: c.muted,
             }}
           >

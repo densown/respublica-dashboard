@@ -4,7 +4,9 @@ import {
   Chip,
   LoadingSpinner,
   PageHeader,
+  Piktogramm,
   Section,
+  Stempel,
   useTheme,
   VoteBar,
 } from '../design-system'
@@ -12,6 +14,9 @@ import { fontSize, fonts, lineHeight, motion, spacing } from '../design-system/t
 import { useApi } from '../hooks/useApi'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { useMeinOrt, useRundgang } from '../hooks/useMeins'
+import { MeineAbgeordneten } from '../components/einstieg/MeineAbgeordneten'
+import { SelbstAbstimmen } from '../components/einstieg/SelbstAbstimmen'
 import { AbgeordnetenStimmen } from '../components/bundestag/AbgeordnetenStimmen'
 import { AbstimmungsBild } from '../components/bundestag/AbstimmungsBild'
 import { FraktionsStimmen } from '../components/bundestag/FraktionsStimmen'
@@ -21,7 +26,9 @@ import {
   datumLang,
   ergebnisWort,
   ergebnisZeile,
+  istAngenommen,
   kurztextFuer,
+  ueberBeschlussempfehlung,
   stimmenKurz,
   vorspann,
 } from '../components/bundestag/abstimmungText'
@@ -74,6 +81,7 @@ export default function Abstimmung() {
   // alle=1: auch wer inzwischen ausgeschieden ist, fuer aeltere Abstimmungen
   const { data: abgeordnete } = useApi<AbgeordnetenApiRow[]>('/api/abgeordnete?alle=1')
   const { data: sitzverteilung } = useApi<SitzverteilungRow[]>('/api/bundestag/sitzverteilung')
+  const geladen = data != null
 
   const { sitze, personen } = useMemo(
     () => abstimmungsSitze(stimmen?.votes ?? [], abgeordnete ?? []),
@@ -93,6 +101,12 @@ export default function Abstimmung() {
     (awId: number) => navigate(`/bundestag/abgeordnete/${awId}`),
     [navigate],
   )
+
+  const [ort] = useMeinOrt()
+  const { abstimmungGeoeffnet } = useRundgang()
+  useEffect(() => {
+    if (geladen) abstimmungGeoeffnet()
+  }, [geladen, abstimmungGeoeffnet])
 
   const [listeFraktion, setListeFraktion] = useState<string | null>(null)
   const [ganzerText, setGanzerText] = useState(false)
@@ -149,7 +163,7 @@ export default function Abstimmung() {
         textDecoration: 'none',
       }}
     >
-      <span aria-hidden>←</span>
+      <Piktogramm name="zurueck" size={16} />
       {t('votePageBack')}
     </Link>
   )
@@ -199,6 +213,39 @@ export default function Abstimmung() {
       {zurueck}
       <PageHeader kicker={kicker} title={anzeigeTitel(data.poll_titel)} subtitle={dek} />
 
+      <div style={{ margin: `-${spacing.md}px 0 ${spacing.xl}px` }}>
+        <Stempel
+          key={data.poll_id}
+          wort={ergebnisWort(data, t)}
+          art={istAngenommen(data) ? 'ja' : 'nein'}
+          groesse={isMobile ? 16 : 20}
+        />
+      </div>
+
+      <Section
+        number={naechste()}
+        title={ergebnisWort(data, t)}
+        note={ergebnisZeile(ergebnis, t)}
+      >
+        <VoteBar
+          ja={ergebnis.ja_gesamt}
+          nein={ergebnis.nein_gesamt}
+          enthalten={ergebnis.enthalten_gesamt}
+          abwesend={ergebnis.abwesend_gesamt}
+          height={isMobile ? 40 : 52}
+          beschriftung="wort"
+          ariaLabel={stimmenKurz(
+            {
+              ja: ergebnis.ja_gesamt,
+              nein: ergebnis.nein_gesamt,
+              enthalten: ergebnis.enthalten_gesamt,
+              abwesend: ergebnis.abwesend_gesamt,
+            },
+            t,
+          )}
+        />
+      </Section>
+
       {absaetze.length > 0 && (
         <Section number={naechste()} title={t('votePageWhat')}>
           <div style={{ maxWidth: '68ch' }}>
@@ -218,10 +265,9 @@ export default function Abstimmung() {
                 <div
                   style={{
                     marginTop: spacing.xs,
-                    fontFamily: fonts.mono,
-                    fontSize: fontSize.micro,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
+                    fontFamily: fonts.body,
+                    fontStyle: 'italic',
+                    fontSize: fontSize.xs,
                     color: c.muted,
                   }}
                 >
@@ -277,29 +323,19 @@ export default function Abstimmung() {
         </Section>
       )}
 
-      <Section
-        number={naechste()}
-        title={ergebnisWort(data, t)}
-        note={ergebnisZeile(ergebnis, t)}
-      >
-        <VoteBar
-          ja={ergebnis.ja_gesamt}
-          nein={ergebnis.nein_gesamt}
-          enthalten={ergebnis.enthalten_gesamt}
-          abwesend={ergebnis.abwesend_gesamt}
-          height={isMobile ? 40 : 52}
-          beschriftung="wort"
-          ariaLabel={stimmenKurz(
-            {
-              ja: ergebnis.ja_gesamt,
-              nein: ergebnis.nein_gesamt,
-              enthalten: ergebnis.enthalten_gesamt,
-              abwesend: ergebnis.abwesend_gesamt,
-            },
-            t,
-          )}
-        />
-      </Section>
+      {!ueberBeschlussempfehlung(data.poll_titel) && (
+        <div style={{ marginBottom: spacing.xxl }}>
+          <SelbstAbstimmen data={data} />
+        </div>
+      )}
+
+      {ort && (
+        <Section number={naechste()} title={t('ortSoStimmten')} aside={ort.name}>
+          <div style={{ maxWidth: 520 }}>
+            <MeineAbgeordneten ort={ort} pollId={data.poll_id} />
+          </div>
+        </Section>
+      )}
 
       <Section
         number={naechste()}

@@ -1,90 +1,64 @@
 import { useLocation } from 'react-router-dom'
-import { fontSize, fonts, spacing } from '../tokens'
+import { fontSize, fonts, lineHeight, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 import { footerSourcesLineKey } from '../../data/sourcesCatalog'
 
+/**
+ * Fuss der Seite. Hell und klein: der fruehere schwarze Block stand auf
+ * kurzen Seiten mitten im Bild und war schwerer als der Inhalt darueber.
+ */
 export function LegalFooter() {
   const { pathname } = useLocation()
   const { c, t } = useTheme()
   const sourcesLineKey = footerSourcesLineKey(pathname)
 
   const linkStyle = {
-    fontFamily: fonts.mono,
-    fontSize: fontSize.micro,
-    color: c.footerLink,
+    display: 'inline-flex',
+    alignItems: 'center',
+    minHeight: 44,
+    fontFamily: fonts.body,
+    fontSize: fontSize.sm,
+    color: c.inkSoft,
     textDecoration: 'none',
-    transition: 'color 0.2s ease',
   } as const
 
   const textStyle = {
     fontFamily: fonts.body,
-    fontSize: fontSize.micro,
-    color: c.footerText,
-    lineHeight: 1.5,
-    maxWidth: 720,
+    fontSize: fontSize.xs,
+    color: c.muted,
+    lineHeight: lineHeight.normal,
+    maxWidth: '68ch',
+    margin: 0,
   } as const
 
   return (
-    <footer
-      style={{
-        marginTop: spacing.xxxl,
-        width: '100%',
-        background: c.footerBg,
-      }}
-    >
+    <footer style={{ width: '100%', marginTop: spacing.xxxl }}>
       <div
         style={{
-          maxWidth: 1100,
+          maxWidth: 1280,
           margin: '0 auto',
           width: '100%',
-          padding: `${spacing.xxl}px ${spacing.xl}px`,
+          padding: `0 ${spacing.lg}px ${spacing.xl}px`,
         }}
       >
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: `${spacing.md}px ${spacing.xl}px`,
-          marginBottom: spacing.lg,
-        }}
-      >
-        <a
-          href="https://respublica.media/impressum/"
-          target="_blank"
-          rel="noopener"
-          style={linkStyle}
-        >
-          {t('impressum')}
-        </a>
-        <a
-          href="https://respublica.media/datenschutz/"
-          target="_blank"
-          rel="noopener"
-          style={linkStyle}
-        >
-          {t('datenschutz')}
-        </a>
-        <a
-          href="https://respublica.media"
-          target="_blank"
-          rel="noopener"
-          style={linkStyle}
-        >
-          {t('backToArticles')}
-        </a>
-        <a
-          href="https://www.reddit.com/r/Res_Publica_DE/"
-          target="_blank"
-          rel="noopener"
-          style={linkStyle}
-        >
-          {t('joinReddit')}
-        </a>
-      </div>
-      <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t(sourcesLineKey)}</p>
-      <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t('aiHint')}</p>
-      <p style={{ ...textStyle, marginBottom: spacing.sm }}>{t('noCookies')}</p>
-      <p style={textStyle}>{t('copyright')}</p>
+        <div style={{ borderTop: `1px solid ${c.ink}`, paddingTop: spacing.sm }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: `0 ${spacing.xl}px` }}>
+            <a href="https://respublica.media/impressum/" target="_blank" rel="noopener" style={linkStyle}>
+              {t('impressum')}
+            </a>
+            <a href="https://respublica.media/datenschutz/" target="_blank" rel="noopener" style={linkStyle}>
+              {t('datenschutz')}
+            </a>
+            <a href="https://respublica.media" target="_blank" rel="noopener" style={linkStyle}>
+              {t('navMagazin')}
+            </a>
+            <a href="https://www.reddit.com/r/Res_Publica_DE/" target="_blank" rel="noopener" style={linkStyle}>
+              {t('joinReddit')}
+            </a>
+          </div>
+          <p style={{ ...textStyle, marginTop: spacing.xs }}>{t(sourcesLineKey)}</p>
+          <p style={{ ...textStyle, marginTop: spacing.xs }}>{t('fussKurz')}</p>
+        </div>
       </div>
     </footer>
   )

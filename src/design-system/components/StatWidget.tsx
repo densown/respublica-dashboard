@@ -1,77 +1,64 @@
 import type { ReactNode } from 'react'
-import { fontSize, fonts, radius, spacing } from '../tokens'
+import { fontSize, fonts, lineHeight, spacing } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type StatWidgetProps = {
   label: string
   value: string | number
   sub?: string
+  /** Frueher ein Zeichen in der Ecke. Wird nicht mehr gezeigt. */
   icon?: ReactNode
-  /** Enge Grids (z. B. Sidebar): minWidth 0, kein fester 140px-Min */
+  /** Enge Grids (z. B. Sidebar): minWidth 0, kein fester Mindestwert */
   fluid?: boolean
 }
 
-export function StatWidget({ label, value, sub, icon, fluid }: StatWidgetProps) {
-  const { c } = useTheme()
+/**
+ * Kennzahl ohne Kasten: die Zahl gross, darunter in einem Satzteil, was sie
+ * zaehlt. Eine Linie darueber haelt mehrere nebeneinander zusammen. Vier
+ * gerahmte Kacheln in einer Reihe waren das austauschbarste Element der App.
+ * Ganze Zahlen bekommen ueberall den Tausenderpunkt.
+ */
+export function StatWidget({ label, value, sub, fluid }: StatWidgetProps) {
+  const { c, lang } = useTheme()
+  const ganz = typeof value === 'number' ? value : /^\d{4,}$/.test(value) ? Number(value) : null
+  const anzeige = ganz != null && Number.isFinite(ganz) ? ganz.toLocaleString(lang === 'de' ? 'de-DE' : 'en-GB') : value
 
   return (
     <div
       style={{
-        background: c.cardBg,
-        border: `1px solid ${c.cardBorder}`,
-        borderRadius: radius.md,
-        padding: spacing.lg,
-        boxShadow: c.shadow,
-        minWidth: fluid ? 0 : 140,
-        flex: fluid ? '1 1 0' : '1 1 140px',
+        paddingTop: spacing.sm,
+        borderTop: `1px solid ${c.ink}`,
+        minWidth: fluid ? 0 : 120,
+        flex: fluid ? '1 1 0' : '1 1 120px',
         maxWidth: '100%',
         boxSizing: 'border-box',
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: spacing.sm,
+          fontFamily: fonts.display,
+          fontWeight: 900,
+          fontSize: 'clamp(1.4rem, 3.4vw, 1.9rem)',
+          color: c.ink,
+          lineHeight: 1.1,
+          fontVariantNumeric: 'tabular-nums',
         }}
       >
-        <span
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: fontSize.micro,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: c.muted,
-          }}
-        >
-          {label}
-        </span>
-        {icon && <span style={{ color: c.subtle, lineHeight: 1 }}>{icon}</span>}
+        {anzeige}
       </div>
       <div
         style={{
-          marginTop: spacing.sm,
-          fontFamily: fonts.display,
-          fontWeight: 900,
-          fontSize: 'clamp(1.6rem, 4vw, 2.1rem)',
-          color: c.ink,
-          lineHeight: 1.1,
+          marginTop: spacing.xs,
+          fontFamily: fonts.body,
+          fontSize: fontSize.sm,
+          lineHeight: lineHeight.tight,
+          color: c.inkSoft,
         }}
       >
-        {value}
+        {label}
       </div>
       {sub && (
-        <p
-          style={{
-            marginTop: spacing.xs,
-            fontFamily: fonts.body,
-            fontSize: fontSize.xs,
-            color: c.muted,
-          }}
-        >
-          {sub}
-        </p>
+        <div style={{ marginTop: 2, fontFamily: fonts.body, fontSize: fontSize.xs, color: c.muted }}>{sub}</div>
       )}
     </div>
   )

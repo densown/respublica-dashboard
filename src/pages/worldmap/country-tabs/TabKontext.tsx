@@ -80,8 +80,6 @@ export function TabKontext({
                   style={{
                     fontFamily: fonts.mono,
                     fontSize: 9,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
                     color: '#fff',
                     background: c.badgeBg,
                     borderRadius: radius.xs,
