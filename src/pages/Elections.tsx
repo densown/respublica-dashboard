@@ -14,6 +14,7 @@ import { useIsMobile } from '../hooks/useMediaQuery'
 import { buildKreiseMap } from './elections/mapGeometry'
 import { filterKreiseSearchHits } from './elections/KreisAutocomplete'
 import { normalizeMapRow } from './elections/normalizeWahlen'
+import { mitNachfolgern } from './elections/electionUiUtils'
 import type { GesamtErgebnis } from './elections/Gesamtergebnis'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useSeo } from '../hooks/useSeo'
@@ -38,17 +39,6 @@ const CompareMode = lazy(() =>
 
 export type ElectionsActiveMode = 'map' | 'analysis' | 'compare'
 
-/**
- * Kreise der Karte, die es so nicht mehr gibt: Goettingen und Osterode sind
- * seit 2016 ein Kreis (03159), Eisenach gehoert seit 2021 zum Wartburgkreis.
- * Ohne die Zuordnung bleiben sie auf der Karte als "Keine Daten" weiss.
- */
-const AGS_NACHFOLGER: Record<string, string> = {
-  '03152': '03159',
-  '03156': '03159',
-  '16056': '16063',
-}
-
 /** Nur diese Wahlen finden bundesweit am selben Tag statt */
 const BUNDESWEIT = new Set<ElectionType>(['federal', 'european'])
 
@@ -71,7 +61,6 @@ export default function Elections() {
   const [metric, setMetric] = useState<string>('winning_party')
   const [selectedAgs, setSelectedAgs] = useState<string | null>(null)
   const [compareRegions, setCompareRegions] = useState<string[]>([])
-  const [showAdvanced, setShowAdvanced] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -163,11 +152,7 @@ export default function Elections() {
     for (const r of normalizedRows) {
       m.set(r.ags.replace(/\s/g, ''), r)
     }
-    for (const [alt, neu] of Object.entries(AGS_NACHFOLGER)) {
-      const zeile = m.get(neu)
-      if (zeile && !m.has(alt)) m.set(alt, zeile)
-    }
-    return m
+    return mitNachfolgern(m)
   }, [normalizedRows])
 
   const winnersByAgs = dataByAgs
@@ -279,8 +264,6 @@ export default function Elections() {
             gesamt={gesamt}
             selectedAgs={selectedAgs}
             onActivateKreis={onActivateKreis}
-            showAdvanced={showAdvanced}
-            setShowAdvanced={setShowAdvanced}
             winnersByAgs={winnersByAgs}
           />
         )}

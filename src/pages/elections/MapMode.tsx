@@ -1,8 +1,6 @@
 import {
   useState,
   type CSSProperties,
-  type Dispatch,
-  type SetStateAction,
 } from 'react'
 import {
   EmptyState,
@@ -10,7 +8,7 @@ import {
   useTheme,
 } from '../../design-system'
 import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
-import { AdvancedAnalysis } from './AdvancedAnalysis'
+import { Vertiefung } from './Vertiefung'
 import { Gesamtergebnis, type GesamtErgebnis } from './Gesamtergebnis'
 import { ElectionMap, ElectionMapLegend } from './ElectionMap'
 import { KreisAutocomplete, type KreisSearchHit } from './KreisAutocomplete'
@@ -148,8 +146,6 @@ export type MapModeProps = {
   gesamt: GesamtErgebnis | null
   selectedAgs: string | null
   onActivateKreis: (ags: string) => void
-  showAdvanced: boolean
-  setShowAdvanced: Dispatch<SetStateAction<boolean>>
   winnersByAgs: Map<string, MapRow>
 }
 
@@ -180,8 +176,6 @@ export function MapMode({
   gesamt,
   selectedAgs,
   onActivateKreis,
-  showAdvanced,
-  setShowAdvanced,
   winnersByAgs,
 }: MapModeProps) {
   const { c, t, lang } = useTheme()
@@ -518,28 +512,8 @@ export function MapMode({
         </>
       )}
 
-      <div style={{ marginTop: spacing.xl }}>
-        <button
-          type="button"
-          onClick={() => setShowAdvanced((v) => !v)}
-          style={{
-            minHeight: 44,
-            padding: '0 18px',
-            borderRadius: radius.sm,
-            border: `1px solid ${c.ink}`,
-            background: 'transparent',
-            color: c.text,
-            fontFamily: fonts.body,
-            fontSize: fontSize.base,
-            cursor: 'pointer',
-          }}
-        >
-          {t('advancedAnalysis')}
-        </button>
-      </div>
-
-      {showAdvanced && (
-        <AdvancedAnalysis
+      {!mapError && normalizedRows.length > 0 && (
+        <Vertiefung
           electionType={debouncedType}
           year={debouncedYear}
           years={years}
