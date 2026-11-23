@@ -14,6 +14,7 @@ const ROUTE_PREFIX: Record<string, string> = {
   koalition: 'coalition',
   demokratie: 'democracy',
   versammlungen: 'versammlungen',
+  'kleine-anfragen': 'kleineAnfragen',
   weltkarte: 'worldmap',
   'eu-parlament': 'euParl',
   lobbyregister: 'lobby',
@@ -30,6 +31,7 @@ const MODULE_PATH: Record<string, string> = {
   coalition: '/koalition',
   democracy: '/demokratie',
   versammlungen: '/versammlungen',
+  kleineAnfragen: '/kleine-anfragen',
   worldmap: '/weltkarte',
   euParl: '/eu-parlament',
   lobby: '/lobbyregister',
@@ -118,6 +120,11 @@ export default function DashboardLayout() {
     // sectionGermany:
     //   { kind: 'link' as const, id: 'versammlungen', icon: '◎', label: t('versammlungenNav') }
     // (Schluessel versammlungenNav dann in i18n/versammlungen.ts anlegen)
+    //
+    // Ebenso der Tracker Kleine Anfragen unter /kleine-anfragen (Beta,
+    // /api/kleine-anfragen*). Zum Veroeffentlichen unter sectionGermany:
+    //   { kind: 'link' as const, id: 'kleineAnfragen', icon: '?', label: t('kaNav') }
+    // (Schluessel kaNav dann in i18n/kleineAnfragen.ts anlegen)
     //
     // Alle Routen bleiben erreichbar, damit vorhandene Links nicht
     // brechen.

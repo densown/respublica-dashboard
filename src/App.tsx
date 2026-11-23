@@ -22,6 +22,7 @@ const Bundestag = lazy(() => import('./pages/Bundestag'))
 const Abstimmung = lazy(() => import('./pages/Abstimmung'))
 const Abgeordneter = lazy(() => import('./pages/Abgeordneter'))
 const Versammlungen = lazy(() => import('./pages/Versammlungen'))
+const KleineAnfragen = lazy(() => import('./pages/KleineAnfragen'))
 
 export default function App() {
   return (
@@ -60,6 +61,7 @@ export default function App() {
             <Route path="demokratie-index" element={<Navigate to="/demokratie" replace />} />
             <Route path="demokratie" element={<DemocracyIndex />} />
             <Route path="versammlungen" element={<Versammlungen />} />
+            <Route path="kleine-anfragen" element={<KleineAnfragen />} />
             <Route path="weltkarte" element={<WorldMap />} />
             <Route path="eu-parlament" element={<EuParliament />} />
             <Route path="lobbyregister" element={<LobbyRegister />} />
