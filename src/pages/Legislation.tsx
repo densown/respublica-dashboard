@@ -31,11 +31,11 @@ import {
   buildUrteilListEndpoint,
   formatDisplayDate,
   parseIsoDate,
-  rechtGebietFromKuerzel,
   type RechtGebietFilter,
 } from '../components/gesetze/utils'
 import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
 
@@ -53,15 +53,10 @@ const COURT_VALUES = [
 
 type GesetzSort = 'new' | 'old' | 'az'
 
-function normalizeGesetzeList(raw: unknown): Gesetz[] {
-  if (Array.isArray(raw)) return raw as Gesetz[]
-  if (raw && typeof raw === 'object') {
-    const o = raw as Record<string, unknown>
-    if (Array.isArray(o.gesetze)) return o.gesetze as Gesetz[]
-    if (Array.isArray(o.data)) return o.data as Gesetz[]
-    if (Array.isArray(o.items)) return o.items as Gesetz[]
-  }
-  return []
+/** Antwort von /api/gesetze?mit_gesamt=1: eine Seite plus Gesamtzahl. */
+interface GesetzeSeite {
+  gesamt: number
+  eintraege: Gesetz[]
 }
 
 function normalizeUrteileList(raw: unknown): Urteil[] {
@@ -217,12 +212,31 @@ export default function Legislation() {
       ? `/api/gesetze/${encodeURIComponent(idTrimmed)}`
       : ''
 
-  const { data: rawList, loading: loadingList, error: errList } =
-    useApi<unknown>('/api/gesetze')
+  // Filtern, Suchen und Blaettern macht die API. Frueher kam die ganze Liste
+  // (rund 8.600 Aenderungen, ~10 MB) und der Browser filterte selbst; das hat
+  // die Seite auf dem Handy lange haengen lassen.
+  const gesetzSearchDebounced = useDebouncedValue(gesetzSearch.trim(), 300)
+  const listEndpoint = useMemo(() => {
+    const p = new URLSearchParams({
+      mit_gesamt: '1',
+      limit: String(PAGE_SIZE),
+      offset: String((gesetzPage - 1) * PAGE_SIZE),
+      sort: gesetzSort,
+    })
+    if (domainFilter !== 'all') p.set('gebiet', domainFilter)
+    if (lobbyFilter === 'mit_lobby') p.set('lobby', '1')
+    if (lobbyFilter === 'klartitel') p.set('klartitel', '1')
+    if (gesetzSearchDebounced) p.set('q', gesetzSearchDebounced)
+    return `/api/gesetze?${p.toString()}`
+  }, [gesetzPage, gesetzSort, domainFilter, lobbyFilter, gesetzSearchDebounced])
+
+  const { data: listSeite, loading: loadingList, error: errList } =
+    useApi<GesetzeSeite>(listEndpoint)
   const list = useMemo(
-    () => normalizeGesetzeList(rawList),
-    [rawList],
+    () => (Array.isArray(listSeite?.eintraege) ? listSeite.eintraege : []),
+    [listSeite],
   )
+  const listGesamt = listSeite?.gesamt ?? 0
 
   const {
     data: detail,
@@ -235,9 +249,10 @@ export default function Legislation() {
 
   const urteilEndpoint = useMemo(
     () =>
+      // Die ganze Urteilsliste nur laden, wenn der Reiter offen ist
       mainTab === 'urteile'
         ? buildUrteilListEndpoint(urteilCourt, urteilRg)
-        : '/api/urteile',
+        : '',
     [mainTab, urteilCourt, urteilRg],
   )
 
@@ -282,67 +297,13 @@ export default function Legislation() {
     [navigate],
   )
 
-  const filteredGesetze = useMemo(() => {
-    let rows = list.slice()
-    if (domainFilter !== 'all') {
-      rows = rows.filter(
-        (g) => rechtGebietFromKuerzel(g.kuerzel) === domainFilter,
-      )
-    }
-    if (lobbyFilter === 'mit_lobby')
-      rows = rows.filter((g) => g.has_lobby === true)
-    if (lobbyFilter === 'klartitel')
-      rows = rows.filter(
-        (g) =>
-          g.titel_offiziell != null && g.titel_offiziell.trim() !== '',
-      )
-    const q = gesetzSearch.trim().toLowerCase()
-    if (q) {
-      rows = rows.filter((g) => {
-        const ku = (g.kuerzel ?? '').toLowerCase()
-        const ti = displayTitel(g).toLowerCase()
-        const zu = (g.zusammenfassung ?? '').toLowerCase()
-        const ab = (g.amtliche_abkuerzung ?? '').toLowerCase()
-        return (
-          ku.includes(q) ||
-          ti.includes(q) ||
-          zu.includes(q) ||
-          ab.includes(q)
-        )
-      })
-    }
-    const sorted = [...rows]
-    if (gesetzSort === 'new') {
-      sorted.sort(
-        (a, b) => parseDatumMs(b.datum) - parseDatumMs(a.datum),
-      )
-    } else if (gesetzSort === 'old') {
-      sorted.sort(
-        (a, b) => parseDatumMs(a.datum) - parseDatumMs(b.datum),
-      )
-    } else {
-      sorted.sort((a, b) =>
-        displayTitel(a).localeCompare(displayTitel(b), 'de', {
-          sensitivity: 'base',
-        }),
-      )
-    }
-    return sorted
-  }, [list, domainFilter, gesetzSearch, gesetzSort, lobbyFilter])
-
   useEffect(() => {
     setGesetzPage(1)
-  }, [domainFilter, gesetzSearch, gesetzSort, lobbyFilter])
+  }, [domainFilter, gesetzSearchDebounced, gesetzSort, lobbyFilter])
 
-  const gesetzTotalPages = Math.max(
-    1,
-    Math.ceil(filteredGesetze.length / PAGE_SIZE),
-  )
+  const gesetzTotalPages = Math.max(1, Math.ceil(listGesamt / PAGE_SIZE))
   const gesetzPageClamped = Math.min(gesetzPage, gesetzTotalPages)
-  const gesetzSlice = useMemo(() => {
-    const start = (gesetzPageClamped - 1) * PAGE_SIZE
-    return filteredGesetze.slice(start, start + PAGE_SIZE)
-  }, [filteredGesetze, gesetzPageClamped])
+  const gesetzSlice = list
 
   const listEntry = useMemo(() => {
     if (!hasValidId) return null
@@ -387,12 +348,11 @@ export default function Legislation() {
     [urteileZumGesetzEndpoint, urteileZumGesetz],
   )
 
-  const listReady = !loadingList && !errList
-  const showNotFound = hasValidId && listReady && listEntry == null
+  // Die Liste zeigt nur eine Seite; ob es den Eintrag gibt, sagt die Detail-API
+  const showNotFound =
+    hasValidId && !loadingDetail && detail == null && errDetail === 'HTTP 404'
 
-  const showDetailSpinner =
-    hasValidId &&
-    (loadingList || (Boolean(errList) && loadingDetail && detail == null))
+  const showDetailSpinner = hasValidId && loadingDetail && detail == null
 
   const errorForDetail =
     showNotFound || gesetzMerged != null
@@ -739,9 +699,9 @@ export default function Legislation() {
           {t('dataLoadError')}
         </p>
       ) : null}
-      {loadingList ? (
+      {loadingList && listSeite == null ? (
         <LoadingSpinner />
-      ) : !list.length ? (
+      ) : !list.length && !gesetzSearchDebounced && domainFilter === 'all' && lobbyFilter === 'alle' ? (
         <EmptyState text={t('gesetzeEmpty')} />
       ) : (
         <>
@@ -757,9 +717,12 @@ export default function Legislation() {
               flex: 1,
               minHeight: 0,
               maxHeight: isMobile ? 'none' : 'calc(100vh - 280px)',
+              opacity: loadingList ? 0.55 : 1,
+              transition: `opacity ${motion.fast}`,
             }}
+            aria-busy={loadingList}
           >
-            {!filteredGesetze.length ? (
+            {!list.length ? (
               <li
                 style={{
                   padding: `0 ${spacing.lg}px`,
@@ -903,7 +866,7 @@ export default function Legislation() {
               })
             )}
           </ul>
-          {filteredGesetze.length > 0 ? (
+          {listGesamt > 0 ? (
             <div style={{ padding: `0 ${spacing.lg}px ${spacing.lg}px` }}>
               <Pagination
                 current={gesetzPageClamped}
