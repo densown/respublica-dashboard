@@ -28,9 +28,7 @@ import { UrteilCard } from '../components/gesetze/UrteilCard'
 import type { Gesetz, GesetzeStats, Urteil } from '../components/gesetze/types'
 import {
   URTEIL_RECHTSGEBIET_OPTIONS,
-  buildUrteilListEndpoint,
   formatDisplayDate,
-  parseIsoDate,
   type RechtGebietFilter,
 } from '../components/gesetze/utils'
 import { fontSize, fonts, motion, radius, spacing } from '../design-system/tokens'
@@ -53,15 +51,16 @@ const COURT_VALUES = [
 
 type GesetzSort = 'new' | 'old' | 'az'
 
+/** Antwort von /api/urteile?mit_gesamt=1 */
+interface UrteileSeite {
+  gesamt: number
+  eintraege: Urteil[]
+}
+
 /** Antwort von /api/gesetze?mit_gesamt=1: eine Seite plus Gesamtzahl. */
 interface GesetzeSeite {
   gesamt: number
   eintraege: Gesetz[]
-}
-
-function normalizeUrteileList(raw: unknown): Urteil[] {
-  if (Array.isArray(raw)) return raw as Urteil[]
-  return []
 }
 
 function displayTitel(g: Gesetz): string {
@@ -76,12 +75,6 @@ function sublineZusammenfassung(g: Gesetz): string {
   const z = (g.zusammenfassung ?? '').trim()
   if (!z) return ''
   return z.length > 80 ? `${z.slice(0, 80).trim()}…` : z
-}
-
-function parseDatumMs(s: string | null | undefined): number {
-  if (!s) return 0
-  const t = Date.parse(s)
-  return Number.isFinite(t) ? t : 0
 }
 
 const DOMAIN_OPTIONS: {
@@ -247,25 +240,43 @@ export default function Legislation() {
   const { data: stats, loading: statsLoading, error: statsError } =
     useApi<GesetzeStats>('/api/gesetze/stats')
 
-  const urteilEndpoint = useMemo(
-    () =>
-      // Die ganze Urteilsliste nur laden, wenn der Reiter offen ist
-      mainTab === 'urteile'
-        ? buildUrteilListEndpoint(urteilCourt, urteilRg)
-        : '',
-    [mainTab, urteilCourt, urteilRg],
-  )
+  // Urteile nur laden, wenn der Reiter offen ist, und seitenweise: Suche,
+  // Gericht, Rechtsgebiet, Zeitraum und Sortierung macht die API.
+  const urteilSearchDebounced = useDebouncedValue(urteilSearch.trim(), 300)
+  const urteilEndpoint = useMemo(() => {
+    if (mainTab !== 'urteile') return ''
+    const p = new URLSearchParams({
+      mit_gesamt: '1',
+      limit: String(PAGE_SIZE),
+      offset: String((urteilPage - 1) * PAGE_SIZE),
+      sort: urteilSortNewest ? 'new' : 'old',
+    })
+    if (urteilCourt !== 'all') p.set('gericht', urteilCourt)
+    if (urteilRg !== 'all') p.set('rechtsgebiet', urteilRg)
+    if (urteilTime !== 'all') p.set('zeitraum', urteilTime)
+    if (urteilSearchDebounced) p.set('q', urteilSearchDebounced)
+    return `/api/urteile?${p.toString()}`
+  }, [
+    mainTab,
+    urteilPage,
+    urteilSortNewest,
+    urteilCourt,
+    urteilRg,
+    urteilTime,
+    urteilSearchDebounced,
+  ])
 
   const {
-    data: rawUrteile,
+    data: urteilSeite,
     loading: loadingUrteile,
     error: errUrteile,
-  } = useApi<unknown>(urteilEndpoint)
+  } = useApi<UrteileSeite>(urteilEndpoint)
 
-  const urteileBase = useMemo(
-    () => normalizeUrteileList(rawUrteile),
-    [rawUrteile],
+  const urteileListe = useMemo(
+    () => (Array.isArray(urteilSeite?.eintraege) ? urteilSeite.eintraege : []),
+    [urteilSeite],
   )
+  const urteilGesamt = urteilSeite?.gesamt ?? 0
 
   useEffect(() => {
     if (!isMobile) return
@@ -361,59 +372,10 @@ export default function Legislation() {
         ? errDetail
         : null
 
-  const filteredUrteile = useMemo(() => {
-    let rows = urteileBase.slice()
-    const q = urteilSearch.trim().toLowerCase()
-    if (q) {
-      rows = rows.filter((u) => {
-        const az = (u.aktenzeichen ?? '').toLowerCase()
-        const zu = (u.zusammenfassung ?? '').toLowerCase()
-        const ls = (u.leitsatz ?? '').toLowerCase()
-        return (
-          az.includes(q) || zu.includes(q) || ls.includes(q)
-        )
-      })
-    }
-    if (urteilTime !== 'all') {
-      const now = new Date()
-      const todayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-      )
-      const days =
-        urteilTime === '30d' ? 30 : urteilTime === '3m' ? 90 : 365
-      const threshold = new Date(
-        todayStart.getTime() - days * 24 * 60 * 60 * 1000,
-      )
-      rows = rows.filter((u) => {
-        const dt = parseIsoDate(u.datum ?? null)
-        if (!dt) return false
-        const ds = new Date(
-          dt.getFullYear(),
-          dt.getMonth(),
-          dt.getDate(),
-        )
-        return ds.getTime() >= threshold.getTime()
-      })
-    }
-    rows.sort((a, b) => {
-      const ta = parseDatumMs(a.datum ?? null)
-      const tb = parseDatumMs(b.datum ?? null)
-      return urteilSortNewest ? tb - ta : ta - tb
-    })
-    return rows
-  }, [
-    urteileBase,
-    urteilSearch,
-    urteilTime,
-    urteilSortNewest,
-  ])
-
   useEffect(() => {
     setUrteilPage(1)
   }, [
-    urteilSearch,
+    urteilSearchDebounced,
     urteilCourt,
     urteilRg,
     urteilTime,
@@ -421,15 +383,9 @@ export default function Legislation() {
     mainTab,
   ])
 
-  const urteilTotalPages = Math.max(
-    1,
-    Math.ceil(filteredUrteile.length / PAGE_SIZE),
-  )
+  const urteilTotalPages = Math.max(1, Math.ceil(urteilGesamt / PAGE_SIZE))
   const urteilPageClamped = Math.min(urteilPage, urteilTotalPages)
-  const urteilSlice = useMemo(() => {
-    const start = (urteilPageClamped - 1) * PAGE_SIZE
-    return filteredUrteile.slice(start, start + PAGE_SIZE)
-  }, [filteredUrteile, urteilPageClamped])
+  const urteilSlice = urteileListe
 
   const inputStyle = useMemo(
     () => ({
@@ -1124,14 +1080,21 @@ export default function Legislation() {
         </p>
       ) : null}
 
-      {loadingUrteile ? (
+      {loadingUrteile && urteilSeite == null ? (
         <LoadingSpinner />
-      ) : !filteredUrteile.length ? (
+      ) : !urteileListe.length ? (
         <EmptyState text={t('urteileEmpty')} />
       ) : (
         <>
           {urteilSlice.map((u) => (
-            <div key={u.id} style={{ marginBottom: spacing.lg }}>
+            <div
+              key={u.id}
+              style={{
+                marginBottom: spacing.lg,
+                opacity: loadingUrteile ? 0.55 : 1,
+                transition: `opacity ${motion.fast}`,
+              }}
+            >
               <UrteilCard
                 urteil={u}
                 onGesetzBadgeClick={onGesetzBadgeFromUrteil}
