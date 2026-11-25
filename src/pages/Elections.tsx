@@ -74,7 +74,7 @@ export default function Elections() {
     let cancelled = false
     const base = import.meta.env.BASE_URL
     const geoUrl =
-      base === '/' ? '/data/kreise.geojson' : `${base.replace(/\/$/, '')}/data/kreise.geojson`
+      base === '/' ? '/data/kreise.json' : `${base.replace(/\/$/, '')}/data/kreise.json`
 
     fetch(geoUrl)
       .then((r) => {
