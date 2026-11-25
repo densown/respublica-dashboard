@@ -335,10 +335,12 @@ export default function WorldMap() {
     }
     let cancelled = false
     const base = import.meta.env.BASE_URL
+    // Laendergrenzen, vereinfacht (vorher world.geojson, 7,3 MB ungezippt, weil
+    // nginx .geojson nicht komprimiert; auf langsamer Leitung lud der Globus minutenlang)
     const geoUrl =
       base === '/'
-        ? '/data/world.geojson'
-        : `${base.replace(/\/$/, '')}/data/world.geojson`
+        ? '/data/world.json'
+        : `${base.replace(/\/$/, '')}/data/world.json`
 
     fetch(geoUrl)
       .then((r) => {
@@ -751,7 +753,7 @@ export default function WorldMap() {
               fontSize: fontSize.md,
             }}
           >
-            {t('dataLoadError')} (world.geojson)
+            {t('dataLoadError')} (world.json)
           </p>
         )}
 
