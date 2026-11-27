@@ -75,15 +75,19 @@ function buildFillColorExpression(
   category: string,
   noDataColor: string,
   darkBasemap: boolean,
-): ExpressionSpecification {
+): ExpressionSpecification | string {
   const expr: unknown[] = [
     'match',
     ['upcase', ['get', 'iso3']] as ExpressionSpecification,
   ]
+  // Jeder Laendercode darf nur einmal vorkommen, sonst lehnt MapLibre den
+  // ganzen Ausdruck ab.
+  const gesehen = new Set<string>()
   for (const r of rows) {
     const iso = normIso(r.country_code)
     const v = r.value
-    if (v == null || Number.isNaN(v)) continue
+    if (v == null || Number.isNaN(v) || !iso || gesehen.has(iso)) continue
+    gesehen.add(iso)
     expr.push(
       iso,
       worldFillColor(v, valueMin, valueMax, category, {
@@ -91,6 +95,10 @@ function buildFillColorExpression(
       }),
     )
   }
+  // Ohne Werte (Daten noch unterwegs) waere ein 'match' ohne Zweige
+  // ungueltig: MapLibre verwirft dann beim Laden die ganze Laenderflaeche,
+  // und der Globus bleibt leer. Dann einfach alle Laender in "keine Daten".
+  if (expr.length === 2) return noDataColor
   expr.push(noDataColor)
   return expr as ExpressionSpecification
 }
