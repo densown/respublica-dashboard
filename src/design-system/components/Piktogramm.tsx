@@ -30,6 +30,8 @@ export type PiktogrammName =
   | 'mond'
   | 'funke'
   | 'magazin'
+  | 'laden'
+  | 'hinzufuegen'
 
 export type PiktogrammProps = {
   name: PiktogrammName
@@ -178,6 +180,22 @@ function zeichnung(name: PiktogrammName) {
     case 'funke':
       // Kennzeichen fuer automatisch erzeugten Text
       return <path d="M12 3.500l1.900 5.600 5.600 1.900-5.600 1.900L12 18.500l-1.900-5.600-5.600-1.900 5.600-1.900z" />
+    case 'laden':
+      // Web-App installieren
+      return (
+        <>
+          <path d="M12 4v10.500M7.500 10l4.500 4.500 4.500-4.500" />
+          <path d="M5 16.500V19.500h14v-3" />
+        </>
+      )
+    case 'hinzufuegen':
+      // Wie das iOS-Symbol "Zum Home-Bildschirm": Plus im Quadrat
+      return (
+        <>
+          <rect x="4.500" y="4.500" width="15" height="15" rx="3" />
+          <path d="M12 8.500v7M8.500 12h7" />
+        </>
+      )
     case 'magazin':
       return (
         <>

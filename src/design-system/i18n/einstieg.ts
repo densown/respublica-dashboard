@@ -74,6 +74,16 @@ export const de = {
   titelZahlMehr: "Alle Antworten der Woche",
   titelZahlAus: "Aus der Antwort auf eine Kleine Anfrage ({fraktion})",
   titelRessorts: "Alle Ressorts",
+  appAbschnitt: "App",
+  appTitel: "Res.Publica als App",
+  appText: "Auf dem Startbildschirm, im eigenen Fenster, ohne Umweg über den Browser.",
+  appKnopf: "Installieren",
+  appSpaeter: "Nicht jetzt",
+  appIosSchritt1: "Auf Teilen tippen",
+  appIosSchritt2: "„Zum Home-Bildschirm“ wählen",
+  appIosHinweis: "In Safari:",
+  appInstalliert: "Läuft schon als App auf diesem Gerät.",
+  appMenue: "Im Browsermenü „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen.",
 } as const
 
 export const en = {
@@ -150,4 +160,14 @@ export const en = {
   titelZahlMehr: "All answers of the week",
   titelZahlAus: "From the answer to a minor interpellation ({fraktion})",
   titelRessorts: "All sections",
+  appAbschnitt: "App",
+  appTitel: "Res.Publica as an app",
+  appText: "On your home screen, in its own window, without the detour through the browser.",
+  appKnopf: "Install",
+  appSpaeter: "Not now",
+  appIosSchritt1: "Tap Share",
+  appIosSchritt2: "Choose “Add to Home Screen”",
+  appIosHinweis: "In Safari:",
+  appInstalliert: "Already running as an app on this device.",
+  appMenue: "In the browser menu choose “Install app” or “Add to Home screen”.",
 } as const

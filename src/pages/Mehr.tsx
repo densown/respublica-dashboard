@@ -5,6 +5,7 @@ import { fonts, fontSize, lineHeight, spacing } from '../design-system/tokens'
 import type { I18nKey } from '../design-system/i18n'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { AppInstallieren } from '../components/einstieg/AppInstallieren'
 
 type Eintrag = {
   pfad: string
@@ -140,6 +141,12 @@ export default function Mehr() {
               <Chip label={t('mehrAnsichtDunkel')} active={theme === 'dark'} onClick={() => setTheme('dark')} />
             </span>
           </div>
+        </div>
+      </Section>
+
+      <Section title={t('appAbschnitt')}>
+        <div style={{ maxWidth: 560 }}>
+          <AppInstallieren form="zeile" />
         </div>
       </Section>
 

@@ -34,6 +34,7 @@ import { StimmMarke } from '../components/bundestag/StimmMarke'
 import { DeineBilanz } from '../components/einstieg/DeineBilanz'
 import { MeineAbgeordneten } from '../components/einstieg/MeineAbgeordneten'
 import { Rundgang } from '../components/einstieg/Rundgang'
+import { AppInstallieren } from '../components/einstieg/AppInstallieren'
 import { WahlkreisFrage } from '../components/einstieg/WahlkreisFrage'
 import { PollStanding } from './elections/PollStanding'
 import { OTHER, standing } from './elections/pollMath'
@@ -616,6 +617,7 @@ export default function Overview() {
         <>
           {blockAufmacher}
           <div style={abstand}>{rundgang}</div>
+          <AppInstallieren form="hinweis" />
           {blockWahl}
           {blockZahl}
           {blockAmTag}
@@ -630,6 +632,7 @@ export default function Overview() {
           </div>
           <div style={{ borderLeft: `1px solid ${c.border}`, paddingLeft: spacing.xxl }}>
             <div style={abstand}>{rundgang}</div>
+            <AppInstallieren form="hinweis" />
             {blockWahl}
             {blockZahl}
             <div style={abstand}>{bilanz}</div>
