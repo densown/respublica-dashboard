@@ -24,6 +24,8 @@ const Abgeordneter = lazy(() => import('./pages/Abgeordneter'))
 const Versammlungen = lazy(() => import('./pages/Versammlungen'))
 const KleineAnfragen = lazy(() => import('./pages/KleineAnfragen'))
 const Europa = lazy(() => import('./pages/Europa'))
+const EuropaLand = lazy(() => import('./pages/EuropaLand'))
+const EuropaVergleich = lazy(() => import('./pages/EuropaVergleich'))
 const EuropaStrom = lazy(() => import('./pages/EuropaStrom'))
 const EuropaParlament = lazy(() => import('./pages/EuropaParlament'))
 const EuropaAbstimmung = lazy(() => import('./pages/EuropaAbstimmung'))
@@ -70,6 +72,8 @@ export default function App() {
             <Route path="weltkarte" element={<WorldMap />} />
             <Route path="europa" element={<Europa />} />
             <Route path="europa/strom" element={<EuropaStrom />} />
+            <Route path="europa/vergleich" element={<EuropaVergleich />} />
+            <Route path="europa/land/:code" element={<EuropaLand />} />
             <Route path="europa/parlament" element={<EuropaParlament />} />
             <Route path="europa/parlament/:id" element={<EuropaAbstimmung />} />
             <Route path="europa/parlament/abgeordnete/:id" element={<EuropaAbgeordneter />} />

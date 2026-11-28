@@ -157,3 +157,49 @@ export type StromKennzahlen = MitQuelle & {
     tage: Record<string, StromTagesbericht>
   } | null
 }
+
+export type KartenLand = {
+  iso2: string
+  iso3: string
+  name: string
+  eu: boolean
+  /** Hat eine eigene Laenderseite. */
+  seite: boolean
+  /** SVG-Pfad im Koordinatensystem der Karte. */
+  d: string
+  /** Mittelpunkt als Anteil von Breite und Hoehe. */
+  x: number
+  y: number
+  /** Anteil an der Kartenflaeche, entscheidet ueber die Beschriftung. */
+  flaeche: number
+  km2: number
+}
+
+export type KartenDaten = { breite: number; hoehe: number; laender: KartenLand[] }
+
+export type EpLand = MitQuelle & {
+  land: string
+  sitze: number
+  fraktionen: { code: string; kurz: string; name: string; sitze: number }[]
+  letzte: (EpAbstimmung & { land: Stimmen })[]
+}
+
+export type StromVergleich = MitQuelle & {
+  einheit: string
+  tage: string[]
+  zonen: { code: string; land: string; name: string; werte: (number | null)[] }[]
+}
+
+export type Kennzahl = {
+  code: string
+  name: string
+  einheit: string | null
+  art: string | null
+  stellen: number | null
+  quelle: { name: string | null; url: string | null; lizenz: string | null }
+  reihe: { jahr: number; wert: number }[]
+  jahr: number
+  wert: number
+}
+
+export type Steckbrief = { land: string; kennzahlen: Kennzahl[] }
