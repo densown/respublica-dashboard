@@ -114,3 +114,11 @@ body {
 .rp-wischzeile > * { flex-shrink: 0; }
 .rp-ohne-scrollbalken::-webkit-scrollbar { display: none; }
 .rp-tab:active { transform: scale(0.94); }
+
+/* Kachelkarte im Strombericht: Kachel gibt beim Tippen leicht nach */
+.rp-kachel:active { transform: scale(0.96); }
+.rp-kachel { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Europakarte: Land unter Maus oder Tastatur hervorheben */
+.rp-kartenland { cursor: pointer; outline: none; }
+.rp-kartenland:hover path, .rp-kartenland:focus-visible path { stroke: currentColor; stroke-width: 2.5; filter: brightness(0.92); }

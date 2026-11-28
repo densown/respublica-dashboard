@@ -13,6 +13,7 @@ import { de as bundestagDe, en as bundestagEn } from './i18n/bundestag'
 import { de as kleineAnfragenDe, en as kleineAnfragenEn } from './i18n/kleineAnfragen'
 import { de as geruestDe, en as geruestEn } from './i18n/geruest'
 import { de as einstiegDe, en as einstiegEn } from './i18n/einstieg'
+import { de as europaDe, en as europaEn } from './i18n/europa'
 
 export const de = {
   ...commonDe,
@@ -28,6 +29,7 @@ export const de = {
   ...kleineAnfragenDe,
   ...geruestDe,
   ...einstiegDe,
+  ...europaDe,
 } as const
 
 export const en = {
@@ -44,6 +46,7 @@ export const en = {
   ...kleineAnfragenEn,
   ...geruestEn,
   ...einstiegEn,
+  ...europaEn,
 } as const
 
 export type I18nKey = keyof typeof de

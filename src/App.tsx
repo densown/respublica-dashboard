@@ -6,7 +6,6 @@ import DashboardLayout from './layouts/DashboardLayout'
 import Admin from './pages/Admin'
 import Coalition from './pages/Coalition'
 import DemocracyIndex from './pages/DemocracyIndex'
-import EuParliament from './pages/EuParliament'
 import Mehr from './pages/Mehr'
 import NotFound from './pages/NotFound'
 import Overview from './pages/Overview'
@@ -24,6 +23,13 @@ const Abstimmung = lazy(() => import('./pages/Abstimmung'))
 const Abgeordneter = lazy(() => import('./pages/Abgeordneter'))
 const Versammlungen = lazy(() => import('./pages/Versammlungen'))
 const KleineAnfragen = lazy(() => import('./pages/KleineAnfragen'))
+const Europa = lazy(() => import('./pages/Europa'))
+const EuropaLand = lazy(() => import('./pages/EuropaLand'))
+const EuropaVergleich = lazy(() => import('./pages/EuropaVergleich'))
+const EuropaStrom = lazy(() => import('./pages/EuropaStrom'))
+const EuropaParlament = lazy(() => import('./pages/EuropaParlament'))
+const EuropaAbstimmung = lazy(() => import('./pages/EuropaAbstimmung'))
+const EuropaAbgeordneter = lazy(() => import('./pages/EuropaAbgeordneter'))
 
 export default function App() {
   return (
@@ -64,7 +70,14 @@ export default function App() {
             <Route path="versammlungen" element={<Versammlungen />} />
             <Route path="kleine-anfragen" element={<KleineAnfragen />} />
             <Route path="weltkarte" element={<WorldMap />} />
-            <Route path="eu-parlament" element={<EuParliament />} />
+            <Route path="europa" element={<Europa />} />
+            <Route path="europa/strom" element={<EuropaStrom />} />
+            <Route path="europa/vergleich" element={<EuropaVergleich />} />
+            <Route path="europa/land/:code" element={<EuropaLand />} />
+            <Route path="europa/parlament" element={<EuropaParlament />} />
+            <Route path="europa/parlament/:id" element={<EuropaAbstimmung />} />
+            <Route path="europa/parlament/abgeordnete/:id" element={<EuropaAbgeordneter />} />
+            <Route path="eu-parlament" element={<Navigate to="/europa/parlament" replace />} />
             <Route path="lobbyregister" element={<LobbyRegister />} />
             <Route path="mehr" element={<Mehr />} />
             <Route path="admin" element={<Admin />} />
