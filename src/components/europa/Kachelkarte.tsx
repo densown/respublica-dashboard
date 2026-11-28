@@ -93,24 +93,31 @@ export function Kachelkarte({ zonen, wert, skala, einheit, gewaehlt, onWahl }: K
         })}
       </div>
 
-      {/* Legende: Skala mit beiden Enden als Zahl */}
-      <div style={{ marginTop: spacing.md, fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
-        <div style={{ marginBottom: spacing.xs }}>{fuelle(t('stKarteLegende'), { einheit: einheitWort(einheit) })}</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span>{preisWert(skala.lo, einheit, lang)}</span>
-          <span
-            aria-hidden
-            style={{
-              flex: 1,
-              maxWidth: 220,
-              height: 10,
-              borderRadius: radius.xs,
-              border: `1px solid ${c.cardBorder}`,
-              background: `linear-gradient(to right, ${preisFarbe(skala.lo, skala, c)}, ${preisFarbe(skala.hi, skala, c)})`,
-            }}
-          />
-          <span>{preisWert(skala.hi, einheit, lang)}</span>
-        </div>
+      <PreisLegende skala={skala} einheit={einheit} />
+    </div>
+  )
+}
+
+/** Farbskala der Preise mit beiden Enden als Zahl und der Einheit im Titel. Fuer Kacheln und Landkarte dieselbe. */
+export function PreisLegende({ skala, einheit }: { skala: Skala; einheit: Einheit }) {
+  const { c, t, lang } = useTheme()
+  return (
+    <div style={{ marginTop: spacing.md, fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
+      <div style={{ marginBottom: spacing.xs }}>{fuelle(t('stKarteLegende'), { einheit: einheitWort(einheit) })}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+        <span>{preisWert(skala.lo, einheit, lang)}</span>
+        <span
+          aria-hidden
+          style={{
+            flex: 1,
+            maxWidth: 220,
+            height: 10,
+            borderRadius: radius.xs,
+            border: `1px solid ${c.cardBorder}`,
+            background: `linear-gradient(to right, ${preisFarbe(skala.lo, skala, c)}, ${preisFarbe(skala.hi, skala, c)})`,
+          }}
+        />
+        <span>{preisWert(skala.hi, einheit, lang)}</span>
       </div>
     </div>
   )

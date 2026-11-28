@@ -13,6 +13,13 @@ export type EuropaKarteProps = {
   beschriftung?: (iso2: string) => string | null | undefined
   /** Text fuer Vorlesehilfen und Tooltip, etwa "Polen: 8,7 ct/kWh". */
   ariaText?: (iso2: string) => string
+  /**
+   * Tipp waehlt ein Land aus, statt seine Seite zu oeffnen (Strombericht).
+   * Nur Laender, fuer die `farbe` einen Wert liefert, sind dann waehlbar.
+   */
+  onWahl?: (iso2: string) => void
+  /** Das gewaehlte Land bekommt einen Rahmen. */
+  gewaehlt?: string
   /** Dieses Land hervorheben (Lagekarte auf der Laenderseite). */
   hervor?: string
   /** Lagekarte: keine Links, keine Beschriftung. */
@@ -30,7 +37,7 @@ export type EuropaKarteProps = {
  * dem Handy nicht mit der Karte schrumpft. Kleine Laender (Luxemburg, Malta)
  * trifft kein Finger: dafuer steht unter der Karte immer die Laenderliste.
  */
-export function EuropaKarte({ karte, farbe, beschriftung, ariaText, hervor, still, schmal, kopf, ariaLabel }: EuropaKarteProps) {
+export function EuropaKarte({ karte, farbe, beschriftung, ariaText, onWahl, gewaehlt, hervor, still, schmal, kopf, ariaLabel }: EuropaKarteProps) {
   const { c } = useTheme()
   const navigate = useNavigate()
   const grenze = schmal ? 0.0042 : 0.0015
@@ -60,6 +67,30 @@ export function EuropaKarte({ karte, farbe, beschriftung, ariaText, hervor, stil
           )
           if (!aktiv) return <g key={land.iso2}>{form}</g>
           const text = ariaText?.(land.iso2) ?? land.name
+          if (onWahl) {
+            // Auswahl statt Seitenwechsel; ohne Wert gibt es nichts zu waehlen
+            if (farbe?.(land.iso2) == null) return <g key={land.iso2}>{form}</g>
+            return (
+              <g
+                key={land.iso2}
+                role="button"
+                tabIndex={0}
+                aria-label={text}
+                aria-pressed={gewaehlt === land.iso2}
+                className="rp-kartenland"
+                onClick={() => onWahl(land.iso2)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onWahl(land.iso2)
+                  }
+                }}
+              >
+                <title>{text}</title>
+                {form}
+              </g>
+            )
+          }
           return (
             <a
               key={land.iso2}
@@ -77,6 +108,22 @@ export function EuropaKarte({ karte, farbe, beschriftung, ariaText, hervor, stil
             </a>
           )
         })}
+        {/* Rahmen des gewaehlten Landes zuletzt, damit kein Nachbar ihn ueberdeckt */}
+        {gewaehlt &&
+          karte.laender
+            .filter((land) => land.iso2 === gewaehlt)
+            .map((land) => (
+              <path
+                key={`wahl${land.iso2}`}
+                d={land.d}
+                fill="none"
+                stroke={c.ink}
+                strokeWidth={2}
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+                pointerEvents="none"
+              />
+            ))}
       </svg>
       {!still &&
         beschriftung &&

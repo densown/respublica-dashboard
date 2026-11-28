@@ -28,9 +28,12 @@ import {
   zahl,
   type Einheit,
 } from '../components/europa/format'
-import { Kachelkarte } from '../components/europa/Kachelkarte'
+import { EuropaKarte } from '../components/europa/EuropaKarte'
+import { Kachelkarte, PreisLegende } from '../components/europa/Kachelkarte'
+import { LAENDER, landNameIso2 } from '../components/europa/laender'
+import { useKarte } from '../components/europa/useKarte'
 import { QuellenZeile, StandStempel } from '../components/europa/QuellenZeile'
-import { guenstigstesFenster, nachPreis, negativeStunden, skalaAus, teuersteStunde } from '../components/europa/strom'
+import { guenstigstesFenster, nachPreis, negativeStunden, preisFarbe, skalaAus, teuersteStunde } from '../components/europa/strom'
 import { Tagesgang } from '../components/europa/Tagesgang'
 import { Verlauf } from '../components/europa/Verlauf'
 import type { StromKennzahlen, StromTag, StromVerlauf } from '../components/europa/typen'
@@ -56,6 +59,8 @@ export default function EuropaStrom() {
   const [einheit, setEinheit] = useLocalStorage<Einheit>('rp-strom-einheit', 'ct')
   const [zone, setZone] = useLocalStorage<string>('rp-strom-zone', HEIMAT)
   const [stunde, setStunde] = useState<number | null>(null)
+  const [ansicht, setAnsicht] = useLocalStorage<'karte' | 'kacheln'>('rp-strom-ansicht', 'karte')
+  const karte = useKarte()
   const [laeuft, setLaeuft] = useState(false)
 
   const heute = heuteInBerlin()
@@ -93,6 +98,18 @@ export default function EuropaStrom() {
 
   const skalaMittel = useMemo(() => skalaAus(zonen.map((z) => z.mittel)), [zonen])
   const skalaStunden = useMemo(() => skalaAus(zonen.flatMap((z) => z.stunden)), [zonen])
+  // Landkarte: ein Wert je Land, das Mittel seiner Zonen mit Preisen (Tag oder gewaehlte Stunde)
+  const preisJeLand = useMemo(() => {
+    const m = new Map<string, number>()
+    for (const land of LAENDER) {
+      const werte = land.zonen
+        .map((code) => zonen.find((x) => x.code === code))
+        .map((z) => (z == null ? null : stunde == null ? z.mittel : (z.stunden[stunde] ?? null)))
+        .filter((v): v is number => v != null)
+      if (werte.length) m.set(land.iso2, werte.reduce((a, b) => a + b, 0) / werte.length)
+    }
+    return m
+  }, [zonen, stunde])
 
   const p = (v: number) => preis(v, einheit, lang)
   const absatz = {
@@ -248,8 +265,19 @@ export default function EuropaStrom() {
             aside={
               stunde == null ? t('stKarteMittel') : fuelle(t('stKarteUhr'), { von: stunde, bis: stunde + 1 })
             }
-            note={t('stKarteNote')}
+            note={t(ansicht === 'karte' ? 'stKarteNoteKarte' : 'stKarteNote')}
           >
+            <Toolbar tight>
+              <ViewToggle<'karte' | 'kacheln'>
+                ariaLabel={t('stAnsicht')}
+                value={ansicht}
+                onChange={setAnsicht}
+                options={[
+                  { value: 'karte', label: t('stAnsichtKarte') },
+                  { value: 'kacheln', label: t('stAnsichtKacheln') },
+                ]}
+              />
+            </Toolbar>
             <Toolbar tight>
               <ViewToggle<'mittel' | 'stunde'>
                 ariaLabel={t('stKarteTitel')}
@@ -305,14 +333,45 @@ export default function EuropaStrom() {
               </label>
             )}
             <div style={{ marginTop: spacing.md }}>
-              <Kachelkarte
-                zonen={zonen}
-                wert={(z) => (stunde == null ? z.mittel : z.stunden[stunde] ?? null)}
-                skala={stunde == null ? skalaMittel : skalaStunden}
-                einheit={einheit}
-                gewaehlt={gewaehlt.code}
-                onWahl={setZone}
-              />
+              {ansicht === 'karte' && karte ? (
+                <>
+                  <EuropaKarte
+                    karte={karte}
+                    schmal={schmal}
+                    ariaLabel={t('stLandkarteAria')}
+                    farbe={(iso2) => {
+                      const v = preisJeLand.get(iso2)
+                      return v == null ? null : preisFarbe(v, stunde == null ? skalaMittel : skalaStunden, c)
+                    }}
+                    beschriftung={(iso2) => {
+                      const v = preisJeLand.get(iso2)
+                      return v == null ? null : preisWert(v, einheit, lang)
+                    }}
+                    ariaText={(iso2) => {
+                      const v = preisJeLand.get(iso2)
+                      return `${landNameIso2(iso2, lang)}${v == null ? '' : `: ${p(v)}`}`
+                    }}
+                    gewaehlt={LAENDER.find((l) => l.zonen.includes(gewaehlt.code))?.iso2}
+                    onWahl={(iso2) => {
+                      const land = LAENDER.find((l) => l.iso2 === iso2)
+                      const code = land?.zonen.find((z) => zonen.some((x) => x.code === z))
+                      if (code) setZone(code)
+                    }}
+                  />
+                  <PreisLegende skala={stunde == null ? skalaMittel : skalaStunden} einheit={einheit} />
+                </>
+              ) : ansicht === 'karte' ? (
+                <Platzhalter zeilen={3} />
+              ) : (
+                <Kachelkarte
+                  zonen={zonen}
+                  wert={(z) => (stunde == null ? z.mittel : z.stunden[stunde] ?? null)}
+                  skala={stunde == null ? skalaMittel : skalaStunden}
+                  einheit={einheit}
+                  gewaehlt={gewaehlt.code}
+                  onWahl={setZone}
+                />
+              )}
             </div>
           </Section>
 
