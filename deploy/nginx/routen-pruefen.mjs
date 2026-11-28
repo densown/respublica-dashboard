@@ -36,6 +36,16 @@ if (!muster) {
   console.error('Muster der Seiten in app-routen.conf nicht gefunden.')
   process.exit(1)
 }
+// nginx liest { und } in einem Regex ohne Anfuehrungszeichen als Blockgrenze
+// und lehnt die Datei dann ab (so geschehen am 28.11.2026 mit {2,3}).
+const klammern = [...conf.matchAll(/^\s*location ~\*? ([^"\s]\S*) \{$/gm)]
+  .map((m) => m[1])
+  .filter((r) => /[{}]/.test(r))
+if (klammern.length) {
+  console.error('Geschweifte Klammern in location-Regex ohne Anfuehrungszeichen:')
+  for (const r of klammern) console.error('  ' + r.slice(0, 120))
+  process.exit(1)
+}
 const seite = new RegExp(muster)
 const genau = new Set([...conf.matchAll(/^location = (\S+)/gm)].map((m) => m[1]))
 const praefixe = [...conf.matchAll(/^location \^~ (\S+)/gm)].map((m) => m[1])
