@@ -7,8 +7,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
 import { EuropaKarte } from '../components/europa/EuropaKarte'
-import { datumKurz, einheitWort, fuelle, heuteInBerlin, preis, zahl, type Einheit } from '../components/europa/format'
-import { kennzahlText, landNameIso2, landVon } from '../components/europa/laender'
+import { datumKurz, datumMarke, einheitWort, fuelle, heuteInBerlin, preis, preisWert, zahl, type Einheit } from '../components/europa/format'
+import { kennzahlText, landNameIso2, landVon, ZEITRAEUME, zeitraumStand } from '../components/europa/laender'
 import { QuellenZeile } from '../components/europa/QuellenZeile'
 import { guenstigstesFenster, skalaAus } from '../components/europa/strom'
 import { Tagesgang } from '../components/europa/Tagesgang'
@@ -22,7 +22,6 @@ import { Zeitreihe } from '../components/europa/Zeitreihe'
  * sich nur jaehrlich aendern. Jeder Abschnitt nennt seine Quelle.
  */
 
-const ZEITRAEUME = [30, 90, 365] as const
 
 export default function EuropaLand() {
   const { code } = useParams()
@@ -67,6 +66,7 @@ export default function EuropaLand() {
   }
 
   const p = (v: number) => preis(v, einheit, lang)
+  const zeit = zeitraumStand(verlauf?.seit, verlauf?.bis, tage)
   const absatz = { margin: 0, fontFamily: fonts.body, fontSize: fontSize.base, lineHeight: lineHeight.relaxed, color: c.inkSoft, maxWidth: '68ch' } as const
   const klein = { fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted } as const
   const weiter = (ziel: string, wort: string) => (
@@ -156,19 +156,34 @@ export default function EuropaLand() {
         >
           <Toolbar label={t('evZeitraum')} tight>
             {ZEITRAEUME.map((n) => (
-              <Chip key={n} dense label={t(n === 365 ? 'evJahr' : n === 90 ? 'ev90' : 'ev30')} active={tage === n} onClick={() => setTage(n)} />
+              <Chip
+                key={n}
+                dense
+                label={t(n === 365 ? 'evJahr' : n === 90 ? 'ev90' : 'ev30')}
+                active={zeit.wirksam === n}
+                disabled={!zeit.moeglich.includes(n)}
+                onClick={() => setTage(n)}
+              />
             ))}
           </Toolbar>
           {verlauf ? (
             <Zeitreihe
               achse={verlauf.tage.map((d) => datumKurz(d, lang))}
-              reihen={verlauf.zonen.map((z, i) => ({ name: z.name, farbe: i === 0 ? c.red : c.ink, werte: z.werte }))}
+              achseKurz={verlauf.tage.map((d) => datumMarke(d, lang))}
+              reihen={verlauf.zonen.map((z, i) => ({ name: z.name, farbe: i === 0 ? c.red : c.ink, strich: i === 0 ? '' : '7 4', werte: z.werte }))}
               format={p}
+              formatMarke={(v) => preisWert(v, einheit, lang)}
+              yTitel={fuelle(t('dgPreisAchse'), { einheit: einheitWort(einheit) })}
               abNull
               ariaLabel={fuelle(t('stVerlaufAria'), { land: name })}
             />
           ) : (
             <Platzhalter zeilen={1} />
+          )}
+          {zeit.verkuerzt && verlauf?.seit && zeit.spanne != null && (
+            <p style={{ ...klein, margin: `${spacing.sm}px 0 0`, lineHeight: 1.7 }}>
+              {fuelle(t('evSeit'), { datum: datumKurz(verlauf.seit, lang), tage: zeit.spanne })}
+            </p>
           )}
           <div style={{ marginTop: spacing.sm }}>
             {weiter(`/europa/vergleich?laender=${land.iso2.toLowerCase()},${partner}`, t('elVergleichen'))}
@@ -268,6 +283,9 @@ export default function EuropaLand() {
                 <div style={klein}>{k.jahr}</div>
                 {k.reihe.length > 2 && (
                   <Sparkline data={k.reihe.map((r) => r.wert)} width={110} height={26} color={c.red} style={{ marginTop: spacing.xs }} />
+                )}
+                {k.reihe.length > 2 && (
+                  <div style={klein}>{fuelle(t('dgVerlaufVon'), { von: k.reihe[0].jahr, bis: k.reihe[k.reihe.length - 1].jahr })}</div>
                 )}
               </Link>
             ))}

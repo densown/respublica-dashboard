@@ -133,6 +133,24 @@ export const NEUTRAL_FALLBACK = '#888888'
  */
 export const SERIES = ['#4E79A7', '#E15759', '#59A14F', '#EDC948'] as const
 
+/**
+ * Reihenfarben fuer Diagramme mit bis zu vier Linien, je Modus eigens gewaehlt.
+ * Geprueft fuer jedes Paar (nicht nur Nachbarn) auf Unterscheidbarkeit bei
+ * Rot-Gruen- und Blau-Gelb-Schwaeche sowie auf Kontrast zur Papier- bzw.
+ * Nachtflaeche. Reihenfolge fest: Blau, Orange, Rosa, Gruen. Nie umsortieren,
+ * die Farbe gehoert zum Platz in der Auswahl.
+ */
+export const REIHEN = {
+  light: ['#1F4E9C', '#C96410', '#CC68AA', '#2F8F62'],
+  dark: ['#3C74D0', '#D4741A', '#D676B4', '#36986A'],
+} as const
+
+/**
+ * Strichmuster zu den Reihenfarben: zweites Merkmal neben der Farbe, damit
+ * eine Linie auch im Graustufendruck und bei Farbschwaeche erkennbar bleibt.
+ */
+export const REIHEN_STRICH = ['', '7 4', '2 4', '9 4 2 4'] as const
+
 /** Badge-Varianten. Fest, weil sie Status markieren und nicht Oberflaeche sind. */
 export const BADGE = {
   blue: '#1E40AF',

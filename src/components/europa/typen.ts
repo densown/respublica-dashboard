@@ -187,6 +187,9 @@ export type EpLand = MitQuelle & {
 export type StromVergleich = MitQuelle & {
   einheit: string
   tage: string[]
+  /** Erster und letzter Liefertag, fuer den es zu diesen Zonen Preise gibt. */
+  seit?: string | null
+  bis?: string | null
   zonen: { code: string; land: string; name: string; werte: (number | null)[] }[]
 }
 

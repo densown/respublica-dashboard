@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Chip, EmptyState, FilterToolbar, PageHeader, Platzhalter, Section, Toolbar, useTheme } from '../design-system'
-import { SERIES } from '../design-system/palettes'
+import { REIHEN, REIHEN_STRICH } from '../design-system/palettes'
 import { fonts, fontSize, lineHeight, measure, spacing } from '../design-system/tokens'
 import { useApi } from '../hooks/useApi'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useSeo } from '../hooks/useSeo'
-import { datumKurz, fuelle, preis, type Einheit } from '../components/europa/format'
-import { kennzahlText, laenderSortiert, landPfad, landVon } from '../components/europa/laender'
+import { datumKurz, datumMarke, einheitWort, fuelle, preis, preisWert, type Einheit } from '../components/europa/format'
+import { kennzahlEinheit, kennzahlText, kennzahlZahl, laenderSortiert, landPfad, landVon, ZEITRAEUME, zeitraumStand } from '../components/europa/laender'
 import { QuellenZeile } from '../components/europa/QuellenZeile'
 import type { Steckbrief, StromVergleich } from '../components/europa/typen'
-import { Zeitreihe, type ZeitreihenReihe } from '../components/europa/Zeitreihe'
+import { ReihenMarke, Zeitreihe, type ZeitreihenReihe } from '../components/europa/Zeitreihe'
 
 /**
  * Laendervergleich: bis zu vier Laender, eine Reihe, eine Zeitachse. Die
@@ -19,11 +19,12 @@ import { Zeitreihe, type ZeitreihenReihe } from '../components/europa/Zeitreihe'
  */
 
 const MAX = 4
-const ZEITRAEUME = [30, 90, 365] as const
 type Jahreswert = { year: number; value: number | null }
 
 export default function EuropaVergleich() {
-  const { c, t, lang } = useTheme()
+  const { c, t, lang, theme } = useTheme()
+  // Farbe und Strichmuster gehoeren zum Platz in der Auswahl, nicht zum Rang
+  const farben = REIHEN[theme]
   const [params, setParams] = useSearchParams()
   useSeo({ titel: t('evTitel'), beschreibung: t('evSeoBeschreibung'), pfad: '/europa/vergleich' })
   const [einheit] = useLocalStorage<Einheit>('rp-strom-einheit', 'ct')
@@ -72,15 +73,17 @@ export default function EuropaVergleich() {
   const r2 = useApi<Jahreswert[]>(url(2))
   const r3 = useApi<Jahreswert[]>(url(3))
 
-  const { achse, reihen } = useMemo((): { achse: string[]; reihen: ZeitreihenReihe[] } => {
+  const { achse, achseKurz, reihen } = useMemo((): { achse: string[]; achseKurz?: string[]; reihen: ZeitreihenReihe[] } => {
     if (istStrom) {
       if (!strom) return { achse: [], reihen: [] }
       return {
         achse: strom.tage.map((d) => datumKurz(d, lang)),
+        achseKurz: strom.tage.map((d) => datumMarke(d, lang)),
         reihen: mitZone
-          .map((l, i) => {
+          .map((l) => {
             const z = strom.zonen.find((x) => x.code === l.zonen[0])
-            return z ? { name: z.name, farbe: SERIES[i % SERIES.length], werte: z.werte } : null
+            const platz = gewaehlt.indexOf(l)
+            return z ? { name: z.name, farbe: farben[platz], strich: REIHEN_STRICH[platz], werte: z.werte } : null
           })
           .filter((x) => x != null),
       }
@@ -94,14 +97,20 @@ export default function EuropaVergleich() {
           const d = daten[i]
           if (!d) return null
           const nach = new Map(d.map((p) => [p.year, p.value]))
-          return { name: nameVon(l.iso2), farbe: SERIES[i % SERIES.length], werte: jahre.map((j) => nach.get(j) ?? null) }
+          return { name: nameVon(l.iso2), farbe: farben[i], strich: REIHEN_STRICH[i], werte: jahre.map((j) => nach.get(j) ?? null) }
         })
         .filter((x) => x != null),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [istStrom, strom, r0.data, r1.data, r2.data, r3.data, gewaehlt, lang])
+  }, [istStrom, strom, r0.data, r1.data, r2.data, r3.data, gewaehlt, lang, farben])
 
   const format = (v: number) => (istStrom ? preis(v, einheit, lang) : kennzahl ? kennzahlText(kennzahl, v, lang) : String(v))
+  const formatMarke = (v: number) => (istStrom ? preisWert(v, einheit, lang) : kennzahl ? kennzahlZahl(kennzahl, v, lang) : String(v))
+  const kEinheit = kennzahl ? kennzahlEinheit(kennzahl, lang) : ''
+  const yTitel = istStrom
+    ? fuelle(t('dgPreisAchse'), { einheit: einheitWort(einheit) })
+    : `${kennzahl?.name ?? reihe}${kEinheit ? ` (${kEinheit})` : ''}`
+  const zeit = zeitraumStand(strom?.seit, strom?.bis, tage)
   const laedt = istStrom ? ladeStrom : [r0, r1, r2, r3].some((r) => r.loading)
   const titelReihe = istStrom ? t('evReiheStrom') : (kennzahl?.name ?? reihe)
   const absatz = { margin: 0, fontFamily: fonts.body, fontSize: fontSize.sm, lineHeight: lineHeight.normal, color: c.muted, maxWidth: '68ch' } as const
@@ -130,19 +139,19 @@ export default function EuropaVergleich() {
             ],
           },
           {
-            label: fuelle(t('evLandDazu'), { n: gewaehlt.length, max: MAX }),
+            label: t('evLandDazu'),
             value: '',
             onChange: (v) => v && gewaehlt.length < MAX && setzeLaender([...gewaehlt.map((g) => g.iso2), v]),
             options: [{ value: '', label: gewaehlt.length >= MAX ? t('evVoll') : t('evLandWaehlen') }, ...(gewaehlt.length >= MAX ? [] : frei.map((l) => ({ value: l.iso2, label: l.name })))],
           },
         ]}
       />
-      <Toolbar label={t('evLaender')}>
+      <Toolbar label={fuelle(t('evLaender'), { n: gewaehlt.length, max: MAX })}>
         {gewaehlt.map((l, i) => (
           <Chip
             key={l.iso2}
             dense
-            dot={SERIES[i % SERIES.length]}
+            dot={farben[i]}
             label={`${nameVon(l.iso2)} ×`}
             title={t('evEntfernen')}
             active
@@ -154,7 +163,14 @@ export default function EuropaVergleich() {
       {istStrom && (
         <Toolbar label={t('evZeitraum')} tight>
           {ZEITRAEUME.map((n) => (
-            <Chip key={n} dense label={t(n === 365 ? 'evJahr' : n === 90 ? 'ev90' : 'ev30')} active={tage === n} onClick={() => setze({ tage: n === 90 ? '' : String(n) })} />
+            <Chip
+              key={n}
+              dense
+              label={t(n === 365 ? 'evJahr' : n === 90 ? 'ev90' : 'ev30')}
+              active={zeit.wirksam === n}
+              disabled={!zeit.moeglich.includes(n)}
+              onClick={() => setze({ tage: n === 90 ? '' : String(n) })}
+            />
           ))}
         </Toolbar>
       )}
@@ -165,8 +181,23 @@ export default function EuropaVergleich() {
         {!laedt && reihen.length === 0 && !(istStrom && fehlerStrom) && <EmptyState text={t('evLeer')} />}
         {reihen.length > 0 && (
           <div style={{ opacity: laedt ? 0.6 : 1, transition: 'opacity 0.15s' }}>
-            <Zeitreihe achse={achse} reihen={reihen} format={format} abNull={istStrom} hoehe={260} ariaLabel={titelReihe} />
+            <Zeitreihe
+              achse={achse}
+              achseKurz={achseKurz}
+              reihen={reihen}
+              format={format}
+              formatMarke={formatMarke}
+              yTitel={yTitel}
+              abNull={istStrom}
+              hoehe={260}
+              ariaLabel={titelReihe}
+            />
           </div>
+        )}
+        {istStrom && zeit.verkuerzt && strom?.seit && zeit.spanne != null && (
+          <p style={{ ...absatz, marginTop: spacing.md }}>
+            {fuelle(t('evSeit'), { datum: datumKurz(strom.seit, lang), tage: zeit.spanne })}
+          </p>
         )}
         {istStrom && ohneZone.length > 0 && (
           <p style={{ ...absatz, marginTop: spacing.md }}>
@@ -188,7 +219,7 @@ export default function EuropaVergleich() {
                     className="rp-zeile"
                     style={{ display: 'flex', alignItems: 'center', gap: spacing.md, minHeight: 44, textDecoration: 'none', color: c.ink }}
                   >
-                    <span aria-hidden style={{ width: 14, height: 3, background: r?.farbe ?? c.border }} />
+                    {r ? <ReihenMarke farbe={r.farbe} strich={r.strich} /> : <span aria-hidden style={{ width: 22, height: 2, background: c.border }} />}
                     <span style={{ flex: 1, fontFamily: fonts.body, fontSize: fontSize.md, fontWeight: 600 }}>{r?.name ?? nameVon(l.iso2)}</span>
                     <span style={{ fontFamily: fonts.mono, fontSize: fontSize.sm, fontWeight: 700 }}>{letzter != null ? format(letzter) : '·'}</span>
                   </Link>
