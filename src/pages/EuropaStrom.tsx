@@ -383,8 +383,8 @@ export default function EuropaStrom() {
           </Section>
 
           <Section
-            title={fuelle(t('stGangTitel'), { land: gewaehlt.name })}
-            note={fuelle(t('stGangNote'), { einheit: einheitWort(einheit) })}
+            title={fuelle(t('stGangTitel'), { land: gewaehlt.code === HEIMAT ? t('stHeimatName') : gewaehlt.name })}
+            note={(gewaehlt.code === HEIMAT ? `${t('stHeimatZone')} ` : '') + fuelle(t('stGangNote'), { einheit: einheitWort(einheit) })}
           >
             <Tagesgang
               stunden={gewaehlt.stunden}
