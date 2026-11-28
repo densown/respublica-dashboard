@@ -32,22 +32,9 @@ import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { LEGAL_AREA_KEYS } from '../components/eulaw/rechtsgebiet'
 
 const PAGE_SIZE = 20
-
-const LEGAL_AREA_KEYS: { value: string; key: I18nKey }[] = [
-  { value: 'Handel', key: 'euLawRgHandel' },
-  { value: 'Energie', key: 'euLawRgEnergie' },
-  { value: 'Gesundheit', key: 'euLawRgGesundheit' },
-  { value: 'Umwelt', key: 'euLawRgUmwelt' },
-  { value: 'Finanzen', key: 'euLawRgFinanzen' },
-  { value: 'Verkehr', key: 'euLawRgVerkehr' },
-  { value: 'Landwirtschaft', key: 'euLawRgLandwirtschaft' },
-  { value: 'Digitales', key: 'euLawRgDigitales' },
-  { value: 'Migration', key: 'euLawRgMigration' },
-  { value: 'Justiz', key: 'euLawRgJustiz' },
-  { value: 'Sonstiges', key: 'euLawRgSonstiges' },
-]
 
 type TypFilter = '' | 'REG' | 'DIR' | 'DEC'
 type GerichtFilter = '' | 'EuGH' | 'EuG'

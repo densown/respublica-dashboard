@@ -15,6 +15,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuUrteilDetail, EuUrteilListItem } from './types'
 import { kiText } from '../../utils/kiText'
+import { rechtsgebietLabel } from './rechtsgebiet'
 
 
 const PREVIEW_LEN = 220
@@ -192,7 +193,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
 
         {item.rechtsgebiet?.trim() ? (
           <div style={{ marginTop: spacing.sm }}>
-            <Badge text={item.rechtsgebiet.trim()} variant="muted" />
+            <Badge text={rechtsgebietLabel(item.rechtsgebiet, t)} variant="muted" />
           </div>
         ) : null}
 
