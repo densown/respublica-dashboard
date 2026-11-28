@@ -26,6 +26,16 @@ export function datumKurz(iso: string, lang: Sprache): string {
   })
 }
 
+/** Kurze Marke fuer die Zeitachse mit Jahr, damit ein Jahreswechsel lesbar bleibt: "29.11.26" oder "29/11/26". */
+export function datumMarke(iso: string, lang: Sprache): string {
+  return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString(ort(lang), {
+    day: 'numeric',
+    month: 'numeric',
+    year: '2-digit',
+    timeZone: 'UTC',
+  })
+}
+
 /** "Samstag, 29. November". */
 export function datumLang(iso: string, lang: Sprache): string {
   return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString(ort(lang), {

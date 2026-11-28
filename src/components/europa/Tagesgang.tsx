@@ -1,6 +1,8 @@
 import { useTheme } from '../../design-system'
 import { fonts, fontSize, radius, spacing } from '../../design-system/tokens'
+import { Diagramm } from './Diagramm'
 import { einheitWort, fuelle, preis, preisWert, type Einheit } from './format'
+import { achsenSkala } from './skala'
 import { guenstigstesFenster, preisFarbe, teuersteStunde, type Skala } from './strom'
 
 export type TagesgangProps = {
@@ -20,14 +22,16 @@ const HOEHE = 170
  * macht aus 12 Pixeln Schrift sieben.
  *
  * Auf der Grafik stehen Zahlen mit Einheit: Hoechstwert, Tiefstwert und die
- * guenstigsten drei Stunden.
+ * guenstigsten drei Stunden. Die Achse hat runde Skalenwerte mit Hilfslinien
+ * und beginnt bei null (Balken duerfen nie abgeschnitten beginnen).
  */
 export function Tagesgang({ stunden, skala, einheit, stunde, ariaLabel }: TagesgangProps) {
   const { c, t, lang } = useTheme()
   const werte = stunden.filter((v): v is number => v != null)
   if (werte.length === 0) return null
-  const lo = Math.min(0, ...werte)
-  const hi = Math.max(1, ...werte)
+  const achse = achsenSkala(Math.min(...werte), Math.max(...werte), true)
+  const lo = achse.lo
+  const hi = achse.hi
   const spanne = hi - lo
   const null_ = ((0 - lo) / spanne) * 100
   const fenster = guenstigstesFenster(stunden)
@@ -65,12 +69,13 @@ export function Tagesgang({ stunden, skala, einheit, stunde, ariaLabel }: Tagesg
 
   return (
     <figure role="img" aria-label={ariaLabel} style={{ margin: 0, maxWidth: 680 }}>
-      <div style={{ position: 'relative', height: HOEHE, marginTop: spacing.xl, marginBottom: spacing.xl }}>
-        {/* Nulllinie */}
-        <div
-          aria-hidden
-          style={{ position: 'absolute', left: 0, right: 0, bottom: `${null_}%`, borderTop: `1px solid ${c.ink}` }}
-        />
+      <Diagramm
+        yTitel={fuelle(t('dgStundeAchse'), { einheit: einheitWort(einheit) })}
+        skala={achse}
+        marke={(v) => preisWert(v, einheit, lang)}
+        xMarken={[0, 6, 12, 18, 24].map((h) => ({ pos: (h / 24) * 100, text: fuelle(t('stGangUhr'), { h }) }))}
+        hoehe={HOEHE}
+      >
         <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 2 }}>
           {stunden.map((v, h) => {
             const imFenster = fenster != null && h >= fenster.von && h < fenster.bis
@@ -107,24 +112,13 @@ export function Tagesgang({ stunden, skala, einheit, stunde, ariaLabel }: Tagesg
               position: 'absolute',
               left: `${(fenster.von / 24) * 100}%`,
               width: `${((fenster.bis - fenster.von) / 24) * 100}%`,
-              bottom: -6,
+              bottom: -5,
               height: 4,
               background: c.yes,
             }}
           />
         )}
-      </div>
-      {/* Stundenachse */}
-      <div
-        aria-hidden
-        style={{ display: 'flex', fontFamily: fonts.mono, fontSize: fontSize.micro, color: c.muted, marginTop: -spacing.md }}
-      >
-        {[0, 3, 6, 9, 12, 15, 18, 21].map((h) => (
-          <span key={h} style={{ flex: 1 }}>
-            {fuelle(t('stGangUhr'), { h })}
-          </span>
-        ))}
-      </div>
+      </Diagramm>
       <figcaption
         style={{
           display: 'flex',
@@ -143,9 +137,6 @@ export function Tagesgang({ stunden, skala, einheit, stunde, ariaLabel }: Tagesg
             {preis(fenster.mittel, einheit, lang)}
           </span>
         )}
-        <span>
-          {t('stEinheit')}: {einheitWort(einheit)} · 0 = {preisWert(0, einheit, lang)}
-        </span>
       </figcaption>
     </figure>
   )

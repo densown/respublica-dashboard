@@ -262,6 +262,37 @@ sonst schlicht redaktioneller Anstand.
 
 ---
 
+## 9a. Diagramme
+
+Jede Grafik muss wissenschaftlichem Standard genügen (Luca, 28.11.2026). Wer
+sie ohne den umgebenden Text sieht, muss sie richtig lesen können.
+
+- **Achsen beschriftet.** Die senkrechte Achse hat einen Titel mit Größe und
+  Einheit ("Tagesmittel in ct/kWh") und runde Skalenwerte mit Hilfslinien. Die
+  Zeitachse trägt Datumsmarken mit Jahr.
+- **Einheit immer sichtbar**, an der Achse und an jedem abgelesenen Wert.
+- **Balken beginnen bei null.** Linien dürfen höher beginnen, wenn die Null
+  sie zusammendrücken würde. Dann steht das ausdrücklich an der Achse.
+- **Lücken bleiben Lücken.** Fehlende Werte unterbrechen die Linie, sie werden
+  nie überbrückt. Ein Einzelwert zwischen zwei Lücken ist ein Punkt.
+- **Eine Achse.** Nie zwei verschiedene Skalen in einem Diagramm.
+- **Farbe nie allein.** Mehrere Reihen bekommen Farbe und Strichmuster, dazu
+  eine Legende. Reihenfarben kommen aus `REIHEN` (`palettes.ts`), geprüft für
+  Farbschwächen und beide Farbmodi. Die Farbe gehört zur Reihe, nicht zum Rang:
+  Abwählen einer Reihe färbt die übrigen nicht um.
+- **Hilfslinien durchgezogen und zurückhaltend**, die Nulllinie betont.
+  Gestrichelt ist Reihen vorbehalten.
+- **Werte nachlesbar.** Unter einer Zeitreihe gibt es dieselben Zahlen als
+  Tabelle.
+- **Quelle, Lizenz und Stand** stehen an der Grafik (Abschnitt 9). Reicht ein
+  gewählter Zeitraum weiter zurück als die Daten, wird er nicht angeboten, und
+  die Seite sagt, seit wann Daten vorliegen.
+
+Bausteine: `Diagramm` (Rahmen mit Achsen), `Zeitreihe`, `achsenSkala` unter
+`src/components/europa/`. Neue Diagramme darauf aufbauen.
+
+---
+
 ## 10. Prüfliste vor dem Merge
 
 - [ ] `npm run build` fehlerfrei
@@ -271,6 +302,7 @@ sonst schlicht redaktioneller Anstand.
 - [ ] Bei 320 px angesehen, kein waagerechtes Scrollen
 - [ ] Touch-Ziele ≥ 44 px
 - [ ] Alle vier Ladezustände bedacht
+- [ ] Diagramme: Achsentitel mit Einheit, Skalenwerte, Lücken sichtbar, Farbe nicht allein (Abschnitt 9a)
 - [ ] i18n-Schlüssel in **beiden** Blöcken, kein roher String im UI
 - [ ] Bundle nicht gewachsen (liegt bei ~2,3 MB, `vendor-map` allein 1 MB)
 

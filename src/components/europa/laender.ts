@@ -82,11 +82,37 @@ export function laenderSortiert(lang: Sprache): (Land & { name: string })[] {
 
 export const landPfad = (iso2: string) => `/europa/land/${iso2.toLowerCase()}`
 
+/** Zahl einer Kennzahl ohne Einheit, fuer Skalenwerte und Tabellen: "83,5". */
+export function kennzahlZahl(k: Pick<Kennzahl, 'code' | 'stellen'>, wert: number, lang: Sprache): string {
+  if (k.code === 'SP.POP.TOTL') return zahl(wert / 1e6, lang, 1)
+  const stellen = Math.min(2, Math.max(0, k.stellen ?? 1))
+  return zahl(wert, lang, k.code === 'NY.GDP.PCAP.CD' ? 0 : stellen)
+}
+
+/** Einheit einer Kennzahl, wie sie hinter der Zahl steht: "Mio.", "%". Leer, wenn es keine gibt. */
+export function kennzahlEinheit(k: Pick<Kennzahl, 'code' | 'einheit'>, lang: Sprache): string {
+  if (k.code === 'SP.POP.TOTL') return lang === 'de' ? 'Mio.' : 'm'
+  return (k.einheit ?? '').trim()
+}
+
 /** Wert einer Kennzahl mit Einheit, etwa "83,5 Mio." oder "4,2 %". */
 export function kennzahlText(k: Pick<Kennzahl, 'code' | 'einheit' | 'stellen'>, wert: number, lang: Sprache): string {
-  if (k.code === 'SP.POP.TOTL') return `${zahl(wert / 1e6, lang, 1)} ${lang === 'de' ? 'Mio.' : 'm'}`
-  const stellen = Math.min(2, Math.max(0, k.stellen ?? 1))
-  const einheit = (k.einheit ?? '').trim()
-  const n = zahl(wert, lang, k.code === 'NY.GDP.PCAP.CD' ? 0 : stellen)
+  const einheit = kennzahlEinheit(k, lang)
+  const n = kennzahlZahl(k, wert, lang)
   return einheit ? `${n} ${einheit}` : n
+}
+
+export const ZEITRAEUME = [30, 90, 365] as const
+
+/**
+ * Welche Zeitraeume etwas zeigen. Ein laengerer Zeitraum ist nur sinnvoll,
+ * wenn die Daten weiter zurueckreichen als der naechstkuerzere. Ohne Angabe
+ * zur Spanne (aeltere API) gelten alle.
+ */
+export function zeitraumStand(seit: string | null | undefined, bis: string | null | undefined, gewaehlt: number) {
+  const spanne =
+    seit && bis ? Math.round((Date.parse(`${bis}T00:00:00Z`) - Date.parse(`${seit}T00:00:00Z`)) / 86_400_000) + 1 : null
+  const moeglich = ZEITRAEUME.filter((_, i) => spanne == null || i === 0 || spanne > ZEITRAEUME[i - 1])
+  const wirksam = moeglich.includes(gewaehlt as (typeof ZEITRAEUME)[number]) ? gewaehlt : moeglich[moeglich.length - 1]
+  return { spanne, moeglich: moeglich as readonly number[], wirksam, verkuerzt: moeglich.length < ZEITRAEUME.length }
 }

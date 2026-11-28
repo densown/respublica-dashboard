@@ -36,7 +36,8 @@ export function FilterToolbar({ placeholder, filters, search }: FilterToolbarPro
         display: 'flex',
         flexWrap: 'wrap',
         gap: spacing.md,
-        alignItems: 'stretch',
+        // unten buendig: ein umbrechendes Etikett darf kein Feld tiefer schieben
+        alignItems: 'flex-end',
         marginBottom: spacing.xl,
       }}
     >
@@ -84,6 +85,9 @@ export function FilterToolbar({ placeholder, filters, search }: FilterToolbarPro
               fontFamily: fonts.mono,
               fontSize: fs.sm,
               color: c.muted,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {f.label}
