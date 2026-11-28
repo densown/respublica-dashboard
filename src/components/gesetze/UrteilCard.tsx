@@ -17,6 +17,7 @@ import {
   rechtsprechungFullTextUrl,
 } from './utils'
 import type { Urteil } from './types'
+import { kiText } from '../../utils/kiText'
 
 function nlToBr(text: string): ReactNode[] {
   const lines = text.split('\n')
@@ -52,9 +53,9 @@ export function UrteilCard({ urteil, onGesetzBadgeClick }: UrteilCardProps) {
     setLawsOpen(false)
   }, [urteil.id])
 
-  const summary = urteil.zusammenfassung?.trim() ?? ''
+  const summary = kiText(urteil.zusammenfassung)
   const tenor = urteil.tenor?.trim() ?? ''
-  const impact = urteil.auswirkung?.trim() ?? ''
+  const impact = kiText(urteil.auswirkung)
   const rg = urteil.rechtsgebiet?.trim() ?? ''
   const az = urteil.aktenzeichen?.trim() ?? '—'
   const court = urteil.gericht?.trim() || '—'
