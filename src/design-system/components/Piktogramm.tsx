@@ -32,6 +32,8 @@ export type PiktogrammName =
   | 'magazin'
   | 'laden'
   | 'hinzufuegen'
+  | 'europa'
+  | 'strom'
 
 export type PiktogrammProps = {
   name: PiktogrammName
@@ -196,6 +198,19 @@ function zeichnung(name: PiktogrammName) {
           <path d="M12 8.500v7M8.500 12h7" />
         </>
       )
+    case 'europa':
+      // Sternenkranz, als Punkte gesetzt
+      return (
+        <>
+          {Array.from({ length: 12 }, (_, i) => {
+            const w = (i * Math.PI) / 6
+            return <circle key={i} cx={12 + 8 * Math.sin(w)} cy={12 - 8 * Math.cos(w)} r="0.6" />
+          })}
+        </>
+      )
+    case 'strom':
+      // Blitz
+      return <path d="M13 3.500L6 13.500h5l-1 7 7-10h-5z" />
     case 'magazin':
       return (
         <>

@@ -17,6 +17,7 @@ type Eintrag = {
 
 const DATEN: Eintrag[] = [
   { pfad: '/lobbyregister', icon: 'lobby', titel: 'lobby', text: 'mehrLobbyText' },
+  { pfad: '/europa', icon: 'europa', titel: 'europaNav', text: 'europaMehrText' },
   { pfad: '/kleine-anfragen', icon: 'anfragen', titel: 'kaNav', text: 'mehrAnfragenText' },
   { pfad: '/demokratie', icon: 'demokratie', titel: 'mehrDemokratieTitel', text: 'mehrDemokratieText' },
   { pfad: '/versammlungen', icon: 'versammlungen', titel: 'mehrVersammlungenTitel', text: 'mehrVersammlungenText' },

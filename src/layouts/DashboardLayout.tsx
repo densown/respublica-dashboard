@@ -27,6 +27,7 @@ const RESSORT: Record<string, string> = {
   versammlungen: 'mehr',
   weltkarte: 'mehr',
   quellen: 'mehr',
+  europa: 'mehr',
 }
 
 function ressortAusPfad(pathname: string): string {

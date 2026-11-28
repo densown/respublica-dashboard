@@ -39,6 +39,8 @@ import { WahlkreisFrage } from '../components/einstieg/WahlkreisFrage'
 import { PollStanding } from './elections/PollStanding'
 import { OTHER, standing } from './elections/pollMath'
 import type { PollRow, Wahltermin } from './elections/pollTypes'
+import { heuteInBerlin, preis } from '../components/europa/format'
+import type { StromTag } from '../components/europa/typen'
 
 type WahlterminListe = { wahltermine: Wahltermin[] }
 type Umfragen = { parteien: string[]; umfragen: PollRow[] }
@@ -117,6 +119,7 @@ export default function Overview() {
   const abstimmungen = useApi<AbstimmungsListenEintrag[]>('/api/bundestag/abstimmungen')
   const { data: wahlen } = useApi<WahlterminListe>('/api/wahltermine?status=kommend')
   const { data: woche } = useApi<Woche>('/api/kleine-anfragen/woche?top=5')
+  const { data: strom } = useApi<StromTag>(`/api/strom/tag?datum=${heuteInBerlin()}`)
 
   const { aufmacher, amTag } = useMemo(() => aufmacherVon(abstimmungen.data ?? []), [abstimmungen.data])
 
@@ -601,6 +604,21 @@ export default function Overview() {
     </p>
   )
 
+  // Europa: der Strompreis von heute, immer mit Einheit
+  const stromHeute = strom?.zonen.find((z) => z.code === 'DE-LU')?.mittel
+  const blockStrom = stromHeute != null && (
+    <section style={{ marginBottom: spacing.xxl }}>
+      {rubrik(t('europaTeaserKicker'))}
+      <div style={{ fontFamily: fonts.display, fontWeight: 700, fontSize: fontSize.xl, lineHeight: lineHeight.tight, color: c.ink }}>
+        {t('europaTeaserStrom').replace('{preis}', preis(stromHeute, 'ct', lang))}
+      </div>
+      <p style={{ margin: `${spacing.sm}px 0 0`, fontFamily: fonts.body, fontSize: fontSize.md, lineHeight: lineHeight.normal, color: c.muted }}>
+        {t('europaTeaserStromText')}
+      </p>
+      {weiter('/europa/strom', t('europaTeaserWeiter'))}
+    </section>
+  )
+
   const rundgang = <Rundgang ersteAbstimmung={aufmacher?.poll_id} />
   const bilanz = <DeineBilanz abstimmungen={abstimmungen.data ?? []} />
   const abstand = { marginBottom: spacing.xxl } as const
@@ -620,6 +638,7 @@ export default function Overview() {
           <AppInstallieren form="hinweis" />
           {blockWahl}
           {blockZahl}
+          {blockStrom}
           {blockAmTag}
           <div style={abstand}>{bilanz}</div>
           {blockRessorts}
@@ -635,6 +654,7 @@ export default function Overview() {
             <AppInstallieren form="hinweis" />
             {blockWahl}
             {blockZahl}
+            {blockStrom}
             <div style={abstand}>{bilanz}</div>
           </div>
         </div>

@@ -114,3 +114,7 @@ body {
 .rp-wischzeile > * { flex-shrink: 0; }
 .rp-ohne-scrollbalken::-webkit-scrollbar { display: none; }
 .rp-tab:active { transform: scale(0.94); }
+
+/* Kachelkarte im Strombericht: Kachel gibt beim Tippen leicht nach */
+.rp-kachel:active { transform: scale(0.96); }
+.rp-kachel { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }

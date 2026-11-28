@@ -99,6 +99,30 @@ export const SOURCES_BY_PAGE: SourceCatalogPage[] = [
       },
     ],
   },
+  {
+    pageTitleKey: 'europaStromTitel',
+    href: '/europa/strom',
+    sources: [
+      {
+        nameKey: 'sourcesNmEnergyCharts',
+        url: 'https://www.energy-charts.info/',
+        licenseKey: 'sourcesLicCcBy40',
+        descKey: 'sourcesDescEnergyCharts',
+      },
+    ],
+  },
+  {
+    pageTitleKey: 'europaParlamentTitel',
+    href: '/europa/parlament',
+    sources: [
+      {
+        nameKey: 'sourcesNmHowTheyVote',
+        url: 'https://howtheyvote.eu/',
+        licenseKey: 'sourcesLicOdbl',
+        descKey: 'sourcesDescHowTheyVote',
+      },
+    ],
+  },
 ]
 
 const FOOTER_LINE_BY_ROUTE_SEGMENT: Record<string, I18nKey> = {
@@ -111,6 +135,7 @@ const FOOTER_LINE_BY_ROUTE_SEGMENT: Record<string, I18nKey> = {
   weltkarte: 'footerSourcesLineWeltkarte',
   'eu-recht': 'footerSourcesLineEuRecht',
   'eu-parlament': 'footerSourcesLineEuParlament',
+  europa: 'footerSourcesLineEuropa',
   lobbyregister: 'footerSourcesLineLobby',
 }
 
