@@ -339,6 +339,13 @@ export default function EuropaStrom() {
                     karte={karte}
                     schmal={schmal}
                     ariaLabel={t('stLandkarteAria')}
+                    kopf={
+                      <>
+                        <strong>{stunde == null ? t('stKarteMittel') : fuelle(t('stKarteUhr'), { von: stunde, bis: stunde + 1 })}</strong>
+                        <br />
+                        {einheitWort(einheit)}
+                      </>
+                    }
                     farbe={(iso2) => {
                       const v = preisJeLand.get(iso2)
                       return v == null ? null : preisFarbe(v, stunde == null ? skalaMittel : skalaStunden, c)
