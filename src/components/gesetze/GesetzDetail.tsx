@@ -4,6 +4,7 @@ import { Badge, EmptyState, LoadingSpinner, useTheme } from '../../design-system
 import { fontSize, fonts, radius, spacing } from '../../design-system/tokens'
 import { courtBadgeVariant, formatDisplayDate } from './utils'
 import type { Gesetz, Urteil } from './types'
+import { kiText } from '../../utils/kiText'
 
 export type GesetzDetailProps = {
   gesetz: Gesetz | null
@@ -141,8 +142,8 @@ export function GesetzDetail({
     (gesetz.name ?? '').trim() ||
     ku ||
     '—'
-  const summary = (gesetz.zusammenfassung ?? '').trim()
-  const kontext = (gesetz.kontext ?? '').trim()
+  const summary = kiText(gesetz.zusammenfassung)
+  const kontext = kiText(gesetz.kontext)
   const diffRaw = (gesetz.diff ?? '').trim()
   const isInitialImport = diffRaw.length > 0 && diffRaw.includes('new file mode')
   const hasAnyDiff = diffRaw.length > 0

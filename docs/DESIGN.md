@@ -124,6 +124,21 @@ gedecktes Grün (`c.yes`), Nein Weinrot (`c.no`), Enthaltung Senf
 `stimmFlaeche()` aus `palettes.ts`). Die Schrift auf einer Stimmfläche
 wählt `textAuf()` nach Kontrast, nicht nach Gefühl.
 
+### Papier statt Weiss
+
+Im hellen Modus gibt es keine weissen Flaechen. Karten, Suchfelder,
+Auswahllisten und Overlays liegen auf dem Papierton (`c.cardBg`,
+`c.inputBg`, `c.surface` = `c.bg`). Wo sich etwas abheben muss
+(Balkenspur, Leiste, Knopf), nimmt es getoentes Papier (`c.bgAlt`).
+
+`DataCard` ist eine Zeitungsspalte, kein Kasten: kein Hintergrund, kein
+Radius, keine Seitenraender, nur eine Linie oben. Listen aus Karten stehen
+ohne Abstand untereinander, die Linie trennt sie (Vorbild:
+Kleine-Anfragen-Liste).
+
+KI-Zusammenfassungen laufen vor der Anzeige durch `kiText()`
+(`src/utils/kiText.ts`), das Markdown-Reste der Modelle entfernt.
+
 ### Dunkelmodus
 
 Nicht invertieren, sondern umschichten. Der Dunkelmodus ist eine eigene

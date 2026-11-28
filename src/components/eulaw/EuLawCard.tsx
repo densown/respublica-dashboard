@@ -15,6 +15,9 @@ import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuRechtDetail, EuRechtListItem } from './types'
+import { kiText } from '../../utils/kiText'
+import { rechtsgebietFarbe, rechtsgebietLabel } from './rechtsgebiet'
+import { EU_DOC_TYPE, EU_DOC_TYPE_FALLBACK } from '../../design-system/palettes'
 
 
 const PREVIEW_LEN = 200
@@ -65,9 +68,15 @@ function eurovocToStrings(tags: unknown): string[] {
 export type EuLawCardProps = {
   item: EuRechtListItem
   startExpanded?: boolean
+  /** Erster Eintrag der Seite: groessere Schlagzeile, laengerer Vorspann. */
+  aufmacher?: boolean
+  /** Datum steht schon in der Tagesueberschrift darueber. */
+  ohneDatum?: boolean
+  /** Kurzmeldung: nur Art, Titel, Rechtsgebiet; Vorspann erst beim Aufklappen. */
+  kurz?: boolean
 }
 
-export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
+export function EuLawCard({ item, startExpanded, aufmacher = false, ohneDatum = false, kurz = false }: EuLawCardProps) {
   const { c, t, lang } = useTheme()
   const navigate = useNavigate()
   const narrow = useIsMobile()
@@ -90,9 +99,9 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
 
   const summaryFull =
     lang === 'de'
-      ? (item.zusammenfassung_de ?? '').trim()
-      : (item.zusammenfassung_en ?? '').trim()
-  const preview = summaryFull ? trunc(summaryFull, PREVIEW_LEN) : ''
+      ? kiText(item.zusammenfassung_de)
+      : kiText(item.zusammenfassung_en)
+  const preview = summaryFull ? trunc(summaryFull, aufmacher ? PREVIEW_LEN * 2 : PREVIEW_LEN) : ''
 
   const typBadgeText =
     lang === 'de' && item.typ_label?.trim()
@@ -112,19 +121,33 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
     [toggle],
   )
 
-  const titleStyle: CSSProperties = {
-    fontFamily: fonts.body,
-    fontSize: narrow ? '0.9rem' : '1rem',
-    fontWeight: 600,
-    lineHeight: 1.35,
-    color: c.ink,
-    margin: 0,
-    marginTop: spacing.sm,
-    display: '-webkit-box',
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-  }
+  const titleStyle: CSSProperties = aufmacher
+    ? {
+        fontFamily: fonts.display,
+        fontSize: narrow ? fontSize.xl : fontSize.xxl,
+        fontWeight: 900,
+        lineHeight: 1.2,
+        color: c.ink,
+        margin: 0,
+        marginTop: spacing.sm,
+        maxWidth: '40ch',
+      }
+    : {
+        fontFamily: fonts.body,
+        fontSize: narrow ? '0.9rem' : '1rem',
+        fontWeight: 600,
+        lineHeight: 1.35,
+        color: c.ink,
+        margin: 0,
+        marginTop: spacing.sm,
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+      }
+
+  // Art des Rechtsakts mit Farbmarke: Verordnung blau, Richtlinie gruen, Beschluss orange
+  const typFarbe = EU_DOC_TYPE[String(item.typ)] ?? EU_DOC_TYPE_FALLBACK
 
   const headerRow: ReactNode = (
     <div
@@ -138,12 +161,14 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
         {/* Art des Rechtsakts als Zeile ueber dem Titel, Nummer als Fundstelle */}
-        <span style={{ fontFamily: fonts.body, fontStyle: 'italic', fontSize: fontSize.sm, color: c.red, lineHeight: 1.2 }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.sm, fontFamily: fonts.body, fontStyle: 'italic', fontSize: fontSize.sm, color: c.inkSoft, lineHeight: 1.2 }}>
+          <span aria-hidden style={{ width: 10, height: 10, background: typFarbe, display: 'inline-block', flexShrink: 0 }} />
+          {aufmacher ? <span style={{ color: c.red, fontStyle: 'normal', fontFamily: fonts.mono, fontSize: fontSize.micro, letterSpacing: '0.04em' }}>{t('euLawNeuester')}</span> : null}
           {typBadgeText}
         </span>
         <Fundstelle href={item.eurlex_url} title="EUR-Lex">CELEX {item.celex}</Fundstelle>
       </div>
-      {item.datum ? (
+      {item.datum && !ohneDatum ? (
         <time
           dateTime={item.datum}
           style={{
@@ -183,19 +208,23 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
 
         {item.rechtsgebiet?.trim() ? (
           <div style={{ marginTop: spacing.sm }}>
-            <Badge text={item.rechtsgebiet.trim()} variant="muted" />
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: spacing.xs, fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
+              <span aria-hidden style={{ width: 7, height: 7, borderRadius: '50%', background: rechtsgebietFarbe(item.rechtsgebiet), display: 'inline-block' }} />
+              {rechtsgebietLabel(item.rechtsgebiet, t)}
+            </span>
           </div>
         ) : null}
 
-        {summaryFull && !expanded ? (
+        {summaryFull && !expanded && !kurz ? (
           <>
             <p
               style={{
                 fontFamily: fonts.body,
-                fontSize: fontSize.md,
+                fontSize: aufmacher ? fontSize.lg : fontSize.md,
                 lineHeight: 1.6,
-                color: c.ink,
+                color: aufmacher ? c.ink : c.inkSoft,
                 marginTop: spacing.md,
+                maxWidth: '68ch',
                 marginBottom: 0,
               }}
             >

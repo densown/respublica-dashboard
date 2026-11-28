@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { spacing, radius, motion } from '../tokens'
+import { spacing, motion } from '../tokens'
 import { useTheme } from '../ThemeContext'
 
 export type DataCardProps = {
@@ -35,28 +35,25 @@ export function DataCard({
             }
           : undefined
       }
+      // Zeitungsspalte statt Kasten: die Karte liegt auf dem Papier, eine
+      // Linie oben trennt sie von der vorigen (wie die Kleine-Anfragen-Liste)
       style={{
-        background: c.cardBg,
-        border: `1px solid ${active ? c.red : c.cardBorder}`,
-        borderRadius: radius.lg,
-        boxShadow: c.shadow,
-        overflow: 'hidden',
+        background: 'transparent',
+        borderTop: `${active ? 2 : 1}px solid ${active ? c.red : c.border}`,
         cursor: interactive ? 'pointer' : 'default',
-        transition: `border-color ${motion.normal} ${motion.easing}, box-shadow ${motion.normal} ${motion.easing}, transform 0.2s ${motion.easing}`,
+        transition: `border-color ${motion.normal} ${motion.easing}`,
       }}
       onMouseEnter={
         interactive
           ? (e) => {
-              e.currentTarget.style.borderColor = c.borderHover
-              e.currentTarget.style.transform = 'translateY(-1px)'
+              if (!active) e.currentTarget.style.borderTopColor = c.ink
             }
           : undefined
       }
       onMouseLeave={
         interactive
           ? (e) => {
-              e.currentTarget.style.borderColor = active ? c.red : c.cardBorder
-              e.currentTarget.style.transform = 'none'
+              e.currentTarget.style.borderTopColor = active ? c.red : c.border
             }
           : undefined
       }
@@ -64,21 +61,17 @@ export function DataCard({
       {header && (
         <div
           style={{
-            padding: `${spacing.lg}px ${spacing.lg}px 0`,
-            borderBottom: `1px solid ${c.border}`,
-            paddingBottom: spacing.md,
+            paddingTop: spacing.lg,
           }}
         >
           {header}
         </div>
       )}
-      <div style={{ padding: spacing.lg }}>{children}</div>
+      <div style={{ padding: `${header ? spacing.md : spacing.lg}px 0 ${spacing.lg}px` }}>{children}</div>
       {footer && (
         <div
           style={{
-            padding: `0 ${spacing.lg}px ${spacing.lg}px`,
-            borderTop: `1px solid ${c.border}`,
-            paddingTop: spacing.md,
+            paddingBottom: spacing.lg,
           }}
         >
           {footer}

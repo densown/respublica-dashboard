@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import {
   useCallback,
   useEffect,
@@ -32,22 +33,37 @@ import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { LEGAL_AREA_KEYS } from '../components/eulaw/rechtsgebiet'
 
 const PAGE_SIZE = 20
 
-const LEGAL_AREA_KEYS: { value: string; key: I18nKey }[] = [
-  { value: 'Handel', key: 'euLawRgHandel' },
-  { value: 'Energie', key: 'euLawRgEnergie' },
-  { value: 'Gesundheit', key: 'euLawRgGesundheit' },
-  { value: 'Umwelt', key: 'euLawRgUmwelt' },
-  { value: 'Finanzen', key: 'euLawRgFinanzen' },
-  { value: 'Verkehr', key: 'euLawRgVerkehr' },
-  { value: 'Landwirtschaft', key: 'euLawRgLandwirtschaft' },
-  { value: 'Digitales', key: 'euLawRgDigitales' },
-  { value: 'Migration', key: 'euLawRgMigration' },
-  { value: 'Justiz', key: 'euLawRgJustiz' },
-  { value: 'Sonstiges', key: 'euLawRgSonstiges' },
-]
+/** Tagesueberschrift in der Liste: Wochentag und Datum, rechts die Zahl der Rechtsakte. */
+function TagesKopf({ datum, anzahl }: { datum: string; anzahl: number }) {
+  const { c, t, lang } = useTheme()
+  const d = new Date(`${datum.slice(0, 10)}T12:00:00Z`)
+  const text = Number.isNaN(d.getTime())
+    ? datum
+    : d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+        gap: spacing.md,
+        marginTop: spacing.xl,
+        paddingTop: spacing.sm,
+        paddingBottom: spacing.xs,
+        borderTop: `3px double ${c.ink}`,
+      }}
+    >
+      <span style={{ fontFamily: fonts.display, fontWeight: 900, fontSize: fontSize.lg, color: c.ink }}>{text}</span>
+      <span style={{ fontFamily: fonts.mono, fontSize: fontSize.xs, color: c.muted }}>
+        {anzahl === 1 ? t('euLawTagAnzahlEins') : interpolate(t('euLawTagAnzahl'), { n: anzahl })}
+      </span>
+    </div>
+  )
+}
 
 type TypFilter = '' | 'REG' | 'DIR' | 'DEC'
 type GerichtFilter = '' | 'EuGH' | 'EuG'
@@ -665,20 +681,49 @@ export default function EuLaw() {
           ) : (
             <>
               {deepItem && !inCurrentList ? (
-                <div style={{ marginBottom: spacing.lg }}>
+                <div style={{ marginBottom: 0 }}>
                   <EuLawCard item={deepItem} startExpanded />
                 </div>
               ) : null}
-              {items.map((item) => (
-                <div key={item.id} style={{ marginBottom: spacing.lg }}>
-                  <EuLawCard
-                    item={item}
-                    startExpanded={
-                      Number.isFinite(routeIdNum) && item.id === routeIdNum
-                    }
-                  />
-                </div>
-              ))}
+              {(() => {
+                // Zeitungsrhythmus: der neueste Rechtsakt auf Seite 1 als
+                // Aufmacher, danach Tagesueberschriften; je Tag zwei Eintraege
+                // mit Vorspann, der Rest als Kurzmeldungen (Desktop zweispaltig)
+                const aufmacherAn = pageSafe === 1 && sortNewest && !debouncedSearch
+                const start = aufmacherAn ? 1 : 0
+                const offen = (id: number) => Number.isFinite(routeIdNum) && id === routeIdNum
+                const bloecke: ReactNode[] = []
+                if (aufmacherAn && items[0]) {
+                  bloecke.push(<EuLawCard key={items[0].id} item={items[0]} aufmacher startExpanded={offen(items[0].id)} />)
+                }
+                const tage: { tag: string; liste: typeof items }[] = []
+                for (const it of items.slice(start)) {
+                  const tag = it.datum ?? ''
+                  const letzter = tage[tage.length - 1]
+                  if (letzter && letzter.tag === tag) letzter.liste.push(it)
+                  else tage.push({ tag, liste: [it] })
+                }
+                for (const { tag, liste } of tage) {
+                  const gesamt = items.filter((x) => (x.datum ?? '') === tag).length
+                  const kurz = liste.slice(2)
+                  bloecke.push(
+                    <section key={`tag-${tag}-${liste[0].id}`}>
+                      {tag ? <TagesKopf datum={tag} anzahl={gesamt} /> : null}
+                      {liste.slice(0, 2).map((it) => (
+                        <EuLawCard key={it.id} item={it} ohneDatum={Boolean(tag)} startExpanded={offen(it.id)} />
+                      ))}
+                      {kurz.length ? (
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', columnGap: spacing.xl }}>
+                          {kurz.map((it) => (
+                            <EuLawCard key={it.id} item={it} kurz ohneDatum={Boolean(tag)} startExpanded={offen(it.id)} />
+                          ))}
+                        </div>
+                      ) : null}
+                    </section>,
+                  )
+                }
+                return bloecke
+              })()}
               <p
                 style={{
                   fontFamily: fonts.mono,
@@ -947,7 +992,7 @@ export default function EuLaw() {
           ) : (
             <>
               {courtDeepItem && !inCurrentCourtList ? (
-                <div style={{ marginBottom: spacing.lg }}>
+                <div style={{ marginBottom: 0 }}>
                   <EuCourtCard
                     item={courtDeepItem}
                     startExpanded
@@ -955,7 +1000,7 @@ export default function EuLaw() {
                 </div>
               ) : null}
               {courtItems.map((item) => (
-                <div key={item.id} style={{ marginBottom: spacing.lg }}>
+                <div key={item.id} style={{ marginBottom: 0 }}>
                   <EuCourtCard
                     item={item}
                     startExpanded={

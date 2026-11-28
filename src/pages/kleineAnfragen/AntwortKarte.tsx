@@ -3,6 +3,7 @@ import { useTheme } from '../../design-system'
 import { fonts, fontSize, lineHeight, radius, spacing } from '../../design-system/tokens'
 import { fraktionsSchrift } from '../../components/bundestag/fraktion'
 import { ressortKurz, type Antwort } from './types'
+import { kiText } from '../../utils/kiText'
 
 /**
  * Eine Antwort der Bundesregierung als Karte. Karte statt Tabelle, weil die
@@ -18,7 +19,7 @@ export function AntwortKarte({ a, kompakt = false }: { a: Antwort; kompakt?: boo
     year: 'numeric',
     timeZone: 'UTC',
   })
-  const zusammenfassung = lang === 'en' ? a.zusammenfassung_en ?? a.zusammenfassung : a.zusammenfassung
+  const zusammenfassung = kiText(lang === 'en' ? a.zusammenfassung_en ?? a.zusammenfassung : a.zusammenfassung)
   // Schlagzeile gibt es nur auf Deutsch; auf Englisch steht der Titel der Anfrage oben
   const ueberschrift = lang === 'de' && a.schlagzeile ? a.schlagzeile : a.titel
   const zeigeTitelExtra = ueberschrift !== a.titel

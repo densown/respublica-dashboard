@@ -14,6 +14,8 @@ import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuUrteilDetail, EuUrteilListItem } from './types'
+import { kiText } from '../../utils/kiText'
+import { rechtsgebietLabel } from './rechtsgebiet'
 
 
 const PREVIEW_LEN = 220
@@ -64,20 +66,20 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
 
   const summary =
     lang === 'de'
-      ? (item.zusammenfassung_de ?? '').trim()
-      : (item.zusammenfassung_en ?? '').trim()
+      ? kiText(item.zusammenfassung_de)
+      : kiText(item.zusammenfassung_en)
 
   const preview = summary ? trunc(summary, PREVIEW_LEN) : ''
 
   const fullSummary =
     lang === 'de'
-      ? (item.zusammenfassung_de ?? '').trim()
-      : (item.zusammenfassung_en ?? '').trim()
+      ? kiText(item.zusammenfassung_de)
+      : kiText(item.zusammenfassung_en)
 
   const impact =
     lang === 'de'
-      ? (item.auswirkung_de ?? '').trim()
-      : (item.auswirkung_en ?? '').trim()
+      ? kiText(item.auswirkung_de)
+      : kiText(item.auswirkung_en)
 
   const badgeText = courtLabel(item.gericht, t)
 
@@ -191,7 +193,7 @@ export function EuCourtCard({ item, startExpanded }: EuCourtCardProps) {
 
         {item.rechtsgebiet?.trim() ? (
           <div style={{ marginTop: spacing.sm }}>
-            <Badge text={item.rechtsgebiet.trim()} variant="muted" />
+            <Badge text={rechtsgebietLabel(item.rechtsgebiet, t)} variant="muted" />
           </div>
         ) : null}
 
