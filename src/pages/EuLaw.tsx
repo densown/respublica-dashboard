@@ -665,12 +665,12 @@ export default function EuLaw() {
           ) : (
             <>
               {deepItem && !inCurrentList ? (
-                <div style={{ marginBottom: spacing.lg }}>
+                <div style={{ marginBottom: 0 }}>
                   <EuLawCard item={deepItem} startExpanded />
                 </div>
               ) : null}
               {items.map((item) => (
-                <div key={item.id} style={{ marginBottom: spacing.lg }}>
+                <div key={item.id} style={{ marginBottom: 0 }}>
                   <EuLawCard
                     item={item}
                     startExpanded={
@@ -947,7 +947,7 @@ export default function EuLaw() {
           ) : (
             <>
               {courtDeepItem && !inCurrentCourtList ? (
-                <div style={{ marginBottom: spacing.lg }}>
+                <div style={{ marginBottom: 0 }}>
                   <EuCourtCard
                     item={courtDeepItem}
                     startExpanded
@@ -955,7 +955,7 @@ export default function EuLaw() {
                 </div>
               ) : null}
               {courtItems.map((item) => (
-                <div key={item.id} style={{ marginBottom: spacing.lg }}>
+                <div key={item.id} style={{ marginBottom: 0 }}>
                   <EuCourtCard
                     item={item}
                     startExpanded={

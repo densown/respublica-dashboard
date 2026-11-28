@@ -36,6 +36,7 @@ import { useApi } from '../hooks/useApi'
 import { useDebouncedValue } from '../hooks/useDebouncedValue'
 import { useIsMobile } from '../hooks/useMediaQuery'
 import { useSeo } from '../hooks/useSeo'
+import { kiText } from '../utils/kiText'
 
 const PAGE_SIZE = 20
 
@@ -72,7 +73,7 @@ function displayTitel(g: Gesetz): string {
 }
 
 function sublineZusammenfassung(g: Gesetz): string {
-  const z = (g.zusammenfassung ?? '').trim()
+  const z = kiText(g.zusammenfassung)
   if (!z) return ''
   return z.length > 80 ? `${z.slice(0, 80).trim()}…` : z
 }
@@ -1090,7 +1091,7 @@ export default function Legislation() {
             <div
               key={u.id}
               style={{
-                marginBottom: spacing.lg,
+                marginBottom: 0,
                 opacity: loadingUrteile ? 0.55 : 1,
                 transition: `opacity ${motion.fast}`,
               }}

@@ -15,6 +15,7 @@ import { useApi } from '../../hooks/useApi'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { formatDisplayDate } from '../gesetze/utils'
 import type { EuRechtDetail, EuRechtListItem } from './types'
+import { kiText } from '../../utils/kiText'
 
 
 const PREVIEW_LEN = 200
@@ -90,8 +91,8 @@ export function EuLawCard({ item, startExpanded }: EuLawCardProps) {
 
   const summaryFull =
     lang === 'de'
-      ? (item.zusammenfassung_de ?? '').trim()
-      : (item.zusammenfassung_en ?? '').trim()
+      ? kiText(item.zusammenfassung_de)
+      : kiText(item.zusammenfassung_en)
   const preview = summaryFull ? trunc(summaryFull, PREVIEW_LEN) : ''
 
   const typBadgeText =

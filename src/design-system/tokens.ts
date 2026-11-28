@@ -1,7 +1,8 @@
 export const light = {
   bg: '#F5F0E8',
-  bgAlt: '#FFFFFF',
-  bgHover: '#EDE8DF',
+  /** Getoentes Papier: Leisten, Balkenspuren, Knoepfe. Kein Weiss, die App ist Zeitungspapier. */
+  bgAlt: '#EFE9DE',
+  bgHover: '#E6DFD2',
   ink: '#0F0F0F',
   /** Primärer Fließtext / Überschriften (semantisch; gleicher Kontrast wie ink) */
   text: '#0F0F0F',
@@ -23,19 +24,20 @@ export const light = {
   borderHover: '#D0CBC2',
   badgeBg: '#1A1A1A',
   badgeText: '#FFFFFF',
-  cardBg: '#FFFFFF',
+  /** Karten liegen auf dem Papier, nicht als weisse Kaesten darueber. */
+  cardBg: '#F5F0E8',
   /** Flächen für Overlays / Such-Dropdowns (Dark Mode: wie cardBg) */
-  surface: '#FFFFFF',
+  surface: '#F5F0E8',
   cardBorder: '#E8E4DC',
   sidebarBg: '#1A1A1A',
   sidebarText: 'rgba(255,255,255,0.55)',
   sidebarActive: '#C8102E',
-  inputBg: '#FFFFFF',
+  inputBg: '#F5F0E8',
   inputBorder: '#D0CCC4',
   footerBg: '#1A1A1A',
   footerText: 'rgba(255,255,255,0.45)',
   footerLink: 'rgba(255,255,255,0.65)',
-  navMobileBg: '#FFFFFF',
+  navMobileBg: '#F5F0E8',
   navMobileBorder: '#E8E4DC',
   overlay: 'rgba(0,0,0,0.3)',
   shadow: '0 1px 3px rgba(0,0,0,0.06)',
@@ -65,7 +67,7 @@ export const light = {
   seatCdu: '#1A1A1A',
 
   /** Halbtransparente Flaeche fuer Diagramm-Tooltips. */
-  tooltipBg: '#FFFFFFEE',
+  tooltipBg: '#F5F0E8EE',
 
   // Weltkarte: Basisflaechen
   mapLandNoData: '#E0E0E0',
